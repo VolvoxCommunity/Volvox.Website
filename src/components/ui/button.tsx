@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
-import { ComponentProps, useRef, MouseEvent } from "react"
-import { Slot } from "@radix-ui/react-slot"
-import { cva, type VariantProps } from "class-variance-authority"
+import { ComponentProps, useRef, MouseEvent } from "react";
+import { Slot } from "@radix-ui/react-slot";
+import { cva, type VariantProps } from "class-variance-authority";
 
-import { cn } from "@/lib/utils"
+import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
   "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-all disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive relative overflow-hidden",
@@ -35,7 +35,7 @@ const buttonVariants = cva(
       size: "default",
     },
   }
-)
+);
 
 function Button({
   className,
@@ -46,26 +46,26 @@ function Button({
   ...props
 }: ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
+    asChild?: boolean;
   }) {
-  const buttonRef = useRef<HTMLButtonElement>(null)
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
-    if (!buttonRef.current) return
+    if (!buttonRef.current) return;
 
-    const rect = buttonRef.current.getBoundingClientRect()
-    const x = e.clientX - rect.left
-    const y = e.clientY - rect.top
+    const rect = buttonRef.current.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
 
-    buttonRef.current.style.setProperty('--mouse-x', `${x}px`)
-    buttonRef.current.style.setProperty('--mouse-y', `${y}px`)
+    buttonRef.current.style.setProperty("--mouse-x", `${x}px`);
+    buttonRef.current.style.setProperty("--mouse-y", `${y}px`);
 
     if (onMouseMove) {
-      onMouseMove(e)
+      onMouseMove(e);
     }
-  }
+  };
 
-  const Comp = asChild ? Slot : "button"
+  const Comp = asChild ? Slot : "button";
 
   return (
     <Comp
@@ -75,7 +75,7 @@ function Button({
       onMouseMove={handleMouseMove}
       {...props}
     />
-  )
+  );
 }
 
-export { Button, buttonVariants }
+export { Button, buttonVariants };

@@ -41,13 +41,13 @@
 
     /* Light mode - Purple/Blue theme */
     --background: oklch(0.98 0.002 264);
-    --foreground: oklch(0.20 0.01 264);
+    --foreground: oklch(0.2 0.01 264);
 
     --card: oklch(1 0 0);
-    --card-foreground: oklch(0.20 0.01 264);
+    --card-foreground: oklch(0.2 0.01 264);
 
     --popover: oklch(1 0 0);
-    --popover-foreground: oklch(0.20 0.01 264);
+    --popover-foreground: oklch(0.2 0.01 264);
 
     --primary: oklch(0.32 0.14 264.5);
     --primary-foreground: oklch(0.99 0 0);
@@ -56,9 +56,9 @@
     --secondary-foreground: oklch(0.99 0 0);
 
     --muted: oklch(0.94 0.005 264);
-    --muted-foreground: oklch(0.50 0.01 264);
+    --muted-foreground: oklch(0.5 0.01 264);
 
-    --accent: oklch(0.70 0.15 200);
+    --accent: oklch(0.7 0.15 200);
     --accent-foreground: oklch(0.99 0 0);
 
     --destructive: oklch(0.577 0.245 27.325);
@@ -88,13 +88,13 @@
     --primary: oklch(0.42 0.14 264.5);
     --primary-foreground: oklch(0.99 0 0);
 
-    --secondary: oklch(0.60 0.18 330);
+    --secondary: oklch(0.6 0.18 330);
     --secondary-foreground: oklch(0.14 0.01 264);
 
     --muted: oklch(0.22 0.01 264);
-    --muted-foreground: oklch(0.60 0.01 264);
+    --muted-foreground: oklch(0.6 0.01 264);
 
-    --accent: oklch(0.70 0.15 200);
+    --accent: oklch(0.7 0.15 200);
     --accent-foreground: oklch(0.99 0 0);
 
     --destructive: oklch(0.704 0.191 22.216);
@@ -112,9 +112,9 @@
   }
 }
 
-
 @keyframes gradient-x {
-  0%, 100% {
+  0%,
+  100% {
     background-position: 0% 50%;
   }
   50% {
@@ -123,7 +123,8 @@
 }
 
 @keyframes pulse-slow {
-  0%, 100% {
+  0%,
+  100% {
     opacity: 0.3;
   }
   50% {
@@ -138,7 +139,7 @@
 
   body {
     @apply bg-background text-foreground;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: "JetBrains Mono", monospace;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }

@@ -111,18 +111,30 @@ Delete content configuration. v4 auto-detects component files.
 
 /* 4. CSS variables (unchanged) */
 @layer base {
-  :root { /* ... */ }
-  .dark { /* ... */ }
+  :root {
+    /* ... */
+  }
+  .dark {
+    /* ... */
+  }
 }
 
 /* 5. Keyframes (unchanged) */
-@keyframes gradient-x { /* ... */ }
-@keyframes pulse-slow { /* ... */ }
+@keyframes gradient-x {
+  /* ... */
+}
+@keyframes pulse-slow {
+  /* ... */
+}
 
 /* 6. Base styles (unchanged) */
 @layer base {
-  * { @apply border-border; }
-  body { @apply bg-background text-foreground; }
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
 }
 ```
 
@@ -143,7 +155,7 @@ Delete content configuration. v4 auto-detects component files.
 ```json
 {
   "dependencies": {
-    "autoprefixer": "^10.4.22"  // DELETE
+    "autoprefixer": "^10.4.22" // DELETE
   }
 }
 ```
@@ -166,6 +178,7 @@ Delete content configuration. v4 auto-detects component files.
 ### 1. Visual Regression Check
 
 Start dev server and test:
+
 - Hero section
 - Products section
 - Blog section
@@ -182,6 +195,7 @@ pnpm start
 ```
 
 Verify:
+
 - No Tailwind warnings/errors
 - Static generation works for blog posts
 - Production rendering matches dev

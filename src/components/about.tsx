@@ -1,8 +1,14 @@
-'use client'
+"use client";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Code, Lightbulb, Heart, Target } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
 
 export function About() {
   return (
@@ -11,7 +17,8 @@ export function About() {
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">About Volvox</h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            A community-driven company building the future of software development.
+            A community-driven company building the future of software
+            development.
           </p>
         </div>
 
@@ -22,18 +29,28 @@ export function About() {
             </CardHeader>
             <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
               <p>
-                Founded on <span className="text-foreground font-medium">January 2, 2020</span> by{' '}
-                <span className="text-foreground font-medium">Bill Chirico</span>, Volvox began with a simple mission:
-                build exceptional software while empowering the next generation of developers.
+                Founded on{" "}
+                <span className="text-foreground font-medium">
+                  January 2, 2020
+                </span>{" "}
+                by{" "}
+                <span className="text-foreground font-medium">
+                  Bill Chirico
+                </span>
+                , Volvox began with a simple mission: build exceptional software
+                while empowering the next generation of developers.
               </p>
               <p>
-                What started as a small software development company has evolved into a thriving community
-                where experienced developers mentor aspiring programmers through real-world open-source projects.
+                What started as a small software development company has evolved
+                into a thriving community where experienced developers mentor
+                aspiring programmers through real-world open-source projects.
               </p>
               <p>
-                Today, Volvox stands at the intersection of professional software development and education,
-                proving that building great products and fostering learning are not mutually exclusive—they&apos;re
-                complementary forces that drive innovation.
+                Today, Volvox stands at the intersection of professional
+                software development and education, proving that building great
+                products and fostering learning are not mutually
+                exclusive—they&apos;re complementary forces that drive
+                innovation.
               </p>
             </CardContent>
           </Card>
@@ -46,8 +63,9 @@ export function About() {
                 </div>
                 <CardTitle>Our Mission</CardTitle>
                 <CardDescription>
-                  To create world-class software solutions while cultivating a new generation of talented developers
-                  through hands-on, mentorship-driven learning.
+                  To create world-class software solutions while cultivating a
+                  new generation of talented developers through hands-on,
+                  mentorship-driven learning.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -59,8 +77,9 @@ export function About() {
                 </div>
                 <CardTitle>Our Values</CardTitle>
                 <CardDescription>
-                  Excellence in craft, generosity in teaching, and commitment to open source. We believe in
-                  building in public and sharing knowledge freely.
+                  Excellence in craft, generosity in teaching, and commitment to
+                  open source. We believe in building in public and sharing
+                  knowledge freely.
                 </CardDescription>
               </CardHeader>
             </Card>
@@ -85,8 +104,9 @@ export function About() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  We build innovative products that solve real problems, from web applications
-                  to developer tools, always with a focus on quality and user experience.
+                  We build innovative products that solve real problems, from
+                  web applications to developer tools, always with a focus on
+                  quality and user experience.
                 </p>
               </CardContent>
             </Card>
@@ -109,8 +129,9 @@ export function About() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Our mentorship program pairs aspiring developers with experienced engineers,
-                  providing real-world experience through open-source contributions.
+                  Our mentorship program pairs aspiring developers with
+                  experienced engineers, providing real-world experience through
+                  open-source contributions.
                 </p>
               </CardContent>
             </Card>
@@ -123,10 +144,12 @@ export function About() {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
             </span>
-            <span className="text-base font-medium text-primary">From Volvox with ❤️</span>
+            <span className="text-base font-medium text-primary">
+              From Volvox with ❤️
+            </span>
           </div>
         </div>
       </div>
     </section>
-  )
+  );
 }

@@ -1,38 +1,38 @@
-"use client"
+"use client";
 
-import { Button } from '@/components/ui/button'
-import { ArrowRight, GithubLogo, DiscordLogo } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
-import confettiLib from 'canvas-confetti'
+import { Button } from "@/components/ui/button";
+import { ArrowRight, GithubLogo, DiscordLogo } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import confettiLib from "canvas-confetti";
 
 interface HeroProps {
-  onNavigate: (section: string) => void
+  onNavigate: (section: string) => void;
 }
 
 export function Hero({ onNavigate }: HeroProps) {
   const handleTitleClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect()
-    const x = (rect.left + rect.width / 2) / window.innerWidth
-    const y = (rect.top + rect.height / 2) / window.innerHeight
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
 
     confettiLib({
       particleCount: 100,
       spread: 70,
-      origin: { x, y }
-    })
-  }
+      origin: { x, y },
+    });
+  };
 
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect()
-    const x = (rect.left + rect.width / 2) / window.innerWidth
-    const y = (rect.top + rect.height / 2) / window.innerHeight
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
 
     confettiLib({
       particleCount: 100,
       spread: 70,
-      origin: { x, y }
-    })
-  }
+      origin: { x, y },
+    });
+  };
 
   return (
     <section className="relative min-h-screen flex items-center justify-center px-4">
@@ -48,7 +48,9 @@ export function Hero({ onNavigate }: HeroProps) {
               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
               <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
             </span>
-            <span className="text-sm font-medium text-primary">Building the future of software development</span>
+            <span className="text-sm font-medium text-primary">
+              Building the future of software development
+            </span>
           </div>
         </motion.div>
 
@@ -77,8 +79,9 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
           className="text-xl md:text-2xl font-medium mb-8 text-muted-foreground max-w-3xl mx-auto leading-relaxed"
         >
-          A software development company and open-source learning community.
-          We build exceptional products while mentoring the next generation of developers.
+          A software development company and open-source learning community. We
+          build exceptional products while mentoring the next generation of
+          developers.
         </motion.p>
 
         <motion.div
@@ -89,23 +92,29 @@ export function Hero({ onNavigate }: HeroProps) {
         >
           <Button
             size="lg"
-            onClick={() => onNavigate('products')}
+            onClick={() => onNavigate("products")}
             className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
           >
             <span className="relative z-10 flex items-center gap-2">
               Explore Products
-              <ArrowRight weight="bold" className="h-5 w-5 transition-transform group-hover:translate-x-1" />
+              <ArrowRight
+                weight="bold"
+                className="h-5 w-5 transition-transform group-hover:translate-x-1"
+              />
             </span>
           </Button>
 
           <Button
             size="lg"
             variant="outline"
-            onClick={() => onNavigate('mentorship')}
+            onClick={() => onNavigate("mentorship")}
             className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary/10 hover:border-secondary transition-all duration-300 font-semibold shadow-md hover:shadow-lg"
           >
             Join as Mentee
-            <ArrowRight weight="bold" className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-1" />
+            <ArrowRight
+              weight="bold"
+              className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-1"
+            />
           </Button>
         </motion.div>
 
@@ -121,7 +130,10 @@ export function Hero({ onNavigate }: HeroProps) {
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
           >
-            <GithubLogo weight="fill" className="h-5 w-5 transition-transform group-hover:scale-110" />
+            <GithubLogo
+              weight="fill"
+              className="h-5 w-5 transition-transform group-hover:scale-110"
+            />
             <span className="font-medium">GitHub</span>
           </a>
           <div className="h-4 w-px bg-border" />
@@ -132,11 +144,14 @@ export function Hero({ onNavigate }: HeroProps) {
             onClick={handleDiscordClick}
             className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
           >
-            <DiscordLogo weight="fill" className="h-5 w-5 transition-transform group-hover:scale-110" />
+            <DiscordLogo
+              weight="fill"
+              className="h-5 w-5 transition-transform group-hover:scale-110"
+            />
             <span className="font-medium">Discord</span>
           </a>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

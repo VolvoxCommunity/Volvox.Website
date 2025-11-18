@@ -1,36 +1,47 @@
-'use client'
+"use client";
 
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
-import { Badge } from '@/components/ui/badge'
-import { GithubLogo, ArrowUpRight, CheckCircle } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
-import { Product } from '@/lib/types'
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { GithubLogo, ArrowUpRight, CheckCircle } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import { Product } from "@/lib/types";
 
 interface ProductsProps {
-  products: Product[]
+  products: Product[];
 }
 
 export function Products({ products }: ProductsProps) {
-  const product = products[0]
+  const product = products[0];
 
   if (!product) {
     return (
       <section id="products" className="py-16 md:py-24 px-4">
         <div className="container mx-auto max-w-7xl">
           <div className="text-center py-12">
-            <p className="text-muted-foreground">No product available yet. Check back soon!</p>
+            <p className="text-muted-foreground">
+              No product available yet. Check back soon!
+            </p>
           </div>
         </div>
       </section>
-    )
+    );
   }
 
   return (
     <section id="products" className="py-16 md:py-24 px-4">
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Featured Product</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Featured Product
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Crafted with precision, built to support recovery journeys.
           </p>
@@ -79,7 +90,7 @@ export function Products({ products }: ProductsProps) {
                       Tech Stack
                     </h4>
                     <div className="flex flex-wrap gap-2">
-                      {product.techStack.map(tech => (
+                      {product.techStack.map((tech) => (
                         <Badge
                           key={tech}
                           variant="secondary"
@@ -106,8 +117,13 @@ export function Products({ products }: ProductsProps) {
                           viewport={{ once: true }}
                           transition={{ delay: idx * 0.1 }}
                         >
-                          <CheckCircle weight="fill" className="h-5 w-5 text-primary mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform" />
-                          <span className="text-sm leading-relaxed">{feature}</span>
+                          <CheckCircle
+                            weight="fill"
+                            className="h-5 w-5 text-primary mt-0.5 flex-shrink-0 group-hover/item:scale-110 transition-transform"
+                          />
+                          <span className="text-sm leading-relaxed">
+                            {feature}
+                          </span>
                         </motion.li>
                       ))}
                     </ul>
@@ -122,8 +138,15 @@ export function Products({ products }: ProductsProps) {
                       asChild
                       className="flex-1 gap-2 group/btn hover:border-primary/50 hover:bg-primary/5"
                     >
-                      <a href={product.githubUrl} target="_blank" rel="noopener noreferrer">
-                        <GithubLogo weight="fill" className="h-5 w-5 group-hover/btn:scale-110 transition-transform" />
+                      <a
+                        href={product.githubUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        <GithubLogo
+                          weight="fill"
+                          className="h-5 w-5 group-hover/btn:scale-110 transition-transform"
+                        />
                         View Code
                       </a>
                     </Button>
@@ -134,9 +157,16 @@ export function Products({ products }: ProductsProps) {
                       asChild
                       className="flex-1 gap-2 group/btn shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
                     >
-                      <a href={product.demoUrl} target="_blank" rel="noopener noreferrer">
+                      <a
+                        href={product.demoUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
                         Try Demo
-                        <ArrowUpRight weight="bold" className="h-5 w-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform" />
+                        <ArrowUpRight
+                          weight="bold"
+                          className="h-5 w-5 group-hover/btn:translate-x-0.5 group-hover/btn:-translate-y-0.5 transition-transform"
+                        />
                       </a>
                     </Button>
                   )}
@@ -155,5 +185,5 @@ export function Products({ products }: ProductsProps) {
         </motion.div>
       </div>
     </section>
-  )
+  );
 }

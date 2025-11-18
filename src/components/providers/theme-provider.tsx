@@ -1,26 +1,27 @@
-"use client"
+"use client";
 
-import * as React from "react"
+import * as React from "react";
 
-type Theme = "dark" | "light" | "system"
+type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
-  children: React.ReactNode
-  defaultTheme?: Theme
-  storageKey?: string
-}
+  children: React.ReactNode;
+  defaultTheme?: Theme;
+  storageKey?: string;
+};
 
 type ThemeProviderState = {
-  theme: Theme
-  setTheme: (theme: Theme) => void
-}
+  theme: Theme;
+  setTheme: (theme: Theme) => void;
+};
 
 const initialState: ThemeProviderState = {
   theme: "system",
   setTheme: () => null,
-}
+};
 
-const ThemeProviderContext = React.createContext<ThemeProviderState>(initialState)
+const ThemeProviderContext =
+  React.createContext<ThemeProviderState>(initialState);
 
 export function ThemeProvider({
   children,
@@ -28,58 +29,59 @@ export function ThemeProvider({
   storageKey = "volvox-theme",
   ...props
 }: ThemeProviderProps) {
-  const [theme, setTheme] = React.useState<Theme>(defaultTheme)
-  const [mounted, setMounted] = React.useState(false)
+  const [theme, setTheme] = React.useState<Theme>(defaultTheme);
+  const [mounted, setMounted] = React.useState(false);
 
   React.useEffect(() => {
-    setMounted(true)
-    const stored = localStorage.getItem(storageKey) as Theme
+    setMounted(true);
+    const stored = localStorage.getItem(storageKey) as Theme;
     if (stored) {
-      setTheme(stored)
+      setTheme(stored);
     }
-  }, [storageKey])
+  }, [storageKey]);
 
   React.useEffect(() => {
-    if (!mounted) return
+    if (!mounted) return;
 
-    const root = window.document.documentElement
-    root.classList.remove("light", "dark")
+    const root = window.document.documentElement;
+    root.classList.remove("light", "dark");
 
     if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
+      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)")
+        .matches
         ? "dark"
-        : "light"
-      root.classList.add(systemTheme)
+        : "light";
+      root.classList.add(systemTheme);
     } else {
-      root.classList.add(theme)
+      root.classList.add(theme);
     }
 
-    localStorage.setItem(storageKey, theme)
-  }, [theme, mounted, storageKey])
+    localStorage.setItem(storageKey, theme);
+  }, [theme, mounted, storageKey]);
 
   const value = {
     theme,
     setTheme: (theme: Theme) => {
-      setTheme(theme)
+      setTheme(theme);
     },
-  }
+  };
 
   if (!mounted) {
-    return <>{children}</>
+    return <>{children}</>;
   }
 
   return (
     <ThemeProviderContext.Provider {...props} value={value}>
       {children}
     </ThemeProviderContext.Provider>
-  )
+  );
 }
 
 export const useTheme = () => {
-  const context = React.useContext(ThemeProviderContext)
+  const context = React.useContext(ThemeProviderContext);
 
   if (context === undefined)
-    throw new Error("useTheme must be used within a ThemeProvider")
+    throw new Error("useTheme must be used within a ThemeProvider");
 
-  return context
-}
+  return context;
+};

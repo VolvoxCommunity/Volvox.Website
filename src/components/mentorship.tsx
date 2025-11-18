@@ -1,40 +1,55 @@
-'use client'
+"use client";
 
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
-import { GraduationCap, Users, Rocket, DiscordLogo, GithubLogo } from '@phosphor-icons/react'
-import { motion } from 'framer-motion'
-import { Mentor, Mentee } from '@/lib/types'
-import confettiLib from 'canvas-confetti'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import {
+  GraduationCap,
+  Users,
+  Rocket,
+  DiscordLogo,
+  GithubLogo,
+} from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import { Mentor, Mentee } from "@/lib/types";
+import confettiLib from "canvas-confetti";
 
 interface MentorshipProps {
-  mentors: Mentor[]
-  mentees: Mentee[]
+  mentors: Mentor[];
+  mentees: Mentee[];
 }
 
 export function Mentorship({ mentors, mentees }: MentorshipProps) {
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect()
-    const x = (rect.left + rect.width / 2) / window.innerWidth
-    const y = (rect.top + rect.height / 2) / window.innerHeight
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
 
     confettiLib({
       particleCount: 100,
       spread: 70,
-      origin: { x, y }
-    })
-  }
+      origin: { x, y },
+    });
+  };
 
   return (
     <section id="mentorship" className="py-16 md:py-24 px-4">
       <div className="container mx-auto max-w-7xl">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Mentorship Program</h2>
+          <h2 className="text-3xl md:text-5xl font-bold mb-4">
+            Mentorship Program
+          </h2>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-            Learn by doing. Contribute to real open-source projects with guidance from experienced developers.
+            Learn by doing. Contribute to real open-source projects with
+            guidance from experienced developers.
           </p>
         </div>
 
@@ -52,13 +67,17 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                   whileHover={{ rotate: 360 }}
                   transition={{ duration: 0.6 }}
                 >
-                  <GraduationCap className="h-6 w-6 text-primary" weight="fill" />
+                  <GraduationCap
+                    className="h-6 w-6 text-primary"
+                    weight="fill"
+                  />
                 </motion.div>
                 <CardTitle className="text-xl">Learn by Building</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Work on real-world projects and gain practical experience while learning best practices.
+                  Work on real-world projects and gain practical experience
+                  while learning best practices.
                 </p>
               </CardContent>
             </Card>
@@ -84,7 +103,8 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Get personalized mentorship from experienced developers who care about your growth.
+                  Get personalized mentorship from experienced developers who
+                  care about your growth.
                 </p>
               </CardContent>
             </Card>
@@ -110,7 +130,8 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
               </CardHeader>
               <CardContent>
                 <p className="text-sm text-muted-foreground">
-                  Build your portfolio, contribute to open source, and kickstart your programming career.
+                  Build your portfolio, contribute to open source, and kickstart
+                  your programming career.
                 </p>
               </CardContent>
             </Card>
@@ -125,17 +146,26 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
 
           <TabsContent value="mentors">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mentors.map(mentor => (
-                <Card key={mentor.id} className="hover:shadow-lg transition-shadow">
+              {mentors.map((mentor) => (
+                <Card
+                  key={mentor.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start gap-4">
                       <Avatar className="h-16 w-16">
                         <AvatarImage src={mentor.avatar} alt={mentor.name} />
-                        <AvatarFallback className="text-lg">{mentor.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className="text-lg">
+                          {mentor.name.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg mb-1">{mentor.name}</CardTitle>
-                        <CardDescription className="text-sm">{mentor.role}</CardDescription>
+                        <CardTitle className="text-lg mb-1">
+                          {mentor.name}
+                        </CardTitle>
+                        <CardDescription className="text-sm">
+                          {mentor.role}
+                        </CardDescription>
                       </div>
                     </div>
                   </CardHeader>
@@ -148,8 +178,12 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                     <div className="mb-4">
                       <p className="text-xs font-medium mb-2">Expertise:</p>
                       <div className="flex flex-wrap gap-1">
-                        {mentor.expertise.slice(0, 4).map(skill => (
-                          <Badge key={skill} variant="secondary" className="text-xs">
+                        {mentor.expertise.slice(0, 4).map((skill) => (
+                          <Badge
+                            key={skill}
+                            variant="secondary"
+                            className="text-xs"
+                          >
                             {skill}
                           </Badge>
                         ))}
@@ -157,8 +191,17 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                     </div>
 
                     {mentor.githubUrl && (
-                      <Button variant="outline" size="sm" asChild className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary">
-                        <a href={mentor.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                      >
+                        <a
+                          href={mentor.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <GithubLogo weight="fill" className="h-4 w-4" />
                           View Profile
                         </a>
@@ -171,24 +214,35 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
 
             {mentors.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">Our mentor team is growing. Check back soon!</p>
+                <p className="text-muted-foreground">
+                  Our mentor team is growing. Check back soon!
+                </p>
               </div>
             )}
           </TabsContent>
 
           <TabsContent value="mentees">
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {mentees.map(mentee => (
-                <Card key={mentee.id} className="hover:shadow-lg transition-shadow">
+              {mentees.map((mentee) => (
+                <Card
+                  key={mentee.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardHeader>
                     <div className="flex items-start gap-4">
                       <Avatar className="h-16 w-16">
                         <AvatarImage src={mentee.avatar} alt={mentee.name} />
-                        <AvatarFallback className="text-lg">{mentee.name.charAt(0)}</AvatarFallback>
+                        <AvatarFallback className="text-lg">
+                          {mentee.name.charAt(0)}
+                        </AvatarFallback>
                       </Avatar>
                       <div className="flex-1 min-w-0">
-                        <CardTitle className="text-lg mb-1">{mentee.name}</CardTitle>
-                        <Badge variant="secondary" className="text-xs">Mentee</Badge>
+                        <CardTitle className="text-lg mb-1">
+                          {mentee.name}
+                        </CardTitle>
+                        <Badge variant="secondary" className="text-xs">
+                          Mentee
+                        </Badge>
                       </div>
                     </div>
                   </CardHeader>
@@ -196,19 +250,34 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                   <CardContent>
                     <div className="space-y-3">
                       <div>
-                        <p className="text-xs font-medium mb-1">Learning Goals:</p>
-                        <p className="text-sm text-muted-foreground">{mentee.goals}</p>
+                        <p className="text-xs font-medium mb-1">
+                          Learning Goals:
+                        </p>
+                        <p className="text-sm text-muted-foreground">
+                          {mentee.goals}
+                        </p>
                       </div>
 
                       <div>
                         <p className="text-xs font-medium mb-1">Progress:</p>
-                        <p className="text-sm text-muted-foreground">{mentee.progress}</p>
+                        <p className="text-sm text-muted-foreground">
+                          {mentee.progress}
+                        </p>
                       </div>
                     </div>
 
                     {mentee.githubUrl && (
-                      <Button variant="outline" size="sm" asChild className="w-full gap-2 mt-4 hover:bg-primary hover:text-primary-foreground hover:border-primary">
-                        <a href={mentee.githubUrl} target="_blank" rel="noopener noreferrer">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        asChild
+                        className="w-full gap-2 mt-4 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                      >
+                        <a
+                          href={mentee.githubUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
                           <GithubLogo weight="fill" className="h-4 w-4" />
                           View Profile
                         </a>
@@ -221,7 +290,9 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
 
             {mentees.length === 0 && (
               <div className="text-center py-12">
-                <p className="text-muted-foreground">Be the first to join our mentorship program!</p>
+                <p className="text-muted-foreground">
+                  Be the first to join our mentorship program!
+                </p>
               </div>
             )}
           </TabsContent>
@@ -230,13 +301,19 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
         <div className="mt-12 text-center">
           <Card className="max-w-2xl mx-auto border-primary/20 bg-primary/5">
             <CardHeader>
-              <CardTitle className="text-2xl">Ready to Start Learning?</CardTitle>
+              <CardTitle className="text-2xl">
+                Ready to Start Learning?
+              </CardTitle>
               <CardDescription>
-                Join our Discord community to connect with mentors and start your journey
+                Join our Discord community to connect with mentors and start
+                your journey
               </CardDescription>
             </CardHeader>
             <CardContent className="flex flex-col sm:flex-row gap-4 justify-center">
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button size="lg" asChild className="gap-2">
                   <a
                     href="https://discord.gg/8ahXACdamN"
@@ -249,9 +326,16 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                   </a>
                 </Button>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <motion.div
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
                 <Button size="lg" variant="outline" asChild className="gap-2">
-                  <a href="https://github.com/VolvoxCommunity" target="_blank" rel="noopener noreferrer">
+                  <a
+                    href="https://github.com/VolvoxCommunity"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
                     <GithubLogo weight="fill" className="h-5 w-5" />
                     Browse Projects
                   </a>
@@ -262,5 +346,5 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
         </div>
       </div>
     </section>
-  )
+  );
 }

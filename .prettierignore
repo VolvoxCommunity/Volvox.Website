@@ -1,0 +1,32 @@
+# Dependencies
+node_modules
+.pnp
+.pnp.*
+.yarn
+
+# Build outputs
+.next
+out
+build
+dist
+
+# Cache and logs
+.cache
+*.log
+.pnpm-debug.log*
+
+# Lock files
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+
+# Environment
+.env*
+
+# Misc
+.DS_Store
+*.pem
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts

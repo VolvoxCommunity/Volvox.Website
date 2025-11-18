@@ -5,6 +5,7 @@ A modern web platform for software development, mentorship, and community learni
 ## About
 
 Volvox is a software development and learning community that:
+
 - Showcases open-source projects and products
 - Publishes technical blog content using MDX
 - Facilitates mentorship programs for developers
@@ -55,6 +56,16 @@ pnpm start
 pnpm lint
 ```
 
+### Formatting
+
+```bash
+# Format all files
+pnpm format
+
+# Check formatting without making changes
+pnpm format:check
+```
+
 ## Project Structure
 
 ```
@@ -81,22 +92,26 @@ content/
 ## Key Features
 
 ### Server/Client Component Architecture
+
 - Server Components for data fetching and SEO
 - Client Components for interactivity and browser APIs
 - Clear separation of concerns
 
 ### MDX Blog System
+
 - Blog posts written in MDX (`content/blog/`)
 - Frontmatter metadata (title, author, date, tags)
 - Syntax highlighting with `rehype-highlight`
 - Static generation with `generateStaticParams()`
 
 ### Theme System
+
 - Light/dark/system modes via `next-themes`
 - CSS custom properties for colors
 - Persistent theme selection
 
 ### Single-Page Experience
+
 - Smooth scrolling navigation
 - Section-based routing
 - Dynamic section tracking

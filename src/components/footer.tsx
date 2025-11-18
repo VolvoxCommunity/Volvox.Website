@@ -1,4 +1,4 @@
-'use client'
+"use client";
 
 export function Footer() {
   return (
@@ -9,5 +9,5 @@ export function Footer() {
         </p>
       </div>
     </footer>
-  )
+  );
 }

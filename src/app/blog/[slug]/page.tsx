@@ -1,32 +1,32 @@
-import { Metadata } from 'next'
-import { MDXRemote } from 'next-mdx-remote/rsc'
-import { getPostBySlug, getAllPosts } from '@/lib/blog'
-import { notFound } from 'next/navigation'
-import Link from 'next/link'
-import Image from 'next/image'
-import { ArrowLeft, Calendar, Clock } from 'lucide-react'
-import { Badge } from '@/components/ui/badge'
-import { Button } from '@/components/ui/button'
+import { Metadata } from "next";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import { getPostBySlug, getAllPosts } from "@/lib/blog";
+import { notFound } from "next/navigation";
+import Link from "next/link";
+import Image from "next/image";
+import { ArrowLeft, Calendar, Clock } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export async function generateStaticParams() {
-  const posts = await getAllPosts()
+  const posts = await getAllPosts();
   return posts.map((post) => ({
     slug: post.slug,
-  }))
+  }));
 }
 
 export async function generateMetadata({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
-  const { slug } = await params
-  const { frontmatter } = await getPostBySlug(slug)
+  const { slug } = await params;
+  const { frontmatter } = await getPostBySlug(slug);
 
   if (!frontmatter) {
     return {
-      title: 'Post Not Found',
-    }
+      title: "Post Not Found",
+    };
   }
 
   return {
@@ -36,28 +36,28 @@ export async function generateMetadata({
     openGraph: {
       title: frontmatter.title,
       description: frontmatter.excerpt,
-      type: 'article',
+      type: "article",
       publishedTime: frontmatter.date,
       authors: [frontmatter.author.name],
     },
     twitter: {
-      card: 'summary_large_image',
+      card: "summary_large_image",
       title: frontmatter.title,
       description: frontmatter.excerpt,
     },
-  }
+  };
 }
 
 export default async function BlogPostPage({
   params,
 }: {
-  params: Promise<{ slug: string }>
+  params: Promise<{ slug: string }>;
 }) {
-  const { slug } = await params
-  const { frontmatter, content } = await getPostBySlug(slug)
+  const { slug } = await params;
+  const { frontmatter, content } = await getPostBySlug(slug);
 
   if (!frontmatter) {
-    notFound()
+    notFound();
   }
 
   return (
@@ -133,7 +133,8 @@ export default async function BlogPostPage({
         </header>
 
         {/* MDX Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none
+        <div
+          className="prose prose-lg dark:prose-invert max-w-none
           prose-headings:font-bold prose-headings:text-foreground
           prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4
           prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
@@ -145,7 +146,8 @@ export default async function BlogPostPage({
           prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
           prose-ul:list-disc prose-ol:list-decimal
           prose-li:text-foreground/90
-        ">
+        "
+        >
           <MDXRemote source={content} />
         </div>
 
@@ -160,5 +162,5 @@ export default async function BlogPostPage({
         </footer>
       </article>
     </div>
-  )
+  );
 }
