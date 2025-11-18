@@ -6,20 +6,22 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v3.
 
+**Package Manager**: This project uses pnpm. The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
+
 ## Development Commands
 
 ```bash
 # Start development server (http://localhost:3000)
-npm run dev
+pnpm dev
 
 # Build for production
-npm run build
+pnpm build
 
 # Start production server
-npm start
+pnpm start
 
 # Run linting
-npm run lint
+pnpm lint
 ```
 
 ## Architecture

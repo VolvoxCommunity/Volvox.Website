@@ -25,16 +25,16 @@ Volvox is a software development and learning community that:
 ### Prerequisites
 
 - Node.js 20+ recommended
-- npm, yarn, pnpm, or bun
+- pnpm (install globally: `npm install -g pnpm`)
 
 ### Development
 
 ```bash
 # Install dependencies
-npm install
+pnpm install
 
 # Run development server
-npm run dev
+pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
@@ -43,16 +43,16 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ```bash
 # Create production build
-npm run build
+pnpm build
 
 # Start production server
-npm start
+pnpm start
 ```
 
 ### Linting
 
 ```bash
-npm run lint
+pnpm lint
 ```
 
 ## Project Structure

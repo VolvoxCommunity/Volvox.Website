@@ -4,6 +4,15 @@
 /node_modules
 /.pnp
 .pnp.*
+
+# pnpm (primary package manager)
+.pnpm-store/
+
+# lock files from other package managers
+package-lock.json
+yarn.lock
+
+# yarn
 .yarn/*
 !.yarn/patches
 !.yarn/plugins
