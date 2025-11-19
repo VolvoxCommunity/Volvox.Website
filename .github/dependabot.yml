@@ -31,16 +31,3 @@ updates:
     labels:
       - 'github-actions'
       - 'dependencies'
-
-  # Maintain dependencies for all dependencies
-  - package-ecosystem: 'composer'
-    directory: '/'
-    schedule:
-      interval: 'daily'
-    versioning-strategy: increase
-    assignees:
-      - 'BillChirico'
-    reviewers:
-      - 'BillChirico'
-    labels:
-      - 'dependencies'
