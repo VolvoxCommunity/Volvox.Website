@@ -8,6 +8,8 @@ import { ArrowLeft, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import rehypeHighlight from "rehype-highlight";
+import { mdxComponents } from "@/lib/mdx-components";
+import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 
 export async function generateStaticParams() {
   const posts = await getAllPosts();
@@ -64,8 +66,8 @@ export default async function BlogPostPage({
   return (
     <div className="min-h-screen">
       {/* Header Navigation */}
-      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl">
-        <div className="container mx-auto px-4 max-w-4xl">
+      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-center justify-between h-16">
             <Button variant="ghost" asChild>
               <Link href="/" className="flex items-center gap-2">
@@ -80,8 +82,8 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      {/* Blog Post Content */}
-      <article className="container mx-auto px-4 py-16 max-w-4xl">
+      {/* Blog Post Content with Reading Progress and TOC */}
+      <BlogContentWrapper>
         {/* Post Header */}
         <header className="mb-12">
           <div className="flex flex-wrap gap-2 mb-4">
@@ -132,21 +134,20 @@ export default async function BlogPostPage({
         {/* MDX Content */}
         <div
           className="prose prose-lg dark:prose-invert max-w-none
-          prose-headings:font-bold prose-headings:text-foreground
-          prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4
-          prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
-          prose-p:text-foreground/90 prose-p:leading-relaxed
+          prose-headings:text-foreground
+          prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl
           prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-          prose-strong:text-foreground prose-strong:font-semibold
-          prose-code:text-secondary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+          prose-strong:text-foreground
+          prose-code:text-secondary prose-code:bg-muted
           prose-pre:bg-card prose-pre:border prose-pre:border-border
           prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
           prose-ul:list-disc prose-ol:list-decimal
-          prose-li:text-foreground/90
+          prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
         "
         >
           <MDXRemote
             source={content}
+            components={mdxComponents}
             options={{
               mdxOptions: {
                 rehypePlugins: [rehypeHighlight],
@@ -164,7 +165,7 @@ export default async function BlogPostPage({
             </Link>
           </Button>
         </footer>
-      </article>
+      </BlogContentWrapper>
     </div>
   );
 }
