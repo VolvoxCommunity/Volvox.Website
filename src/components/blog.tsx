@@ -19,6 +19,8 @@ import {
 import { Clock, Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
+import { MDXRemote } from "next-mdx-remote/rsc";
+import rehypeHighlight from "rehype-highlight";
 
 interface BlogProps {
   posts: BlogPost[];
@@ -233,10 +235,19 @@ export function Blog({ posts }: BlogProps) {
                 </div>
               </DialogHeader>
 
-              <div className="prose prose-sm md:prose-base dark:prose-invert max-w-none mt-6">
-                <p className="text-lg text-muted-foreground leading-relaxed">
-                  {selectedPost.content}
-                </p>
+              <div
+                className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
+                style={{ maxHeight: 'calc(90vh - 280px)' }}
+                onScroll={handleScroll}
+              >
+                <MDXRemote
+                  source={selectedPost.content}
+                  options={{
+                    mdxOptions: {
+                      rehypePlugins: [rehypeHighlight],
+                    },
+                  }}
+                />
               </div>
             </>
           )}
