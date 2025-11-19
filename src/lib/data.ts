@@ -23,10 +23,11 @@ export async function getAllProducts(
  * @returns All mentors from the JSON file.
  */
 export async function getAllMentors() {
+  const mentors = getMentors();
   return {
-    items: getMentors(),
-    total: getMentors().length,
-    limit: getMentors().length,
+    items: mentors,
+    total: mentors.length,
+    limit: mentors.length,
     offset: 0,
     hasMore: false,
   };
@@ -38,10 +39,11 @@ export async function getAllMentors() {
  * @returns All mentees from the JSON file.
  */
 export async function getAllMentees() {
+  const mentees = getMentees();
   return {
-    items: getMentees(),
-    total: getMentees().length,
-    limit: getMentees().length,
+    items: mentees,
+    total: mentees.length,
+    limit: mentees.length,
     offset: 0,
     hasMore: false,
   };
