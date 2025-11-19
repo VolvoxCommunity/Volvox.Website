@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 const VIEWED_POSTS_KEY = "volvox_viewed_posts";
 
 /**
@@ -53,4 +55,14 @@ export async function trackPostView(slug: string): Promise<void> {
   } catch (error) {
     console.error("Failed to track post view:", error);
   }
+}
+
+/**
+ * React hook to track post view on component mount.
+ * Use this in blog post pages for declarative view tracking.
+ */
+export function usePostViewTracking(slug: string): void {
+  useEffect(() => {
+    trackPostView(slug);
+  }, [slug]);
 }
