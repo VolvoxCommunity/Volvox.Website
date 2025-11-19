@@ -67,6 +67,15 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
           >
+            <div className="w-8 h-8 flex-shrink-0">
+              <Image
+                src="/logo.png"
+                alt="Volvox Logo"
+                width={32}
+                height={32}
+                className="rounded-lg w-full h-full object-contain"
+              />
+            </div>
             <span className="text-xl font-bold text-primary">Volvox</span>
           </motion.button>
 
