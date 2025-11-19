@@ -16,7 +16,7 @@ export interface BlogPost {
   title: string;
   excerpt: string;
   content: string;
-  author: Author;
+  author: Author | null;
   date: string;
   tags: string[];
   readTime: string;

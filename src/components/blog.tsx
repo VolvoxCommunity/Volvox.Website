@@ -71,19 +71,19 @@ export function Blog({ posts }: BlogProps) {
                   <div className="flex items-center gap-3 mb-3">
                     <Avatar className="h-8 w-8">
                       <AvatarImage
-                        src={post.author.avatar}
-                        alt={post.author.name}
+                        src={post.author?.avatar}
+                        alt={post.author?.name || "Volvox"}
                       />
                       <AvatarFallback>
-                        {post.author.name.charAt(0)}
+                        {(post.author?.name || "Volvox").charAt(0)}
                       </AvatarFallback>
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <p className="text-xs font-medium truncate">
-                        {post.author.name}
+                        {post.author?.name || "Volvox"}
                       </p>
                       <p className="text-xs text-muted-foreground truncate">
-                        {post.author.role}
+                        {post.author?.role || "Team"}
                       </p>
                     </div>
                   </div>
@@ -151,19 +151,19 @@ export function Blog({ posts }: BlogProps) {
                 <div className="flex items-center gap-3 mb-4">
                   <Avatar className="h-10 w-10">
                     <AvatarImage
-                      src={selectedPost.author.avatar}
-                      alt={selectedPost.author.name}
+                      src={selectedPost.author?.avatar}
+                      alt={selectedPost.author?.name || "Volvox"}
                     />
                     <AvatarFallback>
-                      {selectedPost.author.name.charAt(0)}
+                      {(selectedPost.author?.name || "Volvox").charAt(0)}
                     </AvatarFallback>
                   </Avatar>
                   <div>
                     <p className="text-sm font-medium">
-                      {selectedPost.author.name}
+                      {selectedPost.author?.name || "Volvox"}
                     </p>
                     <p className="text-xs text-muted-foreground">
-                      {selectedPost.author.role}
+                      {selectedPost.author?.role || "Team"}
                     </p>
                   </div>
                 </div>
