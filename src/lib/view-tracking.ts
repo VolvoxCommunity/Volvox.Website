@@ -63,6 +63,6 @@ export async function trackPostView(slug: string): Promise<void> {
  */
 export function usePostViewTracking(slug: string): void {
   useEffect(() => {
-    trackPostView(slug);
+    void trackPostView(slug);
   }, [slug]);
 }
