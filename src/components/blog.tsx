@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Clock, Eye } from "@phosphor-icons/react";
+import { Clock, Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 
@@ -169,55 +169,67 @@ export function Blog({ posts }: BlogProps) {
         <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
           {selectedPost && (
             <>
-              <DialogHeader>
-                <div className="flex items-center gap-3 mb-4">
-                  <Avatar className="h-10 w-10">
-                    <AvatarImage
-                      src={selectedPost.author?.avatar}
-                      alt={selectedPost.author?.name || "Volvox"}
-                    />
-                    <AvatarFallback>
-                      {(selectedPost.author?.name || "Volvox").charAt(0)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <div>
-                    <p className="text-sm font-medium">
-                      {selectedPost.author?.name || "Volvox"}
-                    </p>
-                    <p className="text-xs text-muted-foreground">
-                      {selectedPost.author?.role || "Team"}
-                    </p>
+              <DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
+                isScrolled ? 'shadow-md bg-background/95 backdrop-blur-sm' : 'bg-background'
+              }`}>
+                {/* Progress Bar */}
+                <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
+                  <div
+                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-all duration-150 ease-out"
+                    style={{ width: `${scrollProgress}%` }}
+                  />
+                </div>
+
+                <div className="pt-6 px-6 pb-4">
+                  {/* Author Info */}
+                  <div className="flex items-center gap-3 mb-4">
+                    <Avatar className="h-10 w-10">
+                      <AvatarImage
+                        src={selectedPost.author?.avatar}
+                        alt={selectedPost.author?.name || "Volvox"}
+                      />
+                      <AvatarFallback>
+                        {(selectedPost.author?.name || "Volvox").charAt(0)}
+                      </AvatarFallback>
+                    </Avatar>
+                    <div>
+                      <p className="text-sm font-medium">
+                        {selectedPost.author?.name || "Volvox"}
+                      </p>
+                      <p className="text-xs text-muted-foreground">
+                        {selectedPost.author?.role || "Team"}
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <DialogTitle className="text-2xl md:text-3xl">
-                  {selectedPost.title}
-                </DialogTitle>
+                  {/* Title */}
+                  <DialogTitle className="text-2xl md:text-3xl mb-3">
+                    {selectedPost.title}
+                  </DialogTitle>
 
-                <div className="flex items-center gap-4 text-sm text-muted-foreground pt-2">
-                  <span className="flex items-center gap-1">
-                    <Clock className="h-4 w-4" />
-                    {selectedPost.readTime}
-                  </span>
-                  <span>
-                    {new Date(selectedPost.date).toLocaleDateString("en-US", {
-                      month: "long",
-                      day: "numeric",
-                      year: "numeric",
-                    })}
-                  </span>
-                  <span className="flex items-center gap-1">
-                    <Eye className="h-4 w-4" />
-                    {selectedPost.views} views
-                  </span>
-                </div>
+                  {/* Metadata */}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
+                    <span>
+                      {new Date(selectedPost.date).toLocaleDateString("en-US", {
+                        month: "long",
+                        day: "numeric",
+                        year: "numeric",
+                      })}
+                    </span>
+                    <span className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      {selectedPost.views} views
+                    </span>
+                  </div>
 
-                <div className="flex flex-wrap gap-2 pt-3">
-                  {selectedPost.tags.map((tag) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
+                  {/* Tags */}
+                  <div className="flex flex-wrap gap-2">
+                    {selectedPost.tags.map((tag) => (
+                      <Badge key={tag} variant="secondary">
+                        {tag}
+                      </Badge>
+                    ))}
+                  </div>
                 </div>
               </DialogHeader>
 
