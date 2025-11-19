@@ -170,7 +170,7 @@ export function Blog({ posts }: BlogProps) {
           setIsScrolled(false);
         }}
       >
-        <DialogContent className="max-w-3xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
               <DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
