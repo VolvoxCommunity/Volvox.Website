@@ -13,6 +13,7 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/components/providers/theme-provider";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
+import Image from "next/image";
 
 interface NavigationProps {
   onNavigate: (section: string) => void;
@@ -74,11 +75,10 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
-                className={`text-sm font-medium transition-all px-4 py-2 rounded-lg relative cursor-pointer ${
-                  currentSection === item.id
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-primary hover:bg-muted"
-                }`}
+                className={`text-sm font-medium transition-all px-4 py-2 rounded-lg relative cursor-pointer ${currentSection === item.id
+                  ? "text-primary bg-primary/10"
+                  : "text-foreground hover:text-primary hover:bg-muted"
+                  }`}
               >
                 {item.label}
               </button>
@@ -155,11 +155,10 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                     <button
                       key={item.id}
                       onClick={() => handleNavigate(item.id)}
-                      className={`text-left text-lg font-medium transition-all px-4 py-2 rounded-lg cursor-pointer ${
-                        currentSection === item.id
-                          ? "text-primary bg-primary/10"
-                          : "text-foreground hover:text-primary hover:bg-muted"
-                      }`}
+                      className={`text-left text-lg font-medium transition-all px-4 py-2 rounded-lg cursor-pointer ${currentSection === item.id
+                        ? "text-primary bg-primary/10"
+                        : "text-foreground hover:text-primary hover:bg-muted"
+                        }`}
                     >
                       {item.label}
                     </button>

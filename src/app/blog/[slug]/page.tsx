@@ -34,13 +34,13 @@ export async function generateMetadata({
   return {
     title: `${frontmatter.title} - Volvox Blog`,
     description: frontmatter.excerpt,
-    authors: [{ name: frontmatter.author.name }],
+    authors: [{ name: frontmatter.author?.name || "Volvox" }],
     openGraph: {
       title: frontmatter.title,
       description: frontmatter.excerpt,
       type: "article",
       publishedTime: frontmatter.date,
-      authors: [frontmatter.author.name],
+      authors: [frontmatter.author?.name || "Volvox"],
     },
     twitter: {
       card: "summary_large_image",
