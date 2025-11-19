@@ -63,22 +63,3 @@ export interface Mentee {
   progress: string;
   githubUrl?: string;
 }
-
-/**
- * @deprecated Temporary stub for backward compatibility - will be removed in Task 6
- */
-export interface PaginationOptions {
-  limit?: number;
-  offset?: number;
-}
-
-/**
- * @deprecated Temporary stub for backward compatibility - will be removed in Task 6
- */
-export interface PaginatedResult<T> {
-  items: T[];
-  total: number;
-  limit: number;
-  offset: number;
-  hasMore: boolean;
-}
