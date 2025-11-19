@@ -22,7 +22,6 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         content,
         date,
         tags,
-        read_time,
         views,
         published,
         author:authors (
@@ -54,7 +53,6 @@ export async function getAllPosts(): Promise<BlogPost[]> {
           author: post.author,
           date: post.date,
           tags: post.tags || [],
-          readTime: post.read_time,
           slug: post.slug,
           views: post.views || 0,
           published: post.published || false,
@@ -83,7 +81,6 @@ export async function getPostBySlug(slug: string) {
       content,
       date,
       tags,
-      read_time,
       views,
       published,
       author:authors (
@@ -109,7 +106,6 @@ export async function getPostBySlug(slug: string) {
       author: data.author,
       date: data.date,
       tags: data.tags || [],
-      readTime: data.read_time,
     },
     content: data.content,
     slug: data.slug,

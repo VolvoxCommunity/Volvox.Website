@@ -19,7 +19,6 @@ export interface BlogPost {
   author: Author | null;
   date: string;
   tags: string[];
-  readTime: string;
   slug: string;
   views: number;
   published: boolean;

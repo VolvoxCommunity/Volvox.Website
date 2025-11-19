@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Clock, Eye, ArrowRight } from "@phosphor-icons/react";
+import { Eye, ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
@@ -132,10 +132,6 @@ export function Blog({ posts }: BlogProps) {
                   </div>
 
                   <div className="flex items-center gap-4 text-xs text-muted-foreground">
-                    <span className="flex items-center gap-1">
-                      <Clock className="h-3.5 w-3.5" />
-                      {post.readTime}
-                    </span>
                     <span>
                       {new Date(post.date).toLocaleDateString("en-US", {
                         month: "short",

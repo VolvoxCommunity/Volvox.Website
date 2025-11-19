@@ -92,7 +92,7 @@ pnpm format:check
 **Supabase PostgreSQL** with the following tables:
 
 - `authors` - Author profiles (id, name, role, avatar)
-- `blog_posts` - Blog content (id, title, slug, excerpt, content, author_id, date, tags, read_time, views, published)
+- `blog_posts` - Blog content (id, title, slug, excerpt, content, author_id, date, tags, views, published)
 - `products` - Product information (id, name, description, long_description, tech_stack, features, github_url, demo_url, image)
 - `mentors` - Mentor profiles (id, name, avatar, role, expertise, bio, github_url)
 - `mentees` - Mentee profiles (id, name, avatar, goals, progress, github_url)

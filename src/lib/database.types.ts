@@ -50,7 +50,6 @@ export type Database = {
           excerpt: string
           id: string
           published: boolean | null
-          read_time: string
           slug: string
           tags: string[] | null
           title: string
@@ -65,7 +64,6 @@ export type Database = {
           excerpt: string
           id?: string
           published?: boolean | null
-          read_time: string
           slug: string
           tags?: string[] | null
           title: string
@@ -80,7 +78,6 @@ export type Database = {
           excerpt?: string
           id?: string
           published?: boolean | null
-          read_time?: string
           slug?: string
           tags?: string[] | null
           title?: string

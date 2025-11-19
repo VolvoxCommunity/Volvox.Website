@@ -4,7 +4,7 @@ import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Clock, Eye } from "lucide-react";
+import { ArrowLeft, Calendar, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { PostViewTracker } from "@/components/post-view-tracker";
@@ -126,10 +126,6 @@ export default async function BlogPostPage({
               <div className="flex items-center gap-1">
                 <Calendar className="h-4 w-4" />
                 <span>{frontmatter.date}</span>
-              </div>
-              <div className="flex items-center gap-1">
-                <Clock className="h-4 w-4" />
-                <span>{frontmatter.readTime}</span>
               </div>
               <div className="flex items-center gap-1">
                 <Eye className="h-4 w-4" />
