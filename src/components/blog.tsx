@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Card,
   CardContent,
@@ -9,6 +10,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   Dialog,
@@ -248,6 +250,27 @@ export function Blog({ posts }: BlogProps) {
                     },
                   }}
                 />
+              </div>
+
+              {/* Footer CTA */}
+              <div className="sticky bottom-0 border-t bg-background/95 backdrop-blur-sm p-4 flex items-center justify-between gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+                <Button
+                  variant="ghost"
+                  onClick={() => setSelectedPost(null)}
+                  className="text-muted-foreground"
+                >
+                  Back
+                </Button>
+
+                <Button
+                  asChild
+                  className="flex-1 sm:flex-none"
+                >
+                  <Link href={`/blog/${selectedPost.slug}`}>
+                    Read Full Article
+                    <ArrowRight className="h-4 w-4 ml-2" />
+                  </Link>
+                </Button>
               </div>
             </>
           )}
