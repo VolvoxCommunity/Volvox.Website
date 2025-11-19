@@ -1,4 +1,4 @@
-const SLUG_PATTERN = /^[a-z0-9-]+$/i;
+const SLUG_PATTERN = /^[a-z0-9-]+$/;
 const MAX_SLUG_LENGTH = 120;
 
 /**
@@ -12,7 +12,7 @@ export function normalizeSlug(rawSlug: unknown): string | null {
     return null;
   }
 
-  const trimmed = rawSlug.trim();
+  const trimmed = rawSlug.trim().toLowerCase();
 
   if (!trimmed || trimmed.length > MAX_SLUG_LENGTH) {
     return null;

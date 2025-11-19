@@ -129,7 +129,7 @@ export async function getPostSlugs(): Promise<string[]> {
     .eq("published", true);
 
   if (error) {
-    console.error("Error fetching post slugs:", error);
+    reportError("Error fetching post slugs", error);
     return [];
   }
 
@@ -141,12 +141,15 @@ export async function getPostSlugs(): Promise<string[]> {
  *
  * @param slug - Slug to increment.
  */
-export async function incrementPostViews(slug: string): Promise<void> {
+export async function incrementPostViews(slug: string): Promise<boolean> {
   const { error } = await supabase.rpc("increment_post_views", {
     post_slug: slug,
   });
 
   if (error) {
     reportError("Error incrementing post views", error);
+    return false;
   }
+
+  return true;
 }

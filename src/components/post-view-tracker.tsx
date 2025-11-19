@@ -11,16 +11,16 @@ interface PostViewTrackerProps {
  * available for background analytics events.
  */
 export function PostViewTracker({ slug }: PostViewTrackerProps) {
-  const hasTrackedRef = useRef(false);
+  const lastTrackedSlugRef = useRef<string | null>(null);
 
   useEffect(() => {
-    if (!slug || hasTrackedRef.current) {
+    if (!slug || lastTrackedSlugRef.current === slug) {
       return;
     }
 
     const url = "/api/blog/views";
     const payload = JSON.stringify({ slug });
-    hasTrackedRef.current = true;
+    lastTrackedSlugRef.current = slug;
 
     const sendViaBeacon = (): boolean => {
       if (

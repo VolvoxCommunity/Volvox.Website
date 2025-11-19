@@ -55,6 +55,51 @@ const clampPagination = (limit: number, offset: number) => {
   };
 };
 
+async function getPaginatedData<T>(
+  tableName: string,
+  columns: string,
+  mapper: (row: any) => T,
+  options: PaginationOptions = {}
+): Promise<PaginatedResult<T>> {
+  const {
+    limit: safeLimit,
+    offset: safeOffset,
+    rangeEnd,
+  } = clampPagination(options.limit ?? 12, options.offset ?? 0);
+
+  try {
+    const { data, error, count } = await supabase
+      .from(tableName as any)
+      .select(columns, { count: "exact" })
+      .order("created_at", { ascending: false })
+      .range(safeOffset, rangeEnd);
+
+    if (error) {
+      throw error;
+    }
+
+    const items = data?.map(mapper) || [];
+    const total = count ?? items.length;
+
+    return {
+      items,
+      total,
+      limit: safeLimit,
+      offset: safeOffset,
+      hasMore: safeOffset + items.length < total,
+    };
+  } catch (error) {
+    reportError(`Error fetching ${tableName}`, error);
+    return {
+      items: [],
+      total: 0,
+      limit: safeLimit,
+      offset: safeOffset,
+      hasMore: false,
+    };
+  }
+}
+
 /**
  * Fetches products with pagination support.
  *
@@ -87,8 +132,8 @@ export async function getAllProducts(
         longDescription: product.long_description,
         techStack: product.tech_stack || [],
         features: product.features || [],
-        githubUrl: product.github_url || undefined,
-        demoUrl: product.demo_url || undefined,
+        githubUrl: product.github_url ?? undefined,
+        demoUrl: product.demo_url ?? undefined,
         image: product.image || "",
       })) || []
     );
@@ -107,53 +152,20 @@ export async function getAllProducts(
 export async function getAllMentors(
   options: PaginationOptions = {},
 ): Promise<PaginatedResult<Mentor>> {
-  const {
-    limit: safeLimit,
-    offset: safeOffset,
-    rangeEnd,
-  } = clampPagination(options.limit ?? 12, options.offset ?? 0);
-
-  try {
-    const { data, error, count } = await supabase
-      .from("mentors")
-      .select(MENTOR_COLUMNS, { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(safeOffset, rangeEnd);
-
-    if (error) {
-      throw error;
-    }
-
-    const items =
-      data?.map((mentor) => ({
-        id: mentor.id,
-        name: mentor.name,
-        avatar: mentor.avatar,
-        role: mentor.role,
-        expertise: mentor.expertise || [],
-        bio: mentor.bio,
-        githubUrl: mentor.github_url || undefined,
-      })) || [];
-
-    const total = count ?? items.length;
-
-    return {
-      items,
-      total,
-      limit: safeLimit,
-      offset: safeOffset,
-      hasMore: safeOffset + items.length < total,
-    };
-  } catch (error) {
-    reportError("Error fetching mentors", error);
-    return {
-      items: [],
-      total: 0,
-      limit: safeLimit,
-      offset: safeOffset,
-      hasMore: false,
-    };
-  }
+  return getPaginatedData(
+    "mentors",
+    MENTOR_COLUMNS,
+    (mentor) => ({
+      id: mentor.id,
+      name: mentor.name,
+      avatar: mentor.avatar,
+      role: mentor.role,
+      expertise: mentor.expertise || [],
+      bio: mentor.bio,
+      githubUrl: mentor.github_url ?? undefined,
+    }),
+    options
+  );
 }
 
 /**
@@ -165,50 +177,17 @@ export async function getAllMentors(
 export async function getAllMentees(
   options: PaginationOptions = {},
 ): Promise<PaginatedResult<Mentee>> {
-  const {
-    limit: safeLimit,
-    offset: safeOffset,
-    rangeEnd,
-  } = clampPagination(options.limit ?? 12, options.offset ?? 0);
-
-  try {
-    const { data, error, count } = await supabase
-      .from("mentees")
-      .select(MENTEE_COLUMNS, { count: "exact" })
-      .order("created_at", { ascending: false })
-      .range(safeOffset, rangeEnd);
-
-    if (error) {
-      throw error;
-    }
-
-    const items =
-      data?.map((mentee) => ({
-        id: mentee.id,
-        name: mentee.name,
-        avatar: mentee.avatar,
-        goals: mentee.goals,
-        progress: mentee.progress,
-        githubUrl: mentee.github_url || undefined,
-      })) || [];
-
-    const total = count ?? items.length;
-
-    return {
-      items,
-      total,
-      limit: safeLimit,
-      offset: safeOffset,
-      hasMore: safeOffset + items.length < total,
-    };
-  } catch (error) {
-    reportError("Error fetching mentees", error);
-    return {
-      items: [],
-      total: 0,
-      limit: safeLimit,
-      offset: safeOffset,
-      hasMore: false,
-    };
-  }
+  return getPaginatedData(
+    "mentees",
+    MENTEE_COLUMNS,
+    (mentee) => ({
+      id: mentee.id,
+      name: mentee.name,
+      avatar: mentee.avatar,
+      goals: mentee.goals,
+      progress: mentee.progress,
+      githubUrl: mentee.github_url ?? undefined,
+    }),
+    options
+  );
 }
