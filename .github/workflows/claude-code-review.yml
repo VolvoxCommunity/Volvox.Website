@@ -48,7 +48,8 @@ jobs:
 
             Use the repository's CLAUDE.md for guidance on style and conventions. Be constructive and helpful in your feedback.
 
-            Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR. If you've already left a comment, don't leave another one.
+            Use `gh pr comment` with your Bash tool to leave your review as a comment on the PR.
+            If you've already left a comment, don't leave another one and instead update the existing comment.
             Commit any fixes, documentation, and more to this PR branch.
 
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
