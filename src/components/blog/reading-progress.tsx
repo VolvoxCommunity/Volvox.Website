@@ -16,12 +16,19 @@ export function ReadingProgress() {
     const updateProgress = () => {
       // Get total scrollable height
       const scrollHeight = document.documentElement.scrollHeight - window.innerHeight;
+
+      // Handle pages with no scrollable content
+      if (scrollHeight <= 0) {
+        setProgress(100);
+        return;
+      }
+
       // Get current scroll position
       const scrolled = window.scrollY;
       // Calculate progress percentage
       const progressPercentage = (scrolled / scrollHeight) * 100;
 
-      setProgress(Math.min(progressPercentage, 100));
+      setProgress(Math.max(0, Math.min(progressPercentage, 100)));
     };
 
     // Update on scroll

@@ -31,7 +31,7 @@ export const mdxComponents = {
   ),
 
   // Override default HTML elements
-  pre: ({ children, ...props }: HTMLAttributes<HTMLPreElement>) => {
+  pre: ({ children }: HTMLAttributes<HTMLPreElement>) => {
     // Extract the code element and its props
     const className = isReactElementWithProps(children) ? children.props.className || "" : "";
     const filename = isReactElementWithProps(children) ? children.props.filename : undefined;
@@ -64,8 +64,8 @@ export const mdxComponents = {
       <ImageZoom
         src={typeof src === "string" ? src : ""}
         alt={alt || ""}
-        width={typeof width === "string" ? parseInt(width) : width}
-        height={typeof height === "string" ? parseInt(height) : height}
+        width={typeof width === "string" ? Number.parseInt(width, 10) || undefined : width}
+        height={typeof height === "string" ? Number.parseInt(height, 10) || undefined : height}
         caption={caption}
       />
     );

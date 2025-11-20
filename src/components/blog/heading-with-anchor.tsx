@@ -1,12 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useId, type HTMLAttributes, type ReactNode } from "react";
 import { Link2, Check } from "lucide-react";
 
-interface HeadingWithAnchorProps {
+interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
-  children?: React.ReactNode;
-  id?: string;
+  children?: ReactNode;
 }
 
 /**
@@ -23,6 +22,7 @@ interface HeadingWithAnchorProps {
  */
 export function HeadingWithAnchor({ as: Component, children, id, ...props }: HeadingWithAnchorProps) {
   const [copied, setCopied] = useState(false);
+  const autoId = useId();
 
   // Generate ID from text if not provided
   const headingId =
@@ -34,7 +34,7 @@ export function HeadingWithAnchor({ as: Component, children, id, ...props }: Hea
           .replace(/\s+/g, "-")
           .replace(/[^a-z0-9-_]/g, "")
           .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
-      : `heading-${Math.random().toString(36).substr(2, 9)}`); // Fallback for non-string
+      : `heading-${autoId}`);
 
   const handleCopyLink = async () => {
     const url = `${window.location.origin}${window.location.pathname}#${headingId}`;
@@ -52,13 +52,14 @@ export function HeadingWithAnchor({ as: Component, children, id, ...props }: Hea
     <Component id={headingId} className="group relative" {...props}>
       {children}
       <button
+        type="button"
         onClick={handleCopyLink}
-        className="inline-flex ml-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200
+        className="inline-flex ml-2 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200
                    text-muted-foreground hover:text-primary align-middle"
         aria-label="Copy link to heading"
       >
         {copied ? (
-          <Check className="h-4 w-4 text-[oklch(0.646_0.222_142)]" />
+          <Check className="h-4 w-4 text-green-500" />
         ) : (
           <Link2 className="h-4 w-4" />
         )}

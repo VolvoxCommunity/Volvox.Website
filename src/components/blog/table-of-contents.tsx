@@ -26,7 +26,7 @@ export function TableOfContents() {
     const seenIds = new Set<string>();
 
     elements.forEach((element) => {
-      let baseId =
+      const baseId =
         element.id ||
         element.textContent
           ?.toLowerCase()
@@ -111,6 +111,7 @@ export function TableOfContents() {
           {headings.map((heading) => (
             <li key={heading.id} className={heading.level === 3 ? "ml-4" : ""}>
               <button
+                type="button"
                 onClick={() => scrollToHeading(heading.id)}
                 className={`text-left transition-colors duration-200 hover:text-primary ${
                   activeId === heading.id
