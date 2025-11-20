@@ -2,6 +2,13 @@
 
 import { useEffect, useState } from "react";
 
+/**
+ * Render a top-fixed horizontal reading progress bar that visually reflects the user's vertical scroll position.
+ *
+ * The bar's width corresponds to the current scroll progress (0–100%) and updates automatically as the page is scrolled.
+ *
+ * @returns A JSX element containing a fixed, full-width progress bar whose inner fill width represents the current vertical scroll progress percentage.
+ */
 export function ReadingProgress() {
   const [progress, setProgress] = useState(0);
 

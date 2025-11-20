@@ -8,6 +8,12 @@ interface BlogContentWrapperProps {
   children: ReactNode;
 }
 
+/**
+ * Layout wrapper that displays blog content with a reading progress indicator and a desktop table of contents.
+ *
+ * @param children - Content rendered inside the main article column
+ * @returns The composed blog layout containing a ReadingProgress bar, the main article area, and a TableOfContents shown on large screens
+ */
 export function BlogContentWrapper({ children }: BlogContentWrapperProps) {
   return (
     <>

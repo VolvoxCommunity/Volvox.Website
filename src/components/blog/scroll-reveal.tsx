@@ -8,6 +8,16 @@ interface ScrollRevealProps {
   className?: string;
 }
 
+/**
+ * Reveals its children with a fade-and-slide-up animation when the element enters the viewport.
+ *
+ * Renders a wrapper div that starts hidden and transitions to visible when intersecting the viewport; respects the user's `prefers-reduced-motion` setting by showing content immediately. The reveal can be delayed and additional class names can be applied to the wrapper.
+ *
+ * @param children - Content to render inside the reveal wrapper.
+ * @param delay - Optional delay before the transition begins, in milliseconds (default: 0).
+ * @param className - Optional additional CSS class names to apply to the wrapper.
+ * @returns The wrapper div element that performs the reveal animation around `children`.
+ */
 export function ScrollReveal({ children, delay = 0, className = "" }: ScrollRevealProps) {
   const [isVisible, setIsVisible] = useState(false);
   const ref = useRef<HTMLDivElement>(null);

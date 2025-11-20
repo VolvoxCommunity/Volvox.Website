@@ -9,13 +9,32 @@ interface HeadingWithAnchorProps {
   id?: string;
 }
 
+/**
+ * Render a heading (h1–h6) that exposes a copyable URL anchor.
+ *
+ * Renders the specified heading element containing the provided children and an inline button
+ * that copies the full URL (including the heading hash) to the clipboard. If `id` is not provided,
+ * an id is derived from the text children or a stable fallback is generated.
+ *
+ * @param as - The heading level tag to render (`"h1"` through `"h6"`).
+ * @param children - Content to display inside the heading. If a string, it will be used to derive the heading id when `id` is not provided.
+ * @param id - Optional explicit id to assign to the heading; when omitted an id is derived from `children` or a fallback is generated.
+ * @returns A React element for the heading with an inline copy-link button.
+ */
 export function HeadingWithAnchor({ as: Component, children, id, ...props }: HeadingWithAnchorProps) {
   const [copied, setCopied] = useState(false);
 
   // Generate ID from text if not provided
-  const headingId = id || (typeof children === "string"
-    ? children.toLowerCase().replace(/\s+/g, "-").replace(/[^\w-]/g, "")
-    : "");
+  const headingId =
+    id ||
+    (typeof children === "string"
+      ? children
+          .toLowerCase()
+          .trim()
+          .replace(/\s+/g, "-")
+          .replace(/[^a-z0-9-_]/g, "")
+          .replace(/^-+|-+$/g, "") // Remove leading/trailing hyphens
+      : `heading-${Math.random().toString(36).substr(2, 9)}`); // Fallback for non-string
 
   const handleCopyLink = async () => {
     const url = `${window.location.origin}${window.location.pathname}#${headingId}`;

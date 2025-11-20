@@ -9,6 +9,14 @@ interface CodeBlockProps {
   filename?: string;
 }
 
+/**
+ * Render a styled code block with an optional filename/language header and a copy-to-clipboard button.
+ *
+ * @param children - Code content to render; may be a raw string or a code element whose children contain the text to display and copy.
+ * @param className - Optional class name (e.g., "language-typescript"); the language label is derived by removing the "language-" prefix and defaults to "plaintext".
+ * @param filename - Optional filename to show in the header bar.
+ * @returns A JSX element representing the code block with header (when filename or language is present) and an accessible copy button.
+ */
 export function CodeBlock({ children, className, filename }: CodeBlockProps) {
   const [copied, setCopied] = useState(false);
 
@@ -21,14 +29,18 @@ export function CodeBlock({ children, className, filename }: CodeBlockProps) {
 
     if (typeof children === "string") {
       text = children;
-    } else if (typeof children === "object" && children !== null) {
-      // Extract text from nested code element
-      const childrenObj = children as any;
-      if (childrenObj.props?.children) {
-        text = typeof childrenObj.props.children === "string"
-          ? childrenObj.props.children
-          : "";
-      }
+    } else if (
+      children &&
+      typeof children === "object" &&
+      "props" in children &&
+      (children as any).props?.children
+    ) {
+      text = String((children as any).props.children);
+    }
+
+    if (!text) {
+      console.warn("No text content found to copy");
+      return;
     }
 
     try {

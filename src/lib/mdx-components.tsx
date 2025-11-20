@@ -1,3 +1,4 @@
+import type { HTMLAttributes, ImgHTMLAttributes } from "react";
 import { Callout, CodeBlock, ImageZoom } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
 
@@ -6,13 +7,17 @@ export const mdxComponents = {
   Callout,
 
   // Headings with anchor links
-  h2: (props: any) => <HeadingWithAnchor as="h2" {...props} />,
-  h3: (props: any) => <HeadingWithAnchor as="h3" {...props} />,
+  h2: (props: HTMLAttributes<HTMLHeadingElement>) => (
+    <HeadingWithAnchor as="h2" {...props} />
+  ),
+  h3: (props: HTMLAttributes<HTMLHeadingElement>) => (
+    <HeadingWithAnchor as="h3" {...props} />
+  ),
 
   // Override default HTML elements
-  pre: ({ children, ...props }: any) => {
+  pre: ({ children, ...props }: HTMLAttributes<HTMLPreElement>) => {
     // Extract the code element and its props
-    const codeElement = children?.props;
+    const codeElement = (children as any)?.props;
     const className = codeElement?.className || "";
     const filename = codeElement?.filename;
 
@@ -23,7 +28,7 @@ export const mdxComponents = {
     );
   },
 
-  code: ({ children, className, ...props }: any) => {
+  code: ({ children, className, ...props }: HTMLAttributes<HTMLElement>) => {
     // Inline code (not in pre)
     if (!className) {
       return <code {...props}>{children}</code>;
@@ -36,23 +41,23 @@ export const mdxComponents = {
     );
   },
 
-  img: ({ src, alt, width, height, ...props }: any) => {
+  img: ({ src, alt, width, height, ...props }: ImgHTMLAttributes<HTMLImageElement>) => {
     // Use caption from data attribute if provided
-    const caption = props["data-caption"];
+    const caption = (props as any)["data-caption"];
 
     return (
       <ImageZoom
         src={src || ""}
         alt={alt || ""}
-        width={width}
-        height={height}
+        width={typeof width === "string" ? parseInt(width) : width}
+        height={typeof height === "string" ? parseInt(height) : height}
         caption={caption}
       />
     );
   },
 
   // Enhanced table styling
-  table: ({ children, ...props }: any) => (
+  table: ({ children, ...props }: HTMLAttributes<HTMLTableElement>) => (
     <div className="overflow-x-auto my-6">
       <table className="min-w-full" {...props}>
         {children}
@@ -61,9 +66,9 @@ export const mdxComponents = {
   ),
 
   // Task lists
-  li: ({ children, ...props }: any) => {
+  li: ({ children, ...props }: HTMLAttributes<HTMLLIElement>) => {
     // Check if this is a task list item
-    if (typeof children === "object" && children?.props?.type === "checkbox") {
+    if (typeof children === "object" && (children as any)?.props?.type === "checkbox") {
       return (
         <li className="flex items-start gap-2 list-none" {...props}>
           {children}

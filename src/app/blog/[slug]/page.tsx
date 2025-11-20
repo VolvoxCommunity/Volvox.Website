@@ -11,6 +11,11 @@ import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 
+/**
+ * Collects all blog post slugs to supply route parameters for static generation.
+ *
+ * @returns An array of objects each with a `slug` property for a post (e.g., `{ slug: 'my-post' }`)
+ */
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
@@ -51,6 +56,15 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Render the blog post page for a given post slug.
+ *
+ * Fetches the post identified by `params.slug`, renders its header, author info, MDX content, and navigation.
+ * Invokes `notFound()` if the post frontmatter is missing.
+ *
+ * @param params - Route parameters object that must include a `slug` string
+ * @returns The rendered blog post page for the specified slug
+ */
 export default async function BlogPostPage({
   params,
 }: {

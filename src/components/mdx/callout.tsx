@@ -61,6 +61,16 @@ const defaultTitles: Record<CalloutType, string> = {
   note: "Note",
 };
 
+/**
+ * Render a styled callout box for displaying highlighted content.
+ *
+ * Renders an inline icon, an optional uppercase title (defaults per callout type), and the provided children inside a visually distinct callout panel.
+ *
+ * @param type - The callout variant that determines iconography and color scheme (e.g., "info", "warning", "tip", "danger", "note")
+ * @param children - The content to display inside the callout
+ * @param title - Optional title text to display instead of the type's default title
+ * @returns A JSX element containing the callout with an icon, optional title, and the provided children
+ */
 export function Callout({
   type = "info",
   children,
