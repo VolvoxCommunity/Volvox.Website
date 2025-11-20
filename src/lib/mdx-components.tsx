@@ -47,7 +47,7 @@ export const mdxComponents = {
 
     return (
       <ImageZoom
-        src={src || ""}
+        src={typeof src === "string" ? src : ""}
         alt={alt || ""}
         width={typeof width === "string" ? parseInt(width) : width}
         height={typeof height === "string" ? parseInt(height) : height}

@@ -40,17 +40,10 @@ export function ImageZoom({
     <>
       {/* Thumbnail */}
       <figure className="my-8">
-        <div
-          role="button"
-          tabIndex={0}
-          className="relative rounded-lg overflow-hidden border border-border shadow-sm cursor-zoom-in hover:shadow-md transition-shadow duration-200"
+        <button
+          type="button"
+          className="relative rounded-lg overflow-hidden border border-border shadow-sm cursor-zoom-in hover:shadow-md transition-shadow duration-200 w-full"
           onClick={() => setIsOpen(true)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              setIsOpen(true);
-            }
-          }}
           aria-label={`Expand image: ${alt}`}
         >
           {width && height ? (
@@ -64,7 +57,7 @@ export function ImageZoom({
           ) : (
             <img src={src} alt={alt} className="w-full h-auto" />
           )}
-        </div>
+        </button>
         {(caption || alt) && (
           <figcaption className="mt-3 text-center text-sm text-muted-foreground italic">
             {caption || alt}
@@ -76,6 +69,7 @@ export function ImageZoom({
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg">
           <button
+            type="button"
             onClick={() => setIsOpen(false)}
             className="absolute top-4 right-4 z-50 rounded-full bg-background/80 p-2 border border-border hover:bg-background transition-colors"
             aria-label="Close"
