@@ -65,7 +65,7 @@ Enhancement of existing blog post page (`src/app/blog/[slug]/page.tsx`) in three
 
 ### File Structure
 
-```
+```text
 src/
 ├── components/mdx/
 │   ├── callout.tsx
@@ -196,7 +196,7 @@ src/
 
 ### File Structure
 
-```
+```text
 src/
 ├── app/blog/[slug]/
 │   ├── page.tsx (enhanced prose classes)
