@@ -27,6 +27,7 @@ export function HeadingWithAnchor({
   ...props
 }: HeadingWithAnchorProps) {
   const [copied, setCopied] = useState(false);
+  const [announceText, setAnnounceText] = useState("");
   const autoId = useId();
 
   // Generate ID from text if not provided
@@ -47,15 +48,23 @@ export function HeadingWithAnchor({
     try {
       await navigator.clipboard.writeText(url);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setAnnounceText("Link copied to clipboard");
+      setTimeout(() => {
+        setCopied(false);
+        setAnnounceText("");
+      }, 2000);
     } catch (err) {
       console.error("Failed to copy link:", err);
+      setAnnounceText("Failed to copy link");
     }
   };
 
   return (
     <Component id={headingId} className="group relative" {...props}>
       {children}
+      <span className="sr-only" role="status" aria-live="polite">
+        {announceText}
+      </span>
       <button
         type="button"
         onClick={handleCopyLink}

@@ -86,9 +86,7 @@ export function TableOfContents() {
     });
 
     return () => {
-      elements.forEach((element) => {
-        observer.unobserve(element);
-      });
+      observer.disconnect();
     };
   }, []);
 

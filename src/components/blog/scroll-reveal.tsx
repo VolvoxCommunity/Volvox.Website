@@ -14,7 +14,7 @@ interface ScrollRevealProps {
  * Renders a wrapper div that starts hidden and transitions to visible when intersecting the viewport; respects the user's `prefers-reduced-motion` setting by showing content immediately. The reveal can be delayed and additional class names can be applied to the wrapper.
  *
  * @param children - Content to render inside the reveal wrapper.
- * @param delay - Optional delay before the transition begins, in milliseconds (default: 0).
+ * @param delay - Optional delay before the transition begins, in milliseconds (default: 0, clamped to 0-5000ms range).
  * @param className - Optional additional CSS class names to apply to the wrapper.
  * @returns The wrapper div element that performs the reveal animation around `children`.
  */
@@ -23,6 +23,9 @@ export function ScrollReveal({
   delay = 0,
   className = "",
 }: ScrollRevealProps) {
+  // Clamp delay to reasonable range (0-5000ms)
+  const clampedDelay = Math.max(0, Math.min(delay, 5000));
+
   // Use lazy initializer to check reduced motion preference once
   const [isVisible, setIsVisible] = useState(() =>
     typeof window !== "undefined"
@@ -70,7 +73,7 @@ export function ScrollReveal({
       style={{
         opacity: isVisible ? 1 : 0,
         transform: isVisible ? "translateY(0)" : "translateY(20px)",
-        transitionDelay: `${delay}ms`,
+        transitionDelay: `${clampedDelay}ms`,
       }}
     >
       {children}
