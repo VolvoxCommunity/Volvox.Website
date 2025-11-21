@@ -108,7 +108,7 @@ export function Hero({ onNavigate }: HeroProps) {
             size="lg"
             variant="outline"
             onClick={() => onNavigate("mentorship")}
-            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary/10 hover:border-secondary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
+            className="group text-base px-8 py-6 h-auto border-2 hover:bg-primary/10 hover:border-primary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
           >
             Join as Mentee
             <ArrowRight
@@ -142,7 +142,7 @@ export function Hero({ onNavigate }: HeroProps) {
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleDiscordClick}
-            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
+            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
           >
             <DiscordLogo
               weight="fill"
