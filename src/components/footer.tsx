@@ -26,15 +26,7 @@ export function Footer() {
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Volvox. All rights reserved.
         </p>
-        <div className="flex items-center justify-center gap-4 text-xs text-muted-foreground/60">
-          <Link
-            href="/privacy-policy"
-            className="hover:text-muted-foreground transition-colors"
-          >
-            Privacy Policy
-          </Link>
-          <span>v{version}</span>
-        </div>
+        <p className="text-xs text-muted-foreground/60">v{version}</p>
       </div>
     </footer>
   );
