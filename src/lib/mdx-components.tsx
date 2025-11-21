@@ -1,6 +1,11 @@
-import type { HTMLAttributes, ImgHTMLAttributes, ReactElement } from "react";
+import type {
+  HTMLAttributes,
+  ImgHTMLAttributes,
+  ReactElement,
+  AnchorHTMLAttributes,
+} from "react";
 import { isValidElement } from "react";
-import { Callout, CodeBlock, ImageZoom } from "@/components/mdx";
+import { Callout, CodeBlock, ImageZoom, CustomLink } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
 
 // Type guard to check if a value is a React element with props
@@ -34,6 +39,11 @@ interface ImgPropsWithCaption extends ImgHTMLAttributes<HTMLImageElement> {
 export const mdxComponents = {
   // Custom components that can be used directly in MDX
   Callout,
+
+  // Custom link component
+  a: (props: AnchorHTMLAttributes<HTMLAnchorElement>) => (
+    <CustomLink {...props} />
+  ),
 
   // Headings with anchor links
   h2: (props: HTMLAttributes<HTMLHeadingElement>) => (
@@ -110,7 +120,7 @@ export const mdxComponents = {
     // Check if this is a task list item
     // In Markdown task lists, children is typically an array like [checkbox, text]
     const childArray = Array.isArray(children) ? children : [children];
-    const firstChild = childArray[0];
+    const firstChild: unknown = childArray[0];
 
     if (isCheckboxElement(firstChild) && firstChild.props.type === "checkbox") {
       return (

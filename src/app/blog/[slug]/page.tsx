@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
+import { BlogPostHeader } from "@/components/blog/blog-post-header";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -80,21 +81,7 @@ export default async function BlogPostPage({
   return (
     <div className="min-h-screen">
       {/* Header Navigation */}
-      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-between h-16">
-            <Button variant="ghost" asChild>
-              <Link href="/" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-              </Link>
-            </Button>
-            <Link href="/" className="text-xl font-bold text-primary">
-              Volvox
-            </Link>
-          </div>
-        </div>
-      </header>
+      <BlogPostHeader />
 
       {/* Blog Post Content with Reading Progress and TOC */}
       <main>

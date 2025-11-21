@@ -163,7 +163,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           setIsScrolled(false);
         }}
       >
-        <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
+        <DialogContent className="w-[80vw] max-w-none sm:max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
               <DialogHeader
@@ -251,7 +251,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedPost(null)}
-                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
+                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
                 >
                   Back
                 </Button>

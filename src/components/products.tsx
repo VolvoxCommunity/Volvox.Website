@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { GithubLogo, ArrowUpRight, CheckCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Product } from "@/lib/types";
@@ -75,7 +74,7 @@ export function Products({ products }: ProductsProps) {
 
               <div className="flex flex-col">
                 <CardHeader className="pb-4 pt-6 md:pt-8 px-6 md:px-8">
-                  <CardTitle className="text-2xl md:text-3xl font-bold group-hover:text-secondary transition-colors duration-300">
+                  <CardTitle className="text-2xl md:text-3xl font-bold transition-colors duration-300">
                     {product.name}
                   </CardTitle>
                   <CardDescription className="text-base mt-3 leading-relaxed">
@@ -84,24 +83,6 @@ export function Products({ products }: ProductsProps) {
                 </CardHeader>
 
                 <CardContent className="flex-1 space-y-7 px-6 md:px-8">
-                  <div>
-                    <h4 className="font-semibold mb-3 text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                      <span className="h-px w-4 bg-primary/50" />
-                      Tech Stack
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {product.techStack.map((tech) => (
-                        <Badge
-                          key={tech}
-                          variant="secondary"
-                          className="px-3 py-1 text-xs font-medium hover:bg-secondary/10 hover:text-secondary transition-colors duration-200"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
                   <div>
                     <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                       <span className="h-px w-4 bg-primary/50" />

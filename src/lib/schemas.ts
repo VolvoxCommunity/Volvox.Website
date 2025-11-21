@@ -31,7 +31,6 @@ export const ProductSchema = z.object({
   name: z.string(),
   description: z.string(),
   longDescription: z.string(),
-  techStack: z.array(z.string()),
   features: z.array(z.string()),
   githubUrl: z.string().optional(),
   demoUrl: z.string().optional(),

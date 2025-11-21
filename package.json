@@ -57,6 +57,7 @@
     "postcss-load-config": "^6.0.1",
     "prettier": "^3.6.2",
     "tsx": "^4.20.6",
-    "typescript": "^5"
+    "typescript": "^5",
+    "typescript-eslint": "^8.47.0"
   }
 }

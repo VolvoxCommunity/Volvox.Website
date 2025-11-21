@@ -3,3 +3,4 @@ export { ScrollReveal } from "./scroll-reveal";
 export { TableOfContents } from "./table-of-contents";
 export { HeadingWithAnchor } from "./heading-with-anchor";
 export { BlogContentWrapper } from "./blog-content-wrapper";
+export { BlogPostHeader } from "./blog-post-header";

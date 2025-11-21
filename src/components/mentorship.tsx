@@ -140,8 +140,12 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
 
         <Tabs defaultValue="mentors" className="w-full">
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-            <TabsTrigger value="mentors">Our Mentors</TabsTrigger>
-            <TabsTrigger value="mentees">Featured Mentees</TabsTrigger>
+            <TabsTrigger value="mentors" className="cursor-pointer">
+              Our Mentors
+            </TabsTrigger>
+            <TabsTrigger value="mentees" className="cursor-pointer">
+              Featured Mentees
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="mentors">
