@@ -56,6 +56,7 @@ export function generateHeadingId(text: string, fallback?: string): string {
     .trim()
     .replace(/\s+/g, "-")
     .replace(/[^a-z0-9-_]/g, "")
+    .replace(/-+/g, "-") // Collapse consecutive hyphens
     .replace(/^-+|-+$/g, ""); // Remove leading/trailing hyphens
 
   // If slug is empty (non-ASCII/punctuation-only content), generate hash-based ID
