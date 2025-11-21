@@ -4,11 +4,7 @@
     "name": "Sobriety Waypoint",
     "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
     "longDescription": "Sobriety Waypoint transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
-    "techStack": [
-      "React Native",
-      "Expo",
-      "TypeScript"
-    ],
+    "techStack": ["React Native", "Expo", "TypeScript"],
     "features": [
       "Secure sponsor-sponsee pairing with invite code system",
       "Sobriety timeline with transparent relapse tracking",

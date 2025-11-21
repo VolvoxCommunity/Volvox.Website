@@ -59,7 +59,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
-      <div className="container mx-auto px-4 max-w-7xl">
+      <div className="container mx-auto px-4 py-2 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           <motion.button
             onClick={() => handleNavigate("home")}
