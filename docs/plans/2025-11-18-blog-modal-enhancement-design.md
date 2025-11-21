@@ -11,6 +11,7 @@ Transform the blog preview modal from a basic text display into a full-featured 
 ## Current State
 
 The existing modal (`src/components/blog.tsx` lines 146-210) shows:
+
 - Author avatar and metadata
 - Post title and tags
 - Plain text content (no markdown rendering)
@@ -47,6 +48,7 @@ The existing modal (`src/components/blog.tsx` lines 146-210) shows:
 ```
 
 **Component Structure:**
+
 - Enhanced Dialog component with markdown rendering
 - Sticky progress header (progress bar + metadata)
 - Scrollable content area with prose typography
@@ -56,6 +58,7 @@ The existing modal (`src/components/blog.tsx` lines 146-210) shows:
 ### Reading Progress & Sticky Header
 
 **Visual Design:**
+
 ```
 ┌─────────────────────────────────────┐
 │ ████████░░░░░░░░░░░░░░░░░░░░ 35%   │ ← 2px gradient bar
@@ -71,17 +74,20 @@ The existing modal (`src/components/blog.tsx` lines 146-210) shows:
 ```
 
 **Implementation:**
+
 - Progress calculation: `(scrollTop / (scrollHeight - clientHeight)) * 100`
 - Real-time updates via `onScroll` event on DialogContent
 - Smooth transition animation: `transition-all duration-150`
 - Gradient progress bar: `bg-gradient-to-r from-primary via-primary/80 to-primary/60`
 
 **Sticky Behavior:**
+
 - Header fixed at top with `sticky top-0`
 - Shadow appears when scrolled: `shadow-md` after 10px scroll
 - Blur background: `backdrop-blur-sm bg-background/95`
 
 **Mobile Optimization:**
+
 - Header compresses when scrolled (reduced padding)
 - Progress bar remains visible
 - Title truncates to 2 lines max
@@ -89,6 +95,7 @@ The existing modal (`src/components/blog.tsx` lines 146-210) shows:
 ### Markdown Content Rendering
 
 **Content Features:**
+
 - Headings (h1-h6) with proper hierarchy
 - Code blocks with syntax highlighting via `rehype-highlight`
 - Inline code with distinct background
@@ -100,6 +107,7 @@ The existing modal (`src/components/blog.tsx` lines 146-210) shows:
 - Bold, italic, strikethrough formatting
 
 **Typography System:**
+
 ```css
 prose prose-slate dark:prose-invert max-w-none
 prose-headings:font-bold
@@ -114,6 +122,7 @@ prose-img:rounded-lg prose-img:shadow-lg
 ```
 
 **Component:**
+
 ```tsx
 <div className="prose prose-slate dark:prose-invert max-w-none px-6 py-8">
   <MDXRemote source={selectedPost.content} />
@@ -121,6 +130,7 @@ prose-img:rounded-lg prose-img:shadow-lg
 ```
 
 **Technical:**
+
 - Reuse MDX config from `src/app/blog/[slug]/page.tsx`
 - Content scrolling: `overflow-y-auto scroll-smooth`
 - Max height: `max-h-[calc(90vh-200px)]`
@@ -128,6 +138,7 @@ prose-img:rounded-lg prose-img:shadow-lg
 ### Footer & Call-to-Action
 
 **Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │  [← Back]  [Read Full Article →]   │
@@ -135,6 +146,7 @@ prose-img:rounded-lg prose-img:shadow-lg
 ```
 
 **Behavior:**
+
 - Primary: "Read Full Article" → navigates to `/blog/[slug]`
 - Secondary: "Back" → closes modal
 - Footer shadow when content scrollable: `shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]`
@@ -142,6 +154,7 @@ prose-img:rounded-lg prose-img:shadow-lg
 - Clicking CTA closes modal and navigates
 
 **Styling:**
+
 - Border top separator
 - Transparent background with blur: `bg-background/95 backdrop-blur-sm`
 - Primary button with gradient/brand color
@@ -149,31 +162,37 @@ prose-img:rounded-lg prose-img:shadow-lg
 ### Visual Polish & Animations
 
 **Modal Transitions:**
+
 - Open: Scale 0.95→1.0 with fade-in (200ms ease-out)
 - Close: Scale to 0.95 with fade-out (150ms ease-in)
 - Backdrop: Animated blur fade-in
 
 **Scroll Interactions:**
+
 - Progress bar: `transition-all duration-150 ease-out`
 - Header shadow: Fade-in when scrolled >10px (`transition-shadow duration-200`)
 - Smooth scrolling: `scroll-smooth`
 
 **Content Reveal:**
+
 - Content fades in with upward motion after modal opens
 - 50ms stagger between header and content
 - No per-paragraph animations
 
 **Interactive Elements:**
+
 - Buttons: `hover:scale-[1.02] active:scale-[0.98]`
 - Links: Underline on hover with color transition
 - Glass effects: `backdrop-blur-sm bg-background/95`
 
 **Responsive:**
+
 - Desktop: `max-w-4xl`
 - Tablet: `max-w-3xl`
 - Mobile: Full width, `p-4` padding
 
 **Performance:**
+
 - CSS transforms for GPU acceleration
 - No layout thrashing during scroll
 - Efficient scroll progress calculation
@@ -272,6 +291,7 @@ const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 **Date:** 2025-11-18
 
 **Changes Made:**
+
 - ✅ Scroll progress tracking with state management
 - ✅ Sticky header with gradient progress bar
 - ✅ Markdown rendering via MDXRemote with rehype-highlight
@@ -281,16 +301,19 @@ const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 - ✅ Accessibility maintained (keyboard navigation, ARIA)
 
 **Files Modified:**
+
 - `src/components/blog.tsx` - Enhanced Dialog component with scroll tracking, sticky header/footer, MDX rendering
 - `src/app/layout.tsx` - Added highlight.js CSS for syntax highlighting
 - `tests/postcss-tailwind.test.ts` - Fixed for Tailwind CSS v4 compatibility
 
 **Testing:**
+
 - Manual testing: ✅ All features verified (dev server running on http://localhost:3000)
 - Unit tests: ✅ 14/14 passing
 - Production build: ✅ Success (with pre-existing Sentry warnings unrelated to changes)
 
 **Commits:**
+
 1. `5846f78` - chore: add .worktrees/ to .gitignore
 2. `8fa7b1c` - fix: update PostCSS/Tailwind tests for v4 compatibility
 3. `28d0738` - feat: add scroll progress tracking state to blog modal
@@ -303,6 +326,7 @@ const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
 10. `0eb301d` - test: verify all blog modal enhancements working
 
 **Next Steps:**
+
 - Consider adding table of contents for long posts
 - Consider adding share buttons
 - Consider adding related posts section

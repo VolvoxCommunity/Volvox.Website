@@ -21,7 +21,10 @@ describe("PostCSS Configuration", () => {
     const config = await postcssrc({ cwd: projectRoot });
 
     assert.ok(config.plugins, "Plugins should be defined");
-    assert.ok(config.plugins.length > 0, "At least one plugin should be loaded");
+    assert.ok(
+      config.plugins.length > 0,
+      "At least one plugin should be loaded"
+    );
 
     // Verify Tailwind CSS plugin works by processing Tailwind directives
     const testInput = `@import "tailwindcss";`;

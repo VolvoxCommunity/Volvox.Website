@@ -4,11 +4,18 @@ import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Eye } from "lucide-react";
+import { ArrowLeft, Calendar } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import rehypeHighlight from "rehype-highlight";
+import { mdxComponents } from "@/lib/mdx-components";
+import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 
+/**
+ * Collects all blog post slugs to supply route parameters for static generation.
+ *
+ * @returns An array of objects each with a `slug` property for a post (e.g., `{ slug: 'my-post' }`)
+ */
 export async function generateStaticParams() {
   const posts = await getAllPosts();
   return posts.map((post) => ({
@@ -49,13 +56,22 @@ export async function generateMetadata({
   };
 }
 
+/**
+ * Render the blog post page for a given post slug.
+ *
+ * Fetches the post identified by `params.slug`, renders its header, author info, MDX content, and navigation.
+ * Invokes `notFound()` if the post frontmatter is missing.
+ *
+ * @param params - Route parameters object that must include a `slug` string
+ * @returns The rendered blog post page for the specified slug
+ */
 export default async function BlogPostPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { frontmatter, content, views } = await getPostBySlug(slug);
+  const { frontmatter, content } = await getPostBySlug(slug);
 
   if (!frontmatter) {
     notFound();
@@ -64,8 +80,8 @@ export default async function BlogPostPage({
   return (
     <div className="min-h-screen">
       {/* Header Navigation */}
-      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl">
-        <div className="container mx-auto px-4 max-w-4xl">
+      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40">
+        <div className="container mx-auto px-4 max-w-7xl">
           <div className="flex items-center justify-between h-16">
             <Button variant="ghost" asChild>
               <Link href="/" className="flex items-center gap-2">
@@ -80,95 +96,92 @@ export default async function BlogPostPage({
         </div>
       </header>
 
-      {/* Blog Post Content */}
-      <article className="container mx-auto px-4 py-16 max-w-4xl">
-        {/* Post Header */}
-        <header className="mb-12">
-          <div className="flex flex-wrap gap-2 mb-4">
-            {frontmatter.tags?.map((tag: string) => (
-              <Badge key={tag} variant="secondary">
-                {tag}
-              </Badge>
-            ))}
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-            {frontmatter.title}
-          </h1>
-
-          <p className="text-xl text-muted-foreground mb-6">
-            {frontmatter.excerpt}
-          </p>
-
-          {/* Author Info */}
-          <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
-            <div className="flex items-center gap-2">
-              {frontmatter.author?.avatar && (
-                <Image
-                  src={frontmatter.author.avatar}
-                  alt={frontmatter.author.name}
-                  width={40}
-                  height={40}
-                  className="w-10 h-10 rounded-full"
-                />
-              )}
-              <div>
-                <p className="font-medium text-foreground">
-                  {frontmatter.author?.name}
-                </p>
-                <p className="text-xs">{frontmatter.author?.role}</p>
-              </div>
+      {/* Blog Post Content with Reading Progress and TOC */}
+      <main>
+        <BlogContentWrapper>
+          {/* Post Header */}
+          <header className="mb-12">
+            <div className="flex flex-wrap gap-2 mb-4">
+              {frontmatter.tags?.map((tag: string) => (
+                <Badge key={tag} variant="secondary">
+                  {tag}
+                </Badge>
+              ))}
             </div>
 
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1">
-                <Calendar className="h-4 w-4" />
-                <span>{frontmatter.date}</span>
+            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+              {frontmatter.title}
+            </h1>
+
+            <p className="text-xl text-muted-foreground mb-6">
+              {frontmatter.excerpt}
+            </p>
+
+            {/* Author Info */}
+            <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
+              <div className="flex items-center gap-2">
+                {frontmatter.author?.avatar && (
+                  <Image
+                    src={frontmatter.author.avatar}
+                    alt={frontmatter.author.name}
+                    width={40}
+                    height={40}
+                    className="w-10 h-10 rounded-full"
+                  />
+                )}
+                <div>
+                  <p className="font-medium text-foreground">
+                    {frontmatter.author?.name}
+                  </p>
+                  <p className="text-xs">{frontmatter.author?.role}</p>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <Eye className="h-4 w-4" />
-                <span>{views} views</span>
+
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <span>{frontmatter.date}</span>
+                </div>
               </div>
             </div>
-          </div>
-        </header>
+          </header>
 
-        {/* MDX Content */}
-        <div
-          className="prose prose-lg dark:prose-invert max-w-none
-          prose-headings:font-bold prose-headings:text-foreground
-          prose-h2:text-3xl prose-h2:mt-12 prose-h2:mb-4
-          prose-h3:text-2xl prose-h3:mt-8 prose-h3:mb-3
-          prose-p:text-foreground/90 prose-p:leading-relaxed
+          {/* MDX Content */}
+          <div
+            className="prose prose-lg dark:prose-invert max-w-none
+          prose-headings:text-foreground
+          prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl
           prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-          prose-strong:text-foreground prose-strong:font-semibold
-          prose-code:text-secondary prose-code:bg-muted prose-code:px-1 prose-code:py-0.5 prose-code:rounded
+          prose-strong:text-foreground
+          prose-code:text-secondary prose-code:bg-muted
           prose-pre:bg-card prose-pre:border prose-pre:border-border
           prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
           prose-ul:list-disc prose-ol:list-decimal
-          prose-li:text-foreground/90
+          prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
         "
-        >
-          <MDXRemote
-            source={content}
-            options={{
-              mdxOptions: {
-                rehypePlugins: [rehypeHighlight],
-              },
-            }}
-          />
-        </div>
+          >
+            <MDXRemote
+              source={content}
+              components={mdxComponents}
+              options={{
+                mdxOptions: {
+                  rehypePlugins: [rehypeHighlight],
+                },
+              }}
+            />
+          </div>
 
-        {/* Footer Navigation */}
-        <footer className="mt-16 pt-8 border-t border-border">
-          <Button variant="outline" asChild>
-            <Link href="/#blog" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to All Posts
-            </Link>
-          </Button>
-        </footer>
-      </article>
+          {/* Footer Navigation */}
+          <footer className="mt-16 pt-8 border-t border-border">
+            <Button variant="outline" asChild>
+              <Link href="/#blog" className="flex items-center gap-2">
+                <ArrowLeft className="h-4 w-4" />
+                Back to All Posts
+              </Link>
+            </Button>
+          </footer>
+        </BlogContentWrapper>
+      </main>
     </div>
   );
 }

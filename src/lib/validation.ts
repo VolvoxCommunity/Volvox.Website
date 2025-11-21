@@ -32,4 +32,3 @@ export const slugConstraints = {
   pattern: SLUG_PATTERN,
   maxLength: MAX_SLUG_LENGTH,
 };
-

@@ -18,7 +18,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Eye, ArrowRight } from "@phosphor-icons/react";
+import { ArrowRight } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
@@ -72,7 +72,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
               whileHover={{ scale: 1.02 }}
             >
               <Card
-                className="group cursor-pointer hover:shadow-xl transition-all duration-300 overflow-hidden h-full"
+                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full"
                 onClick={() => handlePostClick(post)}
               >
                 <motion.div
@@ -139,10 +139,6 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                         year: "numeric",
                       })}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-3.5 w-3.5" />
-                      {post.views}
-                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -170,13 +166,17 @@ export function Blog({ posts: initialPosts }: BlogProps) {
         <DialogContent className="max-w-4xl max-h-[90vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
-              <DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
-                isScrolled ? 'shadow-md bg-background/95 backdrop-blur-sm' : 'bg-background'
-              }`}>
+              <DialogHeader
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
+                  isScrolled
+                    ? "shadow-md bg-background/95 backdrop-blur-sm"
+                    : "bg-background"
+                }`}
+              >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
                   <div
-                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-all duration-150 ease-out"
+                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-[width] duration-150 ease-out will-change-[width]"
                     style={{ width: `${scrollProgress}%` }}
                   />
                 </div>
@@ -217,10 +217,6 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                         year: "numeric",
                       })}
                     </span>
-                    <span className="flex items-center gap-1">
-                      <Eye className="h-4 w-4" />
-                      {selectedPost.views} views
-                    </span>
                   </div>
 
                   {/* Tags */}
@@ -239,7 +235,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05, duration: 0.2 }}
                 className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
-                style={{ maxHeight: 'calc(90vh - 280px)' }}
+                style={{ maxHeight: "calc(90vh - 280px)" }}
                 onScroll={handleScroll}
               >
                 <ReactMarkdown

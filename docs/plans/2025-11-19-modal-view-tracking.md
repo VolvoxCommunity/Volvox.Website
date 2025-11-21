@@ -13,6 +13,7 @@
 ## Task 1: Create View Tracking Utility with Tests
 
 **Files:**
+
 - Create: `src/lib/view-tracking.ts`
 - Create: `tests/view-tracking.test.ts`
 
@@ -137,6 +138,7 @@ git commit -m "test: add sessionStorage helpers for view tracking"
 ## Task 2: Implement trackPostView with Tests
 
 **Files:**
+
 - Modify: `src/lib/view-tracking.ts`
 - Modify: `tests/view-tracking.test.ts`
 
@@ -265,6 +267,7 @@ git commit -m "feat: implement trackPostView with session deduplication"
 ## Task 3: Add usePostViewTracking Hook with Tests
 
 **Files:**
+
 - Modify: `src/lib/view-tracking.ts`
 - Modify: `tests/view-tracking.test.ts`
 
@@ -323,6 +326,7 @@ git commit -m "feat: add usePostViewTracking hook for declarative tracking"
 ## Task 4: Integrate Tracking into Blog Modal
 
 **Files:**
+
 - Modify: `src/components/blog.tsx:1` (imports)
 - Modify: `src/components/blog.tsx` (handlePostClick function)
 
@@ -358,11 +362,13 @@ const handlePostClick = async (post: BlogPost) => {
 **Step 4: Manual test - modal tracking**
 
 Run dev server:
+
 ```bash
 pnpm dev
 ```
 
 Open http://localhost:3000, open browser DevTools Network tab:
+
 1. Click a blog post card
 2. Verify POST request to `/api/blog/views` appears
 3. Close modal, reopen same post
@@ -371,6 +377,7 @@ Open http://localhost:3000, open browser DevTools Network tab:
 6. Verify NEW POST request appears
 
 Check sessionStorage in DevTools Application tab:
+
 - Key: `volvox_viewed_posts`
 - Value: Should be JSON array of viewed slugs
 
@@ -386,6 +393,7 @@ git commit -m "feat: add view tracking to blog modal on open"
 ## Task 5: Integrate Tracking into Full Blog Page
 
 **Files:**
+
 - Modify: `src/app/blog/[slug]/page.tsx`
 
 **Step 1: Read current implementation**
@@ -403,6 +411,7 @@ import { usePostViewTracking } from "@/lib/view-tracking";
 **Step 3: Find where PostViewTracker is used**
 
 Look for:
+
 ```typescript
 <PostViewTracker slug={post.slug} />
 ```
@@ -456,6 +465,7 @@ git commit -m "feat: use view tracking hook in blog detail page"
 ## Task 6: Add Deprecation Comment to PostViewTracker
 
 **Files:**
+
 - Modify: `src/components/post-view-tracker.tsx`
 
 **Step 1: Add deprecation notice**
@@ -485,6 +495,7 @@ git commit -m "docs: deprecate PostViewTracker in favor of new hook"
 ## Task 7: Run Full Test Suite
 
 **Files:**
+
 - N/A (Testing)
 
 **Step 1: Run all tests**
@@ -511,6 +522,7 @@ git commit -m "fix: resolve test failures"
 ## Task 8: Build Verification
 
 **Files:**
+
 - N/A (Build)
 
 **Step 1: Run production build**
@@ -540,6 +552,7 @@ Press Ctrl+C to stop production server.
 ## Task 9: Update Design Document
 
 **Files:**
+
 - Modify: `docs/plans/2025-11-19-modal-view-tracking-design.md`
 
 **Step 1: Add implementation completion section**
@@ -552,6 +565,7 @@ Add at the end of the design doc:
 **Date:** 2025-11-19
 
 **Changes Made:**
+
 - ✅ Created `src/lib/view-tracking.ts` with utility and hook
 - ✅ Added comprehensive unit tests (7 new tests)
 - ✅ Integrated tracking into blog modal (handlePostClick)
@@ -561,6 +575,7 @@ Add at the end of the design doc:
 - ✅ Production build successful
 
 **Files Modified:**
+
 - `src/lib/view-tracking.ts` (new)
 - `tests/view-tracking.test.ts` (new)
 - `src/components/blog.tsx` (added trackPostView call)
@@ -568,12 +583,14 @@ Add at the end of the design doc:
 - `src/components/post-view-tracker.tsx` (added deprecation comment)
 
 **Testing:**
+
 - ✅ Unit tests: 21/21 passing
 - ✅ Manual testing: Modal and page tracking verified
 - ✅ Cross-navigation: No duplicate tracking
 - ✅ Production build: Success
 
 **Verification:**
+
 - sessionStorage properly tracks viewed posts
 - No duplicate API calls for same post
 - Works across modal and full page contexts
@@ -608,16 +625,21 @@ Before marking this plan as complete, verify:
 ## Common Issues
 
 **Issue: Tests fail with "window is not defined"**
+
 - Solution: Tests mock sessionStorage correctly in beforeEach
 
 **Issue: fetch is not defined in tests**
+
 - Solution: Tests mock fetch in beforeEach
 
 **Issue: API returns 400 Bad Request**
+
 - Solution: Check slug validation in API route, ensure slug is valid
 
 **Issue: sessionStorage quota exceeded**
+
 - Solution: Unlikely with small slug arrays, but catch block handles gracefully
 
 **Issue: Duplicate tracking still happening**
+
 - Solution: Check that sessionStorage key matches between utility and tests

@@ -6,28 +6,28 @@
 version: 2
 updates:
   # Maintain dependencies for npm
-  - package-ecosystem: 'npm'
-    directory: 'src/Volvox.Apollo.Web/ClientApp'
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
-      interval: 'daily'
+      interval: "daily"
     versioning-strategy: increase
     assignees:
-      - 'BillChirico'
+      - "BillChirico"
     reviewers:
-      - 'BillChirico'
+      - "BillChirico"
     labels:
-      - 'frontend'
-      - 'dependencies'
+      - "frontend"
+      - "dependencies"
 
   # Maintain dependencies for GitHub Actions
-  - package-ecosystem: 'github-actions'
-    directory: '/'
+  - package-ecosystem: "github-actions"
+    directory: "/"
     schedule:
-      interval: 'daily'
+      interval: "daily"
     assignees:
-      - 'BillChirico'
+      - "BillChirico"
     reviewers:
-      - 'BillChirico'
+      - "BillChirico"
     labels:
-      - 'github-actions'
-      - 'dependencies'
+      - "github-actions"
+      - "dependencies"

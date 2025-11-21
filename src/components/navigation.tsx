@@ -84,10 +84,11 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
               <button
                 key={item.id}
                 onClick={() => handleNavigate(item.id)}
-                className={`text-sm font-medium transition-all px-4 py-2 rounded-lg relative cursor-pointer ${currentSection === item.id
-                  ? "text-primary bg-primary/10"
-                  : "text-foreground hover:text-primary hover:bg-muted"
-                  }`}
+                className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
+                  currentSection === item.id
+                    ? "text-primary bg-primary/10"
+                    : "text-foreground hover:text-primary hover:bg-muted"
+                }`}
               >
                 {item.label}
               </button>
@@ -164,10 +165,11 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                     <button
                       key={item.id}
                       onClick={() => handleNavigate(item.id)}
-                      className={`text-left text-lg font-medium transition-all px-4 py-2 rounded-lg cursor-pointer ${currentSection === item.id
-                        ? "text-primary bg-primary/10"
-                        : "text-foreground hover:text-primary hover:bg-muted"
-                        }`}
+                      className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
+                        currentSection === item.id
+                          ? "text-primary bg-primary/10"
+                          : "text-foreground hover:text-primary hover:bg-muted"
+                      }`}
                     >
                       {item.label}
                     </button>

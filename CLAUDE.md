@@ -35,6 +35,43 @@ pnpm format
 pnpm format:check
 ```
 
+## Code Quality Requirements
+
+**MANDATORY**: After changing or editing any files, you MUST follow this workflow:
+
+1. **Type Checking**: Run `pnpm build` to verify TypeScript compilation passes
+2. **Linting**: Run `pnpm lint` to check for code quality issues
+3. **Formatting**: Run `pnpm format` to ensure consistent code formatting
+4. **Commit and Push**: After all checks pass, commit and push all changes
+
+These checks are not optional. All three validation steps must pass before committing. If any check fails, fix the issues and re-run all checks before proceeding.
+
+**Complete Workflow:**
+
+```bash
+# Step 1-3: Run all validation checks
+pnpm format && pnpm lint && pnpm build
+
+# Step 4: If all checks pass, commit and push
+git add .
+git commit -m "your commit message"
+git push
+```
+
+**Important:**
+
+- Do NOT commit if any validation check fails
+- Do NOT skip the validation checks to save time
+- Always push after committing (unless explicitly told not to)
+
+**Why this matters:**
+
+- Prevents TypeScript errors from reaching production
+- Maintains consistent code style across the project
+- Catches potential bugs and issues early
+- Ensures CI/CD pipeline will pass
+- Keeps remote repository in sync with local changes
+
 ## Architecture
 
 ### Framework & Routing
@@ -97,6 +134,7 @@ pnpm format:check
 ```
 
 **Blog Post Frontmatter:**
+
 - `title` - Post title
 - `slug` - URL slug (must match filename)
 - `excerpt` - Brief description

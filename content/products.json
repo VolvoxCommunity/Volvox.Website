@@ -4,12 +4,7 @@
     "name": "Sobriety Waypoint",
     "description": "A comprehensive mobile app for tracking your 12-step recovery journey with daily reflections, progress monitoring, and community support.",
     "longDescription": "Sobriety Waypoint is a thoughtfully designed mobile application that helps individuals in recovery programs track their progress through the 12 steps. Built with React Native and Expo, it provides a seamless cross-platform experience for both iOS and Android users.",
-    "techStack": [
-      "React Native",
-      "Expo",
-      "TypeScript",
-      "AsyncStorage"
-    ],
+    "techStack": ["React Native", "Expo", "TypeScript"],
     "features": [
       "Track progress through all 12 steps",
       "Sponsor assigned tasks",

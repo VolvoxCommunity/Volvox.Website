@@ -30,11 +30,13 @@ Implement session-based view tracking for blog posts opened via the modal, ensur
 **Solution:** Hybrid utility function + React hook approach
 
 **Components:**
+
 1. **Utility function**: `trackPostView(slug)` - Core logic for sessionStorage + API call
 2. **React hook**: `usePostViewTracking(slug)` - Declarative wrapper for page components
 3. **sessionStorage**: `volvox_viewed_posts` - Array of viewed post slugs
 
 **Data flow:**
+
 ```
 User clicks blog card → trackPostView(slug) → Check sessionStorage
   ├─ Not viewed → POST /api/blog/views → Add to sessionStorage
@@ -50,16 +52,16 @@ User opens /blog/[slug] → usePostViewTracking(slug) → trackPostView(slug)
 #### File: `src/lib/view-tracking.ts` (new file)
 
 ```typescript
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
-const VIEWED_POSTS_KEY = 'volvox_viewed_posts';
+const VIEWED_POSTS_KEY = "volvox_viewed_posts";
 
 /**
  * Track a blog post view, ensuring it's only counted once per session.
  * Uses sessionStorage to deduplicate across modal and full page views.
  */
 export async function trackPostView(slug: string): Promise<void> {
-  if (!slug || typeof window === 'undefined') return;
+  if (!slug || typeof window === "undefined") return;
 
   // Check if already tracked in this session
   const viewedPosts = getViewedPosts();
@@ -67,9 +69,9 @@ export async function trackPostView(slug: string): Promise<void> {
 
   // Track the view via API
   try {
-    const response = await fetch('/api/blog/views', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+    const response = await fetch("/api/blog/views", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ slug }),
       keepalive: true,
     });
@@ -80,7 +82,7 @@ export async function trackPostView(slug: string): Promise<void> {
       saveViewedPosts(viewedPosts);
     }
   } catch (error) {
-    console.error('Failed to track post view:', error);
+    console.error("Failed to track post view:", error);
     // Don't add to sessionStorage on error to prevent false tracking
   }
 }
@@ -109,7 +111,7 @@ function saveViewedPosts(posts: Set<string>): void {
   try {
     sessionStorage.setItem(VIEWED_POSTS_KEY, JSON.stringify([...posts]));
   } catch (error) {
-    console.error('Failed to save viewed posts:', error);
+    console.error("Failed to save viewed posts:", error);
   }
 }
 ```
@@ -197,12 +199,14 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
    - ✅ Invalid slug → gracefully handled
 
 **Automated testing:**
+
 - Unit tests for `trackPostView` utility
 - Test sessionStorage helpers
 - Mock fetch and sessionStorage
 - Test hook behavior with React Testing Library
 
 **Acceptance criteria:**
+
 - ✅ Views increment exactly once per session per post
 - ✅ Works in both modal and full page contexts
 - ✅ No duplicate API calls for same post
@@ -213,11 +217,13 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 ## Migration Notes
 
 **Backwards compatibility:**
+
 - Keep `PostViewTracker` component file initially
 - Mark as deprecated with comment
 - Can be removed in future cleanup after verifying new system works
 
 **No breaking changes:**
+
 - Existing view counts unchanged
 - API endpoint unchanged
 - Database schema unchanged
@@ -244,6 +250,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 **Date:** 2025-11-19
 
 **Changes Made:**
+
 - ✅ Created `src/lib/view-tracking.ts` with utility and hook
 - ✅ Added comprehensive unit tests (7 new tests)
 - ✅ Integrated tracking into blog modal (handlePostClick)
@@ -253,6 +260,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 - ✅ SSR compatibility verified (typeof window checks)
 
 **Files Modified:**
+
 - `src/lib/view-tracking.ts` (new) - Core tracking utilities and hook
 - `tests/view-tracking.test.ts` (new) - Comprehensive unit tests
 - `src/components/blog.tsx` - Added trackPostView call in handlePostClick
@@ -260,6 +268,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 - `docs/plans/2025-11-19-modal-view-tracking.md` - Implementation plan
 
 **Testing:**
+
 - ✅ Unit tests: 22/22 passing
   - getViewedPosts: 2 tests
   - saveViewedPosts: 1 test
@@ -270,6 +279,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 - ✅ Production build: Success
 
 **Implementation Notes:**
+
 - PostViewTracker was refactored (not deprecated) to use the new hook, providing a cleaner migration path
 - SSR safety ensured with `typeof window === "undefined"` checks instead of `typeof sessionStorage`
 - Tests properly mock window object for SSR simulation
@@ -277,6 +287,7 @@ export default function BlogPost({ params }: { params: { slug: string } }) {
 - Only marks post as viewed after successful API response
 
 **Verification:**
+
 - sessionStorage properly tracks viewed posts
 - No duplicate API calls for same post
 - Works across modal and full page contexts

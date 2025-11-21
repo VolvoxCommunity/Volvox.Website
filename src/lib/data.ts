@@ -10,10 +10,7 @@ import {
  * @deprecated limit and offset parameters are ignored (no pagination needed)
  * @returns All products from the JSON file.
  */
-export async function getAllProducts(
-  _limit = 50,
-  _offset = 0,
-) {
+export async function getAllProducts(_limit = 50, _offset = 0) {
   return getProducts();
 }
 

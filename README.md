@@ -86,17 +86,22 @@ src/
 │   └── ...               # Section components (hero, blog, etc.)
 ├── hooks/                 # Custom React hooks
 ├── lib/                   # Utilities and types
-│   ├── blog.ts           # Blog post utilities
-│   ├── data.ts           # Supabase data accessors
+│   ├── blog.ts           # Blog post utilities (MDX reading)
+│   ├── content.ts        # Content file readers (JSON)
+│   ├── data.ts           # Data accessor facades
 │   ├── logger.ts         # Centralized error reporting shim
-│   ├── supabase.ts       # Typed Supabase client
+│   ├── schemas.ts        # Zod validation schemas
 │   ├── types.ts          # TypeScript interfaces
 │   └── validation.ts     # Shared validation helpers
 └── tests/                 # Node test suites
     └── slug-validation.test.ts
 
 content/
-└── blog/                  # MDX blog posts
+├── blog/                  # MDX blog posts with frontmatter
+├── authors.json           # Author profiles
+├── products.json          # Product information
+├── mentors.json           # Mentor profiles
+└── mentees.json           # Mentee profiles
 ```
 
 ## Key Features
@@ -126,12 +131,43 @@ content/
 - Section-based routing
 - Dynamic section tracking
 
-### Resilient Data & Analytics
+### Resilient Data Loading
 
 - Promise.allSettled data fetching guards against partial failures
-- Supabase queries now support pagination for products, mentors, and mentees
-- Blog view tracking validates slugs and uses sendBeacon/keepalive for durable writes
-- Node-based unit tests cover slug normalization logic to prevent regressions
+- Local file-based content with Zod validation for type safety
+- Node-based unit tests cover validation logic to prevent regressions
+
+## Content Management
+
+All content is stored as local files in the `content/` directory:
+
+- **Blog posts**: `content/blog/*.mdx` - MDX files with frontmatter
+- **Authors**: `content/authors.json` - JSON array of author objects
+- **Products**: `content/products.json` - JSON array of product objects
+- **Mentors**: `content/mentors.json` - JSON array of mentor objects
+- **Mentees**: `content/mentees.json` - JSON array of mentee objects
+
+### Adding a New Blog Post
+
+1. Create a new `.mdx` file in `content/blog/`
+2. Add frontmatter with required fields:
+   ```yaml
+   ---
+   title: "Post Title"
+   slug: "post-slug"
+   excerpt: "Brief description"
+   authorId: "author-id-from-authors-json"
+   date: "2024-01-15"
+   tags: ["tag1", "tag2"]
+   published: true
+   ---
+   ```
+3. Write your content in MDX format below the frontmatter
+4. Rebuild the site: `pnpm build`
+
+### Editing Other Content
+
+Edit the respective JSON files in `content/` and rebuild.
 
 ## Contributing
 

@@ -53,7 +53,7 @@ export function Products({ products }: ProductsProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="group hover:shadow-2xl hover:shadow-primary/5 transition-all duration-500 border-2 hover:border-primary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
+          <Card className="group hover:shadow-2xl hover:shadow-primary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-primary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
             <div className="grid md:grid-cols-2 gap-0">
               <motion.div
                 className="aspect-video md:aspect-auto bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden"

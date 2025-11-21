@@ -53,7 +53,9 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     }
 
     // Sort by date (newest first)
-    posts.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+    posts.sort(
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+    );
 
     return posts;
   } catch (error) {

@@ -57,7 +57,7 @@ test.describe("Blog View Tracking", () => {
     // Verify view count incremented
     expect(
       modalViews,
-      `Modal should show ${initialViews + 1} views (initial ${initialViews} + 1)`,
+      `Modal should show ${initialViews + 1} views (initial ${initialViews} + 1)`
     ).toBe(initialViews + 1);
   });
 
@@ -79,9 +79,7 @@ test.describe("Blog View Tracking", () => {
     await page.waitForSelector("#blog", { timeout: 10000 });
     await page.locator("#blog").scrollIntoViewIfNeeded();
 
-    const firstCard = page
-      .locator('[id="blog"] .group.cursor-pointer')
-      .first();
+    const firstCard = page.locator('[id="blog"] .group.cursor-pointer').first();
     await firstCard.waitFor({ timeout: 10000 });
 
     // First click
@@ -102,9 +100,7 @@ test.describe("Blog View Tracking", () => {
     await page.waitForSelector('[role="dialog"]', { timeout: 5000 });
     await page.waitForTimeout(500);
 
-    const secondModalText = await page
-      .locator('[role="dialog"]')
-      .textContent();
+    const secondModalText = await page.locator('[role="dialog"]').textContent();
     const secondViewMatch = secondModalText?.match(/(\d+)\s+views/);
     const secondModalViews = secondViewMatch ? parseInt(secondViewMatch[1]) : 0;
 

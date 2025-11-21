@@ -13,6 +13,7 @@
 ## Task 1: Add Scroll Progress State Management
 
 **Files:**
+
 - Modify: `src/components/blog.tsx:28-32`
 
 **Step 1: Add scroll progress state**
@@ -71,6 +72,7 @@ git commit -m "feat: add scroll progress tracking state to blog modal"
 ## Task 2: Create Enhanced Modal Header with Progress Bar
 
 **Files:**
+
 - Modify: `src/components/blog.tsx:150-200`
 
 **Step 1: Import required icons**
@@ -86,9 +88,11 @@ import { Clock, Eye, ArrowRight } from "@phosphor-icons/react";
 Replace the entire DialogHeader section (lines 150-200) with the enhanced header:
 
 ```tsx
-<DialogHeader className={`sticky top-0 z-10 transition-all duration-200 ${
-  isScrolled ? 'shadow-md bg-background/95 backdrop-blur-sm' : 'bg-background'
-}`}>
+<DialogHeader
+  className={`sticky top-0 z-10 transition-all duration-200 ${
+    isScrolled ? "shadow-md bg-background/95 backdrop-blur-sm" : "bg-background"
+  }`}
+>
   {/* Progress Bar */}
   <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
     <div
@@ -163,6 +167,7 @@ git commit -m "feat: add sticky header with progress bar to blog modal"
 ## Task 3: Add Markdown Rendering to Modal Content
 
 **Files:**
+
 - Modify: `src/components/blog.tsx:1-3` (imports)
 - Modify: `src/components/blog.tsx:202-206` (content area)
 
@@ -182,7 +187,7 @@ Replace the existing prose div (lines 202-206) with:
 ```tsx
 <div
   className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
-  style={{ maxHeight: 'calc(90vh - 280px)' }}
+  style={{ maxHeight: "calc(90vh - 280px)" }}
   onScroll={handleScroll}
 >
   <MDXRemote
@@ -208,6 +213,7 @@ git commit -m "feat: add markdown rendering with syntax highlighting to modal"
 ## Task 4: Add Modal Footer with CTA
 
 **Files:**
+
 - Modify: `src/components/blog.tsx` (add Link import and footer)
 
 **Step 1: Add Link import**
@@ -231,7 +237,9 @@ import { Button } from "@/components/ui/button";
 Add this code right before the closing `</>` of the DialogContent (after the MDX div):
 
 ```tsx
-{/* Footer CTA */}
+{
+  /* Footer CTA */
+}
 <div className="sticky bottom-0 border-t bg-background/95 backdrop-blur-sm p-4 flex items-center justify-between gap-4 shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
   <Button
     variant="ghost"
@@ -241,16 +249,13 @@ Add this code right before the closing `</>` of the DialogContent (after the MDX
     Back
   </Button>
 
-  <Button
-    asChild
-    className="flex-1 sm:flex-none"
-  >
+  <Button asChild className="flex-1 sm:flex-none">
     <Link href={`/blog/${selectedPost.slug}`}>
       Read Full Article
       <ArrowRight className="h-4 w-4 ml-2" />
     </Link>
   </Button>
-</div>
+</div>;
 ```
 
 **Step 4: Commit**
@@ -265,6 +270,7 @@ git commit -m "feat: add footer with CTA button linking to full article"
 ## Task 5: Update DialogContent Styling
 
 **Files:**
+
 - Modify: `src/components/blog.tsx:147` (DialogContent props)
 
 **Step 1: Update DialogContent className**
@@ -284,6 +290,7 @@ pnpm dev
 ```
 
 Open http://localhost:3000, click on a blog post card, verify:
+
 - Modal opens with enhanced header
 - Progress bar updates on scroll
 - Markdown renders correctly with syntax highlighting
@@ -302,6 +309,7 @@ git commit -m "feat: update modal layout for better content flow"
 ## Task 6: Add Animations and Polish
 
 **Files:**
+
 - Modify: `src/components/blog.tsx` (add motion animations)
 
 **Step 1: Import motion components**
@@ -322,7 +330,7 @@ Wrap the MDX content div with motion.div:
   animate={{ opacity: 1, y: 0 }}
   transition={{ delay: 0.05, duration: 0.2 }}
   className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
-  style={{ maxHeight: 'calc(90vh - 280px)' }}
+  style={{ maxHeight: "calc(90vh - 280px)" }}
   onScroll={handleScroll}
 >
   <MDXRemote
@@ -372,6 +380,7 @@ git commit -m "feat: add smooth animations and interaction polish to modal"
 ## Task 7: Final Testing and Verification
 
 **Files:**
+
 - Test: `src/components/blog.tsx` (manual testing)
 
 **Step 1: Run development server**
@@ -425,6 +434,7 @@ git commit --allow-empty -m "test: verify all blog modal enhancements working"
 ## Task 8: Update Documentation
 
 **Files:**
+
 - Modify: `docs/plans/2025-11-18-blog-modal-enhancement-design.md`
 
 **Step 1: Add implementation notes**
@@ -437,6 +447,7 @@ Add this section at the end of the design doc:
 **Date:** 2025-11-18
 
 **Changes Made:**
+
 - ✅ Scroll progress tracking with state management
 - ✅ Sticky header with gradient progress bar
 - ✅ Markdown rendering via MDXRemote with rehype-highlight
@@ -446,14 +457,17 @@ Add this section at the end of the design doc:
 - ✅ Accessibility maintained (keyboard navigation, ARIA)
 
 **Files Modified:**
+
 - `src/components/blog.tsx` - Enhanced Dialog component
 
 **Testing:**
+
 - Manual testing: ✅ All features verified
 - Unit tests: ✅ 14/14 passing
 - Production build: ✅ Success
 
 **Next Steps:**
+
 - Consider adding table of contents for long posts
 - Consider adding share buttons
 - Consider adding related posts section
@@ -471,6 +485,7 @@ git commit -m "docs: add implementation completion notes"
 ## Task 9: Create Pull Request
 
 **Files:**
+
 - N/A (Git operations)
 
 **Step 1: Push branch to remote**
@@ -514,6 +529,7 @@ EOF
 **Step 3: Verify PR created**
 
 Visit the PR URL printed by the command and verify:
+
 - Title and description are correct
 - All commits are included
 - CI/CD checks are running (if configured)
@@ -539,27 +555,32 @@ Before marking this plan as complete, verify:
 ## Notes for Engineer
 
 **DRY (Don't Repeat Yourself):**
+
 - Reuse existing MDX configuration from blog detail page
 - Leverage existing UI components (Dialog, Button, Badge, Avatar)
 - Use existing Tailwind prose classes
 
 **YAGNI (You Aren't Gonna Need It):**
+
 - No table of contents (not in scope)
 - No share buttons (future enhancement)
 - No related posts (future enhancement)
 - No copy button on code blocks (nice-to-have)
 
 **TDD (Test-Driven Development):**
+
 - Tests already passing from previous work
 - Manual testing required for UI changes
 - No new unit tests needed (component testing only)
 
 **Frequent Commits:**
+
 - One commit per task (9 commits total)
 - Use conventional commit messages
 - Keep commits atomic and focused
 
 **Common Pitfalls:**
+
 - Don't forget to reset scroll state when modal closes
 - Ensure progress bar doesn't exceed 100%
 - Test with short posts (<1 screen) and long posts (>5 screens)

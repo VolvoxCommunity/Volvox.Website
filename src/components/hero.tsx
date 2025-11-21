@@ -93,7 +93,7 @@ export function Hero({ onNavigate }: HeroProps) {
           <Button
             size="lg"
             onClick={() => onNavigate("products")}
-            className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
+            className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
             <span className="relative z-10 flex items-center gap-2">
               Explore Products
@@ -108,7 +108,7 @@ export function Hero({ onNavigate }: HeroProps) {
             size="lg"
             variant="outline"
             onClick={() => onNavigate("mentorship")}
-            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary/10 hover:border-secondary transition-all duration-300 font-semibold shadow-md hover:shadow-lg"
+            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary/10 hover:border-secondary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
           >
             Join as Mentee
             <ArrowRight
