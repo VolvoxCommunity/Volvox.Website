@@ -320,8 +320,8 @@
     }
   }
 
-  /* Smooth theme transitions */
-  .prose * {
+  /* Smooth theme transitions - scoped to elements that actually change */
+  .prose :where(a, code, pre, blockquote, th, td) {
     transition-property: color, background-color, border-color;
     transition-duration: 0.2s;
     transition-timing-function: ease-in-out;
@@ -329,7 +329,7 @@
 
   /* Respect reduced motion preferences */
   @media (prefers-reduced-motion: reduce) {
-    .prose * {
+    .prose :where(a, code, pre, blockquote, th, td) {
       transition: none;
     }
   }
