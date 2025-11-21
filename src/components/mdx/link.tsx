@@ -24,7 +24,7 @@ export function CustomLink({
       <Link
         href={href}
         className={cn(
-          "font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-colors",
+          "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors",
           className
         )}
         {...props}
@@ -40,7 +40,7 @@ export function CustomLink({
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "font-medium underline underline-offset-4 decoration-border hover:decoration-primary transition-colors inline-flex items-center gap-0.5",
+        "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors inline-flex items-center gap-0.5",
         className
       )}
       {...props}
