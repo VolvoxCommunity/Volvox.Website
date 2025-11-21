@@ -9,8 +9,22 @@ import {
 } from "@/components/ui/card";
 import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import confettiLib from "canvas-confetti";
 
 export function About() {
+  const handleConfetti = (e: React.MouseEvent) => {
+    const rect = (e.target as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+    void confettiLib({
+      particleCount: 50,
+      spread: 60,
+      origin: { x, y },
+      colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
+    });
+  };
+
   return (
     <section id="about" className="py-16 md:py-24 px-4">
       <div className="container mx-auto max-w-7xl">
@@ -143,6 +157,7 @@ export function About() {
             href="https://github.com/VolvoxCommunity"
             target="_blank"
             rel="noopener noreferrer"
+            onMouseEnter={handleConfetti}
             className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 transition-colors duration-300 hover:bg-secondary/10 hover:border-secondary/20 hover:text-secondary group cursor-pointer"
           >
             <span className="relative flex h-3 w-3">
