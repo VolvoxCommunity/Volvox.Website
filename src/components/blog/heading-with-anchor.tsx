@@ -2,7 +2,7 @@
 
 import { useState, useId, type HTMLAttributes, type ReactNode } from "react";
 import { Link2, Check } from "lucide-react";
-import { generateHeadingId } from "@/lib/utils";
+import { generateHeadingId, cn } from "@/lib/utils";
 
 interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";
@@ -25,6 +25,7 @@ export function HeadingWithAnchor({
   as: Component,
   children,
   id,
+  className,
   ...props
 }: HeadingWithAnchorProps) {
   const [copied, setCopied] = useState(false);
@@ -56,7 +57,11 @@ export function HeadingWithAnchor({
   };
 
   return (
-    <Component id={headingId} className="group relative" {...props}>
+    <Component
+      id={headingId}
+      className={cn("group relative", className)}
+      {...props}
+    >
       {children}
       <span className="sr-only" role="status" aria-live="polite">
         {announceText}
