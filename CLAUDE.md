@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v4.
 
-**Package Manager**: This project uses pnpm. The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
+**Package Manager**: This project uses pnpm (pinned to v10.23.0). The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
 
 **Tailwind CSS v4**: This project uses Tailwind CSS v4 with CSS-first configuration. Theme customization is done via the `@theme` directive in `src/app/globals.css` instead of a JavaScript config file. Lightning CSS is used automatically by Next.js for faster builds.
 
@@ -134,6 +134,7 @@ pnpm format:check
 - **Tailwind CSS v4**: Utility-first CSS framework with CSS-first configuration
 - **Lightning CSS**: Automatic via Next.js (replaces PostCSS/Autoprefixer for faster builds)
 - **Theme Configuration**: Uses `@theme` directive in `globals.css` instead of JavaScript config
+- **Brand Colors**: Primary (Blue), Secondary (Purple), and Accent (Orange) are defined in CSS variables as hex codes.
 - **Custom animations**: `gradient-x` and `pulse-slow` defined as `@keyframes` and registered via `@theme`
 - **Dark mode**: Configured via `@variant dark (&:where(.dark, .dark *))` in CSS
 - **Class variance authority**: Used for component variants (see `src/components/ui/button.tsx`)

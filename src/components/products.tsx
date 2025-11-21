@@ -136,7 +136,7 @@ export function Products({ products }: ProductsProps) {
                       variant="outline"
                       size="lg"
                       asChild
-                      className="flex-1 gap-2 group/btn hover:border-primary/50 hover:bg-primary/5"
+                      className="flex-1 gap-2 group/btn hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
                     >
                       <a
                         href={product.githubUrl}
