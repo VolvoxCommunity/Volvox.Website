@@ -176,7 +176,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
                   <div
-                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-[width] duration-150 ease-out"
+                    className="h-full bg-gradient-to-r from-primary via-primary/80 to-primary/60 transition-[width] duration-150 ease-out will-change-[width]"
                     style={{ width: `${scrollProgress}%` }}
                   />
                 </div>

@@ -33,7 +33,7 @@ export function TableOfContents() {
       let id = baseId;
       let counter = 1;
 
-      // Ensure unique IDs
+      // Ensure unique IDs (handles collisions from both HeadingWithAnchor and TOC-generated IDs)
       while (seenIds.has(id)) {
         id = `${baseId}-${counter}`;
         counter++;
@@ -41,7 +41,8 @@ export function TableOfContents() {
 
       seenIds.add(id);
 
-      if (!element.id) {
+      // Update DOM if ID was missing or had to be deduplicated
+      if (element.id !== id) {
         element.id = id;
       }
 
