@@ -120,7 +120,7 @@ export const mdxComponents = {
     // Check if this is a task list item
     // In Markdown task lists, children is typically an array like [checkbox, text]
     const childArray = Array.isArray(children) ? children : [children];
-    const firstChild: unknown = childArray[0];
+    const firstChild = childArray[0];
 
     if (isCheckboxElement(firstChild) && firstChild.props.type === "checkbox") {
       return (
