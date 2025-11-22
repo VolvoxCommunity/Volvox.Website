@@ -17,11 +17,14 @@ export function About() {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
-    void confettiLib({
+    confettiLib({
       particleCount: 50,
       spread: 60,
       origin: { x, y },
       colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
+    }).catch((err) => {
+      // Log confetti animation errors for debugging; effect is non-critical
+      console.error("Confetti animation failed:", err);
     });
   };
 
