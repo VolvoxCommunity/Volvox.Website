@@ -32,7 +32,6 @@ export interface Product {
   name: string;
   description: string;
   longDescription: string;
-  techStack: string[];
   features: string[];
   githubUrl?: string;
   demoUrl?: string;

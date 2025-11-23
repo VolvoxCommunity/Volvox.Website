@@ -27,13 +27,21 @@ interface MentorshipProps {
   mentees: Mentee[];
 }
 
+/**
+ * Render the Mentorship section showcasing program features, a mentors tab, a featured mentees tab, and a call-to-action.
+ *
+ * Renders animated overview cards, a tabbed list of mentor and mentee profile cards (with conditional empty-state messages), and action buttons including a Discord join button that triggers a confetti effect on click.
+ *
+ * @param mentors - Array of mentor objects used to render mentor profile cards and their details (avatar, name, role, bio, expertise, optional profile link).
+ * @param mentees - Array of mentee objects used to render mentee profile cards and their details (avatar, name, goals, progress, optional profile link).
+ * @returns The JSX element for the Mentorship section.
+ */
 export function Mentorship({ mentors, mentees }: MentorshipProps) {
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-    confettiLib({
+    void confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
@@ -140,8 +148,12 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
 
         <Tabs defaultValue="mentors" className="w-full">
           <TabsList className="grid w-full max-w-md mx-auto grid-cols-2 mb-8">
-            <TabsTrigger value="mentors">Our Mentors</TabsTrigger>
-            <TabsTrigger value="mentees">Featured Mentees</TabsTrigger>
+            <TabsTrigger value="mentors" className="cursor-pointer">
+              Our Mentors
+            </TabsTrigger>
+            <TabsTrigger value="mentees" className="cursor-pointer">
+              Featured Mentees
+            </TabsTrigger>
           </TabsList>
 
           <TabsContent value="mentors">
@@ -195,7 +207,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="w-full gap-2 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                        className="w-full gap-2 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
                       >
                         <a
                           href={mentor.githubUrl}
@@ -271,7 +283,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                         variant="outline"
                         size="sm"
                         asChild
-                        className="w-full gap-2 mt-4 hover:bg-primary hover:text-primary-foreground hover:border-primary"
+                        className="w-full gap-2 mt-4 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary"
                       >
                         <a
                           href={mentee.githubUrl}

@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { GithubLogo, ArrowUpRight, CheckCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Product } from "@/lib/types";
@@ -18,6 +17,14 @@ interface ProductsProps {
   products: Product[];
 }
 
+/**
+ * Render a "Featured Product" section that displays the first product from the provided list or a placeholder when no product is available.
+ *
+ * Renders a responsive card for the first product in `products` including the product name, description, key features, and optional action buttons and long description. If `products` is empty, renders a centered placeholder message.
+ *
+ * @param products - Array of products; only the first product in the array is shown. Optional product fields `githubUrl`, `demoUrl`, and `longDescription` control rendering of the corresponding actions and expanded description.
+ * @returns The JSX element for the featured product section or a fallback placeholder.
+ */
 export function Products({ products }: ProductsProps) {
   const product = products[0];
 
@@ -53,7 +60,7 @@ export function Products({ products }: ProductsProps) {
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
         >
-          <Card className="group hover:shadow-2xl hover:shadow-primary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-primary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
+          <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
             <div className="grid md:grid-cols-2 gap-0">
               <motion.div
                 className="aspect-video md:aspect-auto bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden"
@@ -75,7 +82,7 @@ export function Products({ products }: ProductsProps) {
 
               <div className="flex flex-col">
                 <CardHeader className="pb-4 pt-6 md:pt-8 px-6 md:px-8">
-                  <CardTitle className="text-2xl md:text-3xl font-bold group-hover:text-primary transition-colors duration-300">
+                  <CardTitle className="text-2xl md:text-3xl font-bold transition-colors duration-300">
                     {product.name}
                   </CardTitle>
                   <CardDescription className="text-base mt-3 leading-relaxed">
@@ -84,24 +91,6 @@ export function Products({ products }: ProductsProps) {
                 </CardHeader>
 
                 <CardContent className="flex-1 space-y-7 px-6 md:px-8">
-                  <div>
-                    <h4 className="font-semibold mb-3 text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-                      <span className="h-px w-4 bg-primary/50" />
-                      Tech Stack
-                    </h4>
-                    <div className="flex flex-wrap gap-2">
-                      {product.techStack.map((tech) => (
-                        <Badge
-                          key={tech}
-                          variant="secondary"
-                          className="px-3 py-1 text-xs font-medium hover:bg-primary/10 hover:text-primary transition-colors duration-200"
-                        >
-                          {tech}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-
                   <div>
                     <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-2">
                       <span className="h-px w-4 bg-primary/50" />
@@ -136,7 +125,7 @@ export function Products({ products }: ProductsProps) {
                       variant="outline"
                       size="lg"
                       asChild
-                      className="flex-1 gap-2 group/btn hover:border-primary/50 hover:bg-primary/5 hover:text-primary"
+                      className="flex-1 gap-2 group/btn hover:border-secondary/50 hover:bg-secondary/5 hover:text-secondary"
                     >
                       <a
                         href={product.githubUrl}
@@ -153,9 +142,10 @@ export function Products({ products }: ProductsProps) {
                   )}
                   {product.demoUrl && (
                     <Button
+                      variant="accent"
                       size="lg"
                       asChild
-                      className="flex-1 gap-2 group/btn shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30"
+                      className="flex-1 gap-2 group/btn shadow-lg shadow-accent/20 hover:shadow-xl hover:shadow-accent/30"
                     >
                       <a
                         href={product.demoUrl}

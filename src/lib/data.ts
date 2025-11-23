@@ -11,6 +11,9 @@ import {
  * @returns All products from the JSON file.
  */
 export async function getAllProducts(_limit = 50, _offset = 0) {
+  await Promise.resolve();
+  void _limit;
+  void _offset;
   return getProducts();
 }
 
@@ -20,6 +23,7 @@ export async function getAllProducts(_limit = 50, _offset = 0) {
  * @returns All mentors from the JSON file.
  */
 export async function getAllMentors() {
+  await Promise.resolve();
   const mentors = getMentors();
   return {
     items: mentors,
@@ -36,6 +40,7 @@ export async function getAllMentors() {
  * @returns All mentees from the JSON file.
  */
 export async function getAllMentees() {
+  await Promise.resolve();
   const mentees = getMentees();
   return {
     items: mentees,

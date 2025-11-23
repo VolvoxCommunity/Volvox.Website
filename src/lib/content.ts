@@ -18,7 +18,7 @@ export function getAllAuthors(): Author[] {
   try {
     const filePath = path.join(CONTENT_DIR, "authors.json");
     const fileContents = fs.readFileSync(filePath, "utf8");
-    const json = JSON.parse(fileContents);
+    const json: unknown = JSON.parse(fileContents);
 
     // Validate with Zod
     const authors = AuthorsArraySchema.parse(json);
@@ -44,7 +44,7 @@ export function getAllProducts(): Product[] {
   try {
     const filePath = path.join(CONTENT_DIR, "products.json");
     const fileContents = fs.readFileSync(filePath, "utf8");
-    const json = JSON.parse(fileContents);
+    const json: unknown = JSON.parse(fileContents);
 
     // Validate with Zod
     const products = ProductsArraySchema.parse(json);
@@ -62,7 +62,7 @@ export function getAllMentors(): Mentor[] {
   try {
     const filePath = path.join(CONTENT_DIR, "mentors.json");
     const fileContents = fs.readFileSync(filePath, "utf8");
-    const json = JSON.parse(fileContents);
+    const json: unknown = JSON.parse(fileContents);
 
     // Validate with Zod
     const mentors = MentorsArraySchema.parse(json);
@@ -80,7 +80,7 @@ export function getAllMentees(): Mentee[] {
   try {
     const filePath = path.join(CONTENT_DIR, "mentees.json");
     const fileContents = fs.readFileSync(filePath, "utf8");
-    const json = JSON.parse(fileContents);
+    const json: unknown = JSON.parse(fileContents);
 
     // Validate with Zod
     const mentees = MenteesArraySchema.parse(json);

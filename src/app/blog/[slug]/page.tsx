@@ -10,6 +10,8 @@ import { Button } from "@/components/ui/button";
 import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
+import { BlogPostHeader } from "@/components/blog/blog-post-header";
+import { AnimatedBackground } from "@/components/animated-background";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -78,110 +80,104 @@ export default async function BlogPostPage({
   }
 
   return (
-    <div className="min-h-screen">
-      {/* Header Navigation */}
-      <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40">
-        <div className="container mx-auto px-4 max-w-7xl">
-          <div className="flex items-center justify-between h-16">
-            <Button variant="ghost" asChild>
-              <Link href="/" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to Home
-              </Link>
-            </Button>
-            <Link href="/" className="text-xl font-bold text-primary">
-              Volvox
-            </Link>
-          </div>
-        </div>
-      </header>
+    <div className="min-h-screen relative">
+      {/* Animated Background - Same as homepage */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <AnimatedBackground />
+      </div>
 
-      {/* Blog Post Content with Reading Progress and TOC */}
-      <main>
-        <BlogContentWrapper>
-          {/* Post Header */}
-          <header className="mb-12">
-            <div className="flex flex-wrap gap-2 mb-4">
-              {frontmatter.tags?.map((tag: string) => (
-                <Badge key={tag} variant="secondary">
-                  {tag}
-                </Badge>
-              ))}
-            </div>
+      {/* Content Layer */}
+      <div className="relative z-10">
+        {/* Header Navigation */}
+        <BlogPostHeader />
 
-            <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
-              {frontmatter.title}
-            </h1>
-
-            <p className="text-xl text-muted-foreground mb-6">
-              {frontmatter.excerpt}
-            </p>
-
-            {/* Author Info */}
-            <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
-              <div className="flex items-center gap-2">
-                {frontmatter.author?.avatar && (
-                  <Image
-                    src={frontmatter.author.avatar}
-                    alt={frontmatter.author.name}
-                    width={40}
-                    height={40}
-                    className="w-10 h-10 rounded-full"
-                  />
-                )}
-                <div>
-                  <p className="font-medium text-foreground">
-                    {frontmatter.author?.name}
-                  </p>
-                  <p className="text-xs">{frontmatter.author?.role}</p>
-                </div>
+        {/* Blog Post Content with Reading Progress and TOC */}
+        <main>
+          <BlogContentWrapper>
+            {/* Post Header */}
+            <header className="mb-12">
+              <div className="flex flex-wrap gap-2 mb-4">
+                {frontmatter.tags?.map((tag: string) => (
+                  <Badge key={tag} variant="secondary">
+                    {tag}
+                  </Badge>
+                ))}
               </div>
 
-              <div className="flex items-center gap-4">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{frontmatter.date}</span>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6 leading-tight">
+                {frontmatter.title}
+              </h1>
+
+              <p className="text-xl text-muted-foreground mb-6">
+                {frontmatter.excerpt}
+              </p>
+
+              {/* Author Info */}
+              <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
+                <div className="flex items-center gap-2">
+                  {frontmatter.author?.avatar && (
+                    <Image
+                      src={frontmatter.author.avatar}
+                      alt={frontmatter.author.name}
+                      width={40}
+                      height={40}
+                      className="w-10 h-10 rounded-full"
+                    />
+                  )}
+                  <div>
+                    <p className="font-medium text-foreground">
+                      {frontmatter.author?.name}
+                    </p>
+                    <p className="text-xs">{frontmatter.author?.role}</p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-1">
+                    <Calendar className="h-4 w-4" />
+                    <span>{frontmatter.date}</span>
+                  </div>
                 </div>
               </div>
+            </header>
+
+            {/* MDX Content */}
+            <div
+              className="prose prose-lg dark:prose-invert max-w-none
+            prose-headings:text-foreground
+            prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl
+            prose-a:text-secondary prose-a:no-underline hover:prose-a:underline
+            prose-strong:text-foreground
+            prose-code:text-secondary prose-code:bg-muted
+            prose-pre:bg-card prose-pre:border prose-pre:border-border
+            prose-blockquote:border-l-secondary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
+            prose-ul:list-disc prose-ol:list-decimal
+            prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
+          "
+            >
+              <MDXRemote
+                source={content}
+                components={mdxComponents}
+                options={{
+                  mdxOptions: {
+                    rehypePlugins: [rehypeHighlight],
+                  },
+                }}
+              />
             </div>
-          </header>
 
-          {/* MDX Content */}
-          <div
-            className="prose prose-lg dark:prose-invert max-w-none
-          prose-headings:text-foreground
-          prose-h2:text-3xl prose-h3:text-2xl prose-h4:text-xl
-          prose-a:text-primary prose-a:no-underline hover:prose-a:underline
-          prose-strong:text-foreground
-          prose-code:text-secondary prose-code:bg-muted
-          prose-pre:bg-card prose-pre:border prose-pre:border-border
-          prose-blockquote:border-l-primary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
-          prose-ul:list-disc prose-ol:list-decimal
-          prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
-        "
-          >
-            <MDXRemote
-              source={content}
-              components={mdxComponents}
-              options={{
-                mdxOptions: {
-                  rehypePlugins: [rehypeHighlight],
-                },
-              }}
-            />
-          </div>
-
-          {/* Footer Navigation */}
-          <footer className="mt-16 pt-8 border-t border-border">
-            <Button variant="outline" asChild>
-              <Link href="/#blog" className="flex items-center gap-2">
-                <ArrowLeft className="h-4 w-4" />
-                Back to All Posts
-              </Link>
-            </Button>
-          </footer>
-        </BlogContentWrapper>
-      </main>
+            {/* Footer Navigation */}
+            <footer className="mt-16 pt-8 border-t border-border">
+              <Button variant="outline" asChild>
+                <Link href="/#blog" className="flex items-center gap-2">
+                  <ArrowLeft className="h-4 w-4" />
+                  Back to All Posts
+                </Link>
+              </Button>
+            </footer>
+          </BlogContentWrapper>
+        </main>
+      </div>
     </div>
   );
 }

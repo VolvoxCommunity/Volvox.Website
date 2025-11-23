@@ -9,29 +9,47 @@ interface HeroProps {
   onNavigate: (section: string) => void;
 }
 
+/**
+ * Render the hero section for the Volvox landing page.
+ *
+ * Clicking the main title or the Discord link emits a confetti animation at the click position.
+ *
+ * @param onNavigate - Callback invoked with a section identifier (e.g., `"products"`, `"mentorship"`) when an action requests navigation
+ * @returns A React element representing the hero section
+ */
 export function Hero({ onNavigate }: HeroProps) {
   const handleTitleClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-    confettiLib({
+    const promise = confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
     });
+
+    if (promise) {
+      promise.catch((err) => {
+        console.error("Confetti animation failed:", err);
+      });
+    }
   };
 
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-    confettiLib({
+    const promise = confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
     });
+
+    if (promise) {
+      promise.catch((err) => {
+        console.error("Confetti animation failed:", err);
+      });
+    }
   };
 
   return (
@@ -43,12 +61,12 @@ export function Hero({ onNavigate }: HeroProps) {
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           className="mb-6"
         >
-          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
+          <div className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 hover:bg-secondary/10 hover:border-secondary/20 transition-colors duration-300">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary transition-colors duration-300"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary group-hover:bg-secondary transition-colors duration-300"></span>
             </span>
-            <span className="text-sm font-medium text-primary">
+            <span className="text-sm font-medium text-primary group-hover:text-secondary transition-colors duration-300">
               Building the future of software development
             </span>
           </div>
@@ -128,7 +146,7 @@ export function Hero({ onNavigate }: HeroProps) {
             href="https://github.com/VolvoxCommunity"
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors duration-300"
+            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
           >
             <GithubLogo
               weight="fill"

@@ -110,7 +110,7 @@ export function TableOfContents() {
               <button
                 type="button"
                 onClick={() => scrollToHeading(heading.id)}
-                className={`text-left transition-colors duration-200 hover:text-primary ${
+                className={`text-left transition-colors duration-200 hover:text-secondary ${
                   activeId === heading.id
                     ? "text-primary font-medium"
                     : "text-muted-foreground"

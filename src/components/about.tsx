@@ -9,8 +9,36 @@ import {
 } from "@/components/ui/card";
 import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import confettiLib from "canvas-confetti";
 
+/**
+ * Renders the "About Volvox" section with informational cards, animated highlights, and a GitHub CTA that spawns confetti on hover.
+ *
+ * The component includes company story, mission, values, animated service cards, and an external link to the Volvox GitHub which triggers a localized confetti effect when hovered.
+ *
+ * @returns The JSX element for the About section.
+ */
 export function About() {
+  const handleConfetti = (e: React.MouseEvent) => {
+    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
+    const x = (rect.left + rect.width / 2) / window.innerWidth;
+    const y = (rect.top + rect.height / 2) / window.innerHeight;
+
+    const promise = confettiLib({
+      particleCount: 50,
+      spread: 60,
+      origin: { x, y },
+      colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
+    });
+
+    if (promise) {
+      promise.catch((err) => {
+        // Log confetti animation errors for debugging; effect is non-critical
+        console.error("Confetti animation failed:", err);
+      });
+    }
+  };
+
   return (
     <section id="about" className="py-16 md:py-24 px-4">
       <div className="container mx-auto max-w-7xl">
@@ -139,15 +167,21 @@ export function About() {
         </div>
 
         <div className="mt-12 text-center">
-          <div className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20">
+          <a
+            href="https://github.com/VolvoxCommunity"
+            target="_blank"
+            rel="noopener noreferrer"
+            onMouseEnter={handleConfetti}
+            className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 transition-colors duration-300 hover:bg-secondary/10 hover:border-secondary/20 hover:text-secondary group cursor-pointer"
+          >
             <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary transition-colors duration-300"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary group-hover:bg-secondary transition-colors duration-300"></span>
             </span>
-            <span className="text-base font-medium text-primary">
+            <span className="text-base font-medium text-primary group-hover:text-secondary transition-colors duration-300">
               From Volvox with ❤️
             </span>
-          </div>
+          </a>
         </div>
       </div>
     </section>

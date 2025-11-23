@@ -55,6 +55,7 @@ export function ImageZoom({
               className="w-full h-auto"
             />
           ) : (
+            // eslint-disable-next-line @next/next/no-img-element
             <img src={src} alt={alt} className="w-full h-auto" />
           )}
         </button>
@@ -76,7 +77,7 @@ export function ImageZoom({
           >
             <X className="h-5 w-5" />
           </button>
-          <div className="flex items-center justify-center w-full h-full p-8">
+          <div className="relative flex items-center justify-center w-full h-full p-8">
             {width && height ? (
               <Image
                 src={src}
@@ -86,6 +87,7 @@ export function ImageZoom({
                 className="max-w-full max-h-full object-contain"
               />
             ) : (
+              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={src}
                 alt={alt}

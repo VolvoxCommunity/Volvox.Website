@@ -9,15 +9,15 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 const projectRoot = join(__dirname, "..");
 
-describe("PostCSS Configuration", () => {
-  it("loads postcss.config.mjs successfully", async () => {
+void describe("PostCSS Configuration", () => {
+  void it("loads postcss.config.mjs successfully", async () => {
     const config = await postcssrc({ cwd: projectRoot });
 
     assert.ok(config, "PostCSS configuration should be loaded");
     assert.ok(config.plugins, "PostCSS configuration should have plugins");
   });
 
-  it("includes @tailwindcss/postcss plugin", async () => {
+  void it("includes @tailwindcss/postcss plugin", async () => {
     const config = await postcssrc({ cwd: projectRoot });
 
     assert.ok(config.plugins, "Plugins should be defined");
@@ -39,7 +39,7 @@ describe("PostCSS Configuration", () => {
     );
   });
 
-  it("has correct plugin configuration structure", async () => {
+  void it("has correct plugin configuration structure", async () => {
     const config = await postcssrc({ cwd: projectRoot });
 
     assert.ok(Array.isArray(config.plugins), "Plugins should be an array");
@@ -50,8 +50,8 @@ describe("PostCSS Configuration", () => {
   });
 });
 
-describe("Tailwind CSS Processing", () => {
-  it("processes Tailwind CSS @import directive", async () => {
+void describe("Tailwind CSS Processing", () => {
+  void it("processes Tailwind CSS @import directive", async () => {
     const input = `@import "tailwindcss";`;
 
     const config = await postcssrc({ cwd: projectRoot });
@@ -67,7 +67,7 @@ describe("Tailwind CSS Processing", () => {
     );
   });
 
-  it("processes Tailwind CSS @layer directive", async () => {
+  void it("processes Tailwind CSS @layer directive", async () => {
     const input = `
       @import "tailwindcss";
       
@@ -91,7 +91,7 @@ describe("Tailwind CSS Processing", () => {
     );
   });
 
-  it("processes Tailwind CSS @apply directive", async () => {
+  void it("processes Tailwind CSS @apply directive", async () => {
     const input = `
       @import "tailwindcss";
 
@@ -113,7 +113,7 @@ describe("Tailwind CSS Processing", () => {
     );
   });
 
-  it("processes Tailwind CSS utility classes", async () => {
+  void it("processes Tailwind CSS utility classes", async () => {
     const input = `
       @import "tailwindcss";
     `;
@@ -131,7 +131,7 @@ describe("Tailwind CSS Processing", () => {
     );
   });
 
-  it("processes custom @theme directive", async () => {
+  void it("processes custom @theme directive", async () => {
     const input = `
       @import "tailwindcss";
       
@@ -153,7 +153,7 @@ describe("Tailwind CSS Processing", () => {
     );
   });
 
-  it("processes custom @variant directive", async () => {
+  void it("processes custom @variant directive", async () => {
     const input = `
       @import "tailwindcss";
       
@@ -171,7 +171,7 @@ describe("Tailwind CSS Processing", () => {
     assert.ok(result.css.length > 0, "Should generate output");
   });
 
-  it("handles the globals.css file structure", async () => {
+  void it("handles the globals.css file structure", async () => {
     const input = `
       @import "tailwindcss";
 
@@ -209,8 +209,8 @@ describe("Tailwind CSS Processing", () => {
   });
 });
 
-describe("PostCSS Processing", () => {
-  it("processes valid CSS without errors", async () => {
+void describe("PostCSS Processing", () => {
+  void it("processes valid CSS without errors", async () => {
     const input = `
       @import "tailwindcss";
 

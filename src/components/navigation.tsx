@@ -20,6 +20,15 @@ interface NavigationProps {
   currentSection: string;
 }
 
+/**
+ * Top navigation bar with logo, section links, theme toggle, and external links.
+ *
+ * Renders a responsive navigation: horizontal section buttons on medium+ screens and a slide-in sheet on small screens. Includes a theme toggle, GitHub and Discord links (Discord clicks trigger a confetti effect), and highlights the active section.
+ *
+ * @param onNavigate - Callback invoked with a section id when a navigation item is selected.
+ * @param currentSection - The id of the currently active section used to apply active styling.
+ * @returns The navigation bar element (JSX) ready to be rendered at the top of the page.
+ */
 export function Navigation({ onNavigate, currentSection }: NavigationProps) {
   const { theme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -33,11 +42,10 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
   };
 
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.target as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
-    confettiLib({
+    void confettiLib({
       particleCount: 100,
       spread: 70,
       origin: { x, y },
@@ -87,7 +95,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                 className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
                   currentSection === item.id
                     ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-primary hover:bg-muted"
+                    : "text-foreground hover:text-secondary hover:bg-muted"
                 }`}
               >
                 {item.label}
@@ -168,7 +176,7 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
                       className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
                         currentSection === item.id
                           ? "text-primary bg-primary/10"
-                          : "text-foreground hover:text-primary hover:bg-muted"
+                          : "text-foreground hover:text-secondary hover:bg-muted"
                       }`}
                     >
                       {item.label}

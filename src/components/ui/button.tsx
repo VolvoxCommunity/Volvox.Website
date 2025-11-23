@@ -16,12 +16,14 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
         outline:
-          "border bg-background shadow-xs hover:bg-accent hover:text-accent-foreground dark:bg-input/30 dark:border-input before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.08),transparent)] dark:before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.12),transparent)]",
+          "border bg-background shadow-xs hover:bg-secondary hover:text-secondary-foreground dark:bg-input/30 dark:border-input before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.08),transparent)] dark:before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.12),transparent)]",
         secondary:
           "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
+        accent:
+          "bg-accent text-accent-foreground shadow-xs hover:bg-accent/90 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
         ghost:
-          "hover:bg-accent hover:text-accent-foreground dark:hover:bg-accent/50 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_120px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--primary-rgb,79,70,229),0.08),transparent)]",
-        link: "text-primary underline-offset-4 hover:underline overflow-visible before:hidden",
+          "hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary/50 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_120px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.08),transparent)]",
+        link: "text-secondary underline-offset-4 hover:underline overflow-visible before:hidden",
       },
       size: {
         default: "h-9 px-4 py-2 has-[>svg]:px-3",

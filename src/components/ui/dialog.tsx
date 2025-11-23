@@ -30,6 +30,12 @@ function DialogClose({
   return <DialogPrimitive.Close data-slot="dialog-close" {...props} />;
 }
 
+/**
+ * Renders the dialog backdrop overlay with standardized styling hooks and state animations.
+ *
+ * @param className - Additional CSS classes to append to the overlay's composed class list.
+ * @returns The rendered overlay element for the dialog, including data-slot="dialog-overlay" and forwarded props.
+ */
 function DialogOverlay({
   className,
   ...props
@@ -38,7 +44,7 @@ function DialogOverlay({
     <DialogPrimitive.Overlay
       data-slot="dialog-overlay"
       className={cn(
-        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 fixed inset-0 z-50 bg-black/50 backdrop-blur-sm",
         className
       )}
       {...props}

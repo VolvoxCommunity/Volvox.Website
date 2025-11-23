@@ -71,7 +71,7 @@ export function HeadingWithAnchor({
         type="button"
         onClick={handleCopyLink}
         className="inline-flex ml-2 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200
-                   text-muted-foreground hover:text-primary align-middle"
+                   text-muted-foreground hover:text-secondary align-middle"
         aria-label="Copy link to heading"
       >
         {copied ? (
