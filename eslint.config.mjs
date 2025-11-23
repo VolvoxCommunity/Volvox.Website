@@ -21,7 +21,7 @@ const eslintConfig = defineConfig([
         "error",
         {
           checksVoidReturn: {
-            attributes: false, // Allow async event handlers
+            attributes: false,
           },
         },
       ],

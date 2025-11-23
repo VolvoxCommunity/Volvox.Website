@@ -55,7 +55,11 @@ export function BlogPostHeader() {
                 size="icon"
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
-                aria-label={theme === "light" ? "Switch to dark mode" : "Switch to light mode"}
+                aria-label={
+                  theme === "light"
+                    ? "Switch to dark mode"
+                    : "Switch to light mode"
+                }
               >
                 {theme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />

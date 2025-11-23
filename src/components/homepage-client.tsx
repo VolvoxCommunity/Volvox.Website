@@ -41,27 +41,30 @@ export function HomepageClient({
   const [currentSection, setCurrentSection] = useState("home");
   const router = useRouter();
 
-  const handleNavigate = useCallback((section: string) => {
-    setCurrentSection(section);
+  const handleNavigate = useCallback(
+    (section: string) => {
+      setCurrentSection(section);
 
-    if (section === "home") {
-      window.scrollTo({ top: 0, behavior: "smooth" });
-      router.push("/", { scroll: false });
-    } else {
-      const element = document.getElementById(section);
-      if (element) {
-        const offset = 80;
-        const elementPosition = element.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - offset;
+      if (section === "home") {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+        router.push("/", { scroll: false });
+      } else {
+        const element = document.getElementById(section);
+        if (element) {
+          const offset = 80;
+          const elementPosition = element.getBoundingClientRect().top;
+          const offsetPosition = elementPosition + window.pageYOffset - offset;
 
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: "smooth",
-        });
-        router.push(`#${section}`, { scroll: false });
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth",
+          });
+          router.push(`#${section}`, { scroll: false });
+        }
       }
-    }
-  }, [router]);
+    },
+    [router]
+  );
 
   // Handle URL hash on initial load
   useEffect(() => {
@@ -78,7 +81,9 @@ export function HomepageClient({
         } else if (performance.now() - startTime < timeout) {
           animationFrameId = requestAnimationFrame(checkAndScroll);
         } else {
-          console.warn(`Volvox: Could not find element with id '${hash}' to scroll to.`);
+          console.warn(
+            `Volvox: Could not find element with id '${hash}' to scroll to.`
+          );
         }
       };
 

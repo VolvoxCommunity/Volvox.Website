@@ -38,9 +38,8 @@ interface MentorshipProps {
  */
 export function Mentorship({ mentors, mentees }: MentorshipProps) {
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
     void confettiLib({
       particleCount: 100,

@@ -178,10 +178,11 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           {selectedPost && (
             <>
               <DialogHeader
-                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${isScrolled
-                  ? "shadow-md bg-background/95 backdrop-blur-sm"
-                  : "bg-background"
-                  }`}
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
+                  isScrolled
+                    ? "shadow-md bg-background/95 backdrop-blur-sm"
+                    : "bg-background"
+                }`}
               >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">

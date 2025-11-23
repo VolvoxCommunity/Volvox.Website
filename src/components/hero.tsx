@@ -19,9 +19,8 @@ interface HeroProps {
  */
 export function Hero({ onNavigate }: HeroProps) {
   const handleTitleClick = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
     const promise = confettiLib({
       particleCount: 100,
@@ -37,9 +36,8 @@ export function Hero({ onNavigate }: HeroProps) {
   };
 
   const handleDiscordClick = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
+    const x = e.clientX / window.innerWidth;
+    const y = e.clientY / window.innerHeight;
 
     const promise = confettiLib({
       particleCount: 100,
