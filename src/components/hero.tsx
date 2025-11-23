@@ -110,6 +110,7 @@ export function Hero({ onNavigate }: HeroProps) {
         >
           <Button
             size="lg"
+            variant="accent"
             onClick={() => onNavigate("products")}
             className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
           >

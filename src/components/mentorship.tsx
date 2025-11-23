@@ -326,7 +326,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
               >
-                <Button size="lg" asChild className="gap-2">
+                <Button size="lg" variant="accent" asChild className="gap-2">
                   <a
                     href="https://discord.gg/8ahXACdamN"
                     target="_blank"
