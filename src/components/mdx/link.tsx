@@ -29,6 +29,7 @@ export function CustomLink({
 
   const isInternal =
     (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#");
+  const isProtocol = href.startsWith("mailto:") || href.startsWith("tel:");
 
   if (isInternal) {
     return (
@@ -42,6 +43,21 @@ export function CustomLink({
       >
         {children}
       </Link>
+    );
+  }
+
+  if (isProtocol) {
+    return (
+      <a
+        href={href}
+        className={cn(
+          "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors",
+          className
+        )}
+        {...props}
+      >
+        {children}
+      </a>
     );
   }
 

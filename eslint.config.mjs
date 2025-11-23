@@ -29,7 +29,7 @@ const eslintConfig = defineConfig([
   },
   // Exclude config files from type checking
   {
-    files: ["**/*.mjs", "**/*.js"],
+    files: ["**/*.config.mjs", "**/*.config.js"],
     ...tseslint.configs.disableTypeChecked,
   },
   // Override default ignores of eslint-config-next.

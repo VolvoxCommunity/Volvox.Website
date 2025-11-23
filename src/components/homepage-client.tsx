@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { Navigation } from "@/components/navigation";
 import { Hero } from "@/components/hero";
@@ -38,12 +39,14 @@ export function HomepageClient({
   mentees,
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
+  const router = useRouter();
 
   const handleNavigate = useCallback((section: string) => {
     setCurrentSection(section);
 
     if (section === "home") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      router.push("/", { scroll: false });
     } else {
       const element = document.getElementById(section);
       if (element) {
@@ -55,9 +58,10 @@ export function HomepageClient({
           top: offsetPosition,
           behavior: "smooth",
         });
+        router.push(`#${section}`, { scroll: false });
       }
     }
-  }, []);
+  }, [router]);
 
   // Handle URL hash on initial load
   useEffect(() => {
@@ -65,17 +69,26 @@ export function HomepageClient({
     if (hash) {
       const startTime = performance.now();
       const timeout = 2000; // 2 seconds timeout
+      let animationFrameId: number;
 
       const checkAndScroll = () => {
         const element = document.getElementById(hash);
         if (element) {
           handleNavigate(hash);
         } else if (performance.now() - startTime < timeout) {
-          requestAnimationFrame(checkAndScroll);
+          animationFrameId = requestAnimationFrame(checkAndScroll);
+        } else {
+          console.warn(`Volvox: Could not find element with id '${hash}' to scroll to.`);
         }
       };
 
-      requestAnimationFrame(checkAndScroll);
+      animationFrameId = requestAnimationFrame(checkAndScroll);
+
+      return () => {
+        if (animationFrameId) {
+          cancelAnimationFrame(animationFrameId);
+        }
+      };
     }
   }, [handleNavigate]);
 

@@ -24,6 +24,7 @@ import { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import remarkGfm from "remark-gfm";
+import { CustomLink } from "@/components/mdx";
 
 interface BlogProps {
   posts: BlogPost[];
@@ -173,15 +174,14 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           setIsScrolled(false);
         }}
       >
-        <DialogContent className="w-[80vw] max-w-none sm:max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
+        <DialogContent className="w-[80vw] max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
               <DialogHeader
-                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
-                  isScrolled
-                    ? "shadow-md bg-background/95 backdrop-blur-sm"
-                    : "bg-background"
-                }`}
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${isScrolled
+                  ? "shadow-md bg-background/95 backdrop-blur-sm"
+                  : "bg-background"
+                  }`}
               >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">
@@ -251,6 +251,9 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 <ReactMarkdown
                   remarkPlugins={[remarkGfm]}
                   rehypePlugins={[rehypeHighlight]}
+                  components={{
+                    a: CustomLink,
+                  }}
                 >
                   {selectedPost.content}
                 </ReactMarkdown>
@@ -261,7 +264,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 <Button
                   variant="ghost"
                   onClick={() => setSelectedPost(null)}
-                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98] cursor-pointer"
+                  className="text-muted-foreground transition-transform hover:scale-[1.02] active:scale-[0.98]"
                 >
                   Back
                 </Button>
