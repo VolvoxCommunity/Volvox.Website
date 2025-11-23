@@ -63,10 +63,19 @@ export function HomepageClient({
   useEffect(() => {
     const hash = window.location.hash.slice(1); // Remove the '#'
     if (hash) {
-      // Wait for the page to render before scrolling
-      setTimeout(() => {
-        handleNavigate(hash);
-      }, 100);
+      const startTime = performance.now();
+      const timeout = 2000; // 2 seconds timeout
+
+      const checkAndScroll = () => {
+        const element = document.getElementById(hash);
+        if (element) {
+          handleNavigate(hash);
+        } else if (performance.now() - startTime < timeout) {
+          requestAnimationFrame(checkAndScroll);
+        }
+      };
+
+      requestAnimationFrame(checkAndScroll);
     }
   }, [handleNavigate]);
 

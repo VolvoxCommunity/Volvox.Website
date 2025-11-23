@@ -27,7 +27,8 @@ export function CustomLink({
     );
   }
 
-  const isInternal = (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#");
+  const isInternal =
+    (href.startsWith("/") && !href.startsWith("//")) || href.startsWith("#");
 
   if (isInternal) {
     return (
@@ -56,10 +57,7 @@ export function CustomLink({
       {...props}
     >
       {children}
-      <ExternalLink
-        className="h-3 w-3 inline-block"
-        aria-hidden="true"
-      />
+      <ExternalLink className="h-3 w-3 inline-block" aria-hidden="true" />
     </a>
   );
 }
