@@ -72,7 +72,7 @@ export function HomepageClient({
     if (hash) {
       const startTime = performance.now();
       const timeout = 2000; // 2 seconds timeout
-      let animationFrameId: number;
+      let animationFrameId: number | undefined;
 
       const checkAndScroll = () => {
         const element = document.getElementById(hash);
@@ -90,7 +90,7 @@ export function HomepageClient({
       animationFrameId = requestAnimationFrame(checkAndScroll);
 
       return () => {
-        if (animationFrameId) {
+        if (animationFrameId !== undefined) {
           cancelAnimationFrame(animationFrameId);
         }
       };

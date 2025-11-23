@@ -30,7 +30,7 @@ const eslintConfig = defineConfig([
   // Exclude config files from type checking
   {
     files: ["**/*.config.mjs", "**/*.config.js"],
-    extends: [tseslint.configs.disableTypeChecked],
+    ...tseslint.configs.disableTypeChecked,
   },
   // Override default ignores of eslint-config-next.
   globalIgnores([
