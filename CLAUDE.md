@@ -28,8 +28,14 @@ pnpm typecheck
 # Run linting
 pnpm lint
 
-# Run unit tests
+# Run unit tests (Node test runner with tsx)
 pnpm test
+
+# Run E2E tests (Playwright)
+pnpm exec playwright test
+
+# Open Playwright UI for interactive E2E testing
+pnpm exec playwright test --ui
 
 # Format code with Prettier
 pnpm format
@@ -111,7 +117,9 @@ git push
 - **Component structure**:
   - Layout components: `navigation.tsx`, `footer.tsx`, `animated-background.tsx`
   - Section components: `hero.tsx`, `products.tsx`, `blog.tsx`, `mentorship.tsx`, `about.tsx`
-  - UI primitives: `src/components/ui/` (button, card, badge, dialog, etc.)
+  - UI primitives: `src/components/ui/` (button, card, badge, dialog, sheet, tabs, avatar, sonner, etc.)
+  - Blog components: `src/components/blog/` (blog-post-header, table-of-contents, reading-progress, scroll-reveal, heading-with-anchor, blog-content-wrapper)
+  - MDX components: `src/components/mdx/` (callout, code-block, image-zoom, link)
 
 ### Theming
 
@@ -136,6 +144,26 @@ git push
   products.json - Product information
   mentors.json - Mentor profiles
   mentees.json - Mentee profiles
+
+/e2e
+  blog-view-tracking.spec.ts - Playwright E2E test for blog view tracking
+
+/src
+  /app
+    /blog/[slug] - Dynamic blog post pages
+    /privacy - Privacy policy page
+    layout.tsx - Root layout
+    page.tsx - Homepage server component
+    global-error.tsx - Global error boundary
+  /components
+    /blog - Blog-specific components
+    /mdx - Custom MDX components
+    /ui - Reusable UI primitives
+    /providers - React context providers
+  /hooks - Custom React hooks
+  /lib - Utilities, types, schemas
+  instrumentation.ts - Server instrumentation for Sentry
+  instrumentation-client.ts - Client instrumentation
 ```
 
 **Blog Post Frontmatter:**
@@ -150,7 +178,6 @@ git push
 
 ### Custom Hooks
 
-- `use-confetti-easter-eggs.ts`: Easter egg functionality triggered by specific interactions
 - `use-mouse-glow.ts`: Mouse tracking effect for interactive glow
 - `use-mobile.ts`: Mobile viewport detection
 
@@ -183,11 +210,52 @@ git push
 - **Class variance authority**: Used for component variants (see `src/components/ui/button.tsx`)
 - **clsx + tailwind-merge**: Combined via `cn()` utility in `src/lib/utils.ts` for conditional classes
 
+### Additional Dependencies
+
+- **UI Components**: Radix UI primitives (`@radix-ui/react-*`) for accessible components
+- **Notifications**: `sonner` for toast notifications (integrated via `src/components/ui/sonner.tsx`)
+- **Confetti**: `canvas-confetti` for celebratory animations
+- **Date Formatting**: `date-fns` for date manipulation and formatting
+- **Markdown Processing**:
+  - `gray-matter` for parsing frontmatter
+  - `next-mdx-remote` for MDX rendering
+  - `react-markdown` for markdown rendering
+  - `rehype-highlight` for syntax highlighting
+  - `remark-gfm` for GitHub Flavored Markdown
+  - `highlight.js` for code highlighting themes
+- **Styling Utilities**:
+  - `class-variance-authority` for component variants
+  - `clsx` and `tailwind-merge` combined in `cn()` utility
+  - `@radix-ui/colors` for color scales
+
 ### Build Output
 
 - Static generation for blog posts via `generateStaticParams()`
 - Server-side rendering for other pages
 - `.next/` directory contains build artifacts (git-ignored)
+
+### Error Monitoring & Analytics
+
+- **Sentry**: Error tracking and performance monitoring
+  - Configuration files: `sentry.server.config.ts`, `sentry.edge.config.ts`
+  - Instrumentation: `src/instrumentation.ts` registers Sentry based on runtime (nodejs/edge)
+  - Client instrumentation: `src/instrumentation-client.ts` for browser-side error tracking
+  - Environment variable: `NEXT_PUBLIC_SENTRY_DSN` for configuring Sentry DSN
+  - Features: trace sampling (100%), logs enabled, PII enabled
+  - Request error tracking via `onRequestError` hook
+- **Vercel Analytics**: User analytics via `@vercel/analytics` package
+- **Vercel Speed Insights**: Performance monitoring via `@vercel/speed-insights` package
+
+### Testing
+
+- **Unit Tests**: Uses Node.js test runner with `tsx` (located in `src/tests/`)
+  - Example: `slug-validation.test.ts` validates blog post slug format
+  - Run with: `pnpm test`
+- **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
+  - Configuration: `playwright.config.ts` (targets Chromium)
+  - Example: `blog-view-tracking.spec.ts` tests blog page interactions
+  - Run with: `pnpm exec playwright test`
+  - Interactive UI: `pnpm exec playwright test --ui`
 
 ### Data Resilience
 

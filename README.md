@@ -20,6 +20,9 @@ Volvox is a software development and learning community that:
 - **Components**: Radix UI primitives
 - **Animations**: Framer Motion
 - **Icons**: Phosphor Icons, Lucide React
+- **Monitoring**: Sentry (error tracking), Vercel Analytics & Speed Insights
+- **Testing**: Node test runner (unit), Playwright (E2E)
+- **Notifications**: Sonner (toast notifications)
 
 ## Getting Started
 
@@ -59,7 +62,14 @@ pnpm lint
 ### Testing
 
 ```bash
+# Run unit tests (Node test runner)
 pnpm test
+
+# Run E2E tests (Playwright)
+pnpm exec playwright test
+
+# Open Playwright UI
+pnpm exec playwright test --ui
 ```
 
 ### Formatting
@@ -78,21 +88,30 @@ pnpm format:check
 src/
 ├── app/                    # Next.js App Router pages
 │   ├── blog/[slug]/       # Dynamic blog post routes
+│   ├── privacy/           # Privacy policy page
 │   ├── layout.tsx         # Root layout with theme provider
-│   └── page.tsx           # Homepage (Server Component)
+│   ├── page.tsx           # Homepage (Server Component)
+│   └── global-error.tsx   # Global error boundary
 ├── components/            # React components
-│   ├── ui/               # Reusable UI primitives
+│   ├── ui/               # Reusable UI primitives (button, card, badge, etc.)
 │   ├── providers/        # Context providers (theme)
-│   └── ...               # Section components (hero, blog, etc.)
+│   ├── blog/             # Blog-specific components (reading progress, TOC)
+│   ├── mdx/              # MDX custom components (callout, code-block, etc.)
+│   └── ...               # Section components (hero, blog, mentorship, etc.)
 ├── hooks/                 # Custom React hooks
+│   ├── use-mobile.ts     # Mobile viewport detection
+│   └── use-mouse-glow.ts # Mouse tracking effect
 ├── lib/                   # Utilities and types
 │   ├── blog.ts           # Blog post utilities (MDX reading)
 │   ├── content.ts        # Content file readers (JSON)
 │   ├── data.ts           # Data accessor facades
 │   ├── logger.ts         # Centralized error reporting shim
+│   ├── mdx-components.tsx # Custom MDX component mappings
 │   ├── schemas.ts        # Zod validation schemas
 │   ├── types.ts          # TypeScript interfaces
+│   ├── utils.ts          # Utility functions (cn, etc.)
 │   └── validation.ts     # Shared validation helpers
+├── instrumentation.ts     # Server instrumentation for Sentry
 └── tests/                 # Node test suites
     └── slug-validation.test.ts
 
@@ -102,6 +121,9 @@ content/
 ├── products.json          # Product information
 ├── mentors.json           # Mentor profiles
 └── mentees.json           # Mentee profiles
+
+e2e/                       # Playwright E2E tests
+└── blog-view-tracking.spec.ts
 ```
 
 ## Key Features
@@ -136,6 +158,15 @@ content/
 - Promise.allSettled data fetching guards against partial failures
 - Local file-based content with Zod validation for type safety
 - Node-based unit tests cover validation logic to prevent regressions
+
+### Error Monitoring & Analytics
+
+- **Sentry Integration**: Automatic error tracking and performance monitoring
+  - Configured via environment variables (`NEXT_PUBLIC_SENTRY_DSN`)
+  - Server, edge, and client-side error capture
+  - Request error tracking via instrumentation
+- **Vercel Analytics**: User analytics and insights
+- **Vercel Speed Insights**: Performance monitoring
 
 ## Content Management
 
