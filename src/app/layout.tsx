@@ -17,7 +17,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Volvox - Software Development & Learning Community",
+  metadataBase: new URL("https://volvoxdev.com"),
+  title: {
+    default: "Volvox - Software Development & Learning Community",
+    template: "%s | Volvox",
+  },
   description:
     "Building great software while fostering the next generation of developers through mentorship and open source.",
   keywords: [
@@ -34,17 +38,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://volvox.dev",
-    title: "Volvox - Software Development & Learning Community",
-    description:
-      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    url: "https://volvoxdev.com",
     siteName: "Volvox",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Volvox - Software Development & Learning Community",
-    description:
-      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    creator: "@VolvoxLLC",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
