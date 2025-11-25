@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { generateOrganizationSchema } from "@/lib/structured-data";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -56,6 +57,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/volvox-logo.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: JSON.stringify(generateOrganizationSchema()),
+          }}
+        />
       </head>
       <body className={`${jetbrainsMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
