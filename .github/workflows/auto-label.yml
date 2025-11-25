@@ -1,0 +1,93 @@
+name: Auto Label with Claude
+
+on:
+  pull_request:
+    types: [opened, reopened, edited]
+  issues:
+    types: [opened, reopened, edited]
+
+jobs:
+  auto-label:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Auto Label with Claude
+        uses: anthropics/claude-code-action@v1
+        with:
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
+          track_progress: false
+          use_sticky_comment: false
+          prompt: |
+            REPO: ${{ github.repository }}
+            ${{ github.event.pull_request && format('PR NUMBER: {0}', github.event.pull_request.number) || format('ISSUE NUMBER: {0}', github.event.issue.number) }}
+
+            **Task: Intelligent Auto-Labeling**
+
+            You are an intelligent labeling assistant. Analyze the ${{ github.event.pull_request && 'pull request' || 'issue' }} and apply appropriate labels based on the content, files changed, and description.
+
+            **Available Labels:**
+            - `bug` - Something isn't working
+            - `documentation` - Improvements or additions to documentation
+            - `enhancement` - Enhancement on existing feature
+            - `feature` - New feature
+            - `dependencies` - Dependency updates
+            - `backend` - Backend/API related changes
+            - `frontend` - Frontend/UI related changes
+            - `security` - Security related issues or improvements
+            - `testing` - Testing related changes
+            - `accessibility` - Accessibility improvements
+            - `performance` - Performance improvements
+            - `android` - Android specific issues
+            - `ios` - iOS specific issues
+            - `web` - Web specific issues
+            - `supabase` - Supabase/database related
+            - `authentication` - Authentication related issues
+            - `ci/cd` - CI/CD pipeline related
+            - `refactor` - Code refactoring
+
+            **Instructions:**
+
+            1. **Analyze the Content:**
+               ${{ github.event.pull_request && '- Read the PR title, description, and changed files using `gh pr view`' || '- Read the issue title and description using `gh issue view`' }}
+               ${{ github.event.pull_request && '- Use `gh pr diff` to understand what code is being changed' || '' }}
+               - Identify the type of change (bug fix, feature, documentation, etc.)
+               - Determine which areas of the codebase are affected
+
+            2. **Apply Labels:**
+               - Select all appropriate labels that apply to this ${{ github.event.pull_request && 'PR' || 'issue' }}
+               - Use the `gh` CLI to add labels:
+                 ${{ github.event.pull_request && format('`gh pr edit {0} --add-label "label1,label2,label3"`', github.event.pull_request.number) || format('`gh issue edit {0} --add-label "label1,label2,label3"`', github.event.issue.number) }}
+
+            3. **Labeling Guidelines:**
+               - **Type Labels**: bug, feature, enhancement, documentation, refactor, testing, dependencies
+               - **Area Labels**: frontend, backend, supabase, authentication, ci/cd, android, ios, web
+               - **Special Labels**: security, accessibility, performance
+
+            4. **Examples:**
+               - Issue reporting login crash → `bug`, `authentication`, `frontend`
+               - Issue requesting new feature → `feature`, `frontend`
+               - Issue requesting docs update → `documentation`
+               - PR adding new authentication flow → `feature`, `authentication`, `frontend`
+               - PR updating dependencies → `dependencies`
+               - PR improving accessibility → `enhancement`, `accessibility`, `frontend`
+               - PR refactoring database queries → `refactor`, `supabase`, `backend`
+
+            **Important:**
+            - Do NOT create new labels; only use the labels listed above
+            - Be conservative with labels: only add labels that clearly apply
+            - For PRs, prioritize file changes over description
+            - For issues, prioritize the problem description and impact
+
+            **Execute the labeling now using the gh CLI.**
+
+          claude_args: '--allowed-tools "Bash(gh pr view:*),Bash(gh pr diff:*),Bash(gh pr edit:*),Bash(gh issue view:*),Bash(gh issue edit:*)"'
