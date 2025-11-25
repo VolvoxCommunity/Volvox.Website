@@ -115,11 +115,12 @@ git push
 - **Single-page layout**: Homepage is a client-side scrolling experience with section-based navigation
 - **Section tracking**: `homepage-client.tsx` tracks current section via scroll position and updates navigation
 - **Component structure**:
-  - Layout components: `navigation.tsx`, `footer.tsx`, `animated-background.tsx`
+  - Layout components: `navigation.tsx`, `footer.tsx`, `animated-background.tsx` (canvas-based particle animation with mouse tracking)
   - Section components: `hero.tsx`, `products.tsx`, `blog.tsx`, `mentorship.tsx`, `about.tsx`
   - UI primitives: `src/components/ui/` (button, card, badge, dialog, sheet, tabs, avatar, sonner, etc.)
   - Blog components: `src/components/blog/` (blog-post-header, table-of-contents, reading-progress, scroll-reveal, heading-with-anchor, blog-content-wrapper)
   - MDX components: `src/components/mdx/` (callout, code-block, image-zoom, link)
+  - Theme components: `theme-toggle.tsx` (light/dark mode toggle with Sun/Moon icons)
 
 ### Theming
 
@@ -147,6 +148,11 @@ git push
 
 /e2e
   blog-view-tracking.spec.ts - Playwright E2E test for blog view tracking
+
+/tests
+  slug-validation.test.ts - Blog post slug format validation
+  generate-heading-id.test.ts - Heading ID generation tests
+  postcss-tailwind.test.ts - Tailwind CSS configuration tests
 
 /src
   /app
@@ -178,8 +184,24 @@ git push
 
 ### Custom Hooks
 
-- `use-mouse-glow.ts`: Mouse tracking effect for interactive glow
-- `use-mobile.ts`: Mobile viewport detection
+- `use-mouse-glow.ts`: Mouse tracking effect for interactive glow effects
+- `use-mobile.ts`: Exports `useIsMobile()` hook for mobile viewport detection (<768px breakpoint)
+
+### Utility Functions
+
+Located in `src/lib/`:
+
+- **`utils.ts`**:
+  - `cn(...inputs)`: Combines `clsx` and `tailwind-merge` for conditional class names
+  - `generateHeadingId(text, fallback?)`: Creates URL-safe heading IDs from text, with hash-based fallbacks for non-ASCII content
+  - `simpleHash(text)`: Generates hash codes for ID fallbacks
+- **`validation.ts`**:
+  - `normalizeSlug(rawSlug)`: Validates and normalizes blog post slugs
+  - `slugConstraints`: Object containing pattern and max length constraints
+- **`logger.ts`**:
+  - `reportError(context, error)`: Reports errors to Sentry with context metadata, falls back to console.error
+- **`mdx-components.tsx`**:
+  - `mdxComponents`: Custom MDX component overrides (Callout, headings with anchors, code blocks, images with zoom, tables, task lists)
 
 ## Key Technical Details
 
@@ -213,8 +235,12 @@ git push
 ### Additional Dependencies
 
 - **UI Components**: Radix UI primitives (`@radix-ui/react-*`) for accessible components
+- **Icons**:
+  - `@phosphor-icons/react` for Phosphor icons (used in navigation, social links)
+  - `lucide-react` for Lucide icons (used in theme toggle, blog components)
+- **Animations**: `framer-motion` for motion/animation effects (navigation, hero, products, about, mentorship, blog sections)
 - **Notifications**: `sonner` for toast notifications (integrated via `src/components/ui/sonner.tsx`)
-- **Confetti**: `canvas-confetti` for celebratory animations
+- **Confetti**: `canvas-confetti` for celebratory animations (triggers on Discord link click)
 - **Date Formatting**: `date-fns` for date manipulation and formatting
 - **Markdown Processing**:
   - `gray-matter` for parsing frontmatter
@@ -242,14 +268,18 @@ git push
   - Client instrumentation: `src/instrumentation-client.ts` for browser-side error tracking
   - Environment variable: `NEXT_PUBLIC_SENTRY_DSN` for configuring Sentry DSN
   - Features: trace sampling (100%), logs enabled, PII enabled
+  - Replay integration: 10% session sampling, 100% on errors
   - Request error tracking via `onRequestError` hook
+  - Next.js integration via `withSentryConfig` wrapper with monitoring tunnel at `/monitoring`
 - **Vercel Analytics**: User analytics via `@vercel/analytics` package
 - **Vercel Speed Insights**: Performance monitoring via `@vercel/speed-insights` package
 
 ### Testing
 
-- **Unit Tests**: Uses Node.js test runner with `tsx` (located in `src/tests/`)
-  - Example: `slug-validation.test.ts` validates blog post slug format
+- **Unit Tests**: Uses Node.js test runner with `tsx` (located in `tests/`)
+  - `slug-validation.test.ts`: Validates blog post slug format
+  - `generate-heading-id.test.ts`: Tests heading ID generation utility
+  - `postcss-tailwind.test.ts`: Tests Tailwind CSS configuration
   - Run with: `pnpm test`
 - **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
   - Configuration: `playwright.config.ts` (targets Chromium)
@@ -263,3 +293,27 @@ git push
 - `src/lib/logger.ts` provides the shim for forwarding server-side errors to the centralized tracker (falls back to `console.error`)
 - `src/lib/content.ts` wraps all file reads in try-catch blocks, returning empty arrays on error to prevent page crashes
 - All content is validated at runtime using Zod schemas to catch malformed data early
+
+### Content Loading Functions
+
+Located in `src/lib/content.ts`:
+
+- `getAllAuthors(): Author[]` - Reads and validates authors from JSON
+- `getAuthorById(id: string): Author | null` - Retrieves single author by ID
+- `getAllProducts(): Product[]` - Reads and validates products from JSON
+- `getAllMentors(): Mentor[]` - Reads and validates mentors from JSON
+- `getAllMentees(): Mentee[]` - Reads and validates mentees from JSON
+
+Located in `src/lib/data.ts` (API compatibility wrappers):
+
+- `getAllProducts(limit?, offset?)` - Async wrapper with pagination metadata
+- `getAllMentors()` - Returns mentors with pagination metadata wrapper
+- `getAllMentees()` - Returns mentees with pagination metadata wrapper
+
+### Environment Variables
+
+| Variable                 | Required | Description                                                    |
+| ------------------------ | -------- | -------------------------------------------------------------- |
+| `NEXT_PUBLIC_SENTRY_DSN` | Optional | Sentry DSN for error tracking. If not set, Sentry is disabled. |
+
+**Note:** No `.env.example` file exists. Copy the variable above to `.env.local` for local development.
