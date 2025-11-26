@@ -16,20 +16,21 @@ Volvox is a software development and learning community that:
 - **Framework**: Next.js 16 (App Router)
 - **UI**: React 19, TypeScript
 - **Styling**: Tailwind CSS v4 (CSS-first with Lightning CSS)
-- **Content**: MDX with `next-mdx-remote`
-- **Components**: Radix UI primitives
-- **Animations**: Framer Motion
-- **Icons**: Phosphor Icons, Lucide React
-- **Monitoring**: Sentry (error tracking), Vercel Analytics & Speed Insights
+- **Content**: MDX with `next-mdx-remote`, syntax highlighting via `rehype-highlight`
+- **Components**: Radix UI primitives for accessible components
+- **Animations**: Framer Motion for motion effects, canvas-confetti for celebratory animations
+- **Icons**: Phosphor Icons (`@phosphor-icons/react`), Lucide React (`lucide-react`)
+- **Monitoring**: Sentry (error tracking with replay), Vercel Analytics & Speed Insights
 - **Testing**: Node test runner (unit), Playwright (E2E)
 - **Notifications**: Sonner (toast notifications)
+- **Date Handling**: date-fns for date manipulation and formatting
 
 ## Getting Started
 
 ### Prerequisites
 
 - Node.js 20+ recommended
-- pnpm (install globally: `npm install -g pnpm`)
+- pnpm v10.23.0+ (install globally: `npm install -g pnpm`)
 
 ### Development
 
@@ -95,25 +96,29 @@ src/
 ├── components/            # React components
 │   ├── ui/               # Reusable UI primitives (button, card, badge, etc.)
 │   ├── providers/        # Context providers (theme)
-│   ├── blog/             # Blog-specific components (reading progress, TOC)
-│   ├── mdx/              # MDX custom components (callout, code-block, etc.)
+│   ├── blog/             # Blog-specific components (reading progress, TOC, heading anchors)
+│   ├── mdx/              # MDX custom components (callout, code-block, image-zoom, link)
 │   └── ...               # Section components (hero, blog, mentorship, etc.)
 ├── hooks/                 # Custom React hooks
-│   ├── use-mobile.ts     # Mobile viewport detection
-│   └── use-mouse-glow.ts # Mouse tracking effect
+│   ├── use-mobile.ts     # Mobile viewport detection (useIsMobile hook)
+│   └── use-mouse-glow.ts # Mouse tracking glow effect
 ├── lib/                   # Utilities and types
 │   ├── blog.ts           # Blog post utilities (MDX reading)
 │   ├── content.ts        # Content file readers (JSON)
 │   ├── data.ts           # Data accessor facades
-│   ├── logger.ts         # Centralized error reporting shim
+│   ├── logger.ts         # Centralized error reporting (Sentry integration)
 │   ├── mdx-components.tsx # Custom MDX component mappings
 │   ├── schemas.ts        # Zod validation schemas
 │   ├── types.ts          # TypeScript interfaces
-│   ├── utils.ts          # Utility functions (cn, etc.)
-│   └── validation.ts     # Shared validation helpers
+│   ├── utils.ts          # Utility functions (cn, generateHeadingId)
+│   └── validation.ts     # Slug validation helpers
 ├── instrumentation.ts     # Server instrumentation for Sentry
-└── tests/                 # Node test suites
-    └── slug-validation.test.ts
+└── instrumentation-client.ts # Client instrumentation for Sentry
+
+tests/                     # Node test suites
+├── slug-validation.test.ts
+├── generate-heading-id.test.ts
+└── postcss-tailwind.test.ts
 
 content/
 ├── blog/                  # MDX blog posts with frontmatter
@@ -164,6 +169,8 @@ e2e/                       # Playwright E2E tests
 - **Sentry Integration**: Automatic error tracking and performance monitoring
   - Configured via environment variables (`NEXT_PUBLIC_SENTRY_DSN`)
   - Server, edge, and client-side error capture
+  - Session replay with 10% sampling (100% on errors)
+  - Monitoring tunnel at `/monitoring` to bypass ad blockers
   - Request error tracking via instrumentation
 - **Vercel Analytics**: User analytics and insights
 - **Vercel Speed Insights**: Performance monitoring
@@ -199,6 +206,14 @@ All content is stored as local files in the `content/` directory:
 ### Editing Other Content
 
 Edit the respective JSON files in `content/` and rebuild.
+
+## Environment Variables
+
+| Variable                 | Required | Description                                                    |
+| ------------------------ | -------- | -------------------------------------------------------------- |
+| `NEXT_PUBLIC_SENTRY_DSN` | No       | Sentry DSN for error tracking. If not set, Sentry is disabled. |
+
+Create a `.env.local` file in the project root with the variable above for local development.
 
 ## Contributing
 
