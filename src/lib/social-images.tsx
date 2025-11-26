@@ -1,59 +1,8 @@
 import { ImageResponse } from "next/og";
 import { getPostBySlug } from "@/lib/blog";
 
-/**
- * Standard image configuration for social media images.
- * Note: runtime is not included here as it varies by route:
- * - Homepage images use "edge" runtime
- * - Blog post images use "nodejs" runtime (requires filesystem access)
- */
-export const socialImageConfig = {
-  size: { width: 1200, height: 630 },
-  contentType: "image/png" as const,
-};
-
-/**
- * Renders the homepage branded social image content.
- * Used by both OpenGraph and Twitter card images for consistency.
- */
-export function HomeSocialImageContent() {
-  return (
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#0a0a0a",
-        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
-      }}
-    >
-      <div
-        style={{
-          fontSize: 80,
-          fontWeight: "bold",
-          color: "#3b82f6",
-          marginBottom: 24,
-          letterSpacing: "-0.02em",
-        }}
-      >
-        VOLVOX
-      </div>
-      <div
-        style={{
-          fontSize: 36,
-          color: "#a1a1aa",
-          textAlign: "center",
-          maxWidth: 800,
-        }}
-      >
-        Software Development & Learning Community
-      </div>
-    </div>
-  );
-}
+/** Standard image size for social media images */
+const IMAGE_SIZE = { width: 1200, height: 630 };
 
 /**
  * Creates a fallback image when post data cannot be loaded.
@@ -108,7 +57,7 @@ export async function generateBlogPostSocialImage(slug: string) {
     const { frontmatter } = await getPostBySlug(slug);
 
     if (!frontmatter) {
-      return new ImageResponse(createFallbackImage(), socialImageConfig.size);
+      return new ImageResponse(createFallbackImage(), IMAGE_SIZE);
     }
 
     return new ImageResponse(
@@ -158,9 +107,9 @@ export async function generateBlogPostSocialImage(slug: string) {
           </div>
         </div>
       ),
-      socialImageConfig.size
+      IMAGE_SIZE
     );
   } catch {
-    return new ImageResponse(createFallbackImage(), socialImageConfig.size);
+    return new ImageResponse(createFallbackImage(), IMAGE_SIZE);
   }
 }
