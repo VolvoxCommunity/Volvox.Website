@@ -2,6 +2,9 @@ import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { SITE_URL } from "@/lib/constants";
 
+// Force Node.js runtime since blog.ts uses fs/path APIs
+export const runtime = "nodejs";
+
 // Use a constant timestamp for static pages to prevent unnecessary re-crawling
 const BUILD_TIME = new Date();
 
