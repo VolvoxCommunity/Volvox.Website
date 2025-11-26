@@ -75,7 +75,10 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
-        <GoogleAnalytics gaId="G-W02EBRX2ZF" />
+        {process.env.NODE_ENV === "production" &&
+          process.env.NEXT_PUBLIC_GA_ID && (
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+          )}
       </body>
     </html>
   );
