@@ -1,6 +1,7 @@
 import { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -32,25 +33,33 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { frontmatter } = await getPostBySlug(slug);
 
-  return {
-    title: frontmatter.title,
-    description: frontmatter.excerpt,
-    authors: [{ name: frontmatter.author?.name || "Volvox" }],
-    openGraph: {
+  try {
+    const { frontmatter } = await getPostBySlug(slug);
+
+    return {
       title: frontmatter.title,
       description: frontmatter.excerpt,
-      type: "article",
-      publishedTime: frontmatter.date,
-      authors: [frontmatter.author?.name || "Volvox"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: frontmatter.title,
-      description: frontmatter.excerpt,
-    },
-  };
+      authors: [{ name: frontmatter.author?.name || "Volvox" }],
+      openGraph: {
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+        type: "article",
+        publishedTime: frontmatter.date,
+        authors: [frontmatter.author?.name || "Volvox"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+      },
+    };
+  } catch {
+    return {
+      title: "Post Not Found",
+      description: "The requested blog post could not be found.",
+    };
+  }
 }
 
 /**
@@ -68,7 +77,17 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { frontmatter, content } = await getPostBySlug(slug);
+
+  let frontmatter;
+  let content;
+
+  try {
+    const post = await getPostBySlug(slug);
+    frontmatter = post.frontmatter;
+    content = post.content;
+  } catch {
+    notFound();
+  }
 
   return (
     <div className="min-h-screen relative">
