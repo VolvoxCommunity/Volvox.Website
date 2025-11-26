@@ -1,7 +1,7 @@
 import { generateBlogPostSocialImage } from "@/lib/social-images";
 
-// These must be static literals for Next.js static analysis
-export const runtime = "edge";
+// Force Node.js runtime since generateBlogPostSocialImage uses fs/path APIs via blog.ts
+export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Volvox Blog Post";
