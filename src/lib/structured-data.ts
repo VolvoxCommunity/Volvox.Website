@@ -44,7 +44,7 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
     headline: post.title,
     description: post.excerpt,
     author: {
-      "@type": "Person",
+      "@type": post.author ? "Person" : "Organization",
       name: post.author?.name || SITE_NAME,
     },
     datePublished: post.date,

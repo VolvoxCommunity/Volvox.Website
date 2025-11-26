@@ -1,7 +1,6 @@
 import { Metadata } from "next";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
-import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft, Calendar } from "lucide-react";
@@ -35,14 +34,8 @@ export async function generateMetadata({
   const { slug } = await params;
   const { frontmatter } = await getPostBySlug(slug);
 
-  if (!frontmatter) {
-    return {
-      title: "Post Not Found",
-    };
-  }
-
   return {
-    title: `${frontmatter.title} - Volvox Blog`,
+    title: frontmatter.title,
     description: frontmatter.excerpt,
     authors: [{ name: frontmatter.author?.name || "Volvox" }],
     openGraph: {
@@ -76,10 +69,6 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
   const { frontmatter, content } = await getPostBySlug(slug);
-
-  if (!frontmatter) {
-    notFound();
-  }
 
   return (
     <div className="min-h-screen relative">

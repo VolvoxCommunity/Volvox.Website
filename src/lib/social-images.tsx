@@ -1,9 +1,13 @@
 import { ImageResponse } from "next/og";
 import { getPostBySlug } from "@/lib/blog";
 
-/** Standard image configuration for social media images */
+/**
+ * Standard image configuration for social media images.
+ * Note: runtime is not included here as it varies by route:
+ * - Homepage images use "edge" runtime
+ * - Blog post images use "nodejs" runtime (requires filesystem access)
+ */
 export const socialImageConfig = {
-  runtime: "edge" as const,
   size: { width: 1200, height: 630 },
   contentType: "image/png" as const,
 };
