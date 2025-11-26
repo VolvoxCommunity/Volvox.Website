@@ -37,7 +37,7 @@ export async function generateMetadata({
   try {
     const { frontmatter } = await getPostBySlug(slug);
 
-    // The ' | Volvox' suffix is automatically appended by the title template in layout.tsx
+    // The "| Volvox" suffix is automatically appended by the title template in layout.tsx
     return {
       title: frontmatter.title,
       description: frontmatter.excerpt,

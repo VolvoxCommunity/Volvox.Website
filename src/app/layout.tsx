@@ -8,7 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { generateOrganizationSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize } from "@/lib/constants";
+import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -18,7 +18,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://volvoxdev.com"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Volvox - Software Development & Learning Community",
     template: "%s | Volvox",
@@ -39,7 +39,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://volvoxdev.com",
+    url: SITE_URL,
     siteName: "Volvox",
   },
   twitter: {

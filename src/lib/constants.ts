@@ -15,11 +15,14 @@ export const SITE_DESCRIPTION =
 
 /**
  * Safely serializes an object to JSON for use in script tags.
- * Escapes "<" characters to prevent script tag injection.
+ * Escapes angle brackets and ampersands to prevent script tag injection.
  *
  * @param data - The object to serialize
- * @returns JSON string with escaped angle brackets
+ * @returns JSON string safe for embedding in HTML script tags
  */
 export function safeJsonLdSerialize(data: object): string {
-  return JSON.stringify(data).replace(/</g, "\\u003c");
+  return JSON.stringify(data)
+    .replace(/</g, "\\u003c")
+    .replace(/>/g, "\\u003e")
+    .replace(/&/g, "\\u0026");
 }
