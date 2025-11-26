@@ -35,6 +35,8 @@ interface ArticleSchemaInput {
  * @returns Article schema object for JSON-LD injection
  */
 export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
+  const articleUrl = `https://volvoxdev.com/blog/${slug}`;
+
   return {
     "@context": "https://schema.org",
     "@type": "Article",
@@ -45,6 +47,7 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
       name: post.author?.name || "Volvox",
     },
     datePublished: post.date,
+    dateModified: post.date, // Use publication date as modified date (no tracking of edits yet)
     publisher: {
       "@type": "Organization",
       name: "Volvox",
@@ -53,7 +56,12 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
         url: "https://volvoxdev.com/volvox-logo.png",
       },
     },
-    url: `https://volvoxdev.com/blog/${slug}`,
-    image: `https://volvoxdev.com/blog/${slug}/opengraph-image`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": articleUrl,
+    },
+    url: articleUrl,
+    image: `${articleUrl}/opengraph-image`,
+    inLanguage: "en-US",
   };
 }

@@ -2,9 +2,21 @@ import { ImageResponse } from "next/og";
 import { getPostBySlug } from "@/lib/blog";
 
 export const runtime = "nodejs";
-export const alt = "Blog post";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
+
+/**
+ * Generates dynamic alt text for blog post Twitter card image.
+ * Includes the actual post title for better accessibility and SEO.
+ *
+ * @param paramsPromise - Route parameters containing the blog post slug
+ * @returns Alt text string with post title
+ */
+export async function alt(paramsPromise: Promise<{ slug: string }>) {
+  const { slug } = await paramsPromise;
+  const { frontmatter } = await getPostBySlug(slug);
+  return `${frontmatter.title} - Volvox Blog`;
+}
 
 /**
  * Generates a dynamic Twitter card image for each blog post.
