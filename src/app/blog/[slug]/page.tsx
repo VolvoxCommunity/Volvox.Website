@@ -12,6 +12,7 @@ import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { AnimatedBackground } from "@/components/animated-background";
+import { generateArticleSchema } from "@/lib/structured-data";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -81,6 +82,12 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen relative">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(generateArticleSchema(frontmatter, slug)),
+        }}
+      />
       {/* Animated Background - Same as homepage */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <AnimatedBackground />
