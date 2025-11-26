@@ -1,3 +1,5 @@
+import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./constants";
+
 /**
  * Schema.org Organization structured data for Volvox.
  * Used on all pages to establish brand identity in search results.
@@ -6,11 +8,10 @@ export function generateOrganizationSchema() {
   return {
     "@context": "https://schema.org",
     "@type": "Organization",
-    name: "Volvox",
-    url: "https://volvoxdev.com",
-    logo: "https://volvoxdev.com/volvox-logo.png",
-    description:
-      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    name: SITE_NAME,
+    url: SITE_URL,
+    logo: `${SITE_URL}/volvox-logo.png`,
+    description: SITE_DESCRIPTION,
     sameAs: ["https://twitter.com/VolvoxLLC"],
   };
 }
@@ -35,7 +36,7 @@ interface ArticleSchemaInput {
  * @returns Article schema object for JSON-LD injection
  */
 export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
-  const articleUrl = `https://volvoxdev.com/blog/${slug}`;
+  const articleUrl = `${SITE_URL}/blog/${slug}`;
 
   return {
     "@context": "https://schema.org",
@@ -44,16 +45,16 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
     description: post.excerpt,
     author: {
       "@type": "Person",
-      name: post.author?.name || "Volvox",
+      name: post.author?.name || SITE_NAME,
     },
     datePublished: post.date,
     dateModified: post.date, // Use publication date as modified date (no tracking of edits yet)
     publisher: {
       "@type": "Organization",
-      name: "Volvox",
+      name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: "https://volvoxdev.com/volvox-logo.png",
+        url: `${SITE_URL}/volvox-logo.png`,
       },
     },
     mainEntityOfPage: {

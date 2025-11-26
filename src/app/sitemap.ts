@@ -1,5 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
+import { SITE_URL } from "@/lib/constants";
 
 /**
  * Generates a dynamic sitemap for search engine crawlers.
@@ -12,7 +13,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const posts = await getAllPosts();
 
     const blogUrls = posts.map((post) => ({
-      url: `https://volvoxdev.com/blog/${post.slug}`,
+      url: `${SITE_URL}/blog/${post.slug}`,
       lastModified: new Date(post.date),
       changeFrequency: "monthly" as const,
       priority: 0.7,
@@ -20,13 +21,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
     return [
       {
-        url: "https://volvoxdev.com",
+        url: SITE_URL,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 1,
       },
       {
-        url: "https://volvoxdev.com/privacy",
+        url: `${SITE_URL}/privacy`,
         lastModified: new Date(),
         changeFrequency: "yearly",
         priority: 0.3,
@@ -38,13 +39,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     // Return minimal sitemap on error to avoid complete failure
     return [
       {
-        url: "https://volvoxdev.com",
+        url: SITE_URL,
         lastModified: new Date(),
         changeFrequency: "weekly",
         priority: 1,
       },
       {
-        url: "https://volvoxdev.com/privacy",
+        url: `${SITE_URL}/privacy`,
         lastModified: new Date(),
         changeFrequency: "yearly",
         priority: 0.3,

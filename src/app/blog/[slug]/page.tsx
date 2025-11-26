@@ -13,6 +13,7 @@ import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { AnimatedBackground } from "@/components/animated-background";
 import { generateArticleSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -85,7 +86,7 @@ export default async function BlogPostPage({
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
-          __html: JSON.stringify(generateArticleSchema(frontmatter, slug)),
+          __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
         }}
       />
       {/* Animated Background - Same as homepage */}

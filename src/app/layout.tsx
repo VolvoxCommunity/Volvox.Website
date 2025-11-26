@@ -8,6 +8,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { generateOrganizationSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize } from "@/lib/constants";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -63,7 +64,7 @@ export default function RootLayout({
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify(generateOrganizationSchema()),
+            __html: safeJsonLdSerialize(generateOrganizationSchema()),
           }}
         />
       </head>
