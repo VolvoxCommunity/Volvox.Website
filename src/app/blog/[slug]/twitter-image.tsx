@@ -1,11 +1,9 @@
-import {
-  socialImageConfig,
-  generateBlogPostSocialImage,
-} from "@/lib/social-images";
+import { generateBlogPostSocialImage } from "@/lib/social-images";
 
-export const runtime = socialImageConfig.runtime;
-export const size = socialImageConfig.size;
-export const contentType = socialImageConfig.contentType;
+// These must be static literals for Next.js static analysis
+export const runtime = "nodejs";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
 export const alt = "Volvox Blog Post";
 
 /**

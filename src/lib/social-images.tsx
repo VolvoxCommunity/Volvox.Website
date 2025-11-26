@@ -104,10 +104,7 @@ export async function generateBlogPostSocialImage(slug: string) {
     const { frontmatter } = await getPostBySlug(slug);
 
     if (!frontmatter) {
-      return new ImageResponse(
-        createFallbackImage(),
-        socialImageConfig.size
-      );
+      return new ImageResponse(createFallbackImage(), socialImageConfig.size);
     }
 
     return new ImageResponse(
@@ -160,9 +157,6 @@ export async function generateBlogPostSocialImage(slug: string) {
       socialImageConfig.size
     );
   } catch {
-    return new ImageResponse(
-      createFallbackImage(),
-      socialImageConfig.size
-    );
+    return new ImageResponse(createFallbackImage(), socialImageConfig.size);
   }
 }
