@@ -1,0 +1,145 @@
+/**
+ * Syntax Highlighting
+ * 
+ * Custom highlight.js theme using Volvox brand colors.
+ * Includes light and dark mode adjustments.
+ */
+
+/* Base code block styling */
+.hljs {
+  display: block;
+  overflow-x: auto;
+  color: var(--foreground);
+}
+
+/* Comments - muted */
+.hljs-comment,
+.hljs-quote {
+  color: var(--muted-foreground);
+  font-style: italic;
+}
+
+/* Keywords - primary purple */
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-literal,
+.hljs-section,
+.hljs-link {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Function names - secondary pink */
+.hljs-function,
+.hljs-title,
+.hljs-class .hljs-title,
+.hljs-title.class_,
+.hljs-title.function_ {
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+/* Strings - accent blue */
+.hljs-string,
+.hljs-regexp,
+.hljs-template-tag,
+.hljs-template-variable {
+  color: var(--accent);
+}
+
+/* Numbers and literals */
+.hljs-number,
+.hljs-built_in,
+.hljs-builtin-name {
+  color: oklch(0.7 0.15 200);
+}
+
+/* Variables and attributes */
+.hljs-variable,
+.hljs-attr,
+.hljs-attribute {
+  color: oklch(0.6 0.18 330);
+}
+
+/* Types and classes */
+.hljs-type,
+.hljs-class {
+  color: var(--primary);
+  font-weight: 500;
+}
+
+/* Operators and punctuation */
+.hljs-operator,
+.hljs-punctuation {
+  color: var(--foreground);
+  opacity: 0.8;
+}
+
+/* Meta and preprocessor */
+.hljs-meta,
+.hljs-meta .hljs-keyword {
+  color: var(--muted-foreground);
+  font-weight: 500;
+}
+
+/* Symbols and special */
+.hljs-symbol,
+.hljs-bullet {
+  color: var(--accent);
+}
+
+/* Tags (HTML/XML) */
+.hljs-tag {
+  color: var(--primary);
+}
+
+.hljs-name {
+  color: var(--secondary);
+  font-weight: 500;
+}
+
+/* Deletion and addition (diff) */
+.hljs-deletion {
+  background-color: oklch(0.577 0.245 27.325 / 0.2);
+  color: var(--destructive);
+}
+
+.hljs-addition {
+  background-color: oklch(0.646 0.222 142 / 0.2);
+  color: oklch(0.646 0.222 142);
+}
+
+/* Emphasis */
+.hljs-emphasis {
+  font-style: italic;
+}
+
+.hljs-strong {
+  font-weight: 700;
+}
+
+/* Dark mode adjustments for syntax highlighting */
+.dark .hljs {
+  /* Slightly brighter colors for dark mode */
+}
+
+.dark .hljs-keyword,
+.dark .hljs-selector-tag,
+.dark .hljs-literal {
+  color: oklch(0.5 0.16 264.5);
+}
+
+.dark .hljs-function,
+.dark .hljs-title,
+.dark .hljs-class .hljs-title {
+  color: oklch(0.65 0.2 330);
+}
+
+.dark .hljs-string {
+  color: oklch(0.75 0.16 200);
+}
+
+.dark .hljs-number,
+.dark .hljs-built_in {
+  color: oklch(0.75 0.15 180);
+}

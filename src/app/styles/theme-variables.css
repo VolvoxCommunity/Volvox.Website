@@ -1,0 +1,83 @@
+/**
+ * Theme Variables
+ * 
+ * shadcn/ui CSS custom properties for light and dark modes.
+ * Purple/Blue theme matching Volvox brand colors.
+ */
+
+/* Light mode theme */
+:root {
+  --radius: 0.75rem;
+
+  /* Light mode - Purple/Blue theme */
+  --background: oklch(0.98 0.002 264);
+  --foreground: oklch(0.2 0.01 264);
+
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.2 0.01 264);
+
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.2 0.01 264);
+
+  --primary: #007aff;
+  --primary-foreground: #fcfcfc;
+
+  --secondary: #af58da;
+  --secondary-foreground: #fcfcfc;
+
+  --muted: oklch(0.94 0.005 264);
+  --muted-foreground: oklch(0.5 0.01 264);
+
+  --accent: #ff9500;
+  --accent-foreground: #fcfcfc;
+
+  --destructive: oklch(0.577 0.245 27.325);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.88 0.005 264);
+  --input: oklch(0.88 0.005 264);
+  --ring: oklch(0.45 0.22 264);
+
+  --chart-1: oklch(0.646 0.222 41.116);
+  --chart-2: oklch(0.6 0.118 184.704);
+  --chart-3: oklch(0.398 0.07 227.392);
+  --chart-4: oklch(0.828 0.189 84.429);
+  --chart-5: oklch(0.769 0.188 70.08);
+}
+
+/* Dark mode theme */
+.dark {
+  --background: oklch(0.14 0.01 264);
+  --foreground: oklch(0.95 0.005 264);
+
+  --card: oklch(0.18 0.01 264);
+  --card-foreground: oklch(0.95 0.005 264);
+
+  --popover: oklch(0.18 0.01 264);
+  --popover-foreground: oklch(0.95 0.005 264);
+
+  --primary: #007aff;
+  --primary-foreground: #fcfcfc;
+
+  --secondary: #af58da;
+  --secondary-foreground: #21202a;
+
+  --muted: oklch(0.22 0.01 264);
+  --muted-foreground: oklch(0.6 0.01 264);
+
+  --accent: #ff9500;
+  --accent-foreground: #fcfcfc;
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --destructive-foreground: oklch(0.99 0 0);
+
+  --border: oklch(0.25 0.01 264);
+  --input: oklch(0.25 0.01 264);
+  --ring: oklch(0.65 0.22 264);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+}
