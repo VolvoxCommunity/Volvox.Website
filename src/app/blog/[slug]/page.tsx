@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
@@ -12,6 +13,8 @@ import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostHeader } from "@/components/blog/blog-post-header";
 import { AnimatedBackground } from "@/components/animated-background";
+import { generateArticleSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -31,31 +34,34 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const { frontmatter } = await getPostBySlug(slug);
 
-  if (!frontmatter) {
+  try {
+    const { frontmatter } = await getPostBySlug(slug);
+
+    // The "| Volvox" suffix is automatically appended by the title template in layout.tsx
+    return {
+      title: frontmatter.title,
+      description: frontmatter.excerpt,
+      authors: [{ name: frontmatter.author?.name || "Volvox" }],
+      openGraph: {
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+        type: "article",
+        publishedTime: frontmatter.date,
+        authors: [frontmatter.author?.name || "Volvox"],
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: frontmatter.title,
+        description: frontmatter.excerpt,
+      },
+    };
+  } catch {
     return {
       title: "Post Not Found",
+      description: "The requested blog post could not be found.",
     };
   }
-
-  return {
-    title: `${frontmatter.title} - Volvox Blog`,
-    description: frontmatter.excerpt,
-    authors: [{ name: frontmatter.author?.name || "Volvox" }],
-    openGraph: {
-      title: frontmatter.title,
-      description: frontmatter.excerpt,
-      type: "article",
-      publishedTime: frontmatter.date,
-      authors: [frontmatter.author?.name || "Volvox"],
-    },
-    twitter: {
-      card: "summary_large_image",
-      title: frontmatter.title,
-      description: frontmatter.excerpt,
-    },
-  };
 }
 
 /**
@@ -73,14 +79,29 @@ export default async function BlogPostPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const { frontmatter, content } = await getPostBySlug(slug);
 
-  if (!frontmatter) {
+  let frontmatter;
+  let content;
+
+  try {
+    const post = await getPostBySlug(slug);
+    frontmatter = post.frontmatter;
+    content = post.content;
+  } catch {
     notFound();
   }
 
   return (
     <div className="min-h-screen relative">
+      {/* JSON-LD structured data for SEO - placed in head via Script component */}
+      <Script
+        id={`article-schema-${slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
+        }}
+      />
       {/* Animated Background - Same as homepage */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <AnimatedBackground />

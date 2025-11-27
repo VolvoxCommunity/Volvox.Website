@@ -6,6 +6,9 @@ import { ThemeProvider } from "@/components/providers/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { GoogleAnalytics } from "@next/third-parties/google";
+import { generateOrganizationSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -15,7 +18,11 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Volvox - Software Development & Learning Community",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: "Volvox - Software Development & Learning Community",
+    template: "%s | Volvox",
+  },
   description:
     "Building great software while fostering the next generation of developers through mentorship and open source.",
   keywords: [
@@ -32,17 +39,16 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: "https://volvox.dev",
-    title: "Volvox - Software Development & Learning Community",
-    description:
-      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    url: SITE_URL,
     siteName: "Volvox",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Volvox - Software Development & Learning Community",
-    description:
-      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    creator: "@VolvoxLLC",
+  },
+  robots: {
+    index: true,
+    follow: true,
   },
 };
 
@@ -55,6 +61,12 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/volvox-logo.png" />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLdSerialize(generateOrganizationSchema()),
+          }}
+        />
       </head>
       <body className={`${jetbrainsMono.variable} antialiased`}>
         <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
@@ -63,6 +75,10 @@ export default function RootLayout({
         </ThemeProvider>
         <Analytics />
         <SpeedInsights />
+        {process.env.NODE_ENV === "production" &&
+          process.env.NEXT_PUBLIC_GA_ID && (
+            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
+          )}
       </body>
     </html>
   );
