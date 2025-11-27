@@ -3,8 +3,8 @@
  * Centralizes configuration values to avoid duplication.
  */
 
-/** Base URL for the production website */
-export const SITE_URL = "https://volvoxdev.com";
+/** Base URL for the production website (must match canonical domain to avoid redirects) */
+export const SITE_URL = "https://www.volvoxdev.com";
 
 /** Site name used in metadata and branding */
 export const SITE_NAME = "Volvox";
