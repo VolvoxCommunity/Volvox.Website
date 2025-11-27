@@ -56,10 +56,6 @@ export async function generateBlogPostSocialImage(slug: string) {
   try {
     const { frontmatter } = await getPostBySlug(slug);
 
-    if (!frontmatter) {
-      return new ImageResponse(createFallbackImage(), IMAGE_SIZE);
-    }
-
     return new ImageResponse(
       (
         <div

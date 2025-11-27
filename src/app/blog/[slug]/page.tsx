@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
@@ -92,8 +93,11 @@ export default async function BlogPostPage({
 
   return (
     <div className="min-h-screen relative">
-      <script
+      {/* JSON-LD structured data for SEO - placed in head via Script component */}
+      <Script
+        id={`article-schema-${slug}`}
         type="application/ld+json"
+        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
         }}
