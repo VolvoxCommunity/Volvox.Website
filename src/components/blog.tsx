@@ -246,8 +246,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05, duration: 0.2 }}
-                className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth"
-                style={{ maxHeight: "calc(90vh - 280px)" }}
+                className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth flex-1 min-h-0"
                 onScroll={handleScroll}
               >
                 <ReactMarkdown
