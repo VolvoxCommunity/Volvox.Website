@@ -15,6 +15,7 @@ import { useTheme } from "@/components/providers/theme-provider";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
 import Image from "next/image";
+import { NAV_HEIGHT } from "@/lib/constants";
 
 interface NavigationProps {
   /** Callback invoked with section id when navigating (for homepage scroll mode) */
@@ -80,7 +81,10 @@ export function Navigation({
   };
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
+    <nav
+      className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl"
+      style={{ height: NAV_HEIGHT }}
+    >
       <div className="container mx-auto px-4 py-2 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           {linkMode ? (
@@ -132,6 +136,7 @@ export function Navigation({
               ) : (
                 <button
                   key={item.id}
+                  type="button"
                   onClick={() => handleNavigate(item.id)}
                   className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
                     currentSection === item.id

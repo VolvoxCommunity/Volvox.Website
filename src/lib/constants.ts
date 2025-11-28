@@ -13,6 +13,9 @@ export const SITE_NAME = "Volvox";
 export const SITE_DESCRIPTION =
   "Building great software while fostering the next generation of developers through mentorship and open source.";
 
+/** Height of the top navigation bar */
+export const NAV_HEIGHT = "5rem";
+
 /**
  * Safely serializes an object to JSON for use in script tags.
  * Escapes angle brackets and ampersands to prevent script tag injection.

@@ -79,6 +79,7 @@ function createFallbackImage(logoData?: ArrayBuffer) {
           width={120}
           height={120}
           style={{ marginBottom: 24 }}
+          alt="Volvox logo"
         />
       ) : (
         <div
@@ -194,6 +195,7 @@ export async function generateBlogPostSocialImage(slug: string) {
               width={48}
               height={48}
               style={{ marginRight: 16 }}
+              alt="Volvox logo"
             />
           )}
           <div

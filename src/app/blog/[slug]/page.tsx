@@ -14,7 +14,7 @@ import { BlogNavigation } from "@/components/blog/blog-navigation";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 import { generateArticleSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize } from "@/lib/constants";
+import { safeJsonLdSerialize, NAV_HEIGHT } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -113,10 +113,13 @@ export default async function BlogPostPage({
         <BlogNavigation />
 
         {/* Spacer for fixed navigation */}
-        <div className="h-20" />
+        <div style={{ height: NAV_HEIGHT }} />
 
         {/* Sticky Back Navigation */}
-        <div className="sticky top-[72px] z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 -mx-4 px-4 py-3 mb-4">
+        <div
+          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 -mx-4 px-4 py-3 mb-4"
+          style={{ top: NAV_HEIGHT }}
+        >
           <div className="container mx-auto max-w-4xl">
             <Link
               href="/#blog"
@@ -133,15 +136,7 @@ export default async function BlogPostPage({
           <BlogContentWrapper>
             {/* Post Header */}
             <header className="mb-12">
-              <div className="flex flex-wrap gap-2 mb-4">
-                {frontmatter.tags?.map((tag: string) => (
-                  <Badge key={tag} variant="secondary">
-                    {tag}
-                  </Badge>
-                ))}
-              </div>
-
-              <h1 className="text-2xl md:text-3xl font-bold mb-6 leading-tight">
+              <h1 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
                 {frontmatter.title}
               </h1>
 
@@ -149,8 +144,8 @@ export default async function BlogPostPage({
                 {frontmatter.excerpt}
               </p>
 
-              {/* Author Info */}
-              <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground">
+              {/* Author Info & Meta */}
+              <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground mb-4">
                 <div className="flex items-center gap-2">
                   {frontmatter.author?.avatar && (
                     <Image
@@ -169,13 +164,22 @@ export default async function BlogPostPage({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-1">
-                    <Calendar className="h-4 w-4" />
-                    <span>{frontmatter.date}</span>
-                  </div>
+                <div className="flex items-center gap-1">
+                  <Calendar className="h-4 w-4" />
+                  <span>{frontmatter.date}</span>
                 </div>
               </div>
+
+              {/* Categories */}
+              {frontmatter.tags && frontmatter.tags.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {frontmatter.tags.map((tag: string) => (
+                    <Badge key={tag} variant="secondary">
+                      {tag}
+                    </Badge>
+                  ))}
+                </div>
+              )}
             </header>
 
             {/* MDX Content */}
