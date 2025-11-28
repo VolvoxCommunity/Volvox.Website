@@ -12,6 +12,7 @@ interface BlogFrontmatter {
     name: string;
   };
   banner?: string;
+  tags?: string[];
 }
 
 /**
@@ -22,7 +23,11 @@ function getBaseUrl() {
   if (process.env.VERCEL_URL) {
     return `https://${process.env.VERCEL_URL}`;
   }
-  return "http://localhost:3000";
+  if (process.env.NEXT_PUBLIC_SITE_URL) {
+    return process.env.NEXT_PUBLIC_SITE_URL;
+  }
+  const port = process.env.PORT || 3000;
+  return `http://127.0.0.1:${port}`;
 }
 
 /**
@@ -153,40 +158,80 @@ export async function generateBlogPostSocialImage(slug: string) {
             flexDirection: "column",
           }}
         >
+          {/* Title */}
           <div
             style={{
-              fontSize: 48,
+              fontSize: 60,
               fontWeight: 700,
               color: "#ffffff",
-              lineHeight: 1.2,
+              lineHeight: 1.1,
+              marginBottom: 24,
             }}
           >
             {frontmatter.title}
           </div>
+
+          {/* Excerpt */}
           <div
             style={{
-              fontSize: 26,
+              fontSize: 30,
               color: "#d1d5db",
               lineHeight: 1.4,
-              marginTop: 20,
+              marginBottom: 32,
+              display: "flex",
             }}
           >
             {frontmatter.excerpt || "Read more on Volvox Blog"}
           </div>
+
+          {/* Author & Date */}
           <div
             style={{
-              fontSize: 20,
+              display: "flex",
+              alignItems: "center",
+              fontSize: 24,
               color: "#a1a1aa",
-              marginTop: 20,
+              marginBottom: 32,
             }}
           >
-            {`By ${frontmatter.author?.name || "Volvox"} · ${frontmatter.date}`}
+            <span style={{ color: "#ffffff", fontWeight: 700 }}>
+              {frontmatter.author?.name || "Volvox"}
+            </span>
+            <span style={{ margin: "0 12px" }}>·</span>
+            <span>{frontmatter.date}</span>
           </div>
+
+          {/* Tags */}
+          {frontmatter.tags && frontmatter.tags.length > 0 && (
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {frontmatter.tags.slice(0, 3).map((tag) => (
+                <div
+                  key={tag}
+                  style={{
+                    backgroundColor: "#1f2937",
+                    color: "#60a5fa",
+                    padding: "8px 16px",
+                    borderRadius: 999,
+                    fontSize: 20,
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {`#${tag}`}
+                </div>
+              ))}
+            </div>
+          )}
         </div>
+
+        {/* Footer */}
         <div
           style={{
             display: "flex",
             alignItems: "center",
+            justifyContent: "flex-end",
           }}
         >
           {logoResponse && (
