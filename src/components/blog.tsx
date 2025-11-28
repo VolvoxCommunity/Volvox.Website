@@ -125,7 +125,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 </CardHeader>
 
                 <CardContent>
-                  <CardDescription className="line-clamp-3 mb-4">
+                  <CardDescription className="mb-4">
                     {post.excerpt}
                   </CardDescription>
 
