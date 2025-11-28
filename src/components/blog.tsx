@@ -175,15 +175,14 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           setIsScrolled(false);
         }}
       >
-        <DialogContent className="w-[80vw] max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
+        <DialogContent className="w-[80vw] max-w-none sm:max-w-none h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
           {selectedPost && (
             <>
               <DialogHeader
-                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
-                  isScrolled
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${isScrolled
                     ? "shadow-md bg-background/95 backdrop-blur-sm"
                     : "bg-background"
-                }`}
+                  }`}
               >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">

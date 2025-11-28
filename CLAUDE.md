@@ -70,9 +70,9 @@ git push
 
 **Important:**
 
-- Do NOT commit if any validation check fails
+- Do NOT commit or push changes - allow the user to do this manually
 - Do NOT skip the validation checks to save time
-- Always push after committing (unless explicitly told not to)
+- All validation checks must pass before changes are considered complete
 
 **Why this matters:**
 
