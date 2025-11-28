@@ -1,7 +1,8 @@
-import { generateBlogPostSocialImage } from "@/lib/social-images";
+import { generateBlogPostSocialImage, getLogoData } from "@/lib/social-images";
+import { getPostBySlug } from "@/lib/blog";
 
-// Use Edge runtime - image generation uses fetch APIs for post data
-export const runtime = "edge";
+// Use Node.js runtime to access file system
+export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Volvox Blog Post";
@@ -20,5 +21,19 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  return generateBlogPostSocialImage(slug);
+  const [post, logoData] = await Promise.all([
+    getPostBySlug(slug).catch(() => null),
+    getLogoData(),
+  ]);
+
+  const frontmatter = post
+    ? {
+        ...post.frontmatter,
+        author: post.frontmatter.author
+          ? { name: post.frontmatter.author.name }
+          : undefined,
+      }
+    : null;
+
+  return generateBlogPostSocialImage(frontmatter, logoData);
 }

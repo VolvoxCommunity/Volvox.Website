@@ -1,10 +1,12 @@
 import { ImageResponse } from "next/og";
+import * as fs from "fs";
+import * as path from "path";
 
 /** Standard image size for social media images */
 const IMAGE_SIZE = { width: 1200, height: 630 };
 
 /** Shape of blog post frontmatter returned by the API */
-interface BlogFrontmatter {
+export interface BlogFrontmatter {
   title: string;
   excerpt?: string;
   date: string;
@@ -13,21 +15,6 @@ interface BlogFrontmatter {
   };
   banner?: string;
   tags?: string[];
-}
-
-/**
- * Determines the base URL for the current environment.
- * Prefers VERCEL_URL in production/preview, falls back to localhost.
- */
-function getBaseUrl() {
-  if (process.env.VERCEL_URL) {
-    return `https://${process.env.VERCEL_URL}`;
-  }
-  if (process.env.NEXT_PUBLIC_SITE_URL) {
-    return process.env.NEXT_PUBLIC_SITE_URL;
-  }
-  const port = process.env.PORT || 3000;
-  return `http://127.0.0.1:${port}`;
 }
 
 /**
@@ -62,10 +49,30 @@ async function fetchJetBrainsMonoFont(): Promise<ArrayBuffer | null> {
 }
 
 /**
+ * Reads the logo file from the public directory.
+ */
+export async function getLogoData(): Promise<ArrayBuffer | null> {
+  try {
+    const logoPath = path.join(process.cwd(), "public", "logo.png");
+    if (fs.existsSync(logoPath)) {
+      return fs.readFileSync(logoPath).buffer as ArrayBuffer;
+    }
+  } catch (e) {
+    console.error("Failed to read logo file", e);
+  }
+  return null;
+}
+
+/**
  * Creates a fallback image when post data cannot be loaded.
  * Displays generic Volvox Blog branding.
  */
-function createFallbackImage(logoData?: ArrayBuffer) {
+export function createFallbackImage(logoData?: ArrayBuffer | null) {
+  // Convert ArrayBuffer to base64 string for img src if present
+  const logoSrc = logoData
+    ? `data:image/png;base64,${Buffer.from(logoData).toString("base64")}`
+    : null;
+
   return (
     <div
       style={{
@@ -78,9 +85,9 @@ function createFallbackImage(logoData?: ArrayBuffer) {
         backgroundColor: "#0a0a0a",
       }}
     >
-      {logoData ? (
+      {logoSrc ? (
         <img
-          src={logoData as unknown as string}
+          src={logoSrc}
           width={120}
           height={120}
           style={{ marginBottom: 24 }}
@@ -101,7 +108,7 @@ function createFallbackImage(logoData?: ArrayBuffer) {
         style={{
           fontSize: 36,
           color: "#a1a1aa",
-          marginTop: logoData ? 0 : 24,
+          marginTop: logoSrc ? 0 : 24,
         }}
       >
         Blog
@@ -112,32 +119,26 @@ function createFallbackImage(logoData?: ArrayBuffer) {
 
 /**
  * Generates a dynamic social image for a blog post.
- * Fetches post data and renders title, author, and date with logo and custom font.
- * Falls back to generic branding if post cannot be loaded.
  *
- * @param slug - The blog post slug
+ * @param frontmatter - The blog post frontmatter
+ * @param logoData - The logo image data
  * @returns ImageResponse with post-specific social preview image
  */
-export async function generateBlogPostSocialImage(slug: string) {
-  const baseUrl = getBaseUrl();
+export async function generateBlogPostSocialImage(
+  frontmatter: BlogFrontmatter | null | undefined,
+  logoData: ArrayBuffer | null
+) {
+  const fontData = await fetchJetBrainsMonoFont();
 
-  // Fetch logo and font in parallel
-  const [logoResponse, fontData] = await Promise.all([
-    fetch(`${baseUrl}/logo.png`)
-      .then((res) => res.arrayBuffer())
-      .catch(() => null),
-    fetchJetBrainsMonoFont(),
-  ]);
+  // Convert ArrayBuffer to base64 string for img src if present
+  const logoSrc = logoData
+    ? `data:image/png;base64,${Buffer.from(logoData).toString("base64")}`
+    : null;
 
   try {
-    // Fetch post data from API to avoid fs usage in Edge runtime
-    const response = await fetch(`${baseUrl}/api/blog/${slug}`);
-
-    if (!response.ok) {
-      throw new Error("Failed to fetch post data");
+    if (!frontmatter) {
+      throw new Error("No frontmatter provided");
     }
-
-    const frontmatter = (await response.json()) as BlogFrontmatter;
 
     return new ImageResponse(
       <div
@@ -234,9 +235,9 @@ export async function generateBlogPostSocialImage(slug: string) {
             justifyContent: "flex-end",
           }}
         >
-          {logoResponse && (
+          {logoSrc && (
             <img
-              src={logoResponse as unknown as string}
+              src={logoSrc}
               width={48}
               height={48}
               style={{ marginRight: 16 }}
@@ -270,7 +271,7 @@ export async function generateBlogPostSocialImage(slug: string) {
     );
   } catch (e) {
     console.error(e);
-    return new ImageResponse(createFallbackImage(logoResponse ?? undefined), {
+    return new ImageResponse(createFallbackImage(logoData), {
       ...IMAGE_SIZE,
       ...(fontData && {
         fonts: [
