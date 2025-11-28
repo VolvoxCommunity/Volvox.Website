@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Link from "next/link";
 import {
   Moon,
   Sun,
@@ -16,20 +17,31 @@ import confettiLib from "canvas-confetti";
 import Image from "next/image";
 
 interface NavigationProps {
-  onNavigate: (section: string) => void;
-  currentSection: string;
+  /** Callback invoked with section id when navigating (for homepage scroll mode) */
+  onNavigate?: (section: string) => void;
+  /** Currently active section id (for homepage scroll mode) */
+  currentSection?: string;
+  /** When true, uses Link components instead of scroll navigation */
+  linkMode?: boolean;
 }
 
 /**
  * Top navigation bar with logo, section links, theme toggle, and external links.
  *
- * Renders a responsive navigation: horizontal section buttons on medium+ screens and a slide-in sheet on small screens. Includes a theme toggle, GitHub and Discord links (Discord clicks trigger a confetti effect), and highlights the active section.
+ * Supports two modes:
+ * - Scroll mode (default on homepage): Uses callbacks to scroll to sections
+ * - Link mode: Uses Next.js Links to navigate to homepage sections
  *
  * @param onNavigate - Callback invoked with a section id when a navigation item is selected.
  * @param currentSection - The id of the currently active section used to apply active styling.
+ * @param linkMode - When true, navigation items link to homepage sections instead of scrolling.
  * @returns The navigation bar element (JSX) ready to be rendered at the top of the page.
  */
-export function Navigation({ onNavigate, currentSection }: NavigationProps) {
+export function Navigation({
+  onNavigate,
+  currentSection,
+  linkMode = false,
+}: NavigationProps) {
   const { theme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -53,15 +65,17 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
   };
 
   const navItems = [
-    { id: "home", label: "Home" },
-    { id: "products", label: "Products" },
-    { id: "blog", label: "Blog" },
-    { id: "mentorship", label: "Mentorship" },
-    { id: "about", label: "About" },
+    { id: "home", label: "Home", href: "/" },
+    { id: "products", label: "Products", href: "/#products" },
+    { id: "blog", label: "Blog", href: "/#blog" },
+    { id: "mentorship", label: "Mentorship", href: "/#mentorship" },
+    { id: "about", label: "About", href: "/#about" },
   ];
 
   const handleNavigate = (section: string) => {
-    onNavigate(section);
+    if (onNavigate) {
+      onNavigate(section);
+    }
     setMobileOpen(false);
   };
 
@@ -69,38 +83,66 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
     <nav className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl">
       <div className="container mx-auto px-4 py-2 max-w-7xl">
         <div className="flex items-center justify-between h-16">
-          <motion.button
-            onClick={() => handleNavigate("home")}
-            className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <div className="w-8 h-8 flex-shrink-0">
-              <Image
-                src="/logo.png"
-                alt="Volvox Logo"
-                width={32}
-                height={32}
-                className="w-full h-full object-contain"
-              />
-            </div>
-            <span className="text-xl font-bold text-primary">Volvox</span>
-          </motion.button>
+          {linkMode ? (
+            <Link
+              href="/"
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+            >
+              <div className="w-8 h-8 flex-shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="Volvox Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-xl font-bold text-primary">VOLVOX</span>
+            </Link>
+          ) : (
+            <motion.button
+              onClick={() => handleNavigate("home")}
+              className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <div className="w-8 h-8 flex-shrink-0">
+                <Image
+                  src="/logo.png"
+                  alt="Volvox Logo"
+                  width={32}
+                  height={32}
+                  className="w-full h-full object-contain"
+                />
+              </div>
+              <span className="text-xl font-bold text-primary">VOLVOX</span>
+            </motion.button>
+          )}
 
           <div className="hidden md:flex items-center gap-1">
-            {navItems.map((item) => (
-              <button
-                key={item.id}
-                onClick={() => handleNavigate(item.id)}
-                className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
-                  currentSection === item.id
-                    ? "text-primary bg-primary/10"
-                    : "text-foreground hover:text-secondary hover:bg-muted"
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
+            {navItems.map((item) =>
+              linkMode ? (
+                <Link
+                  key={item.id}
+                  href={item.href}
+                  className="text-sm font-medium transition-colors px-4 py-2 rounded-lg text-foreground hover:text-secondary hover:bg-muted"
+                >
+                  {item.label}
+                </Link>
+              ) : (
+                <button
+                  key={item.id}
+                  onClick={() => handleNavigate(item.id)}
+                  className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
+                    currentSection === item.id
+                      ? "text-primary bg-primary/10"
+                      : "text-foreground hover:text-secondary hover:bg-muted"
+                  }`}
+                >
+                  {item.label}
+                </button>
+              )
+            )}
           </div>
 
           <div className="flex items-center gap-2">
@@ -169,19 +211,30 @@ export function Navigation({ onNavigate, currentSection }: NavigationProps) {
               </SheetTrigger>
               <SheetContent side="right" className="w-64">
                 <div className="flex flex-col gap-4 mt-8">
-                  {navItems.map((item) => (
-                    <button
-                      key={item.id}
-                      onClick={() => handleNavigate(item.id)}
-                      className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
-                        currentSection === item.id
-                          ? "text-primary bg-primary/10"
-                          : "text-foreground hover:text-secondary hover:bg-muted"
-                      }`}
-                    >
-                      {item.label}
-                    </button>
-                  ))}
+                  {navItems.map((item) =>
+                    linkMode ? (
+                      <Link
+                        key={item.id}
+                        href={item.href}
+                        onClick={() => setMobileOpen(false)}
+                        className="text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg text-foreground hover:text-secondary hover:bg-muted"
+                      >
+                        {item.label}
+                      </Link>
+                    ) : (
+                      <button
+                        key={item.id}
+                        onClick={() => handleNavigate(item.id)}
+                        className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
+                          currentSection === item.id
+                            ? "text-primary bg-primary/10"
+                            : "text-foreground hover:text-secondary hover:bg-muted"
+                        }`}
+                      >
+                        {item.label}
+                      </button>
+                    )
+                  )}
                   <div className="border-t border-border pt-6 flex gap-2">
                     <Button
                       variant="outline"

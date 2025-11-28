@@ -52,6 +52,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         slug: frontmatter.slug,
         views: 0, // No longer tracking views
         published: frontmatter.published,
+        banner: frontmatter.banner,
       });
     }
 
@@ -93,6 +94,7 @@ export async function getPostBySlug(slug: string) {
         author,
         date: frontmatter.date,
         tags: frontmatter.tags,
+        banner: frontmatter.banner,
       },
       content,
       slug: frontmatter.slug,

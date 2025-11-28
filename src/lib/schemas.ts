@@ -21,6 +21,7 @@ export const BlogPostFrontmatterSchema = z.object({
   date: z.string(),
   tags: z.array(z.string()),
   published: z.boolean(),
+  banner: z.string().optional(),
 });
 
 /**

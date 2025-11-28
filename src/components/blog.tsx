@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   Card,
   CardContent,
@@ -92,11 +93,20 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                   whileHover={{ scale: 1.05 }}
                   transition={{ duration: 0.3 }}
                 >
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-5xl font-bold text-foreground/5">
-                      {post.title.charAt(0)}
+                  {post.banner ? (
+                    <Image
+                      src={post.banner}
+                      alt={post.title}
+                      fill
+                      className="object-cover"
+                    />
+                  ) : (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="text-5xl font-bold text-foreground/5">
+                        {post.title.charAt(0)}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </motion.div>
 
                 <CardHeader>
@@ -179,10 +189,11 @@ export function Blog({ posts: initialPosts }: BlogProps) {
           {selectedPost && (
             <>
               <DialogHeader
-                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${isScrolled
-                  ? "shadow-md bg-background/95 backdrop-blur-sm"
-                  : "bg-background"
-                  }`}
+                className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${
+                  isScrolled
+                    ? "shadow-md bg-background/95 backdrop-blur-sm"
+                    : "bg-background"
+                }`}
               >
                 {/* Progress Bar */}
                 <div className="absolute top-0 left-0 right-0 h-0.5 bg-muted">

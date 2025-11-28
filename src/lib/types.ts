@@ -22,6 +22,7 @@ export interface BlogPost {
   slug: string;
   views: number; // Deprecated - always 0
   published: boolean;
+  banner?: string;
 }
 
 /**
