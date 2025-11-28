@@ -57,52 +57,49 @@ export async function generateBlogPostSocialImage(slug: string) {
     const { frontmatter } = await getPostBySlug(slug);
 
     return new ImageResponse(
-      (
-        <div
-          style={{
-            height: "100%",
-            width: "100%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "space-between",
-            padding: 60,
-            backgroundColor: "#0a0a0a",
-            backgroundImage:
-              "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-            <div
-              style={{
-                fontSize: 52,
-                fontWeight: "bold",
-                color: "#ffffff",
-                lineHeight: 1.2,
-                maxWidth: 1000,
-              }}
-            >
-              {frontmatter.title}
-            </div>
-            <div
-              style={{
-                fontSize: 28,
-                color: "#a1a1aa",
-              }}
-            >
-              By {frontmatter.author?.name || "Volvox"} · {frontmatter.date}
-            </div>
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 60,
+          backgroundColor: "#0a0a0a",
+          backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
+        }}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+          <div
+            style={{
+              fontSize: 52,
+              fontWeight: "bold",
+              color: "#ffffff",
+              lineHeight: 1.2,
+              maxWidth: 1000,
+            }}
+          >
+            {frontmatter.title}
           </div>
           <div
             style={{
-              fontSize: 32,
-              fontWeight: "bold",
-              color: "#3b82f6",
+              fontSize: 28,
+              color: "#a1a1aa",
             }}
           >
-            VOLVOX
+            By {frontmatter.author?.name || "Volvox"} · {frontmatter.date}
           </div>
         </div>
-      ),
+        <div
+          style={{
+            fontSize: 32,
+            fontWeight: "bold",
+            color: "#3b82f6",
+          }}
+        >
+          VOLVOX
+        </div>
+      </div>,
       IMAGE_SIZE
     );
   } catch {

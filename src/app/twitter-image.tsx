@@ -14,42 +14,40 @@ export const contentType = "image/png";
  */
 export default function Image() {
   return new ImageResponse(
-    (
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#0a0a0a",
+        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
+      }}
+    >
       <div
         style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          justifyContent: "center",
-          backgroundColor: "#0a0a0a",
-          backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
+          fontSize: 80,
+          fontWeight: "bold",
+          color: "#3b82f6",
+          marginBottom: 24,
+          letterSpacing: "-0.02em",
         }}
       >
-        <div
-          style={{
-            fontSize: 80,
-            fontWeight: "bold",
-            color: "#3b82f6",
-            marginBottom: 24,
-            letterSpacing: "-0.02em",
-          }}
-        >
-          VOLVOX
-        </div>
-        <div
-          style={{
-            fontSize: 36,
-            color: "#a1a1aa",
-            textAlign: "center",
-            maxWidth: 800,
-          }}
-        >
-          Software Development & Learning Community
-        </div>
+        VOLVOX
       </div>
-    ),
+      <div
+        style={{
+          fontSize: 36,
+          color: "#a1a1aa",
+          textAlign: "center",
+          maxWidth: 800,
+        }}
+      >
+        Software Development & Learning Community
+      </div>
+    </div>,
     { ...size }
   );
 }

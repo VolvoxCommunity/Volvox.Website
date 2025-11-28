@@ -81,9 +81,10 @@ export function Blog({ posts: initialPosts }: BlogProps) {
               viewport={{ once: true }}
               transition={{ delay: idx * 0.1 }}
               whileHover={{ scale: 1.02 }}
+              className="h-full"
             >
               <Card
-                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full"
+                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col"
                 onClick={() => handlePostClick(post)}
               >
                 <motion.div
@@ -124,12 +125,12 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                   </CardTitle>
                 </CardHeader>
 
-                <CardContent>
-                  <CardDescription className="mb-4">
+                <CardContent className="flex-1 flex flex-col">
+                  <CardDescription className="mb-4 flex-1">
                     {post.excerpt}
                   </CardDescription>
 
-                  <div className="flex flex-wrap gap-2 mb-4">
+                  <div className="flex flex-wrap gap-2 mb-4 mt-auto">
                     {post.tags.slice(0, 3).map((tag) => (
                       <Badge key={tag} variant="secondary" className="text-xs">
                         {tag}
