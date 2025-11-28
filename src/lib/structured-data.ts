@@ -66,3 +66,47 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
     inLanguage: "en-US",
   };
 }
+
+/**
+ * Schema.org WebPage structured data for generic pages.
+ *
+ * @param title - Page title
+ * @param description - Page description
+ * @param path - Page path (e.g., "/privacy")
+ * @param datePublished - Optional publication date
+ * @param dateModified - Optional modification date
+ * @returns WebPage schema object for JSON-LD injection
+ */
+export function generateWebPageSchema(
+  title: string,
+  description: string,
+  path: string,
+  datePublished?: string,
+  dateModified?: string
+) {
+  const url = `${SITE_URL}${path}`;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebPage",
+    name: title,
+    description: description,
+    url: url,
+    publisher: {
+      "@type": "Organization",
+      name: SITE_NAME,
+      logo: {
+        "@type": "ImageObject",
+        url: `${SITE_URL}/volvox-logo.png`,
+      },
+    },
+    datePublished: datePublished,
+    dateModified: dateModified,
+    inLanguage: "en-US",
+    isPartOf: {
+      "@type": "WebSite",
+      name: SITE_NAME,
+      url: SITE_URL,
+    },
+  };
+}

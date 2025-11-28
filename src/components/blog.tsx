@@ -180,8 +180,8 @@ export function Blog({ posts: initialPosts }: BlogProps) {
             <>
               <DialogHeader
                 className={`sticky top-0 z-10 transition-[box-shadow,background-color] duration-200 ${isScrolled
-                    ? "shadow-md bg-background/95 backdrop-blur-sm"
-                    : "bg-background"
+                  ? "shadow-md bg-background/95 backdrop-blur-sm"
+                  : "bg-background"
                   }`}
               >
                 {/* Progress Bar */}
@@ -192,43 +192,16 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                   />
                 </div>
 
-                <div className="pt-6 px-6 pb-4">
-                  {/* Author Info */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <Avatar className="h-10 w-10">
-                      <AvatarImage
-                        src={selectedPost.author?.avatar}
-                        alt={selectedPost.author?.name || "Volvox"}
-                      />
-                      <AvatarFallback>
-                        {(selectedPost.author?.name || "Volvox").charAt(0)}
-                      </AvatarFallback>
-                    </Avatar>
-                    <div>
-                      <p className="text-sm font-medium">
-                        {selectedPost.author?.name || "Volvox"}
-                      </p>
-                      <p className="text-xs text-muted-foreground">
-                        {selectedPost.author?.role || "Team"}
-                      </p>
-                    </div>
-                  </div>
-
+                <div className="pt-5 px-6 pb-0 text-left flex flex-col gap-1.5">
                   {/* Title */}
-                  <DialogTitle className="text-2xl md:text-3xl mb-3">
+                  <DialogTitle className="text-3xl md:text-4xl font-bold leading-none">
                     {selectedPost.title}
                   </DialogTitle>
 
-                  {/* Metadata */}
-                  <div className="flex items-center gap-4 text-sm text-muted-foreground mb-3">
-                    <span>
-                      {new Date(selectedPost.date).toLocaleDateString("en-US", {
-                        month: "long",
-                        day: "numeric",
-                        year: "numeric",
-                      })}
-                    </span>
-                  </div>
+                  {/* Excerpt */}
+                  <p className="text-lg text-muted-foreground">
+                    {selectedPost.excerpt}
+                  </p>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">
@@ -238,6 +211,42 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                       </Badge>
                     ))}
                   </div>
+
+                  {/* Author Info & Date */}
+                  <div className="flex items-center gap-4 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <Avatar className="h-8 w-8">
+                        <AvatarImage
+                          src={selectedPost.author?.avatar}
+                          alt={selectedPost.author?.name || "Volvox"}
+                        />
+                        <AvatarFallback>
+                          {(selectedPost.author?.name || "Volvox").charAt(0)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div>
+                        <p className="font-medium text-foreground">
+                          {selectedPost.author?.name || "Volvox"}
+                        </p>
+                        <p className="text-xs">
+                          {selectedPost.author?.role || "Team"}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-center gap-1 border-l pl-4 border-border/50">
+                      <span>
+                        {new Date(selectedPost.date).toLocaleDateString(
+                          "en-US",
+                          {
+                            month: "long",
+                            day: "numeric",
+                            year: "numeric",
+                          }
+                        )}
+                      </span>
+                    </div>
+                  </div>
                 </div>
               </DialogHeader>
 
@@ -245,7 +254,7 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.05, duration: 0.2 }}
-                className="prose prose-slate dark:prose-invert max-w-none px-6 py-8 overflow-y-auto scroll-smooth flex-1 min-h-0"
+                className="prose prose-slate dark:prose-invert max-w-none px-6 pt-2 pb-8 overflow-y-auto scroll-smooth flex-1 min-h-0"
                 onScroll={handleScroll}
               >
                 <ReactMarkdown
