@@ -14,13 +14,6 @@ jest.mock("next/image", () => ({
   default: (props: any) => <img {...props} />,
 }));
 
-// Mock ResizeObserver for Radix UI
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 describe("Navigation", () => {
   beforeEach(() => {
     (useTheme as jest.Mock).mockReturnValue({ theme: "light", setTheme: jest.fn() });

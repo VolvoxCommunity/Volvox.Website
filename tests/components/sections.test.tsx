@@ -30,12 +30,6 @@ jest.mock("@/components/ui/tabs", () => ({
   TabsContent: ({ children }: any) => <div>{children}</div>,
 }));
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
-
 describe("Sections", () => {
   describe("Blog", () => {
     const mockPosts = [
@@ -134,8 +128,7 @@ describe("Sections", () => {
       expect(screen.getByText("Mentor 1")).toBeInTheDocument();
       expect(screen.getByText("Bio 1")).toBeInTheDocument();
 
-      // Switch to mentees
-      // fireEvent.click(menteeTrigger); // Not needed with mocked tabs showing everything
+      // With mocked tabs, both mentors and mentees are rendered simultaneously
       expect(screen.getByText("Mentee 1")).toBeInTheDocument();
       expect(screen.getByText("Goal 1")).toBeInTheDocument();
     });
@@ -144,8 +137,7 @@ describe("Sections", () => {
       render(<Mentorship mentors={[]} mentees={[]} />);
       expect(screen.getByText(/Our mentor team is growing/i)).toBeInTheDocument();
 
-      // const menteeTrigger = screen.getByText("Featured Mentees");
-      // fireEvent.click(menteeTrigger);
+      // With mocked tabs, both empty states are rendered simultaneously
       expect(screen.getByText(/Be the first to join/i)).toBeInTheDocument();
     });
   });
