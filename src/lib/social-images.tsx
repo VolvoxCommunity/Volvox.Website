@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import Image from "next/image";
+
 import * as fs from "fs";
 import * as path from "path";
 
@@ -87,7 +87,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       }}
     >
       {logoSrc ? (
-        <Image
+        <img
           src={logoSrc}
           width={120}
           height={120}
@@ -237,7 +237,7 @@ export async function generateBlogPostSocialImage(
           }}
         >
           {logoSrc && (
-            <Image
+            <img
               src={logoSrc}
               width={48}
               height={48}

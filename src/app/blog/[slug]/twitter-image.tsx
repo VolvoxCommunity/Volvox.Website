@@ -21,9 +21,7 @@ export default async function Image({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const [post] = await Promise.all([
-    getPostBySlug(slug).catch(() => null),
-  ]);
+  const post = await getPostBySlug(slug).catch(() => null);
   const logoData = getLogoData();
 
   const frontmatter = post
