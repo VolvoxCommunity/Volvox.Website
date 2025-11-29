@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import Image from "next/image";
 import * as fs from "fs";
 import * as path from "path";
 
@@ -51,11 +52,11 @@ async function fetchJetBrainsMonoFont(): Promise<ArrayBuffer | null> {
 /**
  * Reads the logo file from the public directory.
  */
-export async function getLogoData(): Promise<ArrayBuffer | null> {
+export function getLogoData(): ArrayBuffer | null {
   try {
     const logoPath = path.join(process.cwd(), "public", "logo.png");
     if (fs.existsSync(logoPath)) {
-      return fs.readFileSync(logoPath).buffer as ArrayBuffer;
+      return fs.readFileSync(logoPath).buffer;
     }
   } catch (e) {
     console.error("Failed to read logo file", e);
@@ -86,7 +87,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       }}
     >
       {logoSrc ? (
-        <img
+        <Image
           src={logoSrc}
           width={120}
           height={120}
@@ -236,7 +237,7 @@ export async function generateBlogPostSocialImage(
           }}
         >
           {logoSrc && (
-            <img
+            <Image
               src={logoSrc}
               width={48}
               height={48}

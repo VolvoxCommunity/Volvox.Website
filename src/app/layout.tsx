@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     siteName: "Volvox",
     images: [
       {
-        url: "/banner.jpg",
+        url: "/banner.jpeg",
         width: 1200,
         height: 630,
         alt: "Volvox Banner",
