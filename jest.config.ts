@@ -19,7 +19,11 @@ const config: Config = {
     'src/**/*.{js,jsx,ts,tsx}',
     '!src/**/*.d.ts',
     '!**/node_modules/**',
-    '!src/app/**',
+    '!src/app/**/page.tsx',
+    '!src/app/**/layout.tsx',
+    '!src/app/global-error.tsx',
+    '!src/app/**/opengraph-image.tsx',
+    '!src/app/**/twitter-image.tsx',
   ],
 }
 
