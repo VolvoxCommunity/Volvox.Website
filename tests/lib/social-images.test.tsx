@@ -8,6 +8,8 @@ jest.mock("next/og", () => ({
 }));
 
 describe("social-images", () => {
+  const originalFetch = global.fetch;
+
   beforeEach(() => {
     global.fetch = jest.fn(() =>
       Promise.resolve({
@@ -18,7 +20,8 @@ describe("social-images", () => {
   });
 
   afterEach(() => {
-    jest.restoreAllMocks();
+    global.fetch = originalFetch;
+    jest.clearAllMocks();
   });
   it("getLogoData reads file", () => {
     (fs.existsSync as jest.Mock).mockReturnValue(true);

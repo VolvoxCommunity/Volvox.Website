@@ -28,8 +28,14 @@ pnpm typecheck
 # Run linting
 pnpm lint
 
-# Run unit tests (Node test runner with tsx)
+# Run unit tests (Jest)
 pnpm test
+
+# Run tests in watch mode
+pnpm test:watch
+
+# Run tests with coverage
+pnpm test:coverage
 
 # Run E2E tests (Playwright)
 pnpm exec playwright test
@@ -152,8 +158,10 @@ git push
   blog-view-tracking.spec.ts - Playwright E2E test for blog view tracking
 
 /tests
-  slug-validation.test.ts - Blog post slug format validation
-  generate-heading-id.test.ts - Heading ID generation tests
+  /app - API route and app-level tests
+  /components - Component tests (UI, sections, MDX)
+  /hooks - Custom React hook tests
+  /lib - Utility and library function tests
   postcss-tailwind.test.ts - Tailwind CSS configuration tests
 
 /src
@@ -278,11 +286,13 @@ Located in `src/lib/`:
 
 ### Testing
 
-- **Unit Tests**: Uses Node.js test runner with `tsx` (located in `tests/`)
-  - `slug-validation.test.ts`: Validates blog post slug format
-  - `generate-heading-id.test.ts`: Tests heading ID generation utility
-  - `postcss-tailwind.test.ts`: Tests Tailwind CSS configuration
+- **Unit Tests**: Uses Jest with Testing Library (located in `tests/`)
+  - Comprehensive test coverage for components, hooks, utilities, API routes
+  - Configuration: `jest.config.ts` with Next.js integration via `next/jest`
+  - Setup: `jest.setup.ts` initializes `@testing-library/jest-dom` and mocks
   - Run with: `pnpm test`
+  - Watch mode: `pnpm test:watch`
+  - Coverage: `pnpm test:coverage`
 - **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
   - Configuration: `playwright.config.ts` (targets Chromium)
   - Example: `blog-view-tracking.spec.ts` tests blog page interactions
