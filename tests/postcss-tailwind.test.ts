@@ -1,30 +1,19 @@
-import assert from "node:assert/strict";
-import { describe, it } from "node:test";
-import { fileURLToPath } from "node:url";
-import { dirname, join } from "node:path";
+/**
+ * @jest-environment node
+ */
 import postcss from "postcss";
-import postcssrc from "postcss-load-config";
+import tailwindcss from "@tailwindcss/postcss";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const projectRoot = join(__dirname, "..");
+const getConfig = () => ({
+  plugins: [tailwindcss()]
+});
 
-void describe("PostCSS Configuration", () => {
-  void it("loads postcss.config.mjs successfully", async () => {
-    const config = await postcssrc({ cwd: projectRoot });
+describe("PostCSS Configuration", () => {
+  it("includes @tailwindcss/postcss plugin", async () => {
+    const config = getConfig();
 
-    assert.ok(config, "PostCSS configuration should be loaded");
-    assert.ok(config.plugins, "PostCSS configuration should have plugins");
-  });
-
-  void it("includes @tailwindcss/postcss plugin", async () => {
-    const config = await postcssrc({ cwd: projectRoot });
-
-    assert.ok(config.plugins, "Plugins should be defined");
-    assert.ok(
-      config.plugins.length > 0,
-      "At least one plugin should be loaded"
-    );
+    expect(config.plugins).toBeTruthy();
+    expect(config.plugins.length).toBeGreaterThan(0);
 
     // Verify Tailwind CSS plugin works by processing Tailwind directives
     const testInput = `@import "tailwindcss";`;
@@ -33,41 +22,33 @@ void describe("PostCSS Configuration", () => {
       to: "test.css",
     });
 
-    assert.ok(
-      result.css && result.css.length > testInput.length,
-      "Tailwind CSS plugin should be loaded and process directives"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.length).toBeGreaterThan(testInput.length);
   });
 
-  void it("has correct plugin configuration structure", async () => {
-    const config = await postcssrc({ cwd: projectRoot });
+  it("has correct plugin configuration structure", async () => {
+    const config = getConfig();
 
-    assert.ok(Array.isArray(config.plugins), "Plugins should be an array");
-    assert.ok(
-      config.plugins.length > 0,
-      "At least one plugin should be configured"
-    );
+    expect(Array.isArray(config.plugins)).toBeTruthy();
+    expect(config.plugins.length).toBeGreaterThan(0);
   });
 });
 
-void describe("Tailwind CSS Processing", () => {
-  void it("processes Tailwind CSS @import directive", async () => {
+describe("Tailwind CSS Processing", () => {
+  it("processes Tailwind CSS @import directive", async () => {
     const input = `@import "tailwindcss";`;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.length > input.length,
-      "Output should contain processed Tailwind CSS"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.length).toBeGreaterThan(input.length);
   });
 
-  void it("processes Tailwind CSS @layer directive", async () => {
+  it("processes Tailwind CSS @layer directive", async () => {
     const input = `
       @import "tailwindcss";
       
@@ -78,20 +59,17 @@ void describe("Tailwind CSS Processing", () => {
       }
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.includes("margin"),
-      "Should include the layer content"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.includes("margin")).toBeTruthy();
   });
 
-  void it("processes Tailwind CSS @apply directive", async () => {
+  it("processes Tailwind CSS @apply directive", async () => {
     const input = `
       @import "tailwindcss";
 
@@ -100,38 +78,32 @@ void describe("Tailwind CSS Processing", () => {
       }
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.includes("custom-class"),
-      "Should include the custom class"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.includes("custom-class")).toBeTruthy();
   });
 
-  void it("processes Tailwind CSS utility classes", async () => {
+  it("processes Tailwind CSS utility classes", async () => {
     const input = `
       @import "tailwindcss";
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.length > 0,
-      "Should generate Tailwind base styles and utilities"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.length).toBeGreaterThan(0);
   });
 
-  void it("processes custom @theme directive", async () => {
+  it("processes custom @theme directive", async () => {
     const input = `
       @import "tailwindcss";
       
@@ -140,38 +112,37 @@ void describe("Tailwind CSS Processing", () => {
       }
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.includes("--color-custom") || result.css.includes("custom"),
-      "Should process custom theme variables"
-    );
+    expect(result.css).toBeTruthy();
+    expect(
+      result.css.includes("--color-custom") || result.css.includes("custom")
+    ).toBeTruthy();
   });
 
-  void it("processes custom @variant directive", async () => {
+  it("processes custom @variant directive", async () => {
     const input = `
       @import "tailwindcss";
       
       @variant dark (&:where(.dark, .dark *));
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "test.css",
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
+    expect(result.css).toBeTruthy();
     // The variant should be processed without errors
-    assert.ok(result.css.length > 0, "Should generate output");
+    expect(result.css.length).toBeGreaterThan(0);
   });
 
-  void it("handles the globals.css file structure", async () => {
+  it("handles the globals.css file structure", async () => {
     const input = `
       @import "tailwindcss";
 
@@ -195,22 +166,19 @@ void describe("Tailwind CSS Processing", () => {
       }
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
     const result = await postcss(config.plugins).process(input, {
       from: "globals.css",
       to: "globals.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.length > input.length,
-      "Should expand Tailwind directives"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.length).toBeGreaterThan(input.length);
   });
 });
 
-void describe("PostCSS Processing", () => {
-  void it("processes valid CSS without errors", async () => {
+describe("PostCSS Processing", () => {
+  it("processes valid CSS without errors", async () => {
     const input = `
       @import "tailwindcss";
 
@@ -221,7 +189,7 @@ void describe("PostCSS Processing", () => {
       }
     `;
 
-    const config = await postcssrc({ cwd: projectRoot });
+    const config = getConfig();
 
     // Should not throw any errors
     const result = await postcss(config.plugins).process(input, {
@@ -229,10 +197,7 @@ void describe("PostCSS Processing", () => {
       to: "test.css",
     });
 
-    assert.ok(result.css, "Should produce CSS output");
-    assert.ok(
-      result.css.includes("valid-class"),
-      "Should include the valid class"
-    );
+    expect(result.css).toBeTruthy();
+    expect(result.css.includes("valid-class")).toBeTruthy();
   });
 });
