@@ -1,44 +1,69 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Blog } from "@/components/blog";
 import { Products } from "@/components/products";
 import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
+import type { BlogPost, Product, Mentor, Mentee } from "@/lib/types";
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} />
+  ),
 }));
+
+interface MotionProps {
+  children: React.ReactNode;
+  [key: string]: unknown;
+}
 
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: any) => <div {...props}>{children}</div>,
-    li: ({ children, ...props }: any) => <li {...props}>{children}</li>,
+    div: ({ children, ...props }: MotionProps) => (
+      <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
+    ),
+    li: ({ children, ...props }: MotionProps) => (
+      <li {...(props as React.LiHTMLAttributes<HTMLLIElement>)}>{children}</li>
+    ),
   },
-  AnimatePresence: ({ children }: any) => <>{children}</>,
+  AnimatePresence: ({ children }: { children: React.ReactNode }) => (
+    <>{children}</>
+  ),
 }));
 
 jest.mock("canvas-confetti", () => jest.fn(() => Promise.resolve()));
 
-jest.mock("react-markdown", () => (props: any) => <div>{props.children}</div>);
+jest.mock("react-markdown", () => ({
+  __esModule: true,
+  default: ({ children }: { children: React.ReactNode }) => (
+    <div>{children}</div>
+  ),
+}));
 jest.mock("rehype-highlight", () => () => {});
 jest.mock("remark-gfm", () => () => {});
 
-jest.mock("@/components/ui/tabs", () => ({
-  Tabs: ({ children }: any) => <div>{children}</div>,
-  TabsList: ({ children }: any) => <div>{children}</div>,
-  TabsTrigger: ({ children, onClick }: any) => <button onClick={onClick}>{children}</button>,
-  TabsContent: ({ children }: any) => <div>{children}</div>,
-}));
+interface TabsProps {
+  children: React.ReactNode;
+}
 
-global.ResizeObserver = class ResizeObserver {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
-};
+interface TabsTriggerProps {
+  children: React.ReactNode;
+  onClick?: () => void;
+}
+
+jest.mock("@/components/ui/tabs", () => ({
+  Tabs: ({ children }: TabsProps) => <div>{children}</div>,
+  TabsList: ({ children }: TabsProps) => <div>{children}</div>,
+  TabsTrigger: ({ children, onClick }: TabsTriggerProps) => (
+    <button onClick={onClick}>{children}</button>
+  ),
+  TabsContent: ({ children }: TabsProps) => <div>{children}</div>,
+}));
 
 describe("Sections", () => {
   describe("Blog", () => {
-    const mockPosts = [
+    const mockPosts: BlogPost[] = [
       {
         id: "1",
         slug: "post-1",
@@ -49,6 +74,7 @@ describe("Sections", () => {
         tags: ["tag1"],
         content: "Content",
         published: true,
+        views: 0,
       },
     ];
 
@@ -72,7 +98,7 @@ describe("Sections", () => {
   });
 
   describe("Products", () => {
-    const mockProducts = [
+    const mockProducts: Product[] = [
       {
         id: "1",
         name: "Product 1",
@@ -94,12 +120,14 @@ describe("Sections", () => {
 
     it("renders empty state", () => {
       render(<Products products={[]} />);
-      expect(screen.getByText("No product available yet. Check back soon!")).toBeInTheDocument();
+      expect(
+        screen.getByText("No product available yet. Check back soon!")
+      ).toBeInTheDocument();
     });
   });
 
   describe("Mentorship", () => {
-    const mockMentors = [
+    const mockMentors: Mentor[] = [
       {
         id: "1",
         name: "Mentor 1",
@@ -110,7 +138,7 @@ describe("Sections", () => {
         githubUrl: "http://github.com",
       },
     ];
-    const mockMentees = [
+    const mockMentees: Mentee[] = [
       {
         id: "1",
         name: "Mentee 1",
@@ -127,25 +155,24 @@ describe("Sections", () => {
 
       // Check tabs triggers
       const mentorTrigger = screen.getByText("Our Mentors");
-      const menteeTrigger = screen.getByText("Featured Mentees");
       expect(mentorTrigger).toBeInTheDocument();
 
       // Mentors are default
       expect(screen.getByText("Mentor 1")).toBeInTheDocument();
       expect(screen.getByText("Bio 1")).toBeInTheDocument();
 
-      // Switch to mentees
-      // fireEvent.click(menteeTrigger); // Not needed with mocked tabs showing everything
+      // With mocked tabs, both mentors and mentees are rendered simultaneously
       expect(screen.getByText("Mentee 1")).toBeInTheDocument();
       expect(screen.getByText("Goal 1")).toBeInTheDocument();
     });
 
     it("renders empty states", () => {
       render(<Mentorship mentors={[]} mentees={[]} />);
-      expect(screen.getByText(/Our mentor team is growing/i)).toBeInTheDocument();
+      expect(
+        screen.getByText(/Our mentor team is growing/i)
+      ).toBeInTheDocument();
 
-      // const menteeTrigger = screen.getByText("Featured Mentees");
-      // fireEvent.click(menteeTrigger);
+      // With mocked tabs, both empty states are rendered simultaneously
       expect(screen.getByText(/Be the first to join/i)).toBeInTheDocument();
     });
   });

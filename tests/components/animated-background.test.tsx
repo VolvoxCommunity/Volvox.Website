@@ -2,7 +2,8 @@ import { render } from "@testing-library/react";
 import { AnimatedBackground } from "@/components/animated-background";
 
 beforeAll(() => {
-  HTMLCanvasElement.prototype.getContext = jest.fn(() => ({
+  // Mock getContext to return a minimal 2D context
+  (HTMLCanvasElement.prototype.getContext as unknown) = jest.fn(() => ({
     fillRect: jest.fn(),
     clearRect: jest.fn(),
     getImageData: jest.fn(() => ({ data: [] })),
@@ -29,12 +30,12 @@ beforeAll(() => {
     stroke: jest.fn(),
     fillStyle: "",
     strokeStyle: "",
-  } as unknown as CanvasRenderingContext2D));
+  }));
 });
 
 describe("AnimatedBackground", () => {
   it("renders canvas", () => {
-     const { container } = render(<AnimatedBackground />);
-     expect(container.querySelector("canvas")).toBeInTheDocument();
+    const { container } = render(<AnimatedBackground />);
+    expect(container.querySelector("canvas")).toBeInTheDocument();
   });
 });

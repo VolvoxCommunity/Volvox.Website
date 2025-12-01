@@ -1,35 +1,29 @@
+/**
+ * @jest-environment node
+ */
 import { GET } from "@/app/api/blog/[slug]/route";
 import { getPostBySlug } from "@/lib/blog";
 
 jest.mock("@/lib/blog");
 
-jest.mock("next/server", () => ({
-  NextResponse: {
-    json: (body: any, init?: any) => ({
-      json: () => Promise.resolve(body),
-      status: init?.status || 200,
-    }),
-  },
-}));
-
 describe("Blog API Route", () => {
   it("returns post data", async () => {
     (getPostBySlug as jest.Mock).mockResolvedValue({
-      frontmatter: { title: "Title" }
+      frontmatter: { title: "Title" },
     });
 
-    const request = {} as any;
+    const request = new Request("http://localhost");
     const params = Promise.resolve({ slug: "post-1" });
     const response = await GET(request, { params });
 
-    const json = await response.json();
+    const json: unknown = await response.json();
     expect(json).toEqual({ title: "Title" });
   });
 
   it("returns 404 on error", async () => {
     (getPostBySlug as jest.Mock).mockRejectedValue(new Error("Not found"));
 
-    const request = {} as any;
+    const request = new Request("http://localhost");
     const params = Promise.resolve({ slug: "post-1" });
     const response = await GET(request, { params });
 

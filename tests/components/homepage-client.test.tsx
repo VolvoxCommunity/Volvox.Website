@@ -1,6 +1,11 @@
-import { render, screen, fireEvent, waitFor, act } from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import { HomepageClient } from "@/components/homepage-client";
 import { useRouter } from "next/navigation";
+
+interface NavigationProps {
+  onNavigate?: (section: string) => void;
+  currentSection?: string;
+}
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -8,32 +13,48 @@ jest.mock("next/navigation", () => ({
 
 const mockNavigation = jest.fn();
 jest.mock("@/components/navigation", () => ({
-  Navigation: (props: any) => {
+  Navigation: (props: NavigationProps) => {
     mockNavigation(props);
     return (
       <div>
-        <button onClick={() => props.onNavigate("products")}>Nav Products</button>
+        <button onClick={() => props.onNavigate?.("products")}>
+          Nav Products
+        </button>
         Navigation
       </div>
     );
   },
 }));
 
+interface HeroProps {
+  onNavigate?: (section: string) => void;
+}
+
 jest.mock("@/components/hero", () => ({
-  Hero: ({ onNavigate }: any) => (
+  Hero: ({ onNavigate }: HeroProps) => (
     <div>
-       <button onClick={() => onNavigate("products")}>Hero Products</button>
-       Hero
+      <button onClick={() => onNavigate?.("products")}>Hero Products</button>
+      Hero
     </div>
   ),
 }));
-jest.mock("@/components/products", () => ({ Products: () => <div>Products Section</div> }));
+jest.mock("@/components/products", () => ({
+  Products: () => <div>Products Section</div>,
+}));
 jest.mock("@/components/blog", () => ({ Blog: () => <div>Blog Section</div> }));
-jest.mock("@/components/mentorship", () => ({ Mentorship: () => <div>Mentorship Section</div> }));
-jest.mock("@/components/about", () => ({ About: () => <div>About Section</div> }));
+jest.mock("@/components/mentorship", () => ({
+  Mentorship: () => <div>Mentorship Section</div>,
+}));
+jest.mock("@/components/about", () => ({
+  About: () => <div>About Section</div>,
+}));
 jest.mock("@/components/footer", () => ({ Footer: () => <div>Footer</div> }));
-jest.mock("@/components/animated-background", () => ({ AnimatedBackground: () => <div>Background</div> }));
-jest.mock("@/components/ui/sonner", () => ({ Toaster: () => <div>Toaster</div> }));
+jest.mock("@/components/animated-background", () => ({
+  AnimatedBackground: () => <div>Background</div>,
+}));
+jest.mock("@/components/ui/sonner", () => ({
+  Toaster: () => <div>Toaster</div>,
+}));
 
 describe("HomepageClient", () => {
   const mockProps = {
@@ -48,11 +69,14 @@ describe("HomepageClient", () => {
       push: jest.fn(),
     });
     window.scrollTo = jest.fn();
-    Element.prototype.getBoundingClientRect = jest.fn(() => ({
-      top: 100,
-      bottom: 200,
-      height: 100,
-    } as any));
+    Element.prototype.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          top: 100,
+          bottom: 200,
+          height: 100,
+        }) as DOMRect
+    );
     mockNavigation.mockClear();
   });
 
@@ -91,23 +115,26 @@ describe("HomepageClient", () => {
         return {
           offsetTop: 500,
           offsetHeight: 1000,
-        } as any;
+        } as HTMLElement;
       }
       return null;
     });
 
     render(<HomepageClient {...mockProps} />);
 
-    expect(mockNavigation).toHaveBeenLastCalledWith(expect.objectContaining({ currentSection: "home" }));
+    expect(mockNavigation).toHaveBeenLastCalledWith(
+      expect.objectContaining({ currentSection: "home" })
+    );
 
     // Simulate scroll to products
-    // window.scrollY is read-only in some environments, need to define property?
     Object.defineProperty(window, "scrollY", { value: 600, writable: true });
 
     act(() => {
-        fireEvent.scroll(window);
+      fireEvent.scroll(window);
     });
 
-    expect(mockNavigation).toHaveBeenLastCalledWith(expect.objectContaining({ currentSection: "products" }));
+    expect(mockNavigation).toHaveBeenLastCalledWith(
+      expect.objectContaining({ currentSection: "products" })
+    );
   });
 });

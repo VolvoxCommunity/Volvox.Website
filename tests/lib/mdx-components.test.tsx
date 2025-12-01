@@ -48,7 +48,11 @@ describe("mdxComponents", () => {
   it("renders pre with filename", () => {
     const Component = mdxComponents.pre;
     // Mock code element with filename prop (if passed by rehype plugins)
-    const code = <code className="language-js" filename="test.js">console.log(1)</code>;
+    const code = (
+      <code className="language-js" data-filename="test.js">
+        console.log(1)
+      </code>
+    );
     // @ts-ignore
     render(<Component>{code}</Component>);
     const block = screen.getByTestId("codeblock");
