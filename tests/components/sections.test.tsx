@@ -7,10 +7,11 @@ import type { BlogPost, Product, Mentor, Mentee } from "@/lib/types";
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
-  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img {...props} />
-  ),
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => {
+    const { alt = "", ...rest } = props;
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img alt={alt} {...rest} />;
+  },
 }));
 
 interface MotionProps {
