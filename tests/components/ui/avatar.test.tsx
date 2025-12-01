@@ -18,13 +18,7 @@ describe("Avatar", () => {
         <AvatarFallback>JD</AvatarFallback>
       </Avatar>
     );
-    // Radix Avatar renders image if src is valid. In JSDOM image loading might not work unless mocked.
-    // Usually it renders `img`.
-    // But Radix handles image loading state.
-    // We can check if img is in document or just the fallback (since load event might not fire immediately in test)
-    // Actually, Radix Avatar image defaults to not loaded state until onload fires.
-    // So fallback should show initially?
-    // Let's check fallback mostly.
+    // Radix Avatar shows fallback until image loads (onload doesn't fire in JSDOM)
     expect(screen.getByText("JD")).toBeInTheDocument();
   });
 });
