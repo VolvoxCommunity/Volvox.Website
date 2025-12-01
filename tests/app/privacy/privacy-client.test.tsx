@@ -7,12 +7,12 @@ jest.mock("next/navigation", () => ({
 }));
 
 jest.mock("@/components/navigation", () => ({
-  Navigation: ({ onNavigate }: any) => (
+  Navigation: ({ onNavigate }: { onNavigate?: (section: string) => void }) => (
     <div>
-      <button type="button" onClick={() => onNavigate("home")}>
+      <button type="button" onClick={() => onNavigate?.("home")}>
         Nav Home
       </button>
-      <button type="button" onClick={() => onNavigate("about")}>
+      <button type="button" onClick={() => onNavigate?.("about")}>
         Nav About
       </button>
     </div>

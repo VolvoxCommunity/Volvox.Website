@@ -3,7 +3,10 @@ import { ImageZoom } from "@/components/mdx/image-zoom";
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: ({ src, alt }: { src: string; alt?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt ?? ""} />
+  ),
 }));
 
 describe("ImageZoom", () => {

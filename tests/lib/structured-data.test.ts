@@ -21,8 +21,10 @@ describe("structured data", () => {
     const schema = generateArticleSchema(post, "slug");
     expect(schema["@type"]).toBe("Article");
     expect(schema.headline).toBe("Title");
-    // Cast to any to access properties that TS might not infer strictly if return type is implicit
-    expect((schema.author as any).name).toBe("Author");
+    // Cast to access nested author object
+    expect((schema.author as { "@type": string; name: string }).name).toBe(
+      "Author"
+    );
   });
 
   it("generates webpage schema", () => {

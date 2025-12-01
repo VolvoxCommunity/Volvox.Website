@@ -1,5 +1,6 @@
 import { renderHook } from "@testing-library/react";
 import { useMouseGlow } from "@/hooks/use-mouse-glow";
+import type { MouseEvent as ReactMouseEvent } from "react";
 
 describe("useMouseGlow", () => {
   it("updates css variables", () => {
@@ -7,7 +8,11 @@ describe("useMouseGlow", () => {
     const ref = result.current.buttonRef;
 
     const element = document.createElement("button");
-    (ref as any).current = element;
+    // Assign the element to the ref's current property
+    Object.defineProperty(ref, "current", {
+      value: element,
+      writable: true,
+    });
 
     element.getBoundingClientRect = jest.fn(
       () =>
@@ -19,7 +24,13 @@ describe("useMouseGlow", () => {
         }) as DOMRect
     );
 
-    result.current.handleMouseMove({ clientX: 60, clientY: 60 } as any);
+    // Create a properly typed mock mouse event
+    const mockEvent = {
+      clientX: 60,
+      clientY: 60,
+    } as ReactMouseEvent<HTMLButtonElement>;
+
+    result.current.handleMouseMove(mockEvent);
 
     // 60 - 10 = 50
     expect(element.style.getPropertyValue("--mouse-x")).toBe("50px");

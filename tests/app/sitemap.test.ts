@@ -13,14 +13,16 @@ describe("sitemap", () => {
     expect(result).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          url: expect.stringContaining("/blog/post-1"),
+          url: expect.stringContaining("/blog/post-1") as unknown,
         }),
       ])
     );
     // Should also contain static routes
     expect(result).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ url: expect.stringContaining("/privacy") }),
+        expect.objectContaining({
+          url: expect.stringContaining("/privacy") as unknown,
+        }),
       ])
     );
   });

@@ -2,10 +2,13 @@ import { render } from "@testing-library/react";
 import { AnimatedBackground } from "@/components/animated-background";
 
 describe("AnimatedBackground", () => {
-  let originalGetContext: typeof HTMLCanvasElement.prototype.getContext;
+  let originalGetContext: typeof HTMLCanvasElement.prototype.getContext | null =
+    null;
 
   beforeEach(() => {
-    originalGetContext = HTMLCanvasElement.prototype.getContext;
+    originalGetContext = HTMLCanvasElement.prototype.getContext.bind(
+      HTMLCanvasElement.prototype
+    );
     // Mock getContext to return a minimal 2D context
     (HTMLCanvasElement.prototype.getContext as unknown) = jest.fn(() => ({
       fillRect: jest.fn(),
@@ -38,7 +41,9 @@ describe("AnimatedBackground", () => {
   });
 
   afterEach(() => {
-    HTMLCanvasElement.prototype.getContext = originalGetContext;
+    if (originalGetContext) {
+      HTMLCanvasElement.prototype.getContext = originalGetContext;
+    }
   });
   it("renders canvas", () => {
     const { container } = render(<AnimatedBackground />);

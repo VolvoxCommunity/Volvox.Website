@@ -45,7 +45,7 @@ describe("social-images", () => {
   });
 
   it("generateBlogPostSocialImage handles missing frontmatter (fallback)", async () => {
-    const response = await generateBlogPostSocialImage(null, null);
+    await generateBlogPostSocialImage(null, null);
     expect(ImageResponse).toHaveBeenCalled();
   });
 });

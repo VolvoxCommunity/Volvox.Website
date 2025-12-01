@@ -21,9 +21,18 @@ describe("Hero", () => {
     expect(onNavigate).toHaveBeenCalledWith("mentorship");
   });
 
-  it("triggers confetti on title click", () => {
+  it("triggers confetti on title click with expected arguments", () => {
     render(<Hero onNavigate={jest.fn()} />);
     fireEvent.click(screen.getByText("Volvox"));
-    expect(confettiLib).toHaveBeenCalled();
+    expect(confettiLib).toHaveBeenCalledWith(
+      expect.objectContaining({
+        particleCount: 100,
+        spread: 70,
+        origin: expect.objectContaining({
+          x: expect.any(Number) as number,
+          y: expect.any(Number) as number,
+        }) as { x: number; y: number },
+      })
+    );
   });
 });

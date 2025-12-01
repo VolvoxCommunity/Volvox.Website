@@ -1,5 +1,16 @@
-import { renderHook, act } from "@testing-library/react";
+import { renderHook } from "@testing-library/react";
 import { useIsMobile } from "@/hooks/use-mobile";
+
+interface MockMediaQueryList {
+  matches: boolean;
+  media: string;
+  onchange: null;
+  addListener: jest.Mock;
+  removeListener: jest.Mock;
+  addEventListener: jest.Mock;
+  removeEventListener: jest.Mock;
+  dispatchEvent: jest.Mock;
+}
 
 describe("useIsMobile", () => {
   it("returns true for mobile width", () => {
@@ -9,16 +20,18 @@ describe("useIsMobile", () => {
       value: 500,
     });
 
-    window.matchMedia = jest.fn().mockImplementation((query) => ({
-      matches: true,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    }));
+    window.matchMedia = jest.fn().mockImplementation(
+      (query: string): MockMediaQueryList => ({
+        matches: true,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })
+    );
 
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(true);
@@ -31,16 +44,18 @@ describe("useIsMobile", () => {
       value: 1024,
     });
 
-    window.matchMedia = jest.fn().mockImplementation((query) => ({
-      matches: false,
-      media: query,
-      onchange: null,
-      addListener: jest.fn(),
-      removeListener: jest.fn(),
-      addEventListener: jest.fn(),
-      removeEventListener: jest.fn(),
-      dispatchEvent: jest.fn(),
-    }));
+    window.matchMedia = jest.fn().mockImplementation(
+      (query: string): MockMediaQueryList => ({
+        matches: false,
+        media: query,
+        onchange: null,
+        addListener: jest.fn(),
+        removeListener: jest.fn(),
+        addEventListener: jest.fn(),
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })
+    );
 
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);

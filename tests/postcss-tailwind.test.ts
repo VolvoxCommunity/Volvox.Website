@@ -28,7 +28,7 @@ describe("PostCSS Configuration", () => {
     expect(result.css.length).toBeGreaterThan(testInput.length);
   });
 
-  it("has correct plugin configuration structure", async () => {
+  it("has correct plugin configuration structure", () => {
     const config = getConfig();
 
     expect(Array.isArray(config.plugins)).toBeTruthy();

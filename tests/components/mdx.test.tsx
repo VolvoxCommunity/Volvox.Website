@@ -1,12 +1,14 @@
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { Callout } from "@/components/mdx/callout";
 import { CustomLink } from "@/components/mdx/link";
 import { CodeBlock } from "@/components/mdx/code-block";
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  // eslint-disable-next-line @next/next/no-img-element
-  default: (props: any) => <img alt="" {...props} />,
+  default: ({ src, alt }: { src: string; alt?: string }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img src={src} alt={alt ?? ""} />
+  ),
 }));
 
 describe("MDX Components", () => {
@@ -34,7 +36,7 @@ describe("MDX Components", () => {
     expect(screen.getByText("js")).toBeInTheDocument();
   });
 
-  it("CodeBlock copy button", async () => {
+  it("CodeBlock copy button", () => {
     const writeText = jest.fn();
     Object.assign(navigator, {
       clipboard: { writeText },

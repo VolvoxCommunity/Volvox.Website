@@ -1,19 +1,48 @@
 import { render, screen } from "@testing-library/react";
 import { mdxComponents } from "@/lib/mdx-components";
+import type { ReactNode } from "react";
+
+interface MockCalloutProps {
+  children: ReactNode;
+}
+
+interface MockCodeBlockProps {
+  children: ReactNode;
+  className?: string;
+  filename?: string;
+}
+
+interface MockImageZoomProps {
+  src: string;
+  alt: string;
+}
+
+interface MockCustomLinkProps {
+  children: ReactNode;
+  href: string;
+}
+
+interface MockHeadingProps {
+  as: string;
+  children: ReactNode;
+}
 
 jest.mock("@/components/mdx", () => ({
-  Callout: ({ children }: any) => <div>Callout: {children}</div>,
-  CodeBlock: ({ children, className, filename }: any) => (
+  Callout: ({ children }: MockCalloutProps) => <div>Callout: {children}</div>,
+  CodeBlock: ({ children, className, filename }: MockCodeBlockProps) => (
     <div data-testid="codeblock" className={className} data-filename={filename}>
       {children}
     </div>
   ),
-  ImageZoom: ({ src, alt }: any) => <img src={src} alt={alt} />,
-  CustomLink: ({ children, href }: any) => <a href={href}>{children}</a>,
+  // eslint-disable-next-line @next/next/no-img-element
+  ImageZoom: ({ src, alt }: MockImageZoomProps) => <img src={src} alt={alt} />,
+  CustomLink: ({ children, href }: MockCustomLinkProps) => (
+    <a href={href}>{children}</a>
+  ),
 }));
 
 jest.mock("@/components/blog/heading-with-anchor", () => ({
-  HeadingWithAnchor: ({ as, children }: any) => (
+  HeadingWithAnchor: ({ as, children }: MockHeadingProps) => (
     <div data-testid={`heading-${as}`}>{children}</div>
   ),
 }));
@@ -47,13 +76,17 @@ describe("mdxComponents", () => {
 
   it("renders pre with filename", () => {
     const Component = mdxComponents.pre;
-    // Mock code element with filename prop (if passed by rehype plugins)
-    const code = (
-      <code className="language-js" data-filename="test.js">
-        console.log(1)
-      </code>
+    // The mdx-components.tsx extracts 'filename' from children.props.filename
+    // So we need to pass filename as a prop, not data-filename
+    const CodeWithFilename = (props: {
+      className?: string;
+      filename?: string;
+    }) => <code {...props}>console.log(1)</code>;
+    render(
+      <Component>
+        <CodeWithFilename className="language-js" filename="test.js" />
+      </Component>
     );
-    render(<Component>{code}</Component>);
     const block = screen.getByTestId("codeblock");
     expect(block).toHaveAttribute("data-filename", "test.js");
   });
