@@ -1,12 +1,9 @@
-import { renderHook } from "@testing-library/react";
+import { renderHook, act } from "@testing-library/react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface MockMediaQueryList {
   matches: boolean;
   media: string;
-  onchange: null;
-  addListener: jest.Mock;
-  removeListener: jest.Mock;
   addEventListener: jest.Mock;
   removeEventListener: jest.Mock;
   dispatchEvent: jest.Mock;
@@ -24,9 +21,6 @@ describe("useIsMobile", () => {
       (query: string): MockMediaQueryList => ({
         matches: true,
         media: query,
-        onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
@@ -48,9 +42,6 @@ describe("useIsMobile", () => {
       (query: string): MockMediaQueryList => ({
         matches: false,
         media: query,
-        onchange: null,
-        addListener: jest.fn(),
-        removeListener: jest.fn(),
         addEventListener: jest.fn(),
         removeEventListener: jest.fn(),
         dispatchEvent: jest.fn(),
@@ -59,5 +50,75 @@ describe("useIsMobile", () => {
 
     const { result } = renderHook(() => useIsMobile());
     expect(result.current).toBe(false);
+  });
+
+  it("updates when media query changes", () => {
+    let changeHandler: (() => void) | null = null;
+
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+
+    const addEventListener = jest.fn((event: string, handler: () => void) => {
+      if (event === "change") {
+        changeHandler = handler;
+      }
+    });
+
+    window.matchMedia = jest.fn().mockImplementation(
+      (query: string): MockMediaQueryList => ({
+        matches: true,
+        media: query,
+        addEventListener,
+        removeEventListener: jest.fn(),
+        dispatchEvent: jest.fn(),
+      })
+    );
+
+    const { result } = renderHook(() => useIsMobile());
+    expect(result.current).toBe(true);
+
+    // Simulate resize to desktop
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 1024,
+    });
+
+    act(() => {
+      changeHandler?.();
+    });
+
+    expect(result.current).toBe(false);
+  });
+
+  it("removes event listener on unmount", () => {
+    const removeEventListener = jest.fn();
+
+    Object.defineProperty(window, "innerWidth", {
+      writable: true,
+      configurable: true,
+      value: 500,
+    });
+
+    window.matchMedia = jest.fn().mockImplementation(
+      (query: string): MockMediaQueryList => ({
+        matches: true,
+        media: query,
+        addEventListener: jest.fn(),
+        removeEventListener,
+        dispatchEvent: jest.fn(),
+      })
+    );
+
+    const { unmount } = renderHook(() => useIsMobile());
+    unmount();
+
+    expect(removeEventListener).toHaveBeenCalledWith(
+      "change",
+      expect.any(Function)
+    );
   });
 });

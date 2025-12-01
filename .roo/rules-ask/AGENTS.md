@@ -97,7 +97,7 @@ This file provides analysis and documentation guidance for agents working in Ask
 
 ### Testing Infrastructure
 
-- Unit tests using `tsx` instead of Jest in `tests/` directory
+- Unit tests using Jest with Testing Library in `tests/` directory
 - E2E tests with Playwright (Chromium only)
 - Test commands: `pnpm test` (unit), `pnpm exec playwright test` (E2E)
 

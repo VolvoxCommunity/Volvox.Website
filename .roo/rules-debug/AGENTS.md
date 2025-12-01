@@ -103,7 +103,7 @@ This file provides debugging-specific guidance for agents working in Debug mode 
 
 ### Node.js Debugging
 
-- Use `tsx` for unit test debugging in `tests/` directory
+- Use Jest for unit test debugging in `tests/` directory
 - Check build output for TypeScript compilation issues
 - Monitor server-side rendering performance
 

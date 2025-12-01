@@ -8,9 +8,10 @@ jest.mock("next/og", () => ({
 }));
 
 describe("social-images", () => {
-  const originalFetch = global.fetch;
+  let originalFetch: typeof global.fetch;
 
   beforeEach(() => {
+    originalFetch = global.fetch;
     global.fetch = jest.fn(() =>
       Promise.resolve({
         text: () => Promise.resolve("css content src: url(http://font.ttf)"),
@@ -23,7 +24,8 @@ describe("social-images", () => {
     global.fetch = originalFetch;
     jest.clearAllMocks();
   });
-  it("getLogoData reads file", () => {
+
+  it("reads logo data from file system when file exists", () => {
     (fs.existsSync as jest.Mock).mockReturnValue(true);
     (fs.readFileSync as jest.Mock).mockReturnValue({
       buffer: new ArrayBuffer(8),

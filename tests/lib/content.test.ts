@@ -29,10 +29,30 @@ describe("content lib", () => {
       expect(result).toEqual(mockAuthors);
     });
 
-    it("handles errors", () => {
+    it("handles file read errors", () => {
       (fs.readFileSync as jest.Mock).mockImplementation(() => {
-        throw new Error("Err");
+        throw new Error("File read error");
       });
+      const result = getAllAuthors();
+      expect(result).toEqual([]);
+      expect(reportError).toHaveBeenCalled();
+    });
+
+    it("handles invalid JSON data (Zod validation failure)", () => {
+      // Missing required 'role' field should fail Zod validation
+      const invalidAuthors = [{ id: "1", name: "Author 1", avatar: "/img1" }];
+      (fs.readFileSync as jest.Mock).mockReturnValue(
+        JSON.stringify(invalidAuthors)
+      );
+
+      const result = getAllAuthors();
+      expect(result).toEqual([]);
+      expect(reportError).toHaveBeenCalled();
+    });
+
+    it("handles malformed JSON", () => {
+      (fs.readFileSync as jest.Mock).mockReturnValue("not valid json");
+
       const result = getAllAuthors();
       expect(result).toEqual([]);
       expect(reportError).toHaveBeenCalled();
@@ -80,6 +100,15 @@ describe("content lib", () => {
       (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mock));
       expect(getAllProducts()).toEqual(mock);
     });
+
+    it("handles file read errors", () => {
+      (fs.readFileSync as jest.Mock).mockImplementation(() => {
+        throw new Error("File read error");
+      });
+      const result = getAllProducts();
+      expect(result).toEqual([]);
+      expect(reportError).toHaveBeenCalled();
+    });
   });
 
   describe("getAllMentors", () => {
@@ -97,6 +126,15 @@ describe("content lib", () => {
       (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mock));
       expect(getAllMentors()).toEqual(mock);
     });
+
+    it("handles file read errors", () => {
+      (fs.readFileSync as jest.Mock).mockImplementation(() => {
+        throw new Error("File read error");
+      });
+      const result = getAllMentors();
+      expect(result).toEqual([]);
+      expect(reportError).toHaveBeenCalled();
+    });
   });
 
   describe("getAllMentees", () => {
@@ -106,6 +144,15 @@ describe("content lib", () => {
       ];
       (fs.readFileSync as jest.Mock).mockReturnValue(JSON.stringify(mock));
       expect(getAllMentees()).toEqual(mock);
+    });
+
+    it("handles file read errors", () => {
+      (fs.readFileSync as jest.Mock).mockImplementation(() => {
+        throw new Error("File read error");
+      });
+      const result = getAllMentees();
+      expect(result).toEqual([]);
+      expect(reportError).toHaveBeenCalled();
     });
   });
 });

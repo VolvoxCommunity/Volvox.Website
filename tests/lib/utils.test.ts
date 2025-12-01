@@ -54,7 +54,7 @@ describe("generateHeadingId", () => {
   });
 
   describe("Non-ASCII headings", () => {
-    it("generates hash-based ID for Chinese characters", () => {
+    it("generates hash-based ID for Japanese characters", () => {
       const result = generateHeadingId("こんにちは");
       expect(result.startsWith("heading-")).toBeTruthy();
       expect(result.length > 8).toBeTruthy();

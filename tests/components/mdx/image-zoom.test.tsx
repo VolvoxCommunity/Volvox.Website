@@ -22,7 +22,7 @@ describe("ImageZoom", () => {
     render(<ImageZoom src="/img.jpg" alt="Alt" />);
     const btn = screen.getByRole("button", { name: /Expand image/i });
     fireEvent.click(btn);
-    // Dialog should open.
+    // Verify dialog opens
     expect(screen.getByLabelText("Close")).toBeInTheDocument();
   });
 });

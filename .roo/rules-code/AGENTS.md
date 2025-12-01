@@ -7,7 +7,7 @@ This file provides implementation-specific guidance for agents working in Code m
 **MANDATORY**: After changing any files, run this validation workflow:
 
 ```bash
-pnpm format && pnpm typecheck && pnpm lint && pnpm build
+pnpm format && pnpm typecheck && pnpm lint && pnpm test && pnpm build
 ```
 
 All checks must pass before committing. Do not skip these steps.
@@ -88,7 +88,7 @@ import { cn } from "@/lib/utils";
 
 ### Unit Tests
 
-- Use `tsx` instead of Jest for unit tests in `tests/` directory
+- Uses Jest with Testing Library for unit tests in `tests/` directory
 - Test utilities and helper functions thoroughly
 - Run tests with `pnpm test`
 

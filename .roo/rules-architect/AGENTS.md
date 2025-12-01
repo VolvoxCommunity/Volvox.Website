@@ -71,7 +71,7 @@ This file provides system design and architecture guidance for agents working in
 
 - **Data Fetching**: All data fetching should occur in Server Components
 - **Direct Database/API Access**: No client-side data fetching libraries needed
-- **SEO Optimization**: Server-rendered content for search engines
+- **SEO**: Server-rendered content for search engines
 - **Initial Load Performance**: Critical for first-contentful paint
 
 ### Client Components
@@ -167,6 +167,7 @@ This file provides system design and architecture guidance for agents working in
 - **Tailwind CSS**: Utility-first CSS framework with excellent DX
 - **Sentry**: Error tracking and performance monitoring
 - **Playwright**: Reliable end-to-end testing
+- **Jest with Testing Library**: Unit testing for components and utilities
 
 ## Future Architecture Considerations
 
