@@ -7,17 +7,24 @@ jest.mock("next/og", () => ({
   ImageResponse: jest.fn(() => ({ type: "ImageResponse" })),
 }));
 
-global.fetch = jest.fn(() =>
-  Promise.resolve({
-    text: () => Promise.resolve("css content src: url(http://font.ttf)"),
-    arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)),
-  })
-) as jest.Mock;
-
 describe("social-images", () => {
+  beforeEach(() => {
+    global.fetch = jest.fn(() =>
+      Promise.resolve({
+        text: () => Promise.resolve("css content src: url(http://font.ttf)"),
+        arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)),
+      })
+    ) as jest.Mock;
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+  });
   it("getLogoData reads file", () => {
     (fs.existsSync as jest.Mock).mockReturnValue(true);
-    (fs.readFileSync as jest.Mock).mockReturnValue({ buffer: new ArrayBuffer(8) });
+    (fs.readFileSync as jest.Mock).mockReturnValue({
+      buffer: new ArrayBuffer(8),
+    });
     const data = getLogoData();
     expect(data).toBeTruthy();
   });
