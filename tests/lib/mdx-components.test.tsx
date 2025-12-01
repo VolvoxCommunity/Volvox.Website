@@ -1,19 +1,44 @@
 import { render, screen } from "@testing-library/react";
 import { mdxComponents } from "@/lib/mdx-components";
 
+interface CalloutProps {
+  children: React.ReactNode;
+}
+
+interface CodeBlockProps {
+  children: React.ReactNode;
+  className?: string;
+  filename?: string;
+}
+
+interface ImageZoomProps {
+  src: string;
+  alt: string;
+}
+
+interface CustomLinkProps {
+  children: React.ReactNode;
+  href: string;
+}
+
+interface HeadingWithAnchorProps {
+  as: string;
+  children: React.ReactNode;
+}
+
 jest.mock("@/components/mdx", () => ({
-  Callout: ({ children }: any) => <div>Callout: {children}</div>,
-  CodeBlock: ({ children, className, filename }: any) => (
+  Callout: ({ children }: CalloutProps) => <div>Callout: {children}</div>,
+  CodeBlock: ({ children, className, filename }: CodeBlockProps) => (
     <div data-testid="codeblock" className={className} data-filename={filename}>
       {children}
     </div>
   ),
-  ImageZoom: ({ src, alt }: any) => <img src={src} alt={alt} />,
-  CustomLink: ({ children, href }: any) => <a href={href}>{children}</a>,
+  ImageZoom: ({ src, alt }: ImageZoomProps) => <img src={src} alt={alt} />,
+  CustomLink: ({ children, href }: CustomLinkProps) => <a href={href}>{children}</a>,
 }));
 
 jest.mock("@/components/blog/heading-with-anchor", () => ({
-  HeadingWithAnchor: ({ as, children }: any) => (
+  HeadingWithAnchor: ({ as, children }: HeadingWithAnchorProps) => (
     <div data-testid={`heading-${as}`}>{children}</div>
   ),
 }));

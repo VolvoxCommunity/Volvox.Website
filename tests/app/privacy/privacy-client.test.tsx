@@ -6,11 +6,15 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
+interface NavigationProps {
+  onNavigate?: (section: string) => void;
+}
+
 jest.mock("@/components/navigation", () => ({
-  Navigation: ({ onNavigate }: any) => (
+  Navigation: ({ onNavigate }: NavigationProps) => (
     <div>
-      <button onClick={() => onNavigate("home")}>Nav Home</button>
-      <button onClick={() => onNavigate("about")}>Nav About</button>
+      <button onClick={() => onNavigate?.("home")}>Nav Home</button>
+      <button onClick={() => onNavigate?.("about")}>Nav About</button>
     </div>
   ),
 }));
