@@ -57,7 +57,9 @@ jest.mock("@/components/ui/tabs", () => ({
   Tabs: ({ children }: TabsProps) => <div>{children}</div>,
   TabsList: ({ children }: TabsProps) => <div>{children}</div>,
   TabsTrigger: ({ children, onClick }: TabsTriggerProps) => (
-    <button onClick={onClick}>{children}</button>
+    <button type="button" onClick={onClick}>
+      {children}
+    </button>
   ),
   TabsContent: ({ children }: TabsProps) => <div>{children}</div>,
 }));

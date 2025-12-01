@@ -17,7 +17,7 @@ jest.mock("@/components/navigation", () => ({
     mockNavigation(props);
     return (
       <div>
-        <button onClick={() => props.onNavigate?.("products")}>
+        <button type="button" onClick={() => props.onNavigate?.("products")}>
           Nav Products
         </button>
         Navigation
@@ -33,7 +33,9 @@ interface HeroProps {
 jest.mock("@/components/hero", () => ({
   Hero: ({ onNavigate }: HeroProps) => (
     <div>
-      <button onClick={() => onNavigate?.("products")}>Hero Products</button>
+      <button type="button" onClick={() => onNavigate?.("products")}>
+        Hero Products
+      </button>
       Hero
     </div>
   ),

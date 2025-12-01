@@ -5,7 +5,8 @@ import { CodeBlock } from "@/components/mdx/code-block";
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element
+  default: (props: any) => <img alt="" {...props} />,
 }));
 
 describe("MDX Components", () => {

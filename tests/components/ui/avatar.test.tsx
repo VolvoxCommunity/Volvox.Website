@@ -11,7 +11,7 @@ describe("Avatar", () => {
     expect(screen.getByText("JD")).toBeInTheDocument();
   });
 
-  it("renders image", () => {
+  it("shows fallback until image loads in JSDOM", () => {
     render(
       <Avatar>
         <AvatarImage src="https://example.com/avatar.jpg" alt="Avatar" />

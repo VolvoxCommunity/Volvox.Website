@@ -9,12 +9,18 @@ jest.mock("next/navigation", () => ({
 jest.mock("@/components/navigation", () => ({
   Navigation: ({ onNavigate }: any) => (
     <div>
-      <button onClick={() => onNavigate("home")}>Nav Home</button>
-      <button onClick={() => onNavigate("about")}>Nav About</button>
+      <button type="button" onClick={() => onNavigate("home")}>
+        Nav Home
+      </button>
+      <button type="button" onClick={() => onNavigate("about")}>
+        Nav About
+      </button>
     </div>
   ),
 }));
-jest.mock("@/components/animated-background", () => ({ AnimatedBackground: () => <div>BG</div> }));
+jest.mock("@/components/animated-background", () => ({
+  AnimatedBackground: () => <div>BG</div>,
+}));
 jest.mock("@/components/footer", () => ({ Footer: () => <div>Footer</div> }));
 
 describe("PrivacyClient", () => {
