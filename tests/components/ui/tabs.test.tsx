@@ -16,7 +16,7 @@ describe("Tabs", () => {
 
     expect(screen.getByRole("tab", { name: "Tab 1" })).toBeInTheDocument();
     expect(screen.getByText("Content 1")).toBeInTheDocument();
-    // Content 2 should not be visible (Radix keeps it mounted but hidden)
-    expect(screen.getByText("Content 2")).not.toBeVisible();
+    // Content 2 should not be visible (Radix keeps it mounted but with hidden attribute)
+    expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
   });
 });
