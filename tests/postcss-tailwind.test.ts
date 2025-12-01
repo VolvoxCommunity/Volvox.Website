@@ -4,8 +4,10 @@
 import postcss from "postcss";
 import tailwindcss from "@tailwindcss/postcss";
 
+// getConfig is a function rather than a constant to ensure a fresh config object is returned for each test,
+// avoiding shared mutable state between tests. This also allows for future extension to support dynamic configuration.
 const getConfig = () => ({
-  plugins: [tailwindcss()]
+  plugins: [tailwindcss()],
 });
 
 describe("PostCSS Configuration", () => {
