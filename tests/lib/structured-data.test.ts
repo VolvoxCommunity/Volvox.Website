@@ -1,4 +1,8 @@
-import { generateOrganizationSchema, generateArticleSchema, generateWebPageSchema } from "@/lib/structured-data";
+import {
+  generateOrganizationSchema,
+  generateArticleSchema,
+  generateWebPageSchema,
+} from "@/lib/structured-data";
 
 describe("structured data", () => {
   it("generates organization schema", () => {
@@ -12,7 +16,7 @@ describe("structured data", () => {
       title: "Title",
       excerpt: "Excerpt",
       date: "2023-01-01",
-      author: { name: "Author" }
+      author: { name: "Author" },
     };
     const schema = generateArticleSchema(post, "slug");
     expect(schema["@type"]).toBe("Article");

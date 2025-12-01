@@ -9,9 +9,15 @@ describe("useMouseGlow", () => {
     const element = document.createElement("button");
     (ref as any).current = element;
 
-    element.getBoundingClientRect = jest.fn(() => ({
-      left: 10, top: 10, width: 100, height: 100
-    } as DOMRect));
+    element.getBoundingClientRect = jest.fn(
+      () =>
+        ({
+          left: 10,
+          top: 10,
+          width: 100,
+          height: 100,
+        }) as DOMRect
+    );
 
     result.current.handleMouseMove({ clientX: 60, clientY: 60 } as any);
 

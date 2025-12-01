@@ -1,4 +1,9 @@
-import { getAllPosts, getPostBySlug, getPostSlugs, incrementPostViews } from "@/lib/blog";
+import {
+  getAllPosts,
+  getPostBySlug,
+  getPostSlugs,
+  incrementPostViews,
+} from "@/lib/blog";
 import * as fs from "fs";
 import matter from "gray-matter";
 import { getAuthorById } from "@/lib/content";
@@ -31,7 +36,7 @@ describe("blog lib", () => {
       id: "user1",
       name: "User One",
       image: "/avatars/user1.png",
-      bio: "Bio"
+      bio: "Bio",
     });
   });
 
@@ -72,9 +77,15 @@ describe("blog lib", () => {
 
       (matter as unknown as jest.Mock).mockImplementation((content: string) => {
         if (content === "post1 content") {
-          return { data: { ...mockPostData, date: "2023-01-01", slug: "post1" }, content: "" };
+          return {
+            data: { ...mockPostData, date: "2023-01-01", slug: "post1" },
+            content: "",
+          };
         }
-        return { data: { ...mockPostData, date: "2023-01-02", slug: "post2" }, content: "" };
+        return {
+          data: { ...mockPostData, date: "2023-01-02", slug: "post2" },
+          content: "",
+        };
       });
 
       const posts = await getAllPosts();
@@ -124,8 +135,9 @@ describe("blog lib", () => {
         return "draft";
       });
       (matter as unknown as jest.Mock).mockImplementation((content: string) => {
-         if (content === "post1") return { data: { ...mockPostData, slug: "post1", published: true } };
-         return { data: { ...mockPostData, slug: "draft", published: false } };
+        if (content === "post1")
+          return { data: { ...mockPostData, slug: "post1", published: true } };
+        return { data: { ...mockPostData, slug: "draft", published: false } };
       });
 
       const slugs = await getPostSlugs();

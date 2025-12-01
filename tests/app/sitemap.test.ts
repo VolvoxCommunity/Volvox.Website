@@ -6,17 +6,23 @@ jest.mock("@/lib/blog");
 describe("sitemap", () => {
   it("generates sitemap with posts", async () => {
     (getAllPosts as jest.Mock).mockResolvedValue([
-      { slug: "post-1", date: "2023-01-01" }
+      { slug: "post-1", date: "2023-01-01" },
     ]);
 
     const result = await sitemap();
-    expect(result).toEqual(expect.arrayContaining([
-      expect.objectContaining({ url: expect.stringContaining("/blog/post-1") })
-    ]));
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          url: expect.stringContaining("/blog/post-1"),
+        }),
+      ])
+    );
     // Should also contain static routes
-    expect(result).toEqual(expect.arrayContaining([
-      expect.objectContaining({ url: expect.stringContaining("/privacy") })
-    ]));
+    expect(result).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ url: expect.stringContaining("/privacy") }),
+      ])
+    );
   });
 
   it("handles errors", async () => {

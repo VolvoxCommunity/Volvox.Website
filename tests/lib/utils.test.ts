@@ -49,9 +49,7 @@ describe("generateHeadingId", () => {
     });
 
     it("removes leading and trailing hyphens", () => {
-      expect(generateHeadingId("-Leading-Trailing-")).toBe(
-        "leading-trailing"
-      );
+      expect(generateHeadingId("-Leading-Trailing-")).toBe("leading-trailing");
     });
   });
 
@@ -127,9 +125,7 @@ describe("generateHeadingId", () => {
     });
 
     it("returns fallback for empty input when provided", () => {
-      expect(generateHeadingId("", "custom-fallback")).toBe(
-        "custom-fallback"
-      );
+      expect(generateHeadingId("", "custom-fallback")).toBe("custom-fallback");
     });
 
     it("returns fallback for whitespace-only input when provided", () => {

@@ -1,5 +1,12 @@
 import { render, screen } from "@testing-library/react";
-import { Card, CardHeader, CardTitle, CardContent, CardDescription, CardFooter } from "@/components/ui/card";
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardDescription,
+  CardFooter,
+} from "@/components/ui/card";
 
 describe("Card", () => {
   it("renders correctly", () => {

@@ -4,7 +4,9 @@ import { Button } from "@/components/ui/button";
 describe("Button", () => {
   it("renders correctly", () => {
     render(<Button>Click me</Button>);
-    expect(screen.getByRole("button", { name: "Click me" })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: "Click me" })
+    ).toBeInTheDocument();
   });
 
   it("applies variant classes", () => {
@@ -27,7 +29,7 @@ describe("Button", () => {
       y: 10,
       bottom: 50,
       right: 110,
-      toJSON: () => {}
+      toJSON: () => {},
     }));
 
     fireEvent.mouseMove(button, { clientX: 60, clientY: 30 });
