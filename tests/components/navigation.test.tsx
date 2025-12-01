@@ -1,7 +1,6 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import { Navigation } from "@/components/navigation";
 import { useTheme } from "@/components/providers/theme-provider";
-import confettiLib from "canvas-confetti";
 
 jest.mock("@/components/providers/theme-provider", () => ({
   useTheme: jest.fn(),
@@ -11,12 +10,18 @@ jest.mock("canvas-confetti", () => jest.fn());
 
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  // eslint-disable-next-line @next/next/no-img-element, jsx-a11y/alt-text
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => (
+    <img {...props} />
+  ),
 }));
 
 describe("Navigation", () => {
   beforeEach(() => {
-    (useTheme as jest.Mock).mockReturnValue({ theme: "light", setTheme: jest.fn() });
+    (useTheme as jest.Mock).mockReturnValue({
+      theme: "light",
+      setTheme: jest.fn(),
+    });
   });
 
   it("renders correctly", () => {
