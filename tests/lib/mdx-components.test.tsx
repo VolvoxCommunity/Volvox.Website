@@ -53,7 +53,6 @@ describe("mdxComponents", () => {
         console.log(1)
       </code>
     );
-    // @ts-ignore
     render(<Component>{code}</Component>);
     const block = screen.getByTestId("codeblock");
     expect(block).toHaveAttribute("data-filename", "test.js");
