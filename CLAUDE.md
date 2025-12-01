@@ -51,18 +51,19 @@ pnpm format:check
 1. **Formatting**: Run `pnpm format` to ensure consistent code formatting
 2. **Type Checking**: Run `pnpm typecheck` to verify TypeScript type safety
 3. **Linting**: Run `pnpm lint` to check for code quality issues (includes type-aware linting)
-4. **Build**: Run `pnpm build` to verify production build passes
-5. **Commit and Push**: After all checks pass, commit and push all changes
+4. **Testing**: Run `pnpm test` to ensure all unit tests pass
+5. **Build**: Run `pnpm build` to verify production build passes
+6. **Commit and Push**: After all checks pass, commit and push all changes
 
 These checks are not optional. All validation steps must pass before committing. If any check fails, fix the issues and re-run all checks before proceeding.
 
 **Complete Workflow:**
 
 ```bash
-# Step 1-4: Run all validation checks
-pnpm format && pnpm typecheck && pnpm lint && pnpm build
+# Step 1-5: Run all validation checks
+pnpm format && pnpm typecheck && pnpm lint && pnpm test && pnpm build
 
-# Step 5: If all checks pass, commit and push
+# Step 6: If all checks pass, commit and push
 git add .
 git commit -m "your commit message"
 git push
@@ -80,6 +81,7 @@ git push
 - Catches type safety issues with type-aware ESLint rules
 - Maintains consistent code style across the project
 - Catches potential bugs and issues early (floating promises, unsafe any usage, etc.)
+- Verifies all unit tests pass before changes are committed
 - Ensures CI/CD pipeline will pass
 - Keeps remote repository in sync with local changes
 
