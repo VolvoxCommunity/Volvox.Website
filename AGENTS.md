@@ -5,9 +5,11 @@ This file provides guidance to agents when working with code in this repository.
 ## Build/Development Commands
 
 **MANDATORY**: After changing any files, run this validation workflow:
+
 ```bash
-pnpm format && pnpm typecheck && pnpm lint && pnpm build
+pnpm format && pnpm typecheck && pnpm lint && pnpm test && pnpm build
 ```
+
 All checks must pass before committing. Do not skip these steps.
 
 ## Project-Specific Architecture
@@ -34,9 +36,9 @@ All checks must pass before committing. Do not skip these steps.
 
 ## Testing Setup
 
-- **Node.js Test Runner**: Uses `tsx` instead of Jest for unit tests in `tests/` directory
+- **Jest with Testing Library**: Uses Jest for unit tests in `tests/` directory
 - **Playwright E2E**: Configuration in `playwright.config.ts` targets Chromium only
-- **Test Commands**: 
+- **Test Commands**:
   - Unit tests: `pnpm test`
   - E2E tests: `pnpm exec playwright test`
   - Interactive UI: `pnpm exec playwright test --ui`
