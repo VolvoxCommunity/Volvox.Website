@@ -40,7 +40,7 @@ export function PrivacyClient() {
               <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
 
               <p className="text-muted-foreground mb-8">
-                Last updated: 11/23/2025
+                Last updated: 12/03/2025
               </p>
 
               <section className="mb-8">
@@ -191,15 +191,259 @@ export function PrivacyClient() {
 
               <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">
-                  Cookies and Tracking
+                  Cookies and Tracking Technologies
                 </h2>
                 <p>
-                  We use cookies and similar tracking technologies to track
-                  activity on our website and store certain information. You can
-                  instruct your browser to refuse all cookies or to indicate
-                  when a cookie is being sent. However, if you do not accept
-                  cookies, you may not be able to use some portions of our
-                  website.
+                  We use cookies and similar tracking technologies to collect
+                  and track information about your browsing activity. A cookie
+                  is a small data file stored on your device that helps us
+                  improve your experience and our services.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Types of Cookies We Use
+                </h3>
+                <ul>
+                  <li>
+                    <strong>Essential Cookies:</strong> Required for basic
+                    website functionality, such as remembering your preferences
+                    and maintaining your session. These cannot be disabled.
+                  </li>
+                  <li>
+                    <strong>Analytics Cookies:</strong> Help us understand how
+                    visitors interact with our website by collecting information
+                    about pages visited, time spent on pages, and navigation
+                    patterns. We use Google Analytics and Vercel Analytics for
+                    this purpose.
+                  </li>
+                  <li>
+                    <strong>Advertising Cookies:</strong> Used to deliver
+                    relevant advertisements and track the effectiveness of our
+                    advertising campaigns. These cookies may track your browsing
+                    activity across different websites.
+                  </li>
+                  <li>
+                    <strong>Performance Cookies:</strong> Help us monitor and
+                    improve website performance, including page load times and
+                    error tracking through services like Sentry.
+                  </li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Cookie Consent
+                </h3>
+                <p>
+                  When you first visit our website, you will be presented with a
+                  cookie consent banner that allows you to accept or decline
+                  non-essential cookies. You can change your cookie preferences
+                  at any time by clicking the &ldquo;Cookie Settings&rdquo; link
+                  in our website footer.
+                </p>
+                <p className="mt-2">
+                  If you decline non-essential cookies, we will only use
+                  essential cookies required for the website to function
+                  properly. Analytics and advertising features will be disabled.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Advertising and Interest-Based Advertising
+                </h2>
+                <p>
+                  We may partner with third-party advertising networks and
+                  exchanges to display advertising on our website or to manage
+                  our advertising on other sites. These partners may use cookies
+                  and similar technologies to collect information about your
+                  activities on our website and other sites to provide you with
+                  targeted advertising based on your browsing activities and
+                  interests.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Advertising Partners
+                </h3>
+                <p>
+                  We may work with the following types of advertising partners:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Google Ads:</strong> We may use Google Ads to
+                    display advertisements. Google may use cookies to serve ads
+                    based on your prior visits to our website or other websites.
+                  </li>
+                  <li>
+                    <strong>Social Media Platforms:</strong> We may use
+                    advertising features from platforms like Facebook, Twitter,
+                    and LinkedIn to reach potential users.
+                  </li>
+                  <li>
+                    <strong>Retargeting Services:</strong> We may use
+                    retargeting services to show you ads on other websites after
+                    you have visited our site.
+                  </li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Information Used for Advertising
+                </h3>
+                <p>
+                  Advertising partners may collect and use the following
+                  information to deliver targeted advertisements:
+                </p>
+                <ul>
+                  <li>Pages you visit on our website</li>
+                  <li>Products or services you view</li>
+                  <li>Your approximate geographic location</li>
+                  <li>Your device type and browser information</li>
+                  <li>Demographic information (age range, gender)</li>
+                  <li>Interests inferred from your browsing behavior</li>
+                </ul>
+                <p className="mt-4">
+                  <strong>Important:</strong> We do not sell your personal
+                  information to advertisers. Advertising partners receive
+                  anonymized or pseudonymized data and are contractually
+                  prohibited from using your information for purposes other than
+                  providing advertising services to us.
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Analytics Services
+                </h2>
+                <p>
+                  We use analytics services to help us understand how users
+                  interact with our website. These services collect information
+                  sent by your browser, including the pages you visit and other
+                  information that assists us in improving our website.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Analytics Providers
+                </h3>
+                <ul>
+                  <li>
+                    <strong>Google Analytics:</strong> We use Google Analytics
+                    to collect information about website traffic and usage. This
+                    service may collect your IP address, browser type, referring
+                    pages, and time spent on pages. For more information, see{" "}
+                    <a
+                      href="https://policies.google.com/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Google&apos;s Privacy Policy
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    <strong>Vercel Analytics:</strong> We use Vercel Analytics
+                    to monitor website performance and visitor metrics in a
+                    privacy-focused manner.
+                  </li>
+                  <li>
+                    <strong>Sentry:</strong> We use Sentry to track errors and
+                    performance issues to improve website reliability. This may
+                    include information about your browser and session when an
+                    error occurs.
+                  </li>
+                </ul>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Your Choices and Opt-Out Options
+                </h2>
+                <p>
+                  You have several options for controlling how your information
+                  is used for advertising and analytics:
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Cookie Preferences
+                </h3>
+                <p>
+                  Use our cookie consent banner or the &ldquo;Cookie
+                  Settings&rdquo; link in the footer to manage your cookie
+                  preferences on our website.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Browser Settings
+                </h3>
+                <p>
+                  Most web browsers allow you to control cookies through their
+                  settings. You can set your browser to refuse all cookies or to
+                  alert you when a cookie is being sent.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Opt-Out Tools
+                </h3>
+                <ul>
+                  <li>
+                    <strong>Google Ads:</strong> Visit{" "}
+                    <a
+                      href="https://adssettings.google.com"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Google Ads Settings
+                    </a>{" "}
+                    to opt out of personalized advertising.
+                  </li>
+                  <li>
+                    <strong>Network Advertising Initiative:</strong> Visit{" "}
+                    <a
+                      href="https://optout.networkadvertising.org"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      NAI Opt-Out
+                    </a>{" "}
+                    to opt out of interest-based advertising from NAI member
+                    companies.
+                  </li>
+                  <li>
+                    <strong>Digital Advertising Alliance:</strong> Visit{" "}
+                    <a
+                      href="https://optout.aboutads.info"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      DAA Opt-Out
+                    </a>{" "}
+                    to opt out of interest-based advertising from DAA
+                    participating companies.
+                  </li>
+                  <li>
+                    <strong>European Users:</strong> Visit{" "}
+                    <a
+                      href="https://www.youronlinechoices.eu"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Your Online Choices
+                    </a>{" "}
+                    to manage advertising preferences in the European Union.
+                  </li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Do Not Track
+                </h3>
+                <p>
+                  Some browsers offer a &ldquo;Do Not Track&rdquo; (DNT)
+                  feature. While there is no industry standard for DNT, we
+                  respect your privacy choices and encourage you to use our
+                  cookie consent tools for the most reliable control over
+                  tracking on our website.
                 </p>
               </section>
 

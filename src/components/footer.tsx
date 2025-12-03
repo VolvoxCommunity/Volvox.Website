@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { version } from "../../package.json";
+import { CookieSettingsButton } from "@/components/cookie-consent-banner";
 
 /**
- * Renders the site footer with Privacy Policy and Terms of Service links, current year copyright, and package version.
+ * Renders the site footer with Privacy Policy, Terms of Service, and Cookie Settings links,
+ * current year copyright, and package version.
  *
- * @returns The footer JSX element containing the legal links, copyright notice (current year), and package version.
+ * @returns The footer JSX element containing the legal links, cookie settings, copyright notice, and package version.
  */
 export function Footer() {
   return (
@@ -26,6 +28,8 @@ export function Footer() {
           >
             Terms of Service
           </Link>
+          <span className="text-muted-foreground/50">|</span>
+          <CookieSettingsButton />
         </div>
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Volvox. All rights reserved.

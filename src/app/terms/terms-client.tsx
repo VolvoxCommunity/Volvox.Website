@@ -192,6 +192,78 @@ export function TermsClient() {
               </section>
 
               <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Advertising and Sponsored Content
+                </h2>
+                <p>
+                  Our website may display advertisements from third-party
+                  advertising networks and partners. By using our services, you
+                  acknowledge and agree that:
+                </p>
+                <ul>
+                  <li>
+                    Advertisements may be displayed based on your browsing
+                    activity, interests, and demographics
+                  </li>
+                  <li>
+                    We may use cookies and similar technologies to deliver
+                    targeted advertising (subject to your cookie consent
+                    preferences)
+                  </li>
+                  <li>
+                    Volvox is not responsible for the content, accuracy, or
+                    opinions expressed in advertisements
+                  </li>
+                  <li>
+                    Your interactions with advertisers are solely between you
+                    and the advertiser
+                  </li>
+                  <li>
+                    Sponsored content will be clearly labeled as such when
+                    applicable
+                  </li>
+                </ul>
+                <p className="mt-4">
+                  For more information about how we use your data for
+                  advertising purposes and how to opt out, please see our{" "}
+                  <a href="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </a>
+                  .
+                </p>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Cookies and Tracking
+                </h2>
+                <p>
+                  By using our website, you acknowledge that we use cookies and
+                  similar tracking technologies as described in our{" "}
+                  <a href="/privacy" className="text-primary hover:underline">
+                    Privacy Policy
+                  </a>
+                  . You can manage your cookie preferences through:
+                </p>
+                <ul>
+                  <li>
+                    Our cookie consent banner displayed when you first visit the
+                    site
+                  </li>
+                  <li>
+                    The &ldquo;Cookie Settings&rdquo; link in our website footer
+                  </li>
+                  <li>Your browser&apos;s privacy settings</li>
+                </ul>
+                <p className="mt-4">
+                  Essential cookies required for basic website functionality
+                  cannot be disabled. If you decline non-essential cookies,
+                  certain features such as personalized content and analytics
+                  may be unavailable.
+                </p>
+              </section>
+
+              <section className="mb-8">
                 <h2 className="text-2xl font-semibold mb-4">Disclaimer</h2>
                 <p>
                   Our services are provided on an &ldquo;as is&rdquo; and

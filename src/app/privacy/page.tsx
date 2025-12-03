@@ -34,7 +34,7 @@ export default function PrivacyPage() {
     "Privacy Policy for Volvox - Learn how we collect, use, and protect your personal information.",
     "/privacy",
     undefined,
-    "2025-11-23" // Matching the "Last updated" date in content
+    "2025-12-03" // Matching the "Last updated" date in content
   );
 
   return (

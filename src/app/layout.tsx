@@ -3,10 +3,10 @@ import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
+import { CookieConsentProvider } from "@/components/providers/cookie-consent-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { Analytics } from "@vercel/analytics/react";
-import { SpeedInsights } from "@vercel/speed-insights/next";
-import { GoogleAnalytics } from "@next/third-parties/google";
+import { CookieConsentBanner } from "@/components/cookie-consent-banner";
+import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { generateOrganizationSchema } from "@/lib/structured-data";
 import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
@@ -77,16 +77,14 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jetbrainsMono.variable} antialiased`}>
-        <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
-          {children}
-          <Toaster />
-        </ThemeProvider>
-        <Analytics />
-        <SpeedInsights />
-        {process.env.NODE_ENV === "production" &&
-          process.env.NEXT_PUBLIC_GA_ID && (
-            <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_ID} />
-          )}
+        <CookieConsentProvider>
+          <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
+            {children}
+            <Toaster />
+            <CookieConsentBanner />
+          </ThemeProvider>
+          <ConditionalAnalytics />
+        </CookieConsentProvider>
       </body>
     </html>
   );
