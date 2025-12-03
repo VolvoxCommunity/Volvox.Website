@@ -21,8 +21,12 @@ export function TableOfContents() {
   const [activeId, setActiveId] = useState<string>("");
 
   useEffect(() => {
-    // Extract headings from the page
-    const elements = document.querySelectorAll("h2, h3");
+    // Extract headings from the article content only (not the entire page)
+    // This prevents picking up headings from other page elements like modals/banners
+    const article = document.querySelector("article");
+    if (!article) return;
+
+    const elements = article.querySelectorAll("h2, h3");
     const headingData: Heading[] = [];
     const seenIds = new Set<string>();
 

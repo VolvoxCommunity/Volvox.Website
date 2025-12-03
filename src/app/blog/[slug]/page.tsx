@@ -117,10 +117,10 @@ export default async function BlogPostPage({
 
         {/* Sticky Back Navigation */}
         <div
-          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 -mx-4 px-4 py-3 mb-4"
+          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3 mb-4"
           style={{ top: NAV_HEIGHT }}
         >
-          <div className="container mx-auto max-w-4xl">
+          <div className="container mx-auto px-4 max-w-7xl">
             <Link
               href="/#blog"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
