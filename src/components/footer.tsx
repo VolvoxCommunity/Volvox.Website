@@ -4,9 +4,9 @@ import Link from "next/link";
 import { version } from "../../package.json";
 
 /**
- * Renders the site footer with a Privacy Policy link, current year copyright, and package version.
+ * Renders the site footer with Privacy Policy and Terms of Service links, current year copyright, and package version.
  *
- * @returns The footer JSX element containing the legal link, copyright notice (current year), and package version.
+ * @returns The footer JSX element containing the legal links, copyright notice (current year), and package version.
  */
 export function Footer() {
   return (
@@ -18,6 +18,13 @@ export function Footer() {
             className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
           >
             Privacy Policy
+          </Link>
+          <span className="text-muted-foreground/50">|</span>
+          <Link
+            href="/terms"
+            className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
+          >
+            Terms of Service
           </Link>
         </div>
         <p className="text-sm text-muted-foreground">
