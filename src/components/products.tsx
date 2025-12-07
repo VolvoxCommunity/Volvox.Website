@@ -12,6 +12,7 @@ import { Button } from "@/components/ui/button";
 import { GithubLogo, ArrowUpRight, CheckCircle } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Product } from "@/lib/types";
+import Image from "next/image";
 
 interface ProductsProps {
   products: Product[];
@@ -67,17 +68,32 @@ export function Products({ products }: ProductsProps) {
                 whileHover={{ scale: 1.02 }}
                 transition={{ duration: 0.3 }}
               >
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="text-[120px] md:text-[180px] font-bold text-foreground/5"
-                    whileHover={{ scale: 1.05, rotate: 2 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {product.name.charAt(0)}
-                  </motion.div>
-                </div>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
+                {product.image ? (
+                  <>
+                    <Image
+                      src={product.image}
+                      alt={product.name}
+                      fill
+                      className="object-contain"
+                      sizes="(max-width: 768px) 100vw, 50vw"
+                    />
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
+                  </>
+                ) : (
+                  <>
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <motion.div
+                        className="text-[120px] md:text-[180px] font-bold text-foreground/5"
+                        whileHover={{ scale: 1.05, rotate: 2 }}
+                        transition={{ duration: 0.3 }}
+                      >
+                        {product.name.charAt(0)}
+                      </motion.div>
+                    </div>
+                    <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
+                  </>
+                )}
               </motion.div>
 
               <div className="flex flex-col">
