@@ -34,7 +34,7 @@ export default function TermsPage() {
     "Terms of Service for Volvox - Read our terms and conditions for using our website and services.",
     "/terms",
     undefined,
-    "2025-12-03" // Matching the "Last updated" date in content
+    "2025-12-07" // Matching the "Last updated" date in content
   );
 
   return (

@@ -40,7 +40,7 @@ export function TermsClient() {
               <h1 className="text-4xl font-bold mb-8">Terms of Service</h1>
 
               <p className="text-muted-foreground mb-8">
-                Last updated: 12/03/2025
+                Last updated: 12/07/2025
               </p>
 
               <section className="mb-8">
@@ -189,6 +189,97 @@ export function TermsClient() {
                     threatening, abusive, defamatory, or otherwise objectionable
                   </li>
                 </ul>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Mobile Applications
+                </h2>
+                <p>
+                  The following additional terms apply to users of Volvox mobile
+                  applications:
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Account and Data
+                </h3>
+                <ul>
+                  <li>
+                    You are responsible for maintaining the confidentiality of
+                    your account credentials and for all activities that occur
+                    under your account
+                  </li>
+                  <li>
+                    You agree to provide accurate and complete information when
+                    creating your account
+                  </li>
+                  <li>
+                    Your data and content are stored securely and are private to
+                    your account unless you choose to share them
+                  </li>
+                  <li>
+                    You may delete your account and associated data at any time
+                    through the application settings or by contacting us
+                  </li>
+                </ul>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Health and Wellness Disclaimer
+                </h3>
+                <p>
+                  Volvox applications that provide health, wellness, or tracking
+                  features are personal tools only. They are not intended to be
+                  a substitute for professional medical advice, diagnosis, or
+                  treatment. Always seek the advice of a qualified healthcare
+                  provider with any questions you may have regarding a medical
+                  condition. Never disregard professional medical advice or
+                  delay seeking it because of something you have read or tracked
+                  in our applications.
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Third-Party Services
+                </h3>
+                <p>
+                  Our applications use the following third-party services to
+                  provide functionality:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Supabase:</strong> For user authentication and
+                    secure data storage. Your account information and
+                    application data are processed and stored through
+                    Supabase&apos;s infrastructure. See the{" "}
+                    <a
+                      href="https://supabase.com/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Supabase Terms of Service
+                    </a>
+                    .
+                  </li>
+                  <li>
+                    <strong>Firebase Analytics:</strong> For understanding app
+                    usage and improving user experience. Usage data is collected
+                    and processed by Google. See the{" "}
+                    <a
+                      href="https://firebase.google.com/terms"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Firebase Terms of Service
+                    </a>
+                    .
+                  </li>
+                </ul>
+                <p className="mt-4">
+                  By using our applications, you agree to be bound by the terms
+                  of these third-party service providers in addition to these
+                  Terms of Service.
+                </p>
               </section>
 
               <section className="mb-8">

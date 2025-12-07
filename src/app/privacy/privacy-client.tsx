@@ -40,7 +40,7 @@ export function PrivacyClient() {
               <h1 className="text-4xl font-bold mb-8">Privacy Policy</h1>
 
               <p className="text-muted-foreground mb-8">
-                Last updated: 12/03/2025
+                Last updated: 12/07/2025
               </p>
 
               <section className="mb-8">
@@ -339,6 +339,24 @@ export function PrivacyClient() {
                     .
                   </li>
                   <li>
+                    <strong>Firebase Analytics:</strong> For our mobile
+                    applications, we use Firebase Analytics to understand app
+                    usage and improve user experience. This service collects
+                    information such as app events, user engagement metrics,
+                    device information, and approximate location. Firebase
+                    Analytics is operated by Google. For more information, see
+                    the{" "}
+                    <a
+                      href="https://firebase.google.com/support/privacy"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Firebase Privacy Policy
+                    </a>
+                    .
+                  </li>
+                  <li>
                     <strong>Vercel Analytics:</strong> We use Vercel Analytics
                     to monitor website performance and visitor metrics in a
                     privacy-focused manner.
@@ -350,6 +368,63 @@ export function PrivacyClient() {
                     error occurs.
                   </li>
                 </ul>
+              </section>
+
+              <section className="mb-8">
+                <h2 className="text-2xl font-semibold mb-4">
+                  Authentication and Data Storage Services
+                </h2>
+                <p>
+                  For Volvox products and applications, we use third-party
+                  services to provide secure authentication and data storage:
+                </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">Supabase</h3>
+                <p>
+                  Our applications use Supabase for user authentication and
+                  database storage. When you create an account and use our
+                  products, the following information is processed and stored
+                  through Supabase:
+                </p>
+                <ul>
+                  <li>
+                    <strong>Authentication Data:</strong> Email address,
+                    encrypted password, and authentication tokens. If you sign
+                    in using a third-party provider (such as Google or Apple),
+                    we receive basic profile information from that provider.
+                  </li>
+                  <li>
+                    <strong>User Profile Data:</strong> Display name, profile
+                    preferences, and account settings you provide.
+                  </li>
+                  <li>
+                    <strong>Application Data:</strong> Content, progress data,
+                    and any other information you create within the application.
+                  </li>
+                  <li>
+                    <strong>Technical Data:</strong> Timestamps, session
+                    information, and device identifiers necessary for app
+                    functionality.
+                  </li>
+                </ul>
+                <p className="mt-4">
+                  Supabase stores data on secure cloud infrastructure. For more
+                  information about how Supabase handles your data, see the{" "}
+                  <a
+                    href="https://supabase.com/privacy"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-primary hover:underline"
+                  >
+                    Supabase Privacy Policy
+                  </a>
+                  .
+                </p>
+                <p className="mt-2">
+                  You can request deletion of your account and associated data
+                  at any time by contacting us or using the account deletion
+                  feature within the application.
+                </p>
               </section>
 
               <section className="mb-8">
