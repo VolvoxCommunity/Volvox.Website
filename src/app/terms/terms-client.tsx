@@ -420,6 +420,23 @@ export function TermsClient() {
                   Terms. Upon termination, your right to use our services will
                   immediately cease.
                 </p>
+
+                <h3 className="text-xl font-semibold mb-2 mt-6">
+                  Account Deletion
+                </h3>
+                <p>
+                  You may request deletion of your account and associated data
+                  at any time. To initiate account deletion, please email{" "}
+                  <a
+                    href="mailto:privacy@volvoxdev.com?subject=Account%20Deletion%20Request"
+                    className="text-primary hover:underline"
+                  >
+                    privacy@volvoxdev.com
+                  </a>{" "}
+                  with the subject line &ldquo;Account Deletion Request&rdquo;.
+                  We will process your request in accordance with our Privacy
+                  Policy and applicable data protection laws.
+                </p>
               </section>
 
               <section className="mb-8">
