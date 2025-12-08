@@ -187,6 +187,19 @@ export function PrivacyClient() {
                   To exercise these rights, please contact us using the
                   information provided below.
                 </p>
+                <p className="mt-4">
+                  <strong>To request deletion of your account and data:</strong>{" "}
+                  Please email us at{" "}
+                  <a
+                    href="mailto:privacy@volvoxdev.com?subject=Data%20Deletion%20Request"
+                    className="text-primary hover:underline"
+                  >
+                    privacy@volvoxdev.com
+                  </a>{" "}
+                  with the subject line &ldquo;Data Deletion Request&rdquo;. We
+                  will process your request in accordance with applicable data
+                  protection laws.
+                </p>
               </section>
 
               <section className="mb-8">
@@ -569,10 +582,10 @@ export function PrivacyClient() {
                 <p className="mt-4">
                   <strong>Email:</strong>{" "}
                   <a
-                    href="mailto:privacy@volvox.dev"
+                    href="mailto:privacy@volvoxdev.com"
                     className="text-primary hover:underline"
                   >
-                    privacy@volvox.dev
+                    privacy@volvoxdev.com
                   </a>
                 </p>
               </section>
