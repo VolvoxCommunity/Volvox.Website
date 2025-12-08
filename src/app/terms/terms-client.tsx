@@ -422,7 +422,7 @@ export function TermsClient() {
                 </p>
 
                 <h3 className="text-xl font-semibold mb-2 mt-6">
-                  Data Deletion
+                  Account Deletion
                 </h3>
                 <p>
                   You may request deletion of your account and associated data
@@ -432,9 +432,9 @@ export function TermsClient() {
                     className="text-primary hover:underline"
                   >
                     privacy@volvoxdev.com
-                  </a>
-                  {" "}with the subject line &ldquo;Data Deletion Request&rdquo;.
-                  We will process your request in accordance with our Privacy
+                  </a>{" "}
+                  with the subject line &ldquo;Data Deletion Request&rdquo;. We
+                  will process your request in accordance with our Privacy
                   Policy and applicable data protection laws.
                 </p>
               </section>
