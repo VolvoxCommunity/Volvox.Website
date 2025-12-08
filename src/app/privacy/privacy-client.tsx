@@ -188,8 +188,8 @@ export function PrivacyClient() {
                   information provided below.
                 </p>
                 <p className="mt-4">
-                  <strong>To request deletion of your account and data:</strong>{" "}
-                  Please email us at{" "}
+                  <strong>To request deletion of your account and data:</strong>
+                  {" "}Please email us at{" "}
                   <a
                     href="mailto:privacy@volvoxdev.com?subject=Data%20Deletion%20Request"
                     className="text-primary hover:underline"
