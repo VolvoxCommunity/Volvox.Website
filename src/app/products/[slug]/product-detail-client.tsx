@@ -31,11 +31,17 @@ export function ProductDetailClient({
   // Build TOC sections based on available content
   const tocSections = [
     { id: "overview", label: "Overview" },
-    product.screenshots.length > 1 && { id: "screenshots", label: "Screenshots" },
+    product.screenshots.length > 1 && {
+      id: "screenshots",
+      label: "Screenshots",
+    },
     { id: "features", label: "Features" },
     changelog && { id: "changelog", label: "Changelog" },
     product.faq.length > 0 && { id: "faq", label: "FAQ" },
-    product.testimonials.length > 0 && { id: "testimonials", label: "Testimonials" },
+    product.testimonials.length > 0 && {
+      id: "testimonials",
+      label: "Testimonials",
+    },
   ].filter(Boolean) as { id: string; label: string }[];
 
   return (

@@ -117,7 +117,10 @@ export const productLinksSchema = z.object({
 export const extendedProductSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1),
-  slug: z.string().min(1).regex(/^[a-z0-9-]+$/),
+  slug: z
+    .string()
+    .min(1)
+    .regex(/^[a-z0-9-]+$/),
   tagline: z.string().min(1),
   description: z.string().min(1),
   longDescription: z.string().min(1),

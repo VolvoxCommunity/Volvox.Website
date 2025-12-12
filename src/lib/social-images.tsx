@@ -87,6 +87,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       }}
     >
       {logoSrc ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={logoSrc}
           width={120}
@@ -237,6 +238,169 @@ export async function generateBlogPostSocialImage(
           }}
         >
           {logoSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={logoSrc}
+              width={48}
+              height={48}
+              style={{ marginRight: 16 }}
+              alt="Volvox logo"
+            />
+          )}
+          <div
+            style={{
+              fontSize: 28,
+              fontWeight: 700,
+              color: "#3b82f6",
+            }}
+          >
+            VOLVOX
+          </div>
+        </div>
+      </div>,
+      {
+        ...IMAGE_SIZE,
+        ...(fontData && {
+          fonts: [
+            {
+              name: "JetBrains Mono",
+              data: fontData,
+              style: "normal" as const,
+              weight: 700 as const,
+            },
+          ],
+        }),
+      }
+    );
+  } catch (e) {
+    console.error(e);
+    return new ImageResponse(createFallbackImage(logoData), {
+      ...IMAGE_SIZE,
+      ...(fontData && {
+        fonts: [
+          {
+            name: "JetBrains Mono",
+            data: fontData,
+            style: "normal" as const,
+            weight: 700 as const,
+          },
+        ],
+      }),
+    });
+  }
+}
+
+/**
+ * Product data shape for OG image generation.
+ */
+export interface ProductOgData {
+  name: string;
+  tagline: string;
+  techStack?: string[];
+}
+
+/**
+ * Generates a dynamic social image for a product page.
+ *
+ * @param product - The product data
+ * @param logoData - The logo image data
+ * @returns ImageResponse with product-specific social preview image
+ */
+export async function generateProductSocialImage(
+  product: ProductOgData | null | undefined,
+  logoData: ArrayBuffer | null
+) {
+  const fontData = await fetchJetBrainsMonoFont();
+
+  const logoSrc = logoData
+    ? `data:image/png;base64,${Buffer.from(logoData).toString("base64")}`
+    : null;
+
+  try {
+    if (!product) {
+      throw new Error("No product data provided");
+    }
+
+    return new ImageResponse(
+      <div
+        style={{
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 60,
+          backgroundColor: "#0a0a0a",
+          fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            flexDirection: "column",
+          }}
+        >
+          {/* Product Name */}
+          <div
+            style={{
+              fontSize: 72,
+              fontWeight: 700,
+              color: "#ffffff",
+              lineHeight: 1.1,
+              marginBottom: 24,
+            }}
+          >
+            {product.name}
+          </div>
+
+          {/* Tagline */}
+          <div
+            style={{
+              fontSize: 32,
+              color: "#d1d5db",
+              lineHeight: 1.4,
+              marginBottom: 40,
+              display: "flex",
+            }}
+          >
+            {product.tagline}
+          </div>
+
+          {/* Tech Stack */}
+          {product.techStack && product.techStack.length > 0 && (
+            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+              {product.techStack.slice(0, 4).map((tech) => (
+                <div
+                  key={tech}
+                  style={{
+                    backgroundColor: "#1f2937",
+                    color: "#60a5fa",
+                    padding: "8px 16px",
+                    borderRadius: 8,
+                    fontSize: 20,
+                    fontWeight: 600,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                  }}
+                >
+                  {tech}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Footer */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "flex-end",
+          }}
+        >
+          {logoSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={logoSrc}
               width={48}
