@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { GithubLogo, ArrowUpRight, CheckCircle } from "@phosphor-icons/react";
+import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import { Product } from "@/lib/types";
 import Image from "next/image";
+import Link from "next/link";
 
 interface ProductsProps {
   products: Product[];
@@ -176,6 +178,19 @@ export function Products({ products }: ProductsProps) {
                       </a>
                     </Button>
                   )}
+                  <Button
+                    variant="ghost"
+                    size="lg"
+                    asChild
+                    className="flex-1 gap-2 group/btn"
+                  >
+                    <Link
+                      href={`/products/${product.id === "ee7a459b-9319-4568-8c70-a9842e3c3558" ? "sobriety-waypoint" : product.name.toLowerCase().replace(/\s+/g, "-")}`}
+                    >
+                      View Details
+                      <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                    </Link>
+                  </Button>
                 </CardFooter>
               </div>
             </div>
