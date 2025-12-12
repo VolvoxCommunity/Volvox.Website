@@ -4,6 +4,9 @@ import {
   getAllProducts,
   getAllMentors,
   getAllMentees,
+  getAllExtendedProducts,
+  getExtendedProductBySlug,
+  getProductChangelog,
 } from "@/lib/content";
 import * as fs from "fs";
 import { reportError } from "@/lib/logger";
@@ -153,6 +156,126 @@ describe("content lib", () => {
       const result = getAllMentees();
       expect(result).toEqual([]);
       expect(reportError).toHaveBeenCalled();
+    });
+  });
+
+  describe("Extended Product Content", () => {
+    describe("getAllExtendedProducts", () => {
+      it("returns array of extended products", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.readdirSync as jest.Mock).mockReturnValue([
+          { name: "sobriety-waypoint", isDirectory: () => true },
+        ]);
+        const mockProduct = {
+          id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
+          name: "Sobriety Waypoint",
+          slug: "sobriety-waypoint",
+          tagline: "Recovery accountability made simple",
+          description: "A comprehensive accountability app",
+          longDescription:
+            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          features: ["Feature 1"],
+          techStack: ["React Native"],
+          links: {},
+          screenshots: [],
+          faq: [],
+          testimonials: [],
+        };
+        (fs.readFileSync as jest.Mock).mockReturnValue(
+          JSON.stringify(mockProduct)
+        );
+
+        const products = getAllExtendedProducts();
+        expect(Array.isArray(products)).toBe(true);
+      });
+
+      it("returns products with required fields", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.readdirSync as jest.Mock).mockReturnValue([
+          { name: "sobriety-waypoint", isDirectory: () => true },
+        ]);
+        const mockProduct = {
+          id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
+          name: "Sobriety Waypoint",
+          slug: "sobriety-waypoint",
+          tagline: "Recovery accountability made simple",
+          description: "A comprehensive accountability app",
+          longDescription:
+            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          features: ["Feature 1"],
+          techStack: ["React Native"],
+          links: {},
+          screenshots: [],
+          faq: [],
+          testimonials: [],
+        };
+        (fs.readFileSync as jest.Mock).mockReturnValue(
+          JSON.stringify(mockProduct)
+        );
+
+        const products = getAllExtendedProducts();
+        if (products.length > 0) {
+          const product = products[0];
+          expect(product).toHaveProperty("id");
+          expect(product).toHaveProperty("slug");
+          expect(product).toHaveProperty("tagline");
+          expect(product).toHaveProperty("links");
+          expect(product).toHaveProperty("faq");
+        }
+      });
+    });
+
+    describe("getExtendedProductBySlug", () => {
+      it("returns product for valid slug", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        const mockProduct = {
+          id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
+          name: "Sobriety Waypoint",
+          slug: "sobriety-waypoint",
+          tagline: "Recovery accountability made simple",
+          description: "A comprehensive accountability app",
+          longDescription:
+            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          features: ["Feature 1"],
+          techStack: ["React Native"],
+          links: {},
+          screenshots: [],
+          faq: [],
+          testimonials: [],
+        };
+        (fs.readFileSync as jest.Mock).mockReturnValue(
+          JSON.stringify(mockProduct)
+        );
+
+        const product = getExtendedProductBySlug("sobriety-waypoint");
+        expect(product).not.toBeNull();
+        expect(product?.slug).toBe("sobriety-waypoint");
+      });
+
+      it("returns null for invalid slug", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(false);
+        const product = getExtendedProductBySlug("nonexistent-product");
+        expect(product).toBeNull();
+      });
+    });
+
+    describe("getProductChangelog", () => {
+      it("returns changelog content for valid slug", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(true);
+        (fs.readFileSync as jest.Mock).mockReturnValue(
+          "# Changelog\n\nAll notable changes"
+        );
+
+        const changelog = getProductChangelog("sobriety-waypoint");
+        expect(changelog).not.toBeNull();
+        expect(changelog).toContain("Changelog");
+      });
+
+      it("returns null for invalid slug", () => {
+        (fs.existsSync as jest.Mock).mockReturnValue(false);
+        const changelog = getProductChangelog("nonexistent-product");
+        expect(changelog).toBeNull();
+      });
     });
   });
 });

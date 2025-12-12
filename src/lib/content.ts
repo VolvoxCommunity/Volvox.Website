@@ -6,10 +6,13 @@ import {
   ProductsArraySchema,
   MentorsArraySchema,
   MenteesArraySchema,
+  extendedProductSchema,
 } from "./schemas";
 import type { Author, Product, Mentor, Mentee } from "./types";
+import type { ExtendedProduct } from "./schemas";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
+const PRODUCTS_DIR = path.join(process.cwd(), "content", "products");
 
 /**
  * Reads and validates authors from JSON file
@@ -88,5 +91,87 @@ export function getAllMentees(): Mentee[] {
   } catch (error) {
     reportError("Failed to read mentees.json", error);
     return [];
+  }
+}
+
+/**
+ * Retrieves all extended products from the folder-based content structure.
+ * Each product folder should contain an index.json file.
+ *
+ * @returns Array of validated ExtendedProduct objects
+ */
+export function getAllExtendedProducts(): ExtendedProduct[] {
+  try {
+    if (!fs.existsSync(PRODUCTS_DIR)) {
+      return [];
+    }
+
+    const productFolders = fs.readdirSync(PRODUCTS_DIR, {
+      withFileTypes: true,
+    });
+    const products: ExtendedProduct[] = [];
+
+    for (const folder of productFolders) {
+      if (!folder.isDirectory()) continue;
+
+      const indexPath = path.join(PRODUCTS_DIR, folder.name, "index.json");
+      if (!fs.existsSync(indexPath)) continue;
+
+      try {
+        const content = fs.readFileSync(indexPath, "utf-8");
+        const data: unknown = JSON.parse(content);
+        const validated = extendedProductSchema.parse(data);
+        products.push(validated);
+      } catch (err) {
+        reportError(`Failed to load product: ${folder.name}`, err);
+      }
+    }
+
+    return products;
+  } catch (err) {
+    reportError("Failed to read products directory", err);
+    return [];
+  }
+}
+
+/**
+ * Retrieves a single extended product by its slug.
+ *
+ * @param slug - The product slug (folder name)
+ * @returns The validated ExtendedProduct or null if not found
+ */
+export function getExtendedProductBySlug(slug: string): ExtendedProduct | null {
+  try {
+    const indexPath = path.join(PRODUCTS_DIR, slug, "index.json");
+    if (!fs.existsSync(indexPath)) {
+      return null;
+    }
+
+    const content = fs.readFileSync(indexPath, "utf-8");
+    const data: unknown = JSON.parse(content);
+    return extendedProductSchema.parse(data);
+  } catch (err) {
+    reportError(`Failed to load product: ${slug}`, err);
+    return null;
+  }
+}
+
+/**
+ * Retrieves the changelog MDX content for a product.
+ *
+ * @param slug - The product slug (folder name)
+ * @returns The raw MDX content or null if not found
+ */
+export function getProductChangelog(slug: string): string | null {
+  try {
+    const changelogPath = path.join(PRODUCTS_DIR, slug, "changelog.mdx");
+    if (!fs.existsSync(changelogPath)) {
+      return null;
+    }
+
+    return fs.readFileSync(changelogPath, "utf-8");
+  } catch (err) {
+    reportError(`Failed to load changelog for: ${slug}`, err);
+    return null;
   }
 }
