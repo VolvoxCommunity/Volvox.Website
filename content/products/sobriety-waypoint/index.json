@@ -1,0 +1,37 @@
+{
+  "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
+  "name": "Sobriety Waypoint",
+  "slug": "sobriety-waypoint",
+  "tagline": "Recovery accountability made simple",
+  "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
+  "longDescription": "Sobriety Waypoint transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
+  "features": [
+    "Secure sponsor-sponsee pairing with invite code system",
+    "Sobriety timeline with transparent relapse tracking",
+    "Task management with sponsor assignment and sponsee completion notes",
+    "Visual journey timeline displaying milestones, tasks, and step progress",
+    "Accountability loop supporting effective sponsorship",
+    "Cross-platform support (iOS, Android, Web)"
+  ],
+  "techStack": ["React Native", "Expo", "TypeScript", "Firebase"],
+  "links": {
+    "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
+    "demo": "https://sobrietywaypoint.com"
+  },
+  "screenshots": ["hero.png"],
+  "faq": [
+    {
+      "question": "Is Sobriety Waypoint free to use?",
+      "answer": "Yes, Sobriety Waypoint is completely free and open source. We believe recovery tools should be accessible to everyone."
+    },
+    {
+      "question": "How do I connect with my sponsor?",
+      "answer": "Your sponsor will provide you with a unique invite code. Enter this code in the app to establish your connection and begin your accountability partnership."
+    },
+    {
+      "question": "Is my data private?",
+      "answer": "Absolutely. Your sobriety data and personal notes are only visible to you and your connected sponsor. We use secure encryption and never share your information with third parties."
+    }
+  ],
+  "testimonials": []
+}
