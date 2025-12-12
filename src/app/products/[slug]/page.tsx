@@ -10,7 +10,7 @@ import { ProductDetailClient } from "./product-detail-client";
 /**
  * Generates static params for all product pages.
  */
-export async function generateStaticParams() {
+export function generateStaticParams() {
   const products = getAllExtendedProducts();
   return products.map((product) => ({
     slug: product.slug,
