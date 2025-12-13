@@ -16,14 +16,30 @@ interface ProductHeroProps {
 }
 
 /**
+ * Resolves a screenshot path to a valid image URL.
+ * Handles external URLs, absolute paths, and bare filenames.
+ */
+function resolveImagePath(
+  screenshot: string | undefined,
+  productSlug: string
+): string | null {
+  if (!screenshot) return null;
+  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
+    return screenshot;
+  }
+  if (screenshot.startsWith("/")) {
+    return screenshot;
+  }
+  return `/images/product/${productSlug}/${screenshot}`;
+}
+
+/**
  * Hero section for product detail pages.
  * Displays product name, tagline, primary screenshot, and action buttons.
  */
 export function ProductHero({ product }: ProductHeroProps) {
   const heroImage = product.screenshots[0];
-  const imagePath = heroImage
-    ? `/images/product/${product.slug}/${heroImage}`
-    : null;
+  const imagePath = resolveImagePath(heroImage, product.slug);
 
   return (
     <section className="py-16 md:py-24 px-4">
@@ -55,7 +71,9 @@ export function ProductHero({ product }: ProductHeroProps) {
                   >
                     <AppleLogo weight="fill" className="h-6 w-6" />
                     <div className="text-left">
-                      <div className="text-xs leading-none">Download on the</div>
+                      <div className="text-xs leading-none">
+                        Download on the
+                      </div>
                       <div className="text-sm font-semibold">App Store</div>
                     </div>
                   </a>

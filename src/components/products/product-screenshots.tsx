@@ -19,6 +19,24 @@ interface ProductScreenshotsProps {
 }
 
 /**
+ * Resolves a screenshot path to a valid image URL.
+ * Handles external URLs, absolute paths, and bare filenames.
+ */
+function resolveImagePath(
+  screenshot: string | undefined,
+  productSlug: string
+): string | null {
+  if (!screenshot) return null;
+  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
+    return screenshot;
+  }
+  if (screenshot.startsWith("/")) {
+    return screenshot;
+  }
+  return `/images/product/${productSlug}/${screenshot}`;
+}
+
+/**
  * Screenshot gallery with lightbox functionality.
  */
 export function ProductScreenshots({
@@ -41,7 +59,8 @@ export function ProductScreenshots({
         <h2 className="text-3xl md:text-4xl font-bold mb-8">Screenshots</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {galleryImages.map((screenshot, idx) => {
-            const imagePath = `/images/product/${slug}/${screenshot}`;
+            const imagePath = resolveImagePath(screenshot, slug);
+            if (!imagePath) return null;
             return (
               <motion.button
                 key={screenshot}
