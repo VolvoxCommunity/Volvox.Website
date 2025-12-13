@@ -48,10 +48,16 @@ jobs:
 
             **Actionable Instructions:**
             - **Fix Issues**: If you identify fixable bugs, typos, or style violations, **commit the fixes directly to this PR branch**.
-            - **Inline Comments**: For specific code feedback that cannot be fixed, use `mcp__github_inline_comment__create_inline_comment` to leave inline comments on the relevant lines.
+            - **Inline Comments**: Use `mcp__github_inline_comment__create_inline_comment` ONLY for issues that require author attention:
+              - Bugs, logic errors, or potential runtime issues
+              - Security vulnerabilities or concerns
+              - Performance problems
+              - Missing error handling or edge cases
+              - Code that violates project conventions (see CLAUDE.md)
+              - **DO NOT** leave inline comments for praise, compliments, or positive observations. Save those for the summary comment only.
             - **Request Changes**: For significant issues or design flaws, request changes in your review.
             - **Be Constructive**: Provide clear explanations and suggestions for improvement.
 
           # See https://github.com/anthropics/claude-code-action/blob/main/docs/usage.md
           # or https://docs.claude.com/en/docs/claude-code/cli-reference for available options
-          claude_args: '--allowed-tools "mcp__github_inline_comment__create_inline_comment,mcp__github__create_pull_request,mcp__github__create_pull_request_comment,mcp__github__create_issue_comment,Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*),Edit,Read,Write"'
+          claude_args: '--model claude-opus-4-5-20251101 --allowed-tools "mcp__github_inline_comment__create_inline_comment,mcp__github__create_pull_request,mcp__github__create_pull_request_comment,mcp__github__create_issue_comment,Bash(gh issue view:*),Bash(gh search:*),Bash(gh issue list:*),Bash(gh pr diff:*),Bash(gh pr view:*),Bash(gh pr list:*),Edit,Read,Write"'
