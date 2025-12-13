@@ -29,7 +29,7 @@ export function ProductFaq({ faq }: ProductFaqProps) {
         <div className="space-y-3">
           {faq.map((item, idx) => (
             <div
-              key={idx}
+              key={item.question}
               className="border border-border/50 rounded-lg overflow-hidden bg-card/50"
             >
               <button
