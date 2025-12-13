@@ -25,7 +25,10 @@ export function ProductToc({
   backHref = "/products",
   backLabel = "Back to Products",
 }: ProductTocProps) {
-  const [activeSection, setActiveSection] = useState<string>("");
+  // Default to first section (overview) on initial load
+  const [activeSection, setActiveSection] = useState<string>(
+    sections[0]?.id ?? ""
+  );
 
   useEffect(() => {
     const observer = new IntersectionObserver(
