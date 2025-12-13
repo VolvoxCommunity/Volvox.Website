@@ -40,7 +40,7 @@ function ProductCard({ product, index }: ProductCardProps) {
       <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
         <div className="grid md:grid-cols-2 gap-0">
           <motion.div
-            className="aspect-video bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center"
+            className="aspect-[2/1] bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
@@ -50,8 +50,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                   src={imagePath}
                   alt={product.name}
                   fill
-                  className="object-contain"
-                  style={{ inset: "1rem", objectPosition: "center" }}
+                  className="object-contain p-4"
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
