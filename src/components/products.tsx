@@ -50,7 +50,8 @@ function ProductCard({ product, index }: ProductCardProps) {
                   src={imagePath}
                   alt={product.name}
                   fill
-                  className="object-contain object-center p-4"
+                  className="object-contain"
+                  style={{ inset: "1rem", objectPosition: "center" }}
                   sizes="(max-width: 768px) 100vw, 50vw"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
