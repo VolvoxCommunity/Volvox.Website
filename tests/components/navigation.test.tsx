@@ -45,7 +45,7 @@ describe("Navigation", () => {
     render(<Navigation linkMode />);
     const links = screen.getAllByRole("link", { name: /Products/i });
     expect(links.length).toBeGreaterThan(0);
-    // Products link now goes to the products index page
-    expect(links[0]).toHaveAttribute("href", "/products");
+    // Products link now goes to the homepage products section
+    expect(links[0]).toHaveAttribute("href", "/#products");
   });
 });
