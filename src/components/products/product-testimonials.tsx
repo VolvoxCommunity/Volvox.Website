@@ -28,7 +28,7 @@ export function ProductTestimonials({
         <div className="grid gap-6 md:grid-cols-2">
           {testimonials.map((testimonial, idx) => (
             <motion.div
-              key={testimonial.quote}
+              key={idx}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -52,7 +52,11 @@ export function ProductTestimonials({
                 ) : (
                   <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                     <span className="text-sm font-semibold text-primary">
-                      {testimonial.name.charAt(0)}
+                      {testimonial.name
+                        .split(" ")
+                        .map((n) => n.charAt(0))
+                        .slice(0, 2)
+                        .join("")}
                     </span>
                   </div>
                 )}
