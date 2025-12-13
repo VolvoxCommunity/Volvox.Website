@@ -18,7 +18,7 @@ export function ProductFeatures({ features }: ProductFeaturesProps) {
         <ul className="grid gap-4 md:grid-cols-2">
           {features.map((feature, idx) => (
             <motion.li
-              key={idx}
+              key={feature}
               className="flex items-start gap-3 p-4 rounded-lg bg-card/50 border border-border/50"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
