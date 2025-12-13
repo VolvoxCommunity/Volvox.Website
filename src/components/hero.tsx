@@ -114,7 +114,7 @@ export function Hero({ onNavigate }: HeroProps) {
             asChild
             className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
-            <Link href="/products">
+            <Link href="/#products">
               <span className="relative z-10 flex items-center gap-2">
                 Explore Products
                 <ArrowRight
