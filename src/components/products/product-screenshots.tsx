@@ -69,7 +69,10 @@ export function ProductScreenshots({
           open={!!selectedImage}
           onOpenChange={() => setSelectedImage(null)}
         >
-          <DialogContent className="max-w-4xl p-0 bg-black/95 border-none">
+          <DialogContent
+            className="max-w-4xl p-0 bg-black/95 border-none"
+            showCloseButton={false}
+          >
             <VisuallyHidden>
               <DialogTitle>Screenshot Preview</DialogTitle>
               <DialogDescription>

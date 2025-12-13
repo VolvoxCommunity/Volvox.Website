@@ -40,35 +40,15 @@ export interface Product {
 }
 
 /**
- * Extended product data for detail pages.
+ * Re-export schema-inferred types for extended product data.
+ * These are the canonical types - use these throughout the codebase.
  */
-export interface ExtendedProduct {
-  id: string;
-  name: string;
-  slug: string;
-  tagline: string;
-  description: string;
-  longDescription: string;
-  features: string[];
-  techStack: string[];
-  links: {
-    github?: string;
-    demo?: string;
-    appStore?: string;
-    playStore?: string;
-  };
-  screenshots: string[];
-  faq: Array<{
-    question: string;
-    answer: string;
-  }>;
-  testimonials: Array<{
-    name: string;
-    role?: string;
-    quote: string;
-    avatar?: string;
-  }>;
-}
+export type {
+  ExtendedProduct,
+  FaqItem,
+  Testimonial,
+  ProductLinks,
+} from "./schemas";
 
 /**
  * Captures mentor profile information.

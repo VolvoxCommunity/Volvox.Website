@@ -7,6 +7,7 @@ import {
   getAllExtendedProducts,
   getExtendedProductBySlug,
   getProductChangelog,
+  isValidSlug,
 } from "@/lib/content";
 import * as fs from "fs";
 import { reportError } from "@/lib/logger";
@@ -275,6 +276,61 @@ describe("content lib", () => {
         (fs.existsSync as jest.Mock).mockReturnValue(false);
         const changelog = getProductChangelog("nonexistent-product");
         expect(changelog).toBeNull();
+      });
+    });
+  });
+
+  describe("Path Traversal Prevention", () => {
+    describe("isValidSlug", () => {
+      it("accepts valid slugs", () => {
+        expect(isValidSlug("sobriety-waypoint")).toBe(true);
+        expect(isValidSlug("product-1")).toBe(true);
+        expect(isValidSlug("my-app")).toBe(true);
+        expect(isValidSlug("test123")).toBe(true);
+        expect(isValidSlug("UPPERCASE")).toBe(true);
+        expect(isValidSlug("MixedCase-123")).toBe(true);
+      });
+
+      it("rejects path traversal attempts", () => {
+        expect(isValidSlug("../etc/passwd")).toBe(false);
+        expect(isValidSlug("..")).toBe(false);
+        expect(isValidSlug("../")).toBe(false);
+        expect(isValidSlug("foo/../bar")).toBe(false);
+        expect(isValidSlug("foo/bar")).toBe(false);
+        expect(isValidSlug("/etc/passwd")).toBe(false);
+      });
+
+      it("rejects slugs with special characters", () => {
+        expect(isValidSlug("foo bar")).toBe(false);
+        expect(isValidSlug("foo_bar")).toBe(false);
+        expect(isValidSlug("foo.bar")).toBe(false);
+        expect(isValidSlug("")).toBe(false);
+      });
+    });
+
+    describe("getExtendedProductBySlug path traversal", () => {
+      it("returns null for path traversal attempts", () => {
+        // These should NOT trigger any file system access
+        expect(getExtendedProductBySlug("../etc/passwd")).toBeNull();
+        expect(getExtendedProductBySlug("..")).toBeNull();
+        expect(getExtendedProductBySlug("foo/../bar")).toBeNull();
+        expect(getExtendedProductBySlug("/etc/passwd")).toBeNull();
+
+        // Verify fs.existsSync was NOT called (validation blocked before fs access)
+        expect(fs.existsSync).not.toHaveBeenCalled();
+      });
+    });
+
+    describe("getProductChangelog path traversal", () => {
+      it("returns null for path traversal attempts", () => {
+        // These should NOT trigger any file system access
+        expect(getProductChangelog("../etc/passwd")).toBeNull();
+        expect(getProductChangelog("..")).toBeNull();
+        expect(getProductChangelog("foo/../bar")).toBeNull();
+        expect(getProductChangelog("/etc/passwd")).toBeNull();
+
+        // Verify fs.existsSync was NOT called (validation blocked before fs access)
+        expect(fs.existsSync).not.toHaveBeenCalled();
       });
     });
   });

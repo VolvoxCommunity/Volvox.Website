@@ -8,11 +8,21 @@ import {
   MenteesArraySchema,
   extendedProductSchema,
 } from "./schemas";
-import type { Author, Product, Mentor, Mentee } from "./types";
-import type { ExtendedProduct } from "./schemas";
+import type { Author, Product, Mentor, Mentee, ExtendedProduct } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const PRODUCTS_DIR = path.join(process.cwd(), "content", "products");
+
+/**
+ * Validates a slug to prevent path traversal attacks.
+ * Only allows lowercase alphanumeric characters and hyphens.
+ *
+ * @param slug - The slug to validate
+ * @returns True if the slug is valid, false otherwise
+ */
+export function isValidSlug(slug: string): boolean {
+  return /^[a-z0-9-]+$/i.test(slug);
+}
 
 /**
  * Reads and validates authors from JSON file
@@ -141,6 +151,11 @@ export function getAllExtendedProducts(): ExtendedProduct[] {
  * @returns The validated ExtendedProduct or null if not found
  */
 export function getExtendedProductBySlug(slug: string): ExtendedProduct | null {
+  // Validate slug to prevent path traversal attacks
+  if (!isValidSlug(slug)) {
+    return null;
+  }
+
   try {
     const indexPath = path.join(PRODUCTS_DIR, slug, "index.json");
     if (!fs.existsSync(indexPath)) {
@@ -163,6 +178,11 @@ export function getExtendedProductBySlug(slug: string): ExtendedProduct | null {
  * @returns The raw MDX content or null if not found
  */
 export function getProductChangelog(slug: string): string | null {
+  // Validate slug to prevent path traversal attacks
+  if (!isValidSlug(slug)) {
+    return null;
+  }
+
   try {
     const changelogPath = path.join(PRODUCTS_DIR, slug, "changelog.mdx");
     if (!fs.existsSync(changelogPath)) {

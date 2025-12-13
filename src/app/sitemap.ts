@@ -27,7 +27,7 @@ const STATIC_ROUTES: MetadataRoute.Sitemap = [
 
 /**
  * Generates a dynamic sitemap for search engine crawlers.
- * Includes homepage, privacy page, and all published blog posts.
+ * Includes homepage, privacy page, individual product pages, and all published blog posts.
  *
  * @returns Array of sitemap entries with URLs, modification dates, and priorities
  */
@@ -43,14 +43,6 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.7,
     }));
 
-    // Products index page
-    const productsIndexUrl = {
-      url: `${SITE_URL}/products`,
-      lastModified: BUILD_TIME,
-      changeFrequency: "weekly" as const,
-      priority: 0.9,
-    };
-
     // Individual product pages
     const productUrls = products.map((product) => ({
       url: `${SITE_URL}/products/${product.slug}`,
@@ -59,7 +51,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.8,
     }));
 
-    return [...STATIC_ROUTES, productsIndexUrl, ...productUrls, ...blogUrls];
+    return [...STATIC_ROUTES, ...productUrls, ...blogUrls];
   } catch (error) {
     console.error("Error generating sitemap:", error);
     // Return minimal sitemap on error to avoid complete failure

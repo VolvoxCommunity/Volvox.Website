@@ -4,11 +4,7 @@ import { useState } from "react";
 import { CaretDown } from "@phosphor-icons/react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
-
-interface FaqItem {
-  question: string;
-  answer: string;
-}
+import type { FaqItem } from "@/lib/types";
 
 interface ProductFaqProps {
   faq: FaqItem[];

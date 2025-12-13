@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 
 import * as fs from "fs";
 import * as path from "path";
+import { reportError } from "./logger";
 
 /** Standard image size for social media images */
 const IMAGE_SIZE = { width: 1200, height: 630 };
@@ -61,7 +62,7 @@ async function fetchJetBrainsMonoFont(): Promise<ArrayBuffer | null> {
       return await fetch(fontUrl).then((res) => res.arrayBuffer());
     }
   } catch (e) {
-    console.error("Failed to fetch JetBrains Mono font", e);
+    reportError("Failed to fetch JetBrains Mono font", e);
   }
   return null;
 }
@@ -76,7 +77,7 @@ export function getLogoData(): ArrayBuffer | null {
       return fs.readFileSync(logoPath).buffer;
     }
   } catch (e) {
-    console.error("Failed to read logo file", e);
+    reportError("Failed to read logo file", e);
   }
   return null;
 }
@@ -308,7 +309,7 @@ export async function generateSocialImage(
       options
     );
   } catch (e) {
-    console.error(e);
+    reportError("Social image generation failed", e);
     return new ImageResponse(createFallbackImage(logoData), options);
   }
 }
