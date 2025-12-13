@@ -46,6 +46,7 @@ export function ProductTestimonials({
                     alt={testimonial.name}
                     width={40}
                     height={40}
+                    loading="lazy"
                     className="rounded-full"
                   />
                 ) : (
