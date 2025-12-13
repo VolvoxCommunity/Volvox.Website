@@ -11,7 +11,7 @@ import {
 import type { Author, Product, Mentor, Mentee, ExtendedProduct } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
-const PRODUCTS_DIR = path.join(process.cwd(), "content", "products");
+const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
 
 /**
  * Validates a slug to prevent path traversal attacks.
