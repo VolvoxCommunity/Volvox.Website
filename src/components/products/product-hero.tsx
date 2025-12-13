@@ -50,6 +50,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                     href={product.links.appStore}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Download ${product.name} on the App Store`}
                     className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
                   >
                     <AppleLogo weight="fill" className="h-6 w-6" />
@@ -66,6 +67,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                     href={product.links.playStore}
                     target="_blank"
                     rel="noopener noreferrer"
+                    aria-label={`Get ${product.name} on Google Play`}
                     className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
                   >
                     <GooglePlayLogo weight="fill" className="h-6 w-6" />
