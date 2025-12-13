@@ -82,3 +82,58 @@ export const MentorsArraySchema = z.array(MentorSchema);
  * Helper to validate and parse mentees array
  */
 export const MenteesArraySchema = z.array(MenteeSchema);
+
+/**
+ * Schema for product FAQ items.
+ */
+export const faqItemSchema = z.object({
+  question: z.string().min(1),
+  answer: z.string().min(1),
+});
+
+/**
+ * Schema for product testimonials.
+ */
+export const testimonialSchema = z.object({
+  name: z.string().min(1),
+  role: z.string().optional(),
+  quote: z.string().min(1),
+  avatar: z.string().optional(),
+});
+
+/**
+ * Schema for product links.
+ */
+export const productLinksSchema = z.object({
+  github: z.string().url().optional(),
+  demo: z.string().url().optional(),
+  appStore: z.string().url().optional(),
+  playStore: z.string().url().optional(),
+});
+
+/**
+ * Schema for extended product data (folder-based structure).
+ */
+export const extendedProductSchema = z.object({
+  id: z.string().uuid(),
+  name: z.string().min(1),
+  slug: z
+    .string()
+    .min(1)
+    // Only allows lowercase alphanumeric characters and hyphens
+    .regex(/^[a-z0-9-]+$/),
+  tagline: z.string().min(1),
+  description: z.string().min(1),
+  longDescription: z.string().min(1),
+  features: z.array(z.string()).min(1),
+  techStack: z.array(z.string()).default([]),
+  links: productLinksSchema.default({}),
+  screenshots: z.array(z.string()).default([]),
+  faq: z.array(faqItemSchema).default([]),
+  testimonials: z.array(testimonialSchema).default([]),
+});
+
+export type ExtendedProduct = z.infer<typeof extendedProductSchema>;
+export type FaqItem = z.infer<typeof faqItemSchema>;
+export type Testimonial = z.infer<typeof testimonialSchema>;
+export type ProductLinks = z.infer<typeof productLinksSchema>;

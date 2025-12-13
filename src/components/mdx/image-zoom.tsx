@@ -68,14 +68,17 @@ export function ImageZoom({
 
       {/* Zoom Dialog */}
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
-        <DialogContent className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg">
+        <DialogContent
+          className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg"
+          showCloseButton={false}
+        >
           <button
             type="button"
             onClick={() => setIsOpen(false)}
-            className="absolute top-4 right-4 z-50 rounded-full bg-background/80 p-2 border border-border hover:bg-background transition-colors"
+            className="absolute top-4 right-4 z-50 rounded-full bg-background/80 p-3 border border-border hover:bg-background transition-colors cursor-pointer"
             aria-label="Close"
           >
-            <X className="h-5 w-5" />
+            <X className="h-6 w-6" />
           </button>
           <div className="relative flex items-center justify-center w-full h-full p-8">
             {width && height ? (

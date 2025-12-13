@@ -2,6 +2,7 @@ import { ImageResponse } from "next/og";
 
 import * as fs from "fs";
 import * as path from "path";
+import { reportError } from "./logger";
 
 /** Standard image size for social media images */
 const IMAGE_SIZE = { width: 1200, height: 630 };
@@ -16,6 +17,23 @@ export interface BlogFrontmatter {
   };
   banner?: string;
   tags?: string[];
+}
+
+/** Product data shape for OG image generation. */
+export interface ProductOgData {
+  name: string;
+  tagline: string;
+  techStack?: string[];
+}
+
+/** Configuration for the unified social image generator. */
+export interface SocialImageConfig {
+  title: string;
+  subtitle?: string;
+  metadata?: string;
+  badges?: string[];
+  badgePrefix?: string;
+  titleSize?: number;
 }
 
 /**
@@ -44,7 +62,7 @@ async function fetchJetBrainsMonoFont(): Promise<ArrayBuffer | null> {
       return await fetch(fontUrl).then((res) => res.arrayBuffer());
     }
   } catch (e) {
-    console.error("Failed to fetch JetBrains Mono font", e);
+    reportError("Failed to fetch JetBrains Mono font", e);
   }
   return null;
 }
@@ -59,20 +77,43 @@ export function getLogoData(): ArrayBuffer | null {
       return fs.readFileSync(logoPath).buffer;
     }
   } catch (e) {
-    console.error("Failed to read logo file", e);
+    reportError("Failed to read logo file", e);
   }
   return null;
 }
 
 /**
- * Creates a fallback image when post data cannot be loaded.
- * Displays generic Volvox Blog branding.
+ * Converts an ArrayBuffer to a base64 data URL for use in img src.
+ */
+function toBase64DataUrl(data: ArrayBuffer): string {
+  return `data:image/png;base64,${Buffer.from(data).toString("base64")}`;
+}
+
+/**
+ * Creates ImageResponse options with font configuration.
+ */
+function createImageResponseOptions(fontData: ArrayBuffer | null) {
+  return {
+    ...IMAGE_SIZE,
+    ...(fontData && {
+      fonts: [
+        {
+          name: "JetBrains Mono",
+          data: fontData,
+          style: "normal" as const,
+          weight: 700 as const,
+        },
+      ],
+    }),
+  };
+}
+
+/**
+ * Creates a fallback image when data cannot be loaded.
+ * Displays generic Volvox branding.
  */
 export function createFallbackImage(logoData?: ArrayBuffer | null) {
-  // Convert ArrayBuffer to base64 string for img src if present
-  const logoSrc = logoData
-    ? `data:image/png;base64,${Buffer.from(logoData).toString("base64")}`
-    : null;
+  const logoSrc = logoData ? toBase64DataUrl(logoData) : null;
 
   return (
     <div
@@ -87,6 +128,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       }}
     >
       {logoSrc ? (
+        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={logoSrc}
           width={120}
@@ -112,34 +154,40 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           marginTop: logoSrc ? 0 : 24,
         }}
       >
-        Blog
+        Volvox Community
       </div>
     </div>
   );
 }
 
 /**
- * Generates a dynamic social image for a blog post.
+ * Generates a dynamic social image with configurable content.
  *
- * @param frontmatter - The blog post frontmatter
+ * @param config - The image configuration (title, subtitle, metadata, badges)
  * @param logoData - The logo image data
- * @returns ImageResponse with post-specific social preview image
+ * @returns ImageResponse with the social preview image
  */
-export async function generateBlogPostSocialImage(
-  frontmatter: BlogFrontmatter | null | undefined,
+export async function generateSocialImage(
+  config: SocialImageConfig | null | undefined,
   logoData: ArrayBuffer | null
-) {
+): Promise<ImageResponse> {
   const fontData = await fetchJetBrainsMonoFont();
-
-  // Convert ArrayBuffer to base64 string for img src if present
-  const logoSrc = logoData
-    ? `data:image/png;base64,${Buffer.from(logoData).toString("base64")}`
-    : null;
+  const logoSrc = logoData ? toBase64DataUrl(logoData) : null;
+  const options = createImageResponseOptions(fontData);
 
   try {
-    if (!frontmatter) {
-      throw new Error("No frontmatter provided");
+    if (!config) {
+      throw new Error("No config provided");
     }
+
+    const {
+      title,
+      subtitle,
+      metadata,
+      badges,
+      badgePrefix = "",
+      titleSize = 60,
+    } = config;
 
     return new ImageResponse(
       <div
@@ -154,6 +202,7 @@ export async function generateBlogPostSocialImage(
           fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
         }}
       >
+        {/* Content */}
         <div
           style={{
             display: "flex",
@@ -163,57 +212,57 @@ export async function generateBlogPostSocialImage(
           {/* Title */}
           <div
             style={{
-              fontSize: 60,
+              fontSize: titleSize,
               fontWeight: 700,
               color: "#ffffff",
               lineHeight: 1.1,
               marginBottom: 24,
             }}
           >
-            {frontmatter.title}
+            {title}
           </div>
 
-          {/* Excerpt */}
-          <div
-            style={{
-              fontSize: 30,
-              color: "#d1d5db",
-              lineHeight: 1.4,
-              marginBottom: 32,
-              display: "flex",
-            }}
-          >
-            {frontmatter.excerpt || "Read more on Volvox Blog"}
-          </div>
+          {/* Subtitle */}
+          {subtitle && (
+            <div
+              style={{
+                fontSize: 30,
+                color: "#d1d5db",
+                lineHeight: 1.4,
+                marginBottom: 32,
+                display: "flex",
+              }}
+            >
+              {subtitle}
+            </div>
+          )}
 
-          {/* Author & Date */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              fontSize: 24,
-              color: "#a1a1aa",
-              marginBottom: 32,
-            }}
-          >
-            <span style={{ color: "#ffffff", fontWeight: 700 }}>
-              {frontmatter.author?.name || "Volvox"}
-            </span>
-            <span style={{ margin: "0 12px" }}>·</span>
-            <span>{frontmatter.date}</span>
-          </div>
+          {/* Metadata */}
+          {metadata && (
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: 24,
+                color: "#a1a1aa",
+                marginBottom: 32,
+              }}
+            >
+              {metadata}
+            </div>
+          )}
 
-          {/* Tags */}
-          {frontmatter.tags && frontmatter.tags.length > 0 && (
+          {/* Badges */}
+          {badges && badges.length > 0 && (
             <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {frontmatter.tags.slice(0, 3).map((tag) => (
+              {badges.map((badge) => (
                 <div
-                  key={tag}
+                  key={badge}
                   style={{
                     backgroundColor: "#1f2937",
                     color: "#60a5fa",
                     padding: "8px 16px",
-                    borderRadius: 999,
+                    borderRadius: badgePrefix ? 999 : 8,
                     fontSize: 20,
                     fontWeight: 600,
                     display: "flex",
@@ -221,7 +270,7 @@ export async function generateBlogPostSocialImage(
                     justifyContent: "center",
                   }}
                 >
-                  {`#${tag}`}
+                  {`${badgePrefix}${badge}`}
                 </div>
               ))}
             </div>
@@ -237,6 +286,7 @@ export async function generateBlogPostSocialImage(
           }}
         >
           {logoSrc && (
+            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={logoSrc}
               width={48}
@@ -256,34 +306,66 @@ export async function generateBlogPostSocialImage(
           </div>
         </div>
       </div>,
-      {
-        ...IMAGE_SIZE,
-        ...(fontData && {
-          fonts: [
-            {
-              name: "JetBrains Mono",
-              data: fontData,
-              style: "normal" as const,
-              weight: 700 as const,
-            },
-          ],
-        }),
-      }
+      options
     );
   } catch (e) {
-    console.error(e);
-    return new ImageResponse(createFallbackImage(logoData), {
-      ...IMAGE_SIZE,
-      ...(fontData && {
-        fonts: [
-          {
-            name: "JetBrains Mono",
-            data: fontData,
-            style: "normal" as const,
-            weight: 700 as const,
-          },
-        ],
-      }),
-    });
+    reportError("Social image generation failed", e);
+    return new ImageResponse(createFallbackImage(logoData), options);
   }
+}
+
+/**
+ * Generates a dynamic social image for a blog post.
+ *
+ * @param frontmatter - The blog post frontmatter
+ * @param logoData - The logo image data
+ * @returns ImageResponse with post-specific social preview image
+ */
+export async function generateBlogPostSocialImage(
+  frontmatter: BlogFrontmatter | null | undefined,
+  logoData: ArrayBuffer | null
+): Promise<ImageResponse> {
+  if (!frontmatter) {
+    return generateSocialImage(null, logoData);
+  }
+
+  const authorName = frontmatter.author?.name || "Volvox";
+
+  return generateSocialImage(
+    {
+      title: frontmatter.title,
+      subtitle: frontmatter.excerpt || "Read more on Volvox Blog",
+      metadata: `${authorName} · ${frontmatter.date}`,
+      badges: frontmatter.tags?.slice(0, 3),
+      badgePrefix: "#",
+      titleSize: 60,
+    },
+    logoData
+  );
+}
+
+/**
+ * Generates a dynamic social image for a product page.
+ *
+ * @param product - The product data
+ * @param logoData - The logo image data
+ * @returns ImageResponse with product-specific social preview image
+ */
+export async function generateProductSocialImage(
+  product: ProductOgData | null | undefined,
+  logoData: ArrayBuffer | null
+): Promise<ImageResponse> {
+  if (!product) {
+    return generateSocialImage(null, logoData);
+  }
+
+  return generateSocialImage(
+    {
+      title: product.name,
+      subtitle: product.tagline,
+      badges: product.techStack?.slice(0, 4),
+      titleSize: 72,
+    },
+    logoData
+  );
 }
