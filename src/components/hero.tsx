@@ -3,6 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { ArrowRight, GithubLogo, DiscordLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import Link from "next/link";
 import confettiLib from "canvas-confetti";
 
 interface HeroProps {
@@ -110,16 +111,18 @@ export function Hero({ onNavigate }: HeroProps) {
         >
           <Button
             size="lg"
-            onClick={() => onNavigate("products")}
+            asChild
             className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
           >
-            <span className="relative z-10 flex items-center gap-2">
-              Explore Products
-              <ArrowRight
-                weight="bold"
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-              />
-            </span>
+            <Link href="/products">
+              <span className="relative z-10 flex items-center gap-2">
+                Explore Products
+                <ArrowRight
+                  weight="bold"
+                  className="h-5 w-5 transition-transform group-hover:translate-x-1"
+                />
+              </span>
+            </Link>
           </Button>
 
           <Button
