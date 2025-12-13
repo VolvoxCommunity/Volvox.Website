@@ -17,7 +17,7 @@ export function ProductChangelog({ content }: ProductChangelogProps) {
   }
 
   return (
-    <section id="changelog" className="py-16 px-4">
+    <section id="changelog" className="py-16 px-4 scroll-mt-32">
       <div className="container mx-auto max-w-4xl">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

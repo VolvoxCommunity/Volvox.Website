@@ -63,7 +63,7 @@ export function ProductDetailClient({
           <ProductHero product={product} />
 
           {/* Overview Section */}
-          <section id="overview" className="py-16 px-4">
+          <section id="overview" className="py-16 px-4 scroll-mt-32">
             <div className="container mx-auto max-w-4xl">
               <h2 className="text-3xl md:text-4xl font-bold mb-6">Overview</h2>
               <p className="text-lg text-muted-foreground leading-relaxed">

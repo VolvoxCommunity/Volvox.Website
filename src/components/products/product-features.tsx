@@ -12,7 +12,7 @@ interface ProductFeaturesProps {
  */
 export function ProductFeatures({ features }: ProductFeaturesProps) {
   return (
-    <section id="features" className="py-16 px-4">
+    <section id="features" className="py-16 px-4 scroll-mt-32">
       <div className="container mx-auto max-w-4xl">
         <h2 className="text-3xl md:text-4xl font-bold mb-8">Features</h2>
         <ul className="grid gap-4 md:grid-cols-2">
