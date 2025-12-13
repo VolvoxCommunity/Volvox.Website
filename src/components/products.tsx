@@ -91,7 +91,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                 <ul className="space-y-3">
                   {product.features.map((feature, idx) => (
                     <motion.li
-                      key={`${product.slug}:${feature}`}
+                      key={`${product.slug}:${feature}:${idx}`}
                       className="flex items-start gap-3 group/item"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
