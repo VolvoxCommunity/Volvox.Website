@@ -102,6 +102,7 @@ export function HomepageClient({
   // (offsetTop, offsetHeight) to once per frame (approx 60fps).
   useEffect(() => {
     let ticking = false;
+    let animationFrameId: number | undefined;
 
     const updateSection = () => {
       const sections = ["products", "blog", "mentorship", "about"];
@@ -132,13 +133,18 @@ export function HomepageClient({
 
     const handleScroll = () => {
       if (!ticking) {
-        window.requestAnimationFrame(updateSection);
+        animationFrameId = window.requestAnimationFrame(updateSection);
         ticking = true;
       }
     };
 
     window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (animationFrameId !== undefined) {
+        cancelAnimationFrame(animationFrameId);
+      }
+    };
   }, []);
 
   return (
