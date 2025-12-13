@@ -97,13 +97,18 @@ export function HomepageClient({
     }
   }, [handleNavigate]);
 
+  // Throttle scroll updates to run at most once per animation frame
+  // This prevents expensive DOM calculations from blocking the main thread during scroll
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateSection = () => {
       const sections = ["products", "blog", "mentorship", "about"];
       const scrollPosition = window.scrollY + 200;
 
       if (window.scrollY < 300) {
         setCurrentSection("home");
+        ticking = false;
         return;
       }
 
@@ -116,9 +121,18 @@ export function HomepageClient({
             scrollPosition < offsetTop + offsetHeight
           ) {
             setCurrentSection(section);
+            ticking = false;
             return;
           }
         }
+      }
+      ticking = false;
+    };
+
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(updateSection);
+        ticking = true;
       }
     };
 
