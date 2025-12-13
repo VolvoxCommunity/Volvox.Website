@@ -1,6 +1,6 @@
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
-import { getAllProducts } from "@/lib/data";
+import { getAllExtendedProducts } from "@/lib/content";
 import { getAllMentors, getAllMentees } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 
@@ -11,7 +11,7 @@ export default async function HomePage() {
   const [blogPostsResult, productsResult, mentorsResult, menteesResult] =
     await Promise.allSettled([
       getAllPosts(),
-      getAllProducts(),
+      Promise.resolve(getAllExtendedProducts()),
       Promise.resolve(getAllMentors()),
       Promise.resolve(getAllMentees()),
     ]);

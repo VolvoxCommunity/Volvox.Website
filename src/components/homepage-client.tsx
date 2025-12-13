@@ -11,11 +11,11 @@ import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
 import { AnimatedBackground } from "@/components/animated-background";
-import type { BlogPost, Product, Mentor, Mentee } from "@/lib/types";
+import type { BlogPost, ExtendedProduct, Mentor, Mentee } from "@/lib/types";
 
 interface HomepageClientProps {
   blogPosts: BlogPost[];
-  products: Product[];
+  products: ExtendedProduct[];
   mentors: Mentor[];
   mentees: Mentee[];
 }
