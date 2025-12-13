@@ -33,6 +33,7 @@ export function ProductFaq({ faq }: ProductFaqProps) {
               className="border border-border/50 rounded-lg overflow-hidden bg-card/50"
             >
               <button
+                type="button"
                 onClick={() => setOpenIndex(openIndex === idx ? null : idx)}
                 className="w-full flex items-center justify-between p-4 text-left hover:bg-muted/50 transition-colors"
                 aria-expanded={openIndex === idx}
