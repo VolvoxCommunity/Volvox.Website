@@ -154,7 +154,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           marginTop: logoSrc ? 0 : 24,
         }}
       >
-        Blog
+        Volvox Community
       </div>
     </div>
   );
