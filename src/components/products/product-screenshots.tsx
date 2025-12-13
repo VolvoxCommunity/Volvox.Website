@@ -80,6 +80,7 @@ export function ProductScreenshots({
               </DialogDescription>
             </VisuallyHidden>
             <button
+              type="button"
               onClick={() => setSelectedImage(null)}
               className="absolute top-4 right-4 z-10 p-2 rounded-full bg-white/10 hover:bg-white/20 transition-colors"
               aria-label="Close"
