@@ -160,7 +160,7 @@ export function Navigation({
                 size="icon"
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
-                aria-label="Toggle theme"
+                data-testid="theme-toggle"
               >
                 {theme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />
@@ -181,7 +181,6 @@ export function Navigation({
                   href="https://github.com/VolvoxCommunity"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub"
                 >
                   <GithubLogo weight="fill" className="h-5 w-5" />
                 </a>
@@ -200,7 +199,6 @@ export function Navigation({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleDiscordClick}
-                  aria-label="Discord"
                 >
                   <DiscordLogo weight="fill" className="h-5 w-5" />
                 </a>
@@ -213,12 +211,12 @@ export function Navigation({
                   variant="ghost"
                   size="icon"
                   className="md:hidden rounded-full hover:bg-muted"
-                  aria-label="Open menu"
+                  data-testid="mobile-menu-trigger"
                 >
                   <List className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-64">
+              <SheetContent side="right" className="w-64" data-testid="mobile-menu-content">
                 <div className="flex flex-col gap-4 mt-8">
                   {navItems.map((item) =>
                     linkMode ? (
@@ -255,7 +253,6 @@ export function Navigation({
                         href="https://github.com/VolvoxCommunity"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="GitHub"
                       >
                         <GithubLogo weight="fill" className="h-5 w-5" />
                       </a>
@@ -271,7 +268,6 @@ export function Navigation({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={handleDiscordClick}
-                        aria-label="Discord"
                       >
                         <DiscordLogo weight="fill" className="h-5 w-5" />
                       </a>

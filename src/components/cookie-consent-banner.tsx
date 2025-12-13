@@ -13,7 +13,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useCookieConsent } from "@/components/providers/cookie-consent-provider";
-import { cn } from "@/lib/utils";
 
 interface CookieToggleProps {
   label: string;
@@ -46,16 +45,26 @@ function CookieToggle({
         aria-label={`Toggle ${label}`}
         disabled={disabled}
         onClick={() => !disabled && onChange(!checked)}
-        className={cn(
-          "relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          checked ? "bg-primary" : "bg-input"
-        )}
+        style={{
+          backgroundColor: checked ? "var(--color-primary)" : "#52525b",
+        }}
+        className={`
+          relative inline-flex h-7 w-12 shrink-0 cursor-pointer rounded-full
+          transition-all duration-200 ease-in-out
+          focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2
+          ${disabled ? "cursor-not-allowed opacity-60" : ""}
+        `}
       >
         <span
-          className={cn(
-            "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-md ring-0 transition-transform duration-200 ease-in-out",
-            checked ? "translate-x-6" : "translate-x-1"
-          )}
+          style={{
+            backgroundColor: checked ? "#ffffff" : "#a1a1aa",
+          }}
+          className={`
+            pointer-events-none inline-block h-5 w-5 mt-1 rounded-full
+            shadow-md ring-1 ring-black/5
+            transition-transform duration-200 ease-in-out
+            ${checked ? "translate-x-6" : "translate-x-1"}
+          `}
         />
       </button>
     </div>
@@ -158,7 +167,7 @@ export function CookieConsentBanner() {
                       </div>
                       <button
                         onClick={declineAll}
-                        className="shrink-0 text-muted-foreground hover:text-foreground transition-colors p-1 -m-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+                        className="shrink-0 text-muted-foreground hover:text-foreground transition-colors p-1 -m-1"
                         aria-label="Decline all cookies"
                       >
                         <X className="h-5 w-5" />
@@ -263,7 +272,7 @@ export function CookieSettingsButton() {
   return (
     <button
       onClick={openSettings}
-      className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+      className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
     >
       Cookie Settings
     </button>
