@@ -160,7 +160,6 @@ export function Navigation({
                 size="icon"
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
-                aria-label="Toggle theme"
               >
                 {theme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />
@@ -181,7 +180,6 @@ export function Navigation({
                   href="https://github.com/VolvoxCommunity"
                   target="_blank"
                   rel="noopener noreferrer"
-                  aria-label="GitHub"
                 >
                   <GithubLogo weight="fill" className="h-5 w-5" />
                 </a>
@@ -200,7 +198,6 @@ export function Navigation({
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleDiscordClick}
-                  aria-label="Discord"
                 >
                   <DiscordLogo weight="fill" className="h-5 w-5" />
                 </a>
@@ -213,7 +210,6 @@ export function Navigation({
                   variant="ghost"
                   size="icon"
                   className="md:hidden rounded-full hover:bg-muted"
-                  aria-label="Open menu"
                 >
                   <List className="h-6 w-6" />
                 </Button>
@@ -255,7 +251,6 @@ export function Navigation({
                         href="https://github.com/VolvoxCommunity"
                         target="_blank"
                         rel="noopener noreferrer"
-                        aria-label="GitHub"
                       >
                         <GithubLogo weight="fill" className="h-5 w-5" />
                       </a>
@@ -271,7 +266,6 @@ export function Navigation({
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={handleDiscordClick}
-                        aria-label="Discord"
                       >
                         <DiscordLogo weight="fill" className="h-5 w-5" />
                       </a>
