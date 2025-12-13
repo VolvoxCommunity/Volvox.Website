@@ -28,10 +28,8 @@ export function ProductScreenshots({
 }: ProductScreenshotsProps) {
   const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
-  // Filter out hero image if it's the only one
-  const galleryImages = screenshots.filter(
-    (_, i) => i > 0 || screenshots.length === 1
-  );
+  // Filter out hero image (index 0) - gallery only shows additional screenshots
+  const galleryImages = screenshots.slice(1);
 
   if (galleryImages.length === 0) {
     return null;
