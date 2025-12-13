@@ -3,13 +3,7 @@
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Quotes } from "@phosphor-icons/react";
-
-interface Testimonial {
-  name: string;
-  role?: string;
-  quote: string;
-  avatar?: string;
-}
+import type { Testimonial } from "@/lib/types";
 
 interface ProductTestimonialsProps {
   testimonials: Testimonial[];
@@ -34,7 +28,7 @@ export function ProductTestimonials({
         <div className="grid gap-6 md:grid-cols-2">
           {testimonials.map((testimonial, idx) => (
             <motion.div
-              key={idx}
+              key={testimonial.quote}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
