@@ -10,9 +10,8 @@ const nextConfig: NextConfig = {
       },
     ],
   },
-  async headers() {
-    await Promise.resolve();
-    return [
+  headers() {
+    return Promise.resolve([
       {
         source: "/:path*",
         headers: [
@@ -42,7 +41,7 @@ const nextConfig: NextConfig = {
           },
         ],
       },
-    ];
+    ]);
   },
 };
 
