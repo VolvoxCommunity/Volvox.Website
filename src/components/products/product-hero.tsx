@@ -1,7 +1,9 @@
 "use client";
 
+// Framework
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
+
+// Third-party
 import {
   GithubLogo,
   ArrowUpRight,
@@ -9,6 +11,9 @@ import {
   GooglePlayLogo,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+
+// Local
+import { Button } from "@/components/ui/button";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 

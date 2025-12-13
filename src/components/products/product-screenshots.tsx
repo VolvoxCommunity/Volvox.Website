@@ -1,16 +1,21 @@
 "use client";
 
+// Framework
 import { useState } from "react";
 import Image from "next/image";
+
+// Third-party
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+
+// Local
 import {
   Dialog,
   DialogContent,
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import { resolveProductImagePath } from "@/lib/image-utils";
 
 interface ProductScreenshotsProps {
