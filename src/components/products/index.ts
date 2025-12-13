@@ -10,4 +10,3 @@ export { ProductTestimonials } from "./product-testimonials";
 export { ProductChangelog } from "./product-changelog";
 export { ProductScreenshots } from "./product-screenshots";
 export { ProductToc } from "./product-toc";
-export { ProductCard } from "./product-card";
