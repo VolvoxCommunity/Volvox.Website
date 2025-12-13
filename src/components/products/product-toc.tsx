@@ -80,6 +80,7 @@ export function ProductToc({
             {sections.map(({ id, label }) => (
               <li key={id}>
                 <button
+                  type="button"
                   onClick={() => handleClick(id)}
                   className={cn(
                     "px-3 py-1 text-sm rounded-full transition-colors",
