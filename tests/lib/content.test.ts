@@ -313,6 +313,10 @@ describe("content lib", () => {
     });
 
     describe("getExtendedProductBySlug path traversal", () => {
+      beforeEach(() => {
+        (fs.existsSync as jest.Mock).mockClear();
+      });
+
       it("returns null for path traversal attempts", () => {
         // These should NOT trigger any file system access
         expect(getExtendedProductBySlug("../etc/passwd")).toBeNull();
@@ -326,6 +330,10 @@ describe("content lib", () => {
     });
 
     describe("getProductChangelog path traversal", () => {
+      beforeEach(() => {
+        (fs.existsSync as jest.Mock).mockClear();
+      });
+
       it("returns null for path traversal attempts", () => {
         // These should NOT trigger any file system access
         expect(getProductChangelog("../etc/passwd")).toBeNull();
