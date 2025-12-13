@@ -167,19 +167,21 @@ describe("Blog Components", () => {
   });
 
   describe("HeadingWithAnchor", () => {
+    const mockWriteText = jest.fn().mockResolvedValue(undefined);
+
     beforeEach(() => {
       Object.assign(navigator, {
         clipboard: {
-          writeText: jest.fn().mockResolvedValue(undefined),
+          writeText: mockWriteText,
         },
       });
     });
 
     it("renders heading with correct tag", () => {
       render(<HeadingWithAnchor as="h2">Test Heading</HeadingWithAnchor>);
-      expect(
-        screen.getByRole("heading", { level: 2 })
-      ).toHaveTextContent("Test Heading");
+      expect(screen.getByRole("heading", { level: 2 })).toHaveTextContent(
+        "Test Heading"
+      );
     });
 
     it("generates id from text content", () => {
@@ -188,15 +190,13 @@ describe("Blog Components", () => {
       expect(heading).toHaveAttribute("id", "my-test-heading");
     });
 
-    it("copies link to clipboard on button click", async () => {
+    it("copies link to clipboard on button click", () => {
       render(<HeadingWithAnchor as="h2">Test</HeadingWithAnchor>);
       const copyButton = screen.getByRole("button", {
         name: /copy link to heading/i,
       });
-      await act(async () => {
-        fireEvent.click(copyButton);
-      });
-      expect(navigator.clipboard.writeText).toHaveBeenCalled();
+      fireEvent.click(copyButton);
+      expect(mockWriteText).toHaveBeenCalled();
     });
   });
 

@@ -17,16 +17,20 @@ function ThemeConsumer() {
 describe("ThemeProvider", () => {
   const originalMatchMedia = window.matchMedia;
   const originalLocalStorage = window.localStorage;
+  let mockGetItem: jest.Mock;
+  let mockSetItem: jest.Mock;
 
   beforeEach(() => {
     // Mock localStorage
     const storage: Record<string, string> = {};
+    mockGetItem = jest.fn((key: string) => storage[key] || null);
+    mockSetItem = jest.fn((key: string, value: string) => {
+      storage[key] = value;
+    });
     Object.defineProperty(window, "localStorage", {
       value: {
-        getItem: jest.fn((key: string) => storage[key] || null),
-        setItem: jest.fn((key: string, value: string) => {
-          storage[key] = value;
-        }),
+        getItem: mockGetItem,
+        setItem: mockSetItem,
         removeItem: jest.fn((key: string) => {
           delete storage[key];
         }),
@@ -115,12 +119,12 @@ describe("ThemeProvider", () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    expect(window.localStorage.getItem).toHaveBeenCalledWith("volvox-theme");
+    expect(mockGetItem).toHaveBeenCalledWith("volvox-theme");
     expect(screen.getByTestId("current-theme")).toHaveTextContent("light");
   });
 
   it("uses custom storage key", async () => {
-    (window.localStorage.getItem as jest.Mock).mockReturnValue("dark");
+    mockGetItem.mockReturnValue("dark");
 
     render(
       <ThemeProvider storageKey="custom-theme">
@@ -132,7 +136,7 @@ describe("ThemeProvider", () => {
       await new Promise((resolve) => setTimeout(resolve, 0));
     });
 
-    expect(window.localStorage.getItem).toHaveBeenCalledWith("custom-theme");
+    expect(mockGetItem).toHaveBeenCalledWith("custom-theme");
   });
 
   it("updates theme when setTheme is called", async () => {
@@ -150,10 +154,7 @@ describe("ThemeProvider", () => {
     fireEvent.click(darkButton);
 
     expect(screen.getByTestId("current-theme")).toHaveTextContent("dark");
-    expect(window.localStorage.setItem).toHaveBeenCalledWith(
-      "volvox-theme",
-      "dark"
-    );
+    expect(mockSetItem).toHaveBeenCalledWith("volvox-theme", "dark");
   });
 
   it("adds dark class to document when theme is dark", async () => {
