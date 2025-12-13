@@ -8,6 +8,11 @@ import {
 import { ProductDetailClient } from "./product-detail-client";
 
 /**
+ * Disable dynamic params to only allow known product slugs.
+ */
+export const dynamicParams = false;
+
+/**
  * Generates static params for all product pages.
  */
 export function generateStaticParams() {
