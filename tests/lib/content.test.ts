@@ -282,13 +282,17 @@ describe("content lib", () => {
 
   describe("Path Traversal Prevention", () => {
     describe("isValidSlug", () => {
-      it("accepts valid slugs", () => {
+      it("accepts valid lowercase slugs", () => {
         expect(isValidSlug("sobriety-waypoint")).toBe(true);
         expect(isValidSlug("product-1")).toBe(true);
         expect(isValidSlug("my-app")).toBe(true);
         expect(isValidSlug("test123")).toBe(true);
-        expect(isValidSlug("UPPERCASE")).toBe(true);
-        expect(isValidSlug("MixedCase-123")).toBe(true);
+      });
+
+      it("rejects uppercase slugs", () => {
+        expect(isValidSlug("UPPERCASE")).toBe(false);
+        expect(isValidSlug("MixedCase-123")).toBe(false);
+        expect(isValidSlug("Product-Name")).toBe(false);
       });
 
       it("rejects path traversal attempts", () => {

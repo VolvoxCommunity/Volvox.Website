@@ -120,7 +120,7 @@ export const extendedProductSchema = z.object({
   slug: z
     .string()
     .min(1)
-    // Only allows lowercase alphanumeric characters and hyphens. This is stricter than the isValidSlug function (elsewhere), which accepts uppercase letters as well. Review for consistency if both are used.
+    // Only allows lowercase alphanumeric characters and hyphens
     .regex(/^[a-z0-9-]+$/),
   tagline: z.string().min(1),
   description: z.string().min(1),

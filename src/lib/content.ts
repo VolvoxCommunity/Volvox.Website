@@ -21,7 +21,7 @@ const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
  * @returns True if the slug is valid, false otherwise
  */
 export function isValidSlug(slug: string): boolean {
-  return /^[a-z0-9-]+$/i.test(slug);
+  return /^[a-z0-9-]+$/.test(slug);
 }
 
 /**
