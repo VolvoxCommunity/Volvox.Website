@@ -25,11 +25,30 @@ interface ProductCardProps {
   index: number;
 }
 
+/**
+ * Resolves a screenshot value to a valid image path.
+ * Handles:
+ * - URLs (http/https) - returns as-is
+ * - Absolute paths (starts with /) - returns as-is
+ * - Bare filenames - prepends the product image directory
+ */
+function resolveImagePath(
+  screenshot: string | undefined,
+  productSlug: string
+): string | null {
+  if (!screenshot) return null;
+  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
+    return screenshot;
+  }
+  if (screenshot.startsWith("/")) {
+    return screenshot;
+  }
+  return `/images/product/${productSlug}/${screenshot}`;
+}
+
 function ProductCard({ product, index }: ProductCardProps) {
   const heroImage = product.screenshots[0];
-  const imagePath = heroImage
-    ? `/images/product/${product.slug}/${heroImage}`
-    : null;
+  const imagePath = resolveImagePath(heroImage, product.slug);
 
   return (
     <motion.div
@@ -92,7 +111,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                 <ul className="space-y-3">
                   {product.features.map((feature, idx) => (
                     <motion.li
-                      key={idx}
+                      key={`${product.slug}:${feature}`}
                       className="flex items-start gap-3 group/item"
                       initial={{ opacity: 0, x: -10 }}
                       whileInView={{ opacity: 1, x: 0 }}
