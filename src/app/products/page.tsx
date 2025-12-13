@@ -1,24 +1,8 @@
-import { Metadata } from "next";
-import { getAllExtendedProducts } from "@/lib/content";
-import { ProductsIndexClient } from "./products-index-client";
-
-export const metadata: Metadata = {
-  title: "Products",
-  description:
-    "Explore our open-source products and applications built to make a difference.",
-  openGraph: {
-    title: "Products | Volvox",
-    description:
-      "Explore our open-source products and applications built to make a difference.",
-    type: "website",
-  },
-};
+import { redirect } from "next/navigation";
 
 /**
- * Products index page server component.
+ * Redirects /products to homepage products section.
  */
 export default function ProductsPage() {
-  const products = getAllExtendedProducts();
-
-  return <ProductsIndexClient products={products} />;
+  redirect("/#products");
 }
