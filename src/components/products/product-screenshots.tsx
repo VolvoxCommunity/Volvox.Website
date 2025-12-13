@@ -11,29 +11,12 @@ import {
   DialogDescription,
 } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { resolveProductImagePath } from "@/lib/image-utils";
 
 interface ProductScreenshotsProps {
   slug: string;
   screenshots: string[];
   productName: string;
-}
-
-/**
- * Resolves a screenshot path to a valid image URL.
- * Handles external URLs, absolute paths, and bare filenames.
- */
-function resolveImagePath(
-  screenshot: string | undefined,
-  productSlug: string
-): string | null {
-  if (!screenshot) return null;
-  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
-    return screenshot;
-  }
-  if (screenshot.startsWith("/")) {
-    return screenshot;
-  }
-  return `/images/product/${productSlug}/${screenshot}`;
 }
 
 /**
@@ -59,7 +42,7 @@ export function ProductScreenshots({
         <h2 className="text-3xl md:text-4xl font-bold mb-8">Screenshots</h2>
         <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
           {galleryImages.map((screenshot, idx) => {
-            const imagePath = resolveImagePath(screenshot, slug);
+            const imagePath = resolveProductImagePath(screenshot, slug);
             if (!imagePath) return null;
             return (
               <motion.button

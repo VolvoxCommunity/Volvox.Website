@@ -13,6 +13,7 @@ import { CheckCircle } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
+import { resolveProductImagePath } from "@/lib/image-utils";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -25,30 +26,9 @@ interface ProductCardProps {
   index: number;
 }
 
-/**
- * Resolves a screenshot value to a valid image path.
- * Handles:
- * - URLs (http/https) - returns as-is
- * - Absolute paths (starts with /) - returns as-is
- * - Bare filenames - prepends the product image directory
- */
-function resolveImagePath(
-  screenshot: string | undefined,
-  productSlug: string
-): string | null {
-  if (!screenshot) return null;
-  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
-    return screenshot;
-  }
-  if (screenshot.startsWith("/")) {
-    return screenshot;
-  }
-  return `/images/product/${productSlug}/${screenshot}`;
-}
-
 function ProductCard({ product, index }: ProductCardProps) {
   const heroImage = product.screenshots[0];
-  const imagePath = resolveImagePath(heroImage, product.slug);
+  const imagePath = resolveProductImagePath(heroImage, product.slug);
 
   return (
     <motion.div

@@ -10,27 +10,10 @@ import {
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
+import { resolveProductImagePath } from "@/lib/image-utils";
 
 interface ProductHeroProps {
   product: ExtendedProduct;
-}
-
-/**
- * Resolves a screenshot path to a valid image URL.
- * Handles external URLs, absolute paths, and bare filenames.
- */
-function resolveImagePath(
-  screenshot: string | undefined,
-  productSlug: string
-): string | null {
-  if (!screenshot) return null;
-  if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {
-    return screenshot;
-  }
-  if (screenshot.startsWith("/")) {
-    return screenshot;
-  }
-  return `/images/product/${productSlug}/${screenshot}`;
 }
 
 /**
@@ -39,7 +22,7 @@ function resolveImagePath(
  */
 export function ProductHero({ product }: ProductHeroProps) {
   const heroImage = product.screenshots[0];
-  const imagePath = resolveImagePath(heroImage, product.slug);
+  const imagePath = resolveProductImagePath(heroImage, product.slug);
 
   return (
     <section className="py-16 md:py-24 px-4">
