@@ -142,120 +142,122 @@ export async function generateBlogPostSocialImage(
     }
 
     return new ImageResponse(
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 60,
-          backgroundColor: "#0a0a0a",
-          fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
-        }}
-      >
+      (
         <div
           style={{
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-between",
+            padding: 60,
+            backgroundColor: "#0a0a0a",
+            fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
           }}
         >
-          {/* Title */}
           <div
             style={{
-              fontSize: 60,
-              fontWeight: 700,
-              color: "#ffffff",
-              lineHeight: 1.1,
-              marginBottom: 24,
-            }}
-          >
-            {frontmatter.title}
-          </div>
-
-          {/* Excerpt */}
-          <div
-            style={{
-              fontSize: 30,
-              color: "#d1d5db",
-              lineHeight: 1.4,
-              marginBottom: 32,
               display: "flex",
+              flexDirection: "column",
             }}
           >
-            {frontmatter.excerpt || "Read more on Volvox Blog"}
+            {/* Title */}
+            <div
+              style={{
+                fontSize: 60,
+                fontWeight: 700,
+                color: "#ffffff",
+                lineHeight: 1.1,
+                marginBottom: 24,
+              }}
+            >
+              {frontmatter.title}
+            </div>
+
+            {/* Excerpt */}
+            <div
+              style={{
+                fontSize: 30,
+                color: "#d1d5db",
+                lineHeight: 1.4,
+                marginBottom: 32,
+                display: "flex",
+              }}
+            >
+              {frontmatter.excerpt || "Read more on Volvox Blog"}
+            </div>
+
+            {/* Author & Date */}
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: 24,
+                color: "#a1a1aa",
+                marginBottom: 32,
+              }}
+            >
+              <span style={{ color: "#ffffff", fontWeight: 700 }}>
+                {frontmatter.author?.name || "Volvox"}
+              </span>
+              <span style={{ margin: "0 12px" }}>·</span>
+              <span>{frontmatter.date}</span>
+            </div>
+
+            {/* Tags */}
+            {frontmatter.tags && frontmatter.tags.length > 0 && (
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                {frontmatter.tags.slice(0, 3).map((tag) => (
+                  <div
+                    key={tag}
+                    style={{
+                      backgroundColor: "#1f2937",
+                      color: "#60a5fa",
+                      padding: "8px 16px",
+                      borderRadius: 999,
+                      fontSize: 20,
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {`#${tag}`}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Author & Date */}
+          {/* Footer */}
           <div
             style={{
               display: "flex",
               alignItems: "center",
-              fontSize: 24,
-              color: "#a1a1aa",
-              marginBottom: 32,
+              justifyContent: "flex-end",
             }}
           >
-            <span style={{ color: "#ffffff", fontWeight: 700 }}>
-              {frontmatter.author?.name || "Volvox"}
-            </span>
-            <span style={{ margin: "0 12px" }}>·</span>
-            <span>{frontmatter.date}</span>
-          </div>
-
-          {/* Tags */}
-          {frontmatter.tags && frontmatter.tags.length > 0 && (
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {frontmatter.tags.slice(0, 3).map((tag) => (
-                <div
-                  key={tag}
-                  style={{
-                    backgroundColor: "#1f2937",
-                    color: "#60a5fa",
-                    padding: "8px 16px",
-                    borderRadius: 999,
-                    fontSize: 20,
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {`#${tag}`}
-                </div>
-              ))}
+            {logoSrc && (
+              <img
+                src={logoSrc}
+                width={48}
+                height={48}
+                style={{ marginRight: 16 }}
+                alt="Volvox logo"
+              />
+            )}
+            <div
+              style={{
+                fontSize: 28,
+                fontWeight: 700,
+                color: "#3b82f6",
+              }}
+            >
+              VOLVOX
             </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          {logoSrc && (
-            <img
-              src={logoSrc}
-              width={48}
-              height={48}
-              style={{ marginRight: 16 }}
-              alt="Volvox logo"
-            />
-          )}
-          <div
-            style={{
-              fontSize: 28,
-              fontWeight: 700,
-              color: "#3b82f6",
-            }}
-          >
-            VOLVOX
           </div>
         </div>
-      </div>,
+      ),
       {
         ...IMAGE_SIZE,
         ...(fontData && {
