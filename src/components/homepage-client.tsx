@@ -97,8 +97,9 @@ export function HomepageClient({
     }
   }, [handleNavigate]);
 
-  // Throttle scroll updates to run at most once per animation frame
-  // This prevents expensive DOM calculations from blocking the main thread during scroll
+  // ⚡ Bolt: Throttled scroll event listener using requestAnimationFrame
+  // Optimization: Reduces main thread blocking by limiting expensive DOM reads
+  // (offsetTop, offsetHeight) to once per frame (approx 60fps).
   useEffect(() => {
     let ticking = false;
 

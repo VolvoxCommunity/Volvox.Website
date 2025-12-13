@@ -141,6 +141,7 @@ describe("HomepageClient", () => {
       fireEvent.scroll(window);
     });
 
+    // ⚡ Bolt: Wait for the throttled scroll update (async due to requestAnimationFrame)
     await waitFor(() => {
       expect(mockNavigation).toHaveBeenLastCalledWith(
         expect.objectContaining({ currentSection: "products" })
