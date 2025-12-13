@@ -22,7 +22,7 @@ interface ProductTocProps {
  */
 export function ProductToc({
   sections,
-  backHref = "/products",
+  backHref = "/#products",
   backLabel = "Back to Products",
 }: ProductTocProps) {
   // Default to first section (overview) on initial load

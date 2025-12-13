@@ -171,7 +171,7 @@ describe("content lib", () => {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobriety Waypoint",
           slug: "sobriety-waypoint",
-          tagline: "Recovery accountability made simple",
+          tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription:
             "Sobriety Waypoint transforms the sponsor-sponsee relationship",
@@ -199,7 +199,7 @@ describe("content lib", () => {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobriety Waypoint",
           slug: "sobriety-waypoint",
-          tagline: "Recovery accountability made simple",
+          tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription:
             "Sobriety Waypoint transforms the sponsor-sponsee relationship",
@@ -233,7 +233,7 @@ describe("content lib", () => {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobriety Waypoint",
           slug: "sobriety-waypoint",
-          tagline: "Recovery accountability made simple",
+          tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription:
             "Sobriety Waypoint transforms the sponsor-sponsee relationship",
