@@ -55,9 +55,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                   >
                     <AppleLogo weight="fill" className="h-6 w-6" />
                     <div className="text-left">
-                      <div className="text-[10px] leading-none">
-                        Download on the
-                      </div>
+                      <div className="text-xs leading-none">Download on the</div>
                       <div className="text-sm font-semibold">App Store</div>
                     </div>
                   </a>
@@ -72,7 +70,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                   >
                     <GooglePlayLogo weight="fill" className="h-6 w-6" />
                     <div className="text-left">
-                      <div className="text-[10px] leading-none">Get it on</div>
+                      <div className="text-xs leading-none">Get it on</div>
                       <div className="text-sm font-semibold">Google Play</div>
                     </div>
                   </a>
