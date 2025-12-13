@@ -1,6 +1,7 @@
 "use client";
 
-import { MDXRemote } from "next-mdx-remote/rsc";
+import ReactMarkdown from "react-markdown";
+import remarkGfm from "remark-gfm";
 import { motion } from "framer-motion";
 
 interface ProductChangelogProps {
@@ -8,7 +9,7 @@ interface ProductChangelogProps {
 }
 
 /**
- * Changelog section rendering MDX content.
+ * Changelog section rendering markdown content.
  */
 export function ProductChangelog({ content }: ProductChangelogProps) {
   if (!content) {
@@ -32,7 +33,7 @@ export function ProductChangelog({ content }: ProductChangelogProps) {
             prose-p:text-muted-foreground
           "
         >
-          <MDXRemote source={content} />
+          <ReactMarkdown remarkPlugins={[remarkGfm]}>{content}</ReactMarkdown>
         </motion.div>
       </div>
     </section>
