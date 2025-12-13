@@ -40,7 +40,7 @@ function ProductCard({ product, index }: ProductCardProps) {
       <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
         <div className="grid md:grid-cols-2 gap-0">
           <motion.div
-            className="aspect-[4/3] bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden"
+            className="aspect-video bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
