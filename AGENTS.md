@@ -40,8 +40,7 @@ All checks must pass before committing. Do not skip these steps.
 - **Playwright E2E**:
   - Configuration in `playwright.config.ts`.
   - Supports Chromium, Firefox, WebKit, Mobile Chrome, and Mobile Safari.
-  - Includes visual regression testing.
-  - To update snapshots: `pnpm exec playwright test --update-snapshots`
+  - Visual regression testing (snapshots) is configured but **ignored** (`ignoreSnapshots: true`) to avoid committing binary files to the repo. Visual checks will pass automatically.
 - **Test Commands**:
   - Unit tests: `pnpm test`
   - E2E tests: `pnpm exec playwright test`

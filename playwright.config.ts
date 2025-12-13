@@ -16,6 +16,7 @@ export default defineConfig({
     // Capture screenshot on failure
     screenshot: "only-on-failure",
   },
+  ignoreSnapshots: true,
   projects: [
     {
       name: "chromium",

@@ -18,7 +18,9 @@ test.describe("Mobile Navigation", () => {
 
     // Check if menu content is visible
     // Prefer testid if available, fallback to role dialog
-    const sheetContent = page.getByTestId("mobile-menu-content").or(page.getByRole("dialog"));
+    const sheetContent = page
+      .getByTestId("mobile-menu-content")
+      .or(page.getByRole("dialog"));
     await expect(sheetContent).toBeVisible({ timeout: 10000 });
 
     await expect(sheetContent.getByText("Home")).toBeVisible();
