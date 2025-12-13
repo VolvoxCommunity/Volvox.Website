@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
 import { BlogNavigation } from "@/components/blog/blog-navigation";
 import { Footer } from "@/components/footer";
@@ -59,28 +57,12 @@ export function ProductDetailClient({
         {/* Spacer for fixed navigation */}
         <div style={{ height: NAV_HEIGHT }} />
 
-        {/* Back Navigation */}
-        <div
-          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3"
-          style={{ top: NAV_HEIGHT }}
-        >
-          <div className="container mx-auto px-4 max-w-6xl">
-            <Link
-              href="/products"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to Products
-            </Link>
-          </div>
-        </div>
+        {/* Combined Back Navigation + Table of Contents */}
+        <ProductToc sections={tocSections} />
 
         <main>
           {/* Hero Section */}
           <ProductHero product={product} />
-
-          {/* Table of Contents */}
-          <ProductToc sections={tocSections} />
 
           {/* Overview Section */}
           <section id="overview" className="py-16 px-4">
