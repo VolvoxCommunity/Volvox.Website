@@ -22,15 +22,31 @@
   "faq": [
     {
       "question": "Is Sobriety Waypoint free to use?",
-      "answer": "Yes, Sobriety Waypoint is completely free and open source. We believe recovery tools should be accessible to everyone."
+      "answer": "Completely free. No ads, no premium tiers, no 'unlock your third milestone for $4.99.' We believe recovery tools should be accessible to everyone—your sobriety journey has enough obstacles without a paywall."
     },
     {
       "question": "How do I connect with my sponsor?",
-      "answer": "Your sponsor will provide you with a unique invite code. Enter this code in the app to establish your connection and begin your accountability partnership."
+      "answer": "Your sponsor generates a unique 8-character invite code from their profile. Enter it in your app, and you're connected. It's like a friend code, but for accountability instead of Mario Kart."
     },
     {
       "question": "Is my data private?",
-      "answer": "Absolutely. Your sobriety data and personal notes are only visible to you and your connected sponsor. We use secure encryption and never share your information with third parties."
+      "answer": "Your sobriety data and personal notes are only visible to you and your connected sponsor. We use bank-level encryption and never share your information with third parties. What happens in your recovery stays in your recovery."
+    },
+    {
+      "question": "Can I be both a sponsor and a sponsee?",
+      "answer": "Absolutely. No role restrictions here—you can guide others while receiving guidance yourself. Just like real 12-step programs, except the app won't ask you to make coffee."
+    },
+    {
+      "question": "What happens if I relapse?",
+      "answer": "Recovery isn't a straight line. You can honestly document relapses, which resets your counter but preserves your entire journey history. No shame, no judgment—just transparent tracking, because real recovery requires real honesty."
+    },
+    {
+      "question": "What 12-step programs does the app support?",
+      "answer": "All of them. AA, NA, CA, OA, GA—if it has 12 steps and accountability partners, we've got you covered. The features work universally because recovery principles are universal."
+    },
+    {
+      "question": "What platforms is Sobriety Waypoint available on?",
+      "answer": "iOS, Android, and Web. Your data syncs across all platforms, so you can check in whether you're on your phone, tablet, or pretending to work at your computer."
     }
   ],
   "testimonials": []
