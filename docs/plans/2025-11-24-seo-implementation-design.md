@@ -65,34 +65,34 @@ Dynamic sitemap at `/sitemap.xml` that auto-generates from blog posts.
 
 ```ts
 // src/app/sitemap.ts
-import { MetadataRoute } from 'next'
-import { getAllPosts } from '@/lib/blog'
+import { MetadataRoute } from "next";
+import { getAllPosts } from "@/lib/blog";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const posts = await getAllPosts()
+  const posts = await getAllPosts();
 
   const blogUrls = posts.map((post) => ({
     url: `https://volvoxdev.com/blog/${post.slug}`,
     lastModified: new Date(post.date),
-    changeFrequency: 'monthly' as const,
+    changeFrequency: "monthly" as const,
     priority: 0.7,
-  }))
+  }));
 
   return [
     {
-      url: 'https://volvoxdev.com',
+      url: "https://volvoxdev.com",
       lastModified: new Date(),
-      changeFrequency: 'weekly',
+      changeFrequency: "weekly",
       priority: 1,
     },
     {
-      url: 'https://volvoxdev.com/privacy',
+      url: "https://volvoxdev.com/privacy",
       lastModified: new Date(),
-      changeFrequency: 'yearly',
+      changeFrequency: "yearly",
       priority: 0.3,
     },
     ...blogUrls,
-  ]
+  ];
 }
 ```
 
@@ -100,16 +100,16 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 ```ts
 // src/app/robots.ts
-import { MetadataRoute } from 'next'
+import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
   return {
     rules: {
-      userAgent: '*',
-      allow: '/',
+      userAgent: "*",
+      allow: "/",
     },
-    sitemap: 'https://volvoxdev.com/sitemap.xml',
-  }
+    sitemap: "https://volvoxdev.com/sitemap.xml",
+  };
 }
 ```
 
@@ -119,46 +119,50 @@ export default function robots(): MetadataRoute.Robots {
 
 ```tsx
 // src/app/opengraph-image.tsx
-import { ImageResponse } from 'next/og'
+import { ImageResponse } from "next/og";
 
-export const runtime = 'edge'
-export const alt = 'Volvox - Software Development & Learning Community'
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+export const runtime = "edge";
+export const alt = "Volvox - Software Development & Learning Community";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
 
 export default async function Image() {
   return new ImageResponse(
-    (
-      <div style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: '#0a0a0a',
-        backgroundImage: 'linear-gradient(to bottom right, #0a0a0a, #1a1a2e)',
-      }}>
-        <div style={{
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#0a0a0a",
+        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
+      }}
+    >
+      <div
+        style={{
           fontSize: 72,
-          fontWeight: 'bold',
-          color: '#3b82f6',
+          fontWeight: "bold",
+          color: "#3b82f6",
           marginBottom: 20,
-        }}>
-          VOLVOX
-        </div>
-        <div style={{
-          fontSize: 32,
-          color: '#a1a1aa',
-          textAlign: 'center',
-          maxWidth: 800,
-        }}>
-          Software Development & Learning Community
-        </div>
+        }}
+      >
+        VOLVOX
       </div>
-    ),
+      <div
+        style={{
+          fontSize: 32,
+          color: "#a1a1aa",
+          textAlign: "center",
+          maxWidth: 800,
+        }}
+      >
+        Software Development & Learning Community
+      </div>
+    </div>,
     { ...size }
-  )
+  );
 }
 ```
 
@@ -166,57 +170,63 @@ export default async function Image() {
 
 ```tsx
 // src/app/blog/[slug]/opengraph-image.tsx
-import { ImageResponse } from 'next/og'
-import { getPostBySlug } from '@/lib/blog'
+import { ImageResponse } from "next/og";
+import { getPostBySlug } from "@/lib/blog";
 
-export const runtime = 'edge'
-export const alt = 'Blog post'
-export const size = { width: 1200, height: 630 }
-export const contentType = 'image/png'
+export const runtime = "edge";
+export const alt = "Blog post";
+export const size = { width: 1200, height: 630 };
+export const contentType = "image/png";
 
 export default async function Image({ params }: { params: { slug: string } }) {
-  const { frontmatter } = await getPostBySlug(params.slug)
+  const { frontmatter } = await getPostBySlug(params.slug);
 
   return new ImageResponse(
-    (
-      <div style={{
-        height: '100%',
-        width: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
+    <div
+      style={{
+        height: "100%",
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
         padding: 60,
-        backgroundColor: '#0a0a0a',
-        backgroundImage: 'linear-gradient(to bottom right, #0a0a0a, #1a1a2e)',
-      }}>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-          <div style={{
+        backgroundColor: "#0a0a0a",
+        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
+      }}
+    >
+      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+        <div
+          style={{
             fontSize: 48,
-            fontWeight: 'bold',
-            color: '#ffffff',
+            fontWeight: "bold",
+            color: "#ffffff",
             lineHeight: 1.2,
             maxWidth: 900,
-          }}>
-            {frontmatter.title}
-          </div>
-          <div style={{
-            fontSize: 24,
-            color: '#a1a1aa',
-          }}>
-            By {frontmatter.author?.name} · {frontmatter.date}
-          </div>
+          }}
+        >
+          {frontmatter.title}
         </div>
-        <div style={{
-          fontSize: 28,
-          fontWeight: 'bold',
-          color: '#3b82f6',
-        }}>
-          VOLVOX
+        <div
+          style={{
+            fontSize: 24,
+            color: "#a1a1aa",
+          }}
+        >
+          By {frontmatter.author?.name} · {frontmatter.date}
         </div>
       </div>
-    ),
+      <div
+        style={{
+          fontSize: 28,
+          fontWeight: "bold",
+          color: "#3b82f6",
+        }}
+      >
+        VOLVOX
+      </div>
+    </div>,
     { ...size }
-  )
+  );
 }
 ```
 
@@ -226,57 +236,60 @@ Twitter images will be identical files named `twitter-image.tsx`.
 
 ```ts
 // src/lib/structured-data.ts
-import { BlogPost } from './types'
+import { BlogPost } from "./types";
 
 export function generateOrganizationSchema() {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Organization',
-    name: 'Volvox',
-    url: 'https://volvoxdev.com',
-    logo: 'https://volvoxdev.com/volvox-logo.png',
-    description: 'Building great software while fostering the next generation of developers through mentorship and open source.',
-    sameAs: [
-      'https://twitter.com/VolvoxLLC',
-    ],
-  }
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Volvox",
+    url: "https://volvoxdev.com",
+    logo: "https://volvoxdev.com/volvox-logo.png",
+    description:
+      "Building great software while fostering the next generation of developers through mentorship and open source.",
+    sameAs: ["https://twitter.com/VolvoxLLC"],
+  };
 }
 
-export function generateArticleSchema(post: BlogPost & { author?: { name: string } }) {
+export function generateArticleSchema(
+  post: BlogPost & { author?: { name: string } }
+) {
   return {
-    '@context': 'https://schema.org',
-    '@type': 'Article',
+    "@context": "https://schema.org",
+    "@type": "Article",
     headline: post.title,
     description: post.excerpt,
     author: {
-      '@type': 'Person',
-      name: post.author?.name || 'Volvox',
+      "@type": "Person",
+      name: post.author?.name || "Volvox",
     },
     datePublished: post.date,
     publisher: {
-      '@type': 'Organization',
-      name: 'Volvox',
+      "@type": "Organization",
+      name: "Volvox",
       logo: {
-        '@type': 'ImageObject',
-        url: 'https://volvoxdev.com/volvox-logo.png',
+        "@type": "ImageObject",
+        url: "https://volvoxdev.com/volvox-logo.png",
       },
     },
     url: `https://volvoxdev.com/blog/${post.slug}`,
     image: `https://volvoxdev.com/blog/${post.slug}/opengraph-image`,
-  }
+  };
 }
 ```
 
 **Usage in layout.tsx:**
 
 ```tsx
-import { generateOrganizationSchema } from '@/lib/structured-data'
+import { generateOrganizationSchema } from "@/lib/structured-data";
 
 // Inside RootLayout, in <head>:
 <script
   type="application/ld+json"
-  dangerouslySetInnerHTML={{ __html: JSON.stringify(generateOrganizationSchema()) }}
-/>
+  dangerouslySetInnerHTML={{
+    __html: JSON.stringify(generateOrganizationSchema()),
+  }}
+/>;
 ```
 
 **Usage in blog/[slug]/page.tsx:**
@@ -300,38 +313,39 @@ Update `layout.tsx` metadata:
 
 ```tsx
 export const metadata: Metadata = {
-  metadataBase: new URL('https://volvoxdev.com'),
+  metadataBase: new URL("https://volvoxdev.com"),
   title: {
-    default: 'Volvox - Software Development & Learning Community',
-    template: '%s | Volvox',
+    default: "Volvox - Software Development & Learning Community",
+    template: "%s | Volvox",
   },
-  description: 'Building great software while fostering the next generation of developers through mentorship and open source.',
+  description:
+    "Building great software while fostering the next generation of developers through mentorship and open source.",
   keywords: [
-    'software development',
-    'mentorship',
-    'open source',
-    'learning',
-    'programming',
-    'React',
-    'TypeScript',
+    "software development",
+    "mentorship",
+    "open source",
+    "learning",
+    "programming",
+    "React",
+    "TypeScript",
   ],
-  authors: [{ name: 'Bill Chirico' }],
-  creator: 'Volvox',
+  authors: [{ name: "Bill Chirico" }],
+  creator: "Volvox",
   openGraph: {
-    type: 'website',
-    locale: 'en_US',
-    url: 'https://volvoxdev.com',
-    siteName: 'Volvox',
+    type: "website",
+    locale: "en_US",
+    url: "https://volvoxdev.com",
+    siteName: "Volvox",
   },
   twitter: {
-    card: 'summary_large_image',
-    creator: '@VolvoxLLC',
+    card: "summary_large_image",
+    creator: "@VolvoxLLC",
   },
   robots: {
     index: true,
     follow: true,
   },
-}
+};
 ```
 
 ## Dependencies
@@ -356,12 +370,12 @@ After implementation, verify:
 
 ## Summary
 
-| Component | Implementation |
-|-----------|----------------|
-| Google Analytics | `@next/third-parties/google` with ID `G-W02EBRX2ZF` |
-| Sitemap | Dynamic `sitemap.ts` with all pages and blog posts |
-| Robots.txt | Allow all crawlers, point to sitemap |
-| Homepage OG Image | Static branded image via `ImageResponse` |
-| Blog OG Images | Dynamic per-post images with title, author, date |
-| Structured Data | Organization (site-wide) + Article (blog posts) |
-| Twitter Handle | `@VolvoxLLC` |
+| Component         | Implementation                                      |
+| ----------------- | --------------------------------------------------- |
+| Google Analytics  | `@next/third-parties/google` with ID `G-W02EBRX2ZF` |
+| Sitemap           | Dynamic `sitemap.ts` with all pages and blog posts  |
+| Robots.txt        | Allow all crawlers, point to sitemap                |
+| Homepage OG Image | Static branded image via `ImageResponse`            |
+| Blog OG Images    | Dynamic per-post images with title, author, date    |
+| Structured Data   | Organization (site-wide) + Article (blog posts)     |
+| Twitter Handle    | `@VolvoxLLC`                                        |
