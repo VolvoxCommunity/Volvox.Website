@@ -86,6 +86,3 @@ playwright/.cache/
 # Git worktrees
 worktrees/
 .worktrees/
-
-# Documentation plans
-docs/plans/
