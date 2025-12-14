@@ -26,14 +26,14 @@ function ConsentConsumer() {
       <span data-testid="performance">{consent.performance.toString()}</span>
       <span data-testid="show-banner">{showBanner.toString()}</span>
       <span data-testid="settings-open">{isSettingsOpen.toString()}</span>
-      <button onClick={acceptAll}>Accept All</button>
-      <button onClick={declineAll}>Decline All</button>
-      <button onClick={() => updateConsent({ analytics: true })}>
+      <button type="button" onClick={acceptAll}>Accept All</button>
+      <button type="button" onClick={declineAll}>Decline All</button>
+      <button type="button" onClick={() => updateConsent({ analytics: true })}>
         Enable Analytics
       </button>
-      <button onClick={resetConsent}>Reset</button>
-      <button onClick={openSettings}>Open Settings</button>
-      <button onClick={closeSettings}>Close Settings</button>
+      <button type="button" onClick={resetConsent}>Reset</button>
+      <button type="button" onClick={openSettings}>Open Settings</button>
+      <button type="button" onClick={closeSettings}>Close Settings</button>
     </div>
   );
 }
