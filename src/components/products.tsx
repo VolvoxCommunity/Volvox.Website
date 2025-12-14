@@ -40,7 +40,7 @@ function ProductCard({ product, index }: ProductCardProps) {
       <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
         <div className="grid md:grid-cols-2 gap-0">
           <motion.div
-            className="aspect-[2/1] bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center"
+            className="bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center p-4"
             whileHover={{ scale: 1.02 }}
             transition={{ duration: 0.3 }}
           >
@@ -49,14 +49,14 @@ function ProductCard({ product, index }: ProductCardProps) {
                 <Image
                   src={imagePath}
                   alt={product.name}
-                  fill
-                  className="object-contain p-4"
-                  sizes="(max-width: 768px) 100vw, 50vw"
+                  width={600}
+                  height={400}
+                  className="w-full h-auto object-contain"
                 />
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
               </>
             ) : (
-              <>
+              <div className="aspect-video w-full relative">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <motion.div
@@ -68,7 +68,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                   </motion.div>
                 </div>
                 <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
-              </>
+              </div>
             )}
           </motion.div>
 
