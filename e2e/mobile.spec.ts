@@ -7,7 +7,7 @@ test.describe("Mobile Navigation", () => {
   });
 
   test("should open mobile menu", async ({ page }) => {
-    const menuTrigger = page.getByTestId("mobile-menu-trigger");
+    const menuTrigger = page.getByLabel("Open menu");
     await expect(menuTrigger).toBeVisible();
 
     // Ensure we are at top
@@ -17,10 +17,7 @@ test.describe("Mobile Navigation", () => {
     await page.waitForTimeout(1000); // Wait for sheet animation
 
     // Check if menu content is visible
-    // Prefer testid if available, fallback to role dialog
-    const sheetContent = page
-      .getByTestId("mobile-menu-content")
-      .or(page.getByRole("dialog"));
+    const sheetContent = page.getByRole("dialog");
     await expect(sheetContent).toBeVisible({ timeout: 10000 });
 
     await expect(sheetContent.getByText("Home")).toBeVisible();

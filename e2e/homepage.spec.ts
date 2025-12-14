@@ -123,7 +123,7 @@ test.describe("Homepage", () => {
   });
 
   test("should toggle theme", async ({ page }) => {
-    const themeToggle = page.getByTestId("theme-toggle");
+    const themeToggle = page.getByLabel("Toggle theme");
     await themeToggle.click();
 
     const html = page.locator("html");

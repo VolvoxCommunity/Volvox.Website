@@ -160,7 +160,6 @@ export function Navigation({
                 size="icon"
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
-                data-testid="theme-toggle"
               >
                 {theme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />
@@ -211,16 +210,11 @@ export function Navigation({
                   variant="ghost"
                   size="icon"
                   className="md:hidden rounded-full hover:bg-muted"
-                  data-testid="mobile-menu-trigger"
                 >
                   <List className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-64"
-                data-testid="mobile-menu-content"
-              >
+              <SheetContent side="right" className="w-64">
                 <div className="flex flex-col gap-4 mt-8">
                   {navItems.map((item) =>
                     linkMode ? (
