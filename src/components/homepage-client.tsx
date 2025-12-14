@@ -98,31 +98,47 @@ export function HomepageClient({
   }, [handleNavigate]);
 
   useEffect(() => {
+    let ticking = false;
+
     const handleScroll = () => {
-      const sections = ["products", "blog", "mentorship", "about"];
-      const scrollPosition = window.scrollY + 200;
+      // Throttle scroll updates to the next animation frame to reduce main thread load
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const sections = ["products", "blog", "mentorship", "about"];
+          const scrollPosition = window.scrollY + 200;
 
-      if (window.scrollY < 300) {
-        setCurrentSection("home");
-        return;
-      }
+          let newSection = null;
 
-      for (const section of sections) {
-        const element = document.getElementById(section);
-        if (element) {
-          const { offsetTop, offsetHeight } = element;
-          if (
-            scrollPosition >= offsetTop &&
-            scrollPosition < offsetTop + offsetHeight
-          ) {
-            setCurrentSection(section);
-            return;
+          if (window.scrollY < 300) {
+            newSection = "home";
+          } else {
+            for (const section of sections) {
+              const element = document.getElementById(section);
+              if (element) {
+                const { offsetTop, offsetHeight } = element;
+                if (
+                  scrollPosition >= offsetTop &&
+                  scrollPosition < offsetTop + offsetHeight
+                ) {
+                  newSection = section;
+                  break;
+                }
+              }
+            }
           }
-        }
+
+          if (newSection) {
+            setCurrentSection(newSection);
+          }
+          ticking = false;
+        });
+
+        ticking = true;
       }
     };
 
-    window.addEventListener("scroll", handleScroll);
+    // Use passive listener to allow the browser to optimize scrolling
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 

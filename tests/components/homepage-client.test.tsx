@@ -1,4 +1,10 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from "@testing-library/react";
 import { HomepageClient } from "@/components/homepage-client";
 import { useRouter } from "next/navigation";
 
@@ -111,7 +117,7 @@ describe("HomepageClient", () => {
     document.body.removeChild(productEl);
   });
 
-  it("updates section on scroll", () => {
+  it("updates section on scroll", async () => {
     jest.spyOn(document, "getElementById").mockImplementation((id) => {
       if (id === "products") {
         return {
@@ -135,8 +141,10 @@ describe("HomepageClient", () => {
       fireEvent.scroll(window);
     });
 
-    expect(mockNavigation).toHaveBeenLastCalledWith(
-      expect.objectContaining({ currentSection: "products" })
-    );
+    await waitFor(() => {
+      expect(mockNavigation).toHaveBeenLastCalledWith(
+        expect.objectContaining({ currentSection: "products" })
+      );
+    });
   });
 });

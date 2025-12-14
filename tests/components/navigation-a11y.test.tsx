@@ -19,21 +19,30 @@ jest.mock("next/image", () => ({
 // Mock framer-motion to render children directly
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: React.ComponentProps<"div">) => <div {...props}>{children}</div>,
-    button: ({ children, ...props }: React.ComponentProps<"button">) => <button {...props}>{children}</button>,
+    div: ({ children, ...props }: React.ComponentProps<"div">) => (
+      <div {...props}>{children}</div>
+    ),
+    button: ({ children, ...props }: React.ComponentProps<"button">) => (
+      <button {...props}>{children}</button>
+    ),
   },
 }));
 
 describe("Navigation Accessibility", () => {
   beforeEach(() => {
-    (useTheme as jest.Mock).mockReturnValue({ theme: "light", setTheme: jest.fn() });
+    (useTheme as jest.Mock).mockReturnValue({
+      theme: "light",
+      setTheme: jest.fn(),
+    });
   });
 
   it("has accessible names for social links and theme toggle", () => {
     render(<Navigation />);
 
     // Theme toggle
-    expect(screen.getByRole("button", { name: /toggle theme/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /toggle theme/i })
+    ).toBeInTheDocument();
 
     // GitHub link
     expect(screen.getByRole("link", { name: /github/i })).toBeInTheDocument();
@@ -47,6 +56,8 @@ describe("Navigation Accessibility", () => {
     render(<Navigation />);
 
     // Mobile menu trigger
-    expect(screen.getByRole("button", { name: /open menu/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /open menu/i })
+    ).toBeInTheDocument();
   });
 });
