@@ -221,6 +221,53 @@ describe("Blog Components", () => {
       render(<ReadingProgress />);
       expect(document.querySelector(".fixed")).toBeInTheDocument();
     });
+
+    it("updates progress on scroll", () => {
+      render(<ReadingProgress />);
+
+      // Find the progress bar inner element (the one with width style)
+      const progressBar = document.querySelector(
+        ".fixed > div"
+      ) as HTMLElement;
+      expect(progressBar).toBeInTheDocument();
+
+      // Initially at 0% (scrollY is 0)
+      expect(progressBar.style.width).toBe("0%");
+
+      // Simulate scrolling to 50% (scrollY = 600 for scrollHeight 2000 - innerHeight 800 = 1200)
+      act(() => {
+        Object.defineProperty(window, "scrollY", {
+          value: 600,
+          writable: true,
+          configurable: true,
+        });
+        window.dispatchEvent(new Event("scroll"));
+      });
+
+      // Progress should be 50%
+      expect(progressBar.style.width).toBe("50%");
+    });
+
+    it("clamps progress to 100% at bottom of page", () => {
+      render(<ReadingProgress />);
+
+      const progressBar = document.querySelector(
+        ".fixed > div"
+      ) as HTMLElement;
+
+      // Scroll past the end
+      act(() => {
+        Object.defineProperty(window, "scrollY", {
+          value: 1500,
+          writable: true,
+          configurable: true,
+        });
+        window.dispatchEvent(new Event("scroll"));
+      });
+
+      // Progress should be clamped to 100%
+      expect(progressBar.style.width).toBe("100%");
+    });
   });
 
   describe("ScrollReveal", () => {
