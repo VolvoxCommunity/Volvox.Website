@@ -56,7 +56,7 @@ jest.mock("framer-motion", () => ({
     button: ({ children, onClick, ...props }: MotionProps) => (
       <button
         type="button"
-        onClick={onClick as () => void}
+        onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
         {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       >
         {children}
