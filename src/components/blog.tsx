@@ -85,8 +85,17 @@ export function Blog({ posts: initialPosts }: BlogProps) {
               className="h-full"
             >
               <Card
-                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col"
+                className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                 onClick={() => handlePostClick(post)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    e.preventDefault();
+                    handlePostClick(post);
+                  }
+                }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Read post: ${post.title}`}
               >
                 <motion.div
                   className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border"

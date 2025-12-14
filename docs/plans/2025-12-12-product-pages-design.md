@@ -151,6 +151,7 @@ Route: `src/app/products/page.tsx`
 ### Dynamic OG Image Generation
 
 Create `src/app/products/[slug]/opengraph-image.tsx`:
+
 - Uses Next.js `ImageResponse` (same pattern as blog)
 - Displays: Product name, tagline, Volvox logo
 - Size: 1200x630 (standard OG image)
@@ -180,6 +181,7 @@ Create `src/app/products/[slug]/opengraph-image.tsx`:
 ### Structured Data (JSON-LD)
 
 Add `SoftwareApplication` schema:
+
 - name, description, operatingSystem, applicationCategory
 - Improves search engine understanding
 
@@ -187,16 +189,16 @@ Add `SoftwareApplication` schema:
 
 ### New Components (`src/components/products/`)
 
-| Component | Description |
-|-----------|-------------|
-| `product-hero.tsx` | Hero section with name, tagline, screenshot, app badges, buttons |
-| `product-toc.tsx` | Sticky table of contents (extend/reuse blog TOC pattern) |
-| `product-screenshots.tsx` | Gallery with lightbox/zoom functionality |
-| `product-features.tsx` | Checkmark feature list |
-| `product-changelog.tsx` | Renders MDX changelog, shows latest entries |
-| `product-faq.tsx` | Accordion-style FAQ section |
-| `product-testimonials.tsx` | Testimonial cards grid |
-| `product-card.tsx` | Card for index page listing |
+| Component                  | Description                                                      |
+| -------------------------- | ---------------------------------------------------------------- |
+| `product-hero.tsx`         | Hero section with name, tagline, screenshot, app badges, buttons |
+| `product-toc.tsx`          | Sticky table of contents (extend/reuse blog TOC pattern)         |
+| `product-screenshots.tsx`  | Gallery with lightbox/zoom functionality                         |
+| `product-features.tsx`     | Checkmark feature list                                           |
+| `product-changelog.tsx`    | Renders MDX changelog, shows latest entries                      |
+| `product-faq.tsx`          | Accordion-style FAQ section                                      |
+| `product-testimonials.tsx` | Testimonial cards grid                                           |
+| `product-card.tsx`         | Card for index page listing                                      |
 
 ### Reusable from Existing Codebase
 
@@ -225,6 +227,7 @@ getProductChangelog(slug: string): string | null
 ### Validation
 
 Extend `src/lib/schemas.ts` with updated Zod schema:
+
 - Validates: `slug`, `tagline`, `links`, `techStack`, `screenshots`, `faq`, `testimonials`
 - FAQ items: `{ question: string, answer: string }`
 - Testimonials: `{ name: string, role?: string, quote: string, avatar?: string }`
@@ -248,6 +251,7 @@ Current `content/products.json` will be replaced by folder structure:
 ### Homepage Update
 
 Modify `src/components/products.tsx`:
+
 - Add "View Details" link to `/products/[slug]`
 - Keep current card design, just add navigation
 
