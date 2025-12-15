@@ -44,7 +44,7 @@
     "remark-gfm": "^4.0.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss": "^4.0.0",
+    "tailwindcss": "^4.1.18",
     "zod": "^4.1.13"
   },
   "devDependencies": {
