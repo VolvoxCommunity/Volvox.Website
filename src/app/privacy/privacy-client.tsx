@@ -74,15 +74,9 @@ export function PrivacyClient() {
                 </ul>
                 <p>This information may include:</p>
                 <ul>
-                  <li>
-                    Name and contact information (email address, phone number)
-                  </li>
+                  <li>Name and contact information (email address)</li>
                   <li>Username and password</li>
-                  <li>Professional information and skills</li>
-                  <li>
-                    Payment information (processed securely through third-party
-                    payment processors)
-                  </li>
+                  <li>Display name</li>
                 </ul>
 
                 <h3 className="text-xl font-semibold mb-2 mt-6">
