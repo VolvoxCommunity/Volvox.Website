@@ -3,6 +3,7 @@ import * as path from "path";
 import matter from "gray-matter";
 import { reportError } from "./logger";
 import { BlogPostFrontmatterSchema } from "./schemas";
+import { normalizeSlug } from "./validation";
 import { getAuthorById } from "./content";
 import type { BlogPost } from "./types";
 
@@ -69,9 +70,16 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 }
 
 export async function getPostBySlug(slug: string) {
+  // Validate slug first - fail fast without logging as system error
+  const validSlug = normalizeSlug(slug);
+  if (!validSlug) {
+    throw new Error(`Invalid slug: ${slug}`);
+  }
+
   try {
     await Promise.resolve();
-    const filePath = path.join(BLOG_DIR, `${slug}.mdx`);
+
+    const filePath = path.join(BLOG_DIR, `${validSlug}.mdx`);
 
     if (!fs.existsSync(filePath)) {
       throw new Error(`Post not found: ${slug}`);
