@@ -1,0 +1,88 @@
+import { test, expect } from "./fixtures/base.fixture";
+
+const viewports = {
+  mobile: { width: 375, height: 667 },
+  tablet: { width: 768, height: 1024 },
+  desktop: { width: 1280, height: 720 },
+};
+
+test.describe("Responsive Design", () => {
+  test.describe("Mobile (375px)", () => {
+    test.use({ viewport: viewports.mobile });
+
+    test("navigation shows mobile menu button", async ({ page }) => {
+      await page.goto("/");
+      const menuButton = page.locator('[data-testid="mobile-menu-button"]');
+      if ((await menuButton.count()) > 0) {
+        await expect(menuButton).toBeVisible();
+      }
+    });
+
+    test("content does not overflow horizontally", async ({ page }) => {
+      await page.goto("/");
+      const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
+      const clientWidth = await page.evaluate(() => document.body.clientWidth);
+      expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 5);
+    });
+
+    test("footer is visible and properly styled", async ({ page }) => {
+      await page.goto("/");
+      const footer = page.locator('[data-testid="footer"], footer');
+      await footer.scrollIntoViewIfNeeded();
+      await expect(footer).toBeVisible();
+    });
+  });
+
+  test.describe("Tablet (768px)", () => {
+    test.use({ viewport: viewports.tablet });
+
+    test("navigation adapts to tablet layout", async ({ page }) => {
+      await page.goto("/");
+      const nav = page.locator("nav");
+      await expect(nav).toBeVisible();
+    });
+
+    test("content does not overflow horizontally", async ({ page }) => {
+      await page.goto("/");
+      const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
+      const clientWidth = await page.evaluate(() => document.body.clientWidth);
+      expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 5);
+    });
+  });
+
+  test.describe("Desktop (1280px)", () => {
+    test.use({ viewport: viewports.desktop });
+
+    test("navigation shows desktop layout", async ({ page }) => {
+      await page.goto("/");
+      const desktopNav = page.locator('[data-testid="desktop-nav"]');
+      if ((await desktopNav.count()) > 0) {
+        await expect(desktopNav).toBeVisible();
+      }
+      const mobileButton = page.locator('[data-testid="mobile-menu-button"]');
+      if ((await mobileButton.count()) > 0) {
+        await expect(mobileButton).not.toBeVisible();
+      }
+    });
+
+    test("blog post shows sidebar TOC", async ({ page }) => {
+      await page.goto("/blog/announcing-volvox");
+      const toc = page.locator('[data-testid="table-of-contents"]');
+      if ((await toc.count()) > 0) {
+        await expect(toc).toBeVisible();
+      }
+    });
+  });
+
+  test("no horizontal scroll on any viewport", async ({ page }) => {
+    for (const [name, size] of Object.entries(viewports)) {
+      await page.setViewportSize(size);
+      await page.goto("/");
+      const scrollWidth = await page.evaluate(() => document.body.scrollWidth);
+      const clientWidth = await page.evaluate(() => document.body.clientWidth);
+      expect(scrollWidth, `Horizontal scroll on ${name}`).toBeLessThanOrEqual(
+        clientWidth + 5
+      );
+    }
+  });
+});

@@ -1,7 +1,7 @@
 import { test, expect } from "../fixtures/base.fixture";
 
 test.describe("Theme Toggle", () => {
-  test.beforeEach(async ({ page, context }) => {
+  test.beforeEach(async ({ context }) => {
     // Clear any stored theme preferences
     await context.clearCookies();
   });
@@ -35,7 +35,7 @@ test.describe("Theme Toggle", () => {
     await expect(page.locator("html")).toHaveClass(/light/);
   });
 
-  test("persists theme preference across page loads", async ({ page, context }) => {
+  test("persists theme preference across page loads", async ({ context }) => {
     // Create a new page without any init scripts
     const newPage = await context.newPage();
 
@@ -134,7 +134,9 @@ test.describe("Theme Toggle", () => {
     expect(ariaLabel?.toLowerCase()).toContain("theme");
   });
 
-  test("theme toggle shows correct icon for current theme", async ({ page }) => {
+  test("theme toggle shows correct icon for current theme", async ({
+    page,
+  }) => {
     // Start with light theme
     await page.addInitScript(() => {
       localStorage.setItem("volvox-theme", "light");
@@ -189,13 +191,15 @@ test.describe("Theme Toggle", () => {
     await page.waitForTimeout(100);
 
     // Record theme changes
-    const themeChanges: string[] = [];
     await page.evaluate(() => {
       const observer = new MutationObserver(() => {
         const htmlClass = document.documentElement.className;
-        (window as never)["__themeChanges"] =
-          (window as never)["__themeChanges"] || [];
-        (window as never)["__themeChanges"].push(htmlClass);
+        interface WindowWithThemeChanges extends Window {
+          __themeChanges?: string[];
+        }
+        const w = window as WindowWithThemeChanges;
+        w.__themeChanges = w.__themeChanges || [];
+        w.__themeChanges.push(htmlClass);
       });
       observer.observe(document.documentElement, {
         attributes: true,
@@ -209,7 +213,10 @@ test.describe("Theme Toggle", () => {
 
     // Get recorded changes
     const changes = await page.evaluate(() => {
-      return (window as never)["__themeChanges"] || [];
+      interface WindowWithThemeChanges extends Window {
+        __themeChanges?: string[];
+      }
+      return (window as WindowWithThemeChanges).__themeChanges || [];
     });
 
     // Should only have one change (no flickering)
