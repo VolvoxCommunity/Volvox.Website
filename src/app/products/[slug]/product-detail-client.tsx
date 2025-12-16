@@ -69,6 +69,25 @@ export function ProductDetailClient({
               <p className="text-lg text-muted-foreground leading-relaxed">
                 {product.longDescription}
               </p>
+
+              {/* Tech Stack */}
+              {product.techStack && product.techStack.length > 0 && (
+                <div className="mt-8">
+                  <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-muted-foreground">
+                    Built With
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {product.techStack.map((tech) => (
+                      <span
+                        key={`${product.slug}:tech:${tech}`}
+                        className="inline-flex items-center px-4 py-2 rounded-full text-sm font-medium bg-secondary/20 text-foreground border border-secondary/30"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </section>
 
