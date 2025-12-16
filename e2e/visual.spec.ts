@@ -23,8 +23,10 @@ test.describe("Visual Regression", () => {
       await waitForAnimations(page);
       const hero = page.locator('[data-testid="hero-section"]');
       await expect(hero).toBeVisible();
-      // Very high threshold: animated background canvas has randomized particles
-      // that create significant pixel variance between runs
+      // NOTE: Very high threshold (5000px vs global 100px) because the hero section
+      // contains an animated background canvas with randomized particle positions.
+      // Each test run produces different particle layouts, causing legitimate pixel
+      // differences that aren't visual regressions. Consider mask option in future.
       await expect(hero).toHaveScreenshot("homepage-hero.png", {
         maxDiffPixels: 5000,
       });
