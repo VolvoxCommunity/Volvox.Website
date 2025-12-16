@@ -1,3 +1,10 @@
+/* eslint-disable react-hooks/rules-of-hooks */
+/* eslint-disable @typescript-eslint/require-await */
+/**
+ * Playwright fixtures use a `use` callback that ESLint's react-hooks plugin
+ * mistakenly flags as React's `use` hook. These rules are disabled file-wide
+ * since this is a Playwright fixture file, not a React component.
+ */
 import { test as base, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
