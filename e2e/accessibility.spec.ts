@@ -9,8 +9,9 @@ const pages = [
   { name: "Terms", path: "/terms" },
 ];
 
-// Known accessibility issues to be fixed separately (tracked in backlog)
+// Known accessibility issues to be fixed separately
 // TODO: Fix color contrast issues in footer text and re-enable this rule
+// Tracked in: https://github.com/VolvoxCommunity/Volvox.Website/issues/102
 const EXCLUDED_RULES = ["color-contrast"];
 
 test.describe("Accessibility", () => {
