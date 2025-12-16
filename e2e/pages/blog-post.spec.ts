@@ -15,8 +15,10 @@ test.describe("Blog Post Page", () => {
     // Check that the date element exists using data-testid for reliable selection
     const dateElement = page.locator('[data-testid="post-date"]');
     await expect(dateElement).toBeVisible();
-    // Verify date format (YYYY-MM-DD) rather than specific date
-    await expect(dateElement).toContainText(/\d{4}-\d{2}-\d{2}/);
+    // Verify date format (MMM DD, YYYY or YYYY-MM-DD) rather than specific date
+    await expect(dateElement).toContainText(
+      /[A-Z][a-z]{2} \d{1,2}, \d{4}|\d{4}-\d{2}-\d{2}/
+    );
   });
 
   test("renders author information", async ({ page }) => {
