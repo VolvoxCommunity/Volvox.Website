@@ -357,5 +357,22 @@ describe("Sheet Components", () => {
       );
       expect(screen.getByTestId("desc")).toHaveClass("custom-desc");
     });
+
+    it("wires aria-describedby to the dialog", () => {
+      render(
+        <Sheet defaultOpen>
+          <SheetContent>
+            <SheetTitle>Title</SheetTitle>
+            <SheetDescription id="sheet-desc">
+              This is a sheet description
+            </SheetDescription>
+          </SheetContent>
+        </Sheet>
+      );
+
+      const dialog = screen.getByRole("dialog");
+      // Radix UI automatically wires SheetDescription to aria-describedby
+      expect(dialog).toHaveAttribute("aria-describedby", "sheet-desc");
+    });
   });
 });
