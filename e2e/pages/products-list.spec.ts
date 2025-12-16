@@ -48,10 +48,8 @@ test.describe("Products List Page", () => {
   });
 
   test("displays footer", async ({ page }) => {
-    const footer = page
-      .locator('[data-testid="footer"]')
-      .or(page.locator("footer"))
-      .first();
+    // Use consistent data-testid selector for footer
+    const footer = page.locator('[data-testid="footer"]');
     await footer.waitFor({ state: "attached" });
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();

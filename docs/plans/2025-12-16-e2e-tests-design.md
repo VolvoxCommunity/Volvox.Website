@@ -24,7 +24,7 @@ A comprehensive Playwright E2E test suite covering all pages, features, accessib
 
 ## Test Structure
 
-```
+```text
 e2e/
 ├── fixtures/
 │   └── base.fixture.ts         # Extended test fixture with axe, helpers

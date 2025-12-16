@@ -1,5 +1,18 @@
 import { test, expect } from "./fixtures/base.fixture";
 
+// Helper to wait for all CSS animations to complete
+async function waitForAnimations(
+  page: import("@playwright/test").Page
+): Promise<void> {
+  await page.waitForFunction(() => {
+    const animations = document.getAnimations();
+    return (
+      animations.length === 0 ||
+      animations.every((a) => a.playState === "finished")
+    );
+  });
+}
+
 test.describe("Visual Regression", () => {
   // Only run visual tests on Chromium to avoid maintaining multiple baselines
   test.skip(
@@ -13,36 +26,42 @@ test.describe("Visual Regression", () => {
     test("homepage hero section", async ({ page }) => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
-      // Wait for animations to settle
-      await page.waitForTimeout(2000);
+      // Wait for fonts and animations to complete
+      await page.evaluate(() => document.fonts.ready);
+      await waitForAnimations(page);
       const hero = page.locator('[data-testid="hero-section"]');
-      if ((await hero.count()) > 0) {
-        await expect(hero).toHaveScreenshot("homepage-hero.png", {
-          maxDiffPixels: 500,
-        });
-      }
+      await expect(hero).toBeVisible();
+      await expect(hero).toHaveScreenshot("homepage-hero.png", {
+        maxDiffPixels: 300,
+      });
     });
 
     test("navigation bar", async ({ page }) => {
       await page.goto("/");
       const nav = page.locator("nav");
-      await expect(nav).toHaveScreenshot("navigation-desktop.png");
+      await expect(nav).toHaveScreenshot("navigation-desktop.png", {
+        maxDiffPixels: 100,
+      });
     });
 
     test("footer", async ({ page }) => {
       await page.goto("/");
-      await page.waitForTimeout(500);
+      await page.waitForLoadState("domcontentloaded");
       const footer = page.locator('[data-testid="footer"]');
       await footer.scrollIntoViewIfNeeded();
-      await expect(footer).toHaveScreenshot("footer-desktop.png");
+      await expect(footer).toBeVisible();
+      await expect(footer).toHaveScreenshot("footer-desktop.png", {
+        maxDiffPixels: 100,
+      });
     });
 
     test("products listing page", async ({ page }) => {
       await page.goto("/products");
       await page.waitForLoadState("networkidle");
-      await page.waitForTimeout(1000);
+      await page.evaluate(() => document.fonts.ready);
+      await waitForAnimations(page);
       await expect(page).toHaveScreenshot("products-listing.png", {
-        maxDiffPixels: 500,
+        maxDiffPixels: 300,
       });
     });
   });
@@ -53,9 +72,10 @@ test.describe("Visual Regression", () => {
     test("homepage mobile view", async ({ page }) => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
-      await page.waitForTimeout(2000);
+      await page.evaluate(() => document.fonts.ready);
+      await waitForAnimations(page);
       await expect(page).toHaveScreenshot("homepage-mobile.png", {
-        maxDiffPixels: 500,
+        maxDiffPixels: 300,
       });
     });
 
@@ -63,13 +83,13 @@ test.describe("Visual Regression", () => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
-        await menuButton.click();
-        await page.waitForTimeout(500);
-        await expect(page).toHaveScreenshot("mobile-menu-open.png", {
-          maxDiffPixels: 500,
-        });
-      }
+      await expect(menuButton).toBeVisible();
+      await menuButton.click();
+      // Wait for menu animation to complete
+      await waitForAnimations(page);
+      await expect(page).toHaveScreenshot("mobile-menu-open.png", {
+        maxDiffPixels: 300,
+      });
     });
   });
 
@@ -80,13 +100,14 @@ test.describe("Visual Regression", () => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       const toggle = page.locator('[data-testid="theme-toggle"]');
-      if ((await toggle.count()) > 0) {
-        await toggle.click();
-        await page.waitForTimeout(2000);
-        await expect(page).toHaveScreenshot("homepage-dark.png", {
-          maxDiffPixels: 500,
-        });
-      }
+      await expect(toggle).toBeVisible();
+      await toggle.click();
+      await page.waitForSelector("html.dark");
+      await page.evaluate(() => document.fonts.ready);
+      await waitForAnimations(page);
+      await expect(page).toHaveScreenshot("homepage-dark.png", {
+        maxDiffPixels: 300,
+      });
     });
   });
 });

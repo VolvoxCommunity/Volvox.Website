@@ -17,7 +17,8 @@ test.describe("Blog Post Page", () => {
       .locator('article header div:has([class*="lucide-calendar"])')
       .last();
     await expect(dateElement).toBeVisible();
-    await expect(dateElement).toContainText("2025-11-28");
+    // Verify date format (YYYY-MM-DD) rather than specific date
+    await expect(dateElement).toContainText(/\d{4}-\d{2}-\d{2}/);
   });
 
   test("renders author information", async ({ page }) => {
@@ -66,13 +67,12 @@ test.describe("Blog Post Page", () => {
 
       if (buttonText) {
         await firstButton.click();
-        await page.waitForTimeout(500); // Wait for smooth scroll
 
-        // Find the heading with matching text
+        // Find the heading with matching text and wait for it to be in viewport
         const targetHeading = page
           .locator(`h2, h3`)
           .filter({ hasText: buttonText.trim() });
-        await expect(targetHeading).toBeInViewport();
+        await expect(targetHeading).toBeInViewport({ timeout: 2000 });
       }
     }
   });

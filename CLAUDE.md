@@ -294,8 +294,8 @@ Located in `src/lib/`:
   - Watch mode: `pnpm test:watch`
   - Coverage: `pnpm test:coverage`
 - **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
-  - Configuration: `playwright.config.ts` (targets Chromium)
-  - Example: `blog-view-tracking.spec.ts` tests blog page interactions
+  - Configuration: `playwright.config.ts` (multi-browser: Chromium, Firefox, Safari + mobile)
+  - Visual regression tests run on Chromium only to avoid multiple baselines
   - Run with: `pnpm exec playwright test`
   - Interactive UI: `pnpm exec playwright test --ui`
 

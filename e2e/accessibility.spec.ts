@@ -37,14 +37,13 @@ test.describe("Accessibility", () => {
 
   test("focus is visible on interactive elements", async ({ page }) => {
     await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
 
     for (let i = 0; i < 5; i++) {
       await page.keyboard.press("Tab");
       const focused = page.locator(":focus");
-      const count = await focused.count();
-      if (count > 0) {
-        await expect(focused).toBeVisible();
-      }
+      // Each tab should focus an element - fail if no element is focused
+      await expect(focused).toBeVisible();
     }
   });
 

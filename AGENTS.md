@@ -37,7 +37,7 @@ All checks must pass before committing. Do not skip these steps.
 ## Testing Setup
 
 - **Jest with Testing Library**: Uses Jest for unit tests in `tests/` directory
-- **Playwright E2E**: Configuration in `playwright.config.ts` targets Chromium only
+- **Playwright E2E**: Configuration in `playwright.config.ts` targets multi-browser (Chromium, Firefox, Safari + mobile)
 - **Test Commands**:
   - Unit tests: `pnpm test`
   - E2E tests: `pnpm exec playwright test`

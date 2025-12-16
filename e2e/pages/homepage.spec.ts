@@ -29,13 +29,10 @@ test.describe("Homepage", () => {
   });
 
   test("scroll-based section tracking updates navigation", async ({ page }) => {
-    await page
-      .locator("#blog, [data-testid='blog-section']")
-      .scrollIntoViewIfNeeded();
-    await page.waitForTimeout(500);
-    // Verify the page scrolled (blog section is in viewport)
     const blogSection = page.locator("#blog, [data-testid='blog-section']");
-    await expect(blogSection).toBeInViewport();
+    await blogSection.scrollIntoViewIfNeeded();
+    // Wait for section to be in viewport instead of fixed timeout
+    await expect(blogSection).toBeInViewport({ timeout: 2000 });
   });
 
   test("animated background renders without errors", async ({

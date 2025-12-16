@@ -6,7 +6,8 @@ test.describe("Cookie Consent", () => {
     page: import("@playwright/test").Page
   ): Promise<boolean> {
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
-    await page.waitForTimeout(500);
+    // Wait for page to stabilize instead of fixed timeout
+    await page.waitForLoadState("domcontentloaded");
     return (await banner.count()) > 0;
   }
 
@@ -16,7 +17,8 @@ test.describe("Cookie Consent", () => {
     await page.goto("/");
 
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
-    await page.waitForTimeout(500);
+    // Wait for page to stabilize instead of fixed timeout
+    await page.waitForLoadState("domcontentloaded");
 
     // Skip test if cookie consent feature is not implemented
     test.skip(
@@ -52,7 +54,8 @@ test.describe("Cookie Consent", () => {
     await expect(banner).not.toBeVisible();
 
     await page.reload();
-    await page.waitForTimeout(500);
+    // Wait for page to stabilize instead of fixed timeout
+    await page.waitForLoadState("domcontentloaded");
     await expect(banner).not.toBeVisible();
   });
 
@@ -69,9 +72,9 @@ test.describe("Cookie Consent", () => {
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
     await expect(banner).toBeVisible();
 
+    // Use flexible regex pattern for reject button, consistent with accept button pattern
     const rejectButton = banner.getByRole("button", {
-      name: "Decline All",
-      exact: true,
+      name: /decline|reject|deny/i,
     });
     test.skip(
       (await rejectButton.count()) === 0,
@@ -82,7 +85,8 @@ test.describe("Cookie Consent", () => {
     await expect(banner).not.toBeVisible();
 
     await page.reload();
-    await page.waitForTimeout(500);
+    // Wait for banner state to be applied
+    await page.waitForLoadState("domcontentloaded");
     await expect(banner).not.toBeVisible();
   });
 });

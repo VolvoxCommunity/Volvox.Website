@@ -82,8 +82,8 @@ test.describe("Theme Toggle", () => {
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");
 
-    // Wait for theme to initialize
-    await page.waitForTimeout(100);
+    // Wait for theme to initialize by waiting for the dark class
+    await page.waitForSelector("html.dark");
 
     // Should respect system preference (dark mode)
     await expect(page.locator("html")).toHaveClass(/dark/);
@@ -94,7 +94,7 @@ test.describe("Theme Toggle", () => {
     });
     await page.emulateMedia({ colorScheme: "light" });
     await page.reload();
-    await page.waitForTimeout(100);
+    await page.waitForSelector("html:not(.dark)");
 
     // Should respect system preference (light mode)
     await expect(page.locator("html")).not.toHaveClass(/dark/);
@@ -168,7 +168,7 @@ test.describe("Theme Toggle", () => {
     // Set system preference to dark
     await page.emulateMedia({ colorScheme: "dark" });
     await page.goto("/");
-    await page.waitForTimeout(100);
+    await page.waitForSelector("html.dark");
 
     const toggle = page.getByRole("button", { name: /toggle theme/i });
 
@@ -177,21 +177,20 @@ test.describe("Theme Toggle", () => {
 
     // Toggle to light mode (user preference)
     await toggle.click();
-    await page.waitForTimeout(100);
+    await page.waitForSelector("html:not(.dark)");
     await expect(page.locator("html")).not.toHaveClass(/dark/);
 
     // Reload - should use user preference (light) not system (dark)
     await page.reload();
-    await page.waitForTimeout(100);
+    await page.waitForSelector("html:not(.dark)");
     await expect(page.locator("html")).not.toHaveClass(/dark/);
   });
 
   test("theme transitions work smoothly without flash", async ({ page }) => {
     await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
     const toggle = page.getByRole("button", { name: /toggle theme/i });
-
-    // Wait for initial render
-    await page.waitForTimeout(100);
+    await toggle.waitFor({ state: "visible" });
 
     // Record theme changes
     await page.evaluate(() => {
@@ -212,7 +211,12 @@ test.describe("Theme Toggle", () => {
 
     // Toggle theme
     await toggle.click();
-    await page.waitForTimeout(100);
+
+    // Wait for theme transition to complete
+    await page.waitForFunction(() => {
+      const animations = document.getAnimations();
+      return animations.every((anim) => anim.playState === "finished");
+    });
 
     // Get recorded changes
     const changes = await page.evaluate(() => {

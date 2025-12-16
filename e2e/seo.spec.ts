@@ -34,11 +34,10 @@ test.describe("SEO", () => {
     });
 
     test("has canonical URL", async ({ page }) => {
+      // Canonical URLs are required for SEO
       const canonical = page.locator('link[rel="canonical"]');
-      const count = await canonical.count();
-      if (count > 0) {
-        await expect(canonical).toHaveAttribute("href", /.+/);
-      }
+      await expect(canonical).toHaveCount(1);
+      await expect(canonical).toHaveAttribute("href", /.+/);
     });
   });
 
@@ -53,11 +52,9 @@ test.describe("SEO", () => {
     test("has article-specific OG type", async ({ page }) => {
       await page.goto("/blog/announcing-volvox");
 
+      // Blog posts require article OG type for proper social sharing
       const ogType = page.locator('meta[property="og:type"]');
-      const count = await ogType.count();
-      if (count > 0) {
-        await expect(ogType).toHaveAttribute("content", "article");
-      }
+      await expect(ogType).toHaveAttribute("content", "article");
     });
   });
 
@@ -68,11 +65,9 @@ test.describe("SEO", () => {
       const title = await page.title();
       expect(title.toLowerCase()).toContain("sobriety");
 
+      // Product pages require descriptive meta descriptions for SEO
       const description = page.locator('meta[name="description"]');
-      const count = await description.count();
-      if (count > 0) {
-        await expect(description).toHaveAttribute("content", /.{30,}/);
-      }
+      await expect(description).toHaveAttribute("content", /.{50,}/);
     });
   });
 

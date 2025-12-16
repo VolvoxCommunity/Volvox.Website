@@ -1,4 +1,19 @@
 import { test, expect } from "../fixtures/base.fixture";
+import type { Page } from "@playwright/test";
+
+// Helper to dismiss cookie banner if present
+async function dismissCookieBanner(page: Page): Promise<void> {
+  const cookieBanner = page.locator('[data-testid="cookie-consent-banner"]');
+  if ((await cookieBanner.count()) > 0 && (await cookieBanner.isVisible())) {
+    const acceptButton = cookieBanner.getByRole("button", {
+      name: /accept|agree/i,
+    });
+    if ((await acceptButton.count()) > 0) {
+      await acceptButton.click();
+      await page.waitForLoadState("domcontentloaded");
+    }
+  }
+}
 
 test.describe("Footer", () => {
   test.beforeEach(async ({ page }) => {
@@ -94,17 +109,7 @@ test.describe("Footer", () => {
   });
 
   test("footer links navigate correctly", async ({ page }) => {
-    // Dismiss cookie consent banner if present
-    const cookieBanner = page.locator('[data-testid="cookie-consent-banner"]');
-    if ((await cookieBanner.count()) > 0 && (await cookieBanner.isVisible())) {
-      const acceptButton = cookieBanner.getByRole("button", {
-        name: /accept|agree/i,
-      });
-      if ((await acceptButton.count()) > 0) {
-        await acceptButton.click();
-        await page.waitForTimeout(300);
-      }
-    }
+    await dismissCookieBanner(page);
 
     const footer = page.locator('[data-testid="footer"]');
 
@@ -151,23 +156,7 @@ test.describe("Footer", () => {
 
     for (const path of pages) {
       await page.goto(path);
-
-      // Dismiss cookie consent banner if present
-      const cookieBanner = page.locator(
-        '[data-testid="cookie-consent-banner"]'
-      );
-      if (
-        (await cookieBanner.count()) > 0 &&
-        (await cookieBanner.isVisible())
-      ) {
-        const acceptButton = cookieBanner.getByRole("button", {
-          name: /accept|agree/i,
-        });
-        if ((await acceptButton.count()) > 0) {
-          await acceptButton.click();
-          await page.waitForTimeout(300);
-        }
-      }
+      await dismissCookieBanner(page);
 
       const footer = page.locator('[data-testid="footer"]');
       await footer.scrollIntoViewIfNeeded();
@@ -186,7 +175,7 @@ test.describe("Footer", () => {
     // Toggle to dark mode
     const themeToggle = page.getByRole("button", { name: /toggle theme/i });
     await themeToggle.click();
-    await page.waitForTimeout(300);
+    await page.waitForSelector("html.dark");
 
     // Re-locate footer after theme change (page may have re-rendered)
     const footerAfterToggle = page.locator('[data-testid="footer"]');

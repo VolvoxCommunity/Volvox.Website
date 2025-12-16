@@ -13,9 +13,8 @@ test.describe("Responsive Design", () => {
     test("navigation shows mobile menu button", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if ((await menuButton.count()) > 0) {
-        await expect(menuButton).toBeVisible();
-      }
+      // Mobile menu button is expected on mobile viewports
+      await expect(menuButton).toBeVisible();
     });
 
     test("content does not overflow horizontally", async ({ page }) => {
@@ -55,22 +54,18 @@ test.describe("Responsive Design", () => {
 
     test("navigation shows desktop layout", async ({ page }) => {
       await page.goto("/");
+      // Desktop navigation should be visible and mobile menu hidden
       const desktopNav = page.locator('[data-testid="desktop-nav"]');
-      if ((await desktopNav.count()) > 0) {
-        await expect(desktopNav).toBeVisible();
-      }
+      await expect(desktopNav).toBeVisible();
       const mobileButton = page.locator('[data-testid="mobile-menu-button"]');
-      if ((await mobileButton.count()) > 0) {
-        await expect(mobileButton).not.toBeVisible();
-      }
+      await expect(mobileButton).not.toBeVisible();
     });
 
     test("blog post shows sidebar TOC", async ({ page }) => {
       await page.goto("/blog/announcing-volvox");
+      // Table of contents should be visible on desktop blog posts
       const toc = page.locator('[data-testid="table-of-contents"]');
-      if ((await toc.count()) > 0) {
-        await expect(toc).toBeVisible();
-      }
+      await expect(toc).toBeVisible();
     });
   });
 
