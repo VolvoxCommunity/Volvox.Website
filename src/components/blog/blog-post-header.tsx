@@ -21,7 +21,10 @@ export function BlogPostHeader() {
   };
 
   return (
-    <header className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40">
+    <header
+      className="border-b border-border/50 bg-background/70 backdrop-blur-xl sticky top-0 z-40"
+      data-testid="blog-post-header"
+    >
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-16">
           <Button variant="ghost" asChild>

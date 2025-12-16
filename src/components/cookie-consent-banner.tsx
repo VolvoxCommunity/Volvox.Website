@@ -131,7 +131,10 @@ export function CookieConsentBanner() {
             className="fixed bottom-0 left-0 right-0 z-50 p-4 md:p-6"
           >
             <div className="mx-auto max-w-4xl">
-              <div className="rounded-xl border bg-background/95 backdrop-blur-sm shadow-lg p-4 md:p-6">
+              <div
+                className="rounded-xl border bg-background/95 backdrop-blur-sm shadow-lg p-4 md:p-6"
+                data-testid="cookie-consent-banner"
+              >
                 <div className="flex items-start gap-4">
                   <div className="hidden sm:flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
                     <Cookie className="h-5 w-5 text-primary" weight="duotone" />

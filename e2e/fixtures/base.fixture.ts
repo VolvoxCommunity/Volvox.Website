@@ -16,6 +16,7 @@ type TestFixtures = {
 
 export const test = base.extend<TestFixtures>({
   axe: async ({ page }, use) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks -- Playwright fixtures use 'use' which is not a React hook
     await use(new AxeBuilder({ page }));
   },
 
@@ -26,6 +27,7 @@ export const test = base.extend<TestFixtures>({
         errors.push(msg.text());
       }
     });
+    // eslint-disable-next-line react-hooks/rules-of-hooks, @typescript-eslint/require-await -- Playwright fixtures use 'use' which is not a React hook
     await use(async () => {
       expect(errors, "Console errors found").toEqual([]);
     });
@@ -38,6 +40,7 @@ export const test = base.extend<TestFixtures>({
         failures.push(`${res.status()} ${res.url()}`);
       }
     });
+    // eslint-disable-next-line react-hooks/rules-of-hooks, @typescript-eslint/require-await -- Playwright fixtures use 'use' which is not a React hook
     await use(async () => {
       expect(failures, "Failed network requests").toEqual([]);
     });

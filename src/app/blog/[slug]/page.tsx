@@ -157,7 +157,10 @@ export default async function BlogPostPage({
                     />
                   )}
                   <div>
-                    <p className="font-medium text-foreground">
+                    <p
+                      className="font-medium text-foreground"
+                      data-testid="author-name"
+                    >
                       {frontmatter.author?.name}
                     </p>
                     <p className="text-xs">{frontmatter.author?.role}</p>

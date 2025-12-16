@@ -123,7 +123,10 @@ export function Navigation({
             </motion.button>
           )}
 
-          <div className="hidden md:flex items-center gap-1">
+          <div
+            className="hidden md:flex items-center gap-1"
+            data-testid="desktop-nav"
+          >
             {navItems.map((item) =>
               linkMode ? (
                 <Link
@@ -214,11 +217,16 @@ export function Navigation({
                   size="icon"
                   className="md:hidden rounded-full hover:bg-muted"
                   aria-label="Open menu"
+                  data-testid="mobile-menu-button"
                 >
                   <List className="h-6 w-6" />
                 </Button>
               </SheetTrigger>
-              <SheetContent side="right" className="w-64">
+              <SheetContent
+                side="right"
+                className="w-64"
+                data-testid="mobile-menu"
+              >
                 <div className="flex flex-col gap-4 mt-8">
                   {navItems.map((item) =>
                     linkMode ? (
