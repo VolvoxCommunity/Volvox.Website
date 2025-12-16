@@ -20,7 +20,7 @@ export interface BlogPost {
   date: string;
   tags: string[];
   slug: string;
-  views: number; // Deprecated - always 0
+  views: number;
   published: boolean;
   banner?: string;
 }

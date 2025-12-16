@@ -5,7 +5,7 @@ import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar } from "lucide-react";
+import { ArrowLeft, Calendar, Eye } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
@@ -13,6 +13,7 @@ import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogNavigation } from "@/components/blog/blog-navigation";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
+import { ViewTracker } from "@/components/blog/view-tracker";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { safeJsonLdSerialize, NAV_HEIGHT } from "@/lib/constants";
 
@@ -82,17 +83,22 @@ export default async function BlogPostPage({
 
   let frontmatter;
   let content;
+  let views: number;
 
   try {
     const post = await getPostBySlug(slug);
     frontmatter = post.frontmatter;
     content = post.content;
+    views = post.views;
   } catch {
     notFound();
   }
 
   return (
     <div className="min-h-screen relative flex flex-col">
+      {/* View Tracker - fires on mount to increment view count */}
+      <ViewTracker slug={slug} />
+
       {/* JSON-LD structured data for SEO - placed in head via Script component */}
       <Script
         id={`article-schema-${slug}`}
@@ -173,6 +179,13 @@ export default async function BlogPostPage({
                 >
                   <Calendar className="h-4 w-4" />
                   <span>{frontmatter.date}</span>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <Eye className="h-4 w-4" />
+                  <span>
+                    {views.toLocaleString()} {views === 1 ? "view" : "views"}
+                  </span>
                 </div>
               </div>
 

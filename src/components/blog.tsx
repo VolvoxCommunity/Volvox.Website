@@ -19,7 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ArrowRight } from "@phosphor-icons/react";
+import { ArrowRight, Eye } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 import ReactMarkdown from "react-markdown";
@@ -176,6 +176,10 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                         year: "numeric",
                       })}
                     </span>
+                    <span className="flex items-center gap-1">
+                      <Eye className="h-3 w-3" weight="bold" />
+                      {post.views.toLocaleString()}
+                    </span>
                   </div>
                 </CardContent>
               </Card>
@@ -270,6 +274,14 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                             year: "numeric",
                           }
                         )}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center gap-1 border-l pl-4 border-border/50">
+                      <Eye className="h-4 w-4" weight="bold" />
+                      <span>
+                        {selectedPost.views.toLocaleString()}{" "}
+                        {selectedPost.views === 1 ? "view" : "views"}
                       </span>
                     </div>
                   </div>

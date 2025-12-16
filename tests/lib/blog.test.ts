@@ -8,6 +8,7 @@ import * as fs from "fs";
 import matter from "gray-matter";
 import { getAuthorById } from "@/lib/content";
 import { reportError } from "@/lib/logger";
+import * as views from "@/lib/views";
 
 jest.mock("fs");
 jest.mock("gray-matter");
@@ -16,6 +17,11 @@ jest.mock("@/lib/logger", () => ({
 }));
 jest.mock("@/lib/content", () => ({
   getAuthorById: jest.fn(),
+}));
+jest.mock("@/lib/views", () => ({
+  getPostViews: jest.fn().mockResolvedValue(0),
+  getPostViewsBatch: jest.fn().mockResolvedValue(new Map()),
+  incrementPostViews: jest.fn().mockResolvedValue(1),
 }));
 
 describe("blog lib", () => {
@@ -38,6 +44,16 @@ describe("blog lib", () => {
       image: "/avatars/user1.png",
       bio: "Bio",
     });
+    // Reset views mocks with working defaults
+    (views.getPostViews as jest.Mock).mockResolvedValue(0);
+    (views.getPostViewsBatch as jest.Mock).mockImplementation(
+      (slugs: string[]) => {
+        const map = new Map<string, number>();
+        slugs.forEach((slug) => map.set(slug, 0));
+        return Promise.resolve(map);
+      }
+    );
+    (views.incrementPostViews as jest.Mock).mockResolvedValue(1);
   });
 
   describe("getAllPosts", () => {
@@ -146,9 +162,21 @@ describe("blog lib", () => {
   });
 
   describe("incrementPostViews", () => {
-    it("returns true (noop)", async () => {
-      const result = await incrementPostViews("any-slug");
-      expect(result).toBe(true);
+    it("delegates to views service", async () => {
+      (views.incrementPostViews as jest.Mock).mockResolvedValue(42);
+
+      const result = await incrementPostViews("test-slug");
+
+      expect(views.incrementPostViews).toHaveBeenCalledWith("test-slug");
+      expect(result).toBe(42);
+    });
+
+    it("returns -1 on failure", async () => {
+      (views.incrementPostViews as jest.Mock).mockResolvedValue(-1);
+
+      const result = await incrementPostViews("test-slug");
+
+      expect(result).toBe(-1);
     });
   });
 });

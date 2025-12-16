@@ -5,6 +5,11 @@ import { reportError } from "./logger";
 import { BlogPostFrontmatterSchema } from "./schemas";
 import { normalizeSlug } from "./validation";
 import { getAuthorById } from "./content";
+import {
+  getPostViews,
+  getPostViewsBatch,
+  incrementPostViews as incrementViews,
+} from "./views";
 import type { BlogPost } from "./types";
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
@@ -22,7 +27,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     // Simulate async operation
     await Promise.resolve();
 
-    const posts: BlogPost[] = [];
+    const postsData: Array<{
+      frontmatter: ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+      content: string;
+      author: ReturnType<typeof getAuthorById>;
+    }> = [];
 
     for (const file of files) {
       const filePath = path.join(BLOG_DIR, file);
@@ -42,8 +51,16 @@ export async function getAllPosts(): Promise<BlogPost[]> {
       // Get author details
       const author = getAuthorById(frontmatter.authorId);
 
-      posts.push({
-        id: frontmatter.slug, // Use slug as ID
+      postsData.push({ frontmatter, content, author });
+    }
+
+    // Fetch views for all posts in batch
+    const slugs = postsData.map((p) => p.frontmatter.slug);
+    const viewsMap = await getPostViewsBatch(slugs);
+
+    const posts: BlogPost[] = postsData.map(
+      ({ frontmatter, content, author }) => ({
+        id: frontmatter.slug,
         title: frontmatter.title,
         excerpt: frontmatter.excerpt,
         content,
@@ -51,11 +68,11 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         date: frontmatter.date,
         tags: frontmatter.tags,
         slug: frontmatter.slug,
-        views: 0, // No longer tracking views
+        views: viewsMap.get(frontmatter.slug) ?? 0,
         published: frontmatter.published,
         banner: frontmatter.banner,
-      });
-    }
+      })
+    );
 
     // Sort by date (newest first)
     posts.sort(
@@ -94,6 +111,9 @@ export async function getPostBySlug(slug: string) {
     // Get author details
     const author = getAuthorById(frontmatter.authorId);
 
+    // Fetch view count for this post
+    const views = await getPostViews(validSlug);
+
     return {
       frontmatter: {
         id: frontmatter.slug,
@@ -106,7 +126,7 @@ export async function getPostBySlug(slug: string) {
       },
       content,
       slug: frontmatter.slug,
-      views: 0, // No longer tracking views
+      views,
     };
   } catch (error) {
     reportError(`Failed to fetch post: ${slug}`, error);
@@ -150,15 +170,9 @@ export async function getPostSlugs(): Promise<string[]> {
 /**
  * Increments the view counter for a given blog slug.
  *
- * @deprecated View tracking removed - this is a no-op stub for backward compatibility
  * @param slug - Slug to increment.
+ * @returns The new view count, or -1 if the operation failed.
  */
-export async function incrementPostViews(slug: string): Promise<boolean> {
-  // No-op: View tracking has been removed
-  // This stub remains temporarily for backward compatibility
-  // Will be removed in Task 7
-  await Promise.resolve();
-  // Prevent unused var warning
-  void slug;
-  return true;
+export async function incrementPostViews(slug: string): Promise<number> {
+  return incrementViews(slug);
 }
