@@ -16,7 +16,7 @@ import { motion } from "framer-motion";
 
 // Local
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 
@@ -158,6 +158,9 @@ export function ProductHero({ product }: ProductHeroProps) {
             className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg"
             showCloseButton={false}
           >
+            <DialogTitle className="sr-only">
+              {product.name} - Expanded View
+            </DialogTitle>
             <button
               type="button"
               onClick={() => setIsZoomOpen(false)}
