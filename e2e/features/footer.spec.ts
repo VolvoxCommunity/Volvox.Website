@@ -34,12 +34,8 @@ test.describe("Footer", () => {
     expect(href).toBe("/terms");
   });
 
-  test("has social links", async ({ page }) => {
+  test("has proper container structure", async ({ page }) => {
     const footer = page.locator('[data-testid="footer"]');
-
-    // Check if there are any links to social media platforms
-    // The footer may not have social links, so we check for their existence in the navigation instead
-    // This test verifies the footer structure is present
     await expect(footer).toBeVisible();
 
     // Verify footer has the main container structure
