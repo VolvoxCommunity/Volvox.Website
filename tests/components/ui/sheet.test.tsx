@@ -240,27 +240,18 @@ describe("Sheet Components", () => {
   });
 
   describe("SheetFooter", () => {
-    it("renders footer content", () => {
+    it("renders footer content within the sheet", () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
             <SheetTitle>Title</SheetTitle>
-            <SheetFooter>Footer Content</SheetFooter>
+            <SheetFooter data-testid="footer">Footer Content</SheetFooter>
           </SheetContent>
         </Sheet>
       );
+      // Primary behavioral assertion: footer content renders
       expect(screen.getByText("Footer Content")).toBeInTheDocument();
-    });
-
-    it("has data-slot attribute", () => {
-      render(
-        <Sheet defaultOpen>
-          <SheetContent>
-            <SheetTitle>Title</SheetTitle>
-            <SheetFooter data-testid="footer">Footer</SheetFooter>
-          </SheetContent>
-        </Sheet>
-      );
+      // Verify slot plumbing for component identification
       expect(screen.getByTestId("footer")).toHaveAttribute(
         "data-slot",
         "sheet-footer"
