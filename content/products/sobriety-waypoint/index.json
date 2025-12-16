@@ -16,7 +16,9 @@
   "techStack": ["React Native", "Expo", "TypeScript", "Firebase"],
   "links": {
     "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
-    "demo": "https://sobrietywaypoint.com"
+    "demo": "https://sobrietywaypoint.com",
+    "appStore": "https://apps.apple.com/us/app/sobriety-waypoint/id6755614815",
+    "playStore": "https://play.google.com/apps/internaltest/4701660329596082968"
   },
   "screenshots": ["hero.png"],
   "faq": [

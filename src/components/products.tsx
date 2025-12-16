@@ -9,7 +9,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle } from "@phosphor-icons/react";
+import { CheckCircle, AppleLogo, GooglePlayLogo } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
@@ -107,9 +107,64 @@ function ProductCard({ product, index }: ProductCardProps) {
                   ))}
                 </ul>
               </div>
+
+              {product.techStack && product.techStack.length > 0 && (
+                <div>
+                  <h4 className="font-semibold mb-4 text-xs uppercase tracking-wider text-muted-foreground flex items-center gap-2">
+                    <span className="h-px w-4 bg-secondary/50" />
+                    Tech Stack
+                  </h4>
+                  <div className="flex flex-wrap gap-2">
+                    {product.techStack.map((tech) => (
+                      <span
+                        key={`${product.slug}:tech:${tech}`}
+                        className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-secondary/20 text-foreground border border-secondary/30"
+                      >
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              )}
             </CardContent>
 
-            <CardFooter className="pt-6 pb-6 md:pb-8 px-6 md:px-8">
+            <CardFooter className="pt-6 pb-6 md:pb-8 px-6 md:px-8 flex-col items-start gap-4">
+              {(product.links?.appStore || product.links?.playStore) && (
+                <div className="flex flex-wrap gap-3">
+                  {product.links.appStore && (
+                    <a
+                      href={product.links.appStore}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Download ${product.name} on the App Store`}
+                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                    >
+                      <AppleLogo weight="fill" className="h-6 w-6" />
+                      <div className="text-left">
+                        <div className="text-xs leading-none">
+                          Download on the
+                        </div>
+                        <div className="text-sm font-semibold">App Store</div>
+                      </div>
+                    </a>
+                  )}
+                  {product.links.playStore && (
+                    <a
+                      href={product.links.playStore}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Get ${product.name} on Google Play`}
+                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                    >
+                      <GooglePlayLogo weight="fill" className="h-6 w-6" />
+                      <div className="text-left">
+                        <div className="text-xs leading-none">Get it on</div>
+                        <div className="text-sm font-semibold">Google Play</div>
+                      </div>
+                    </a>
+                  )}
+                </div>
+              )}
               <Button asChild className="gap-2 group/btn">
                 <Link href={`/products/${product.slug}`}>
                   View Details
