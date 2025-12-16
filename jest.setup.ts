@@ -6,3 +6,12 @@ global.ResizeObserver = class ResizeObserver {
   unobserve() {}
   disconnect() {}
 };
+
+// Mock @upstash/redis to avoid ESM import issues
+jest.mock("@upstash/redis", () => ({
+  Redis: jest.fn().mockImplementation(() => ({
+    get: jest.fn(),
+    mget: jest.fn(),
+    incr: jest.fn(),
+  })),
+}));
