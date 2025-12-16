@@ -2,19 +2,14 @@ import { test, expect } from "../fixtures/base.fixture";
 
 test.describe("Theme Toggle", () => {
   test.beforeEach(async ({ page }) => {
-    // Clear any stored theme preferences from localStorage
-    // Theme is stored as 'volvox-theme' key, not in cookies
+    // Set initial theme to light for consistent starting conditions
+    // regardless of system preferences
     await page.addInitScript(() => {
-      localStorage.removeItem("volvox-theme");
+      localStorage.setItem("volvox-theme", "light");
     });
   });
 
   test("toggles between light and dark mode", async ({ page }) => {
-    // Start with light theme explicitly set
-    await page.addInitScript(() => {
-      localStorage.setItem("volvox-theme", "light");
-    });
-
     await page.goto("/");
 
     // Wait for page to be fully loaded and theme to be applied
@@ -39,7 +34,7 @@ test.describe("Theme Toggle", () => {
   });
 
   test("persists theme preference across page loads", async ({ context }) => {
-    // Create a new page without any init scripts
+    // Create a new page without any init scripts from beforeEach
     const newPage = await context.newPage();
 
     // Set light theme via localStorage before loading page
@@ -77,35 +72,41 @@ test.describe("Theme Toggle", () => {
     await newPage.close();
   });
 
-  test("respects system preference on first visit", async ({ page }) => {
-    // Set system preference to dark
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
+  test("respects system preference on first visit", async ({ context }) => {
+    // Create a new page to test system preference without init scripts
+    const newPage = await context.newPage();
 
-    // Wait for theme to initialize by waiting for the dark class
-    await page.waitForSelector("html.dark");
-
-    // Should respect system preference (dark mode)
-    await expect(page.locator("html")).toHaveClass(/dark/);
-
-    // Clear and test with light preference
-    await page.evaluate(() => {
+    // Clear any existing theme preference
+    await newPage.goto("/");
+    await newPage.evaluate(() => {
       localStorage.removeItem("volvox-theme");
     });
-    await page.emulateMedia({ colorScheme: "light" });
-    await page.reload();
-    await page.waitForSelector("html:not(.dark)");
+
+    // Set system preference to dark
+    await newPage.emulateMedia({ colorScheme: "dark" });
+    await newPage.reload();
+
+    // Wait for theme to initialize
+    await newPage.waitForSelector("html.dark");
+
+    // Should respect system preference (dark mode)
+    await expect(newPage.locator("html")).toHaveClass(/dark/);
+
+    // Clear and test with light preference
+    await newPage.evaluate(() => {
+      localStorage.removeItem("volvox-theme");
+    });
+    await newPage.emulateMedia({ colorScheme: "light" });
+    await newPage.reload();
+    await newPage.waitForSelector("html:not(.dark)");
 
     // Should respect system preference (light mode)
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await expect(newPage.locator("html")).not.toHaveClass(/dark/);
+
+    await newPage.close();
   });
 
   test("theme toggle is keyboard accessible", async ({ page }) => {
-    // Start with light theme
-    await page.addInitScript(() => {
-      localStorage.setItem("volvox-theme", "light");
-    });
-
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
     await page.waitForSelector("html.light");
@@ -127,27 +128,23 @@ test.describe("Theme Toggle", () => {
     await expect(page.locator("html")).toHaveClass(/light/);
   });
 
-  test("theme toggle has accessible label", async ({ page }) => {
+  test("theme toggle has accessible name", async ({ page }) => {
     await page.goto("/");
-    const toggle = page.getByRole("button", { name: /toggle theme/i });
 
-    // Button should be accessible via its sr-only span text
-    // The component uses <span className="sr-only">Toggle theme</span>
+    // Button should be findable by accessible name via sr-only text
+    const toggle = page.getByRole("button", { name: /toggle theme/i });
     await expect(toggle).toBeVisible();
+
+    // Verify the accessible name contains "theme" (provided via sr-only span)
     const accessibleName = await toggle.evaluate(
-      (el) => el.textContent?.trim() || el.getAttribute("aria-label") || ""
+      (el) => el.textContent?.toLowerCase() || ""
     );
-    expect(accessibleName.toLowerCase()).toContain("theme");
+    expect(accessibleName).toContain("theme");
   });
 
   test("theme toggle shows correct icon for current theme", async ({
     page,
   }) => {
-    // Start with light theme
-    await page.addInitScript(() => {
-      localStorage.setItem("volvox-theme", "light");
-    });
-
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
     await page.waitForSelector("html.light");
@@ -167,26 +164,31 @@ test.describe("Theme Toggle", () => {
     await expect(icon).toBeVisible();
   });
 
-  test("theme preference overrides system preference", async ({ page }) => {
-    // Set system preference to dark
-    await page.emulateMedia({ colorScheme: "dark" });
-    await page.goto("/");
-    await page.waitForSelector("html.dark");
+  test("theme preference overrides system preference", async ({ context }) => {
+    // Create a new page to avoid the beforeEach init script
+    const newPage = await context.newPage();
 
-    const toggle = page.getByRole("button", { name: /toggle theme/i });
+    // Set system preference to dark
+    await newPage.emulateMedia({ colorScheme: "dark" });
+    await newPage.goto("/");
+    await newPage.waitForSelector("html.dark");
+
+    const toggle = newPage.getByRole("button", { name: /toggle theme/i });
 
     // Initially should be dark (following system)
-    await expect(page.locator("html")).toHaveClass(/dark/);
+    await expect(newPage.locator("html")).toHaveClass(/dark/);
 
     // Toggle to light mode (user preference)
     await toggle.click();
-    await page.waitForSelector("html:not(.dark)");
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await newPage.waitForSelector("html:not(.dark)");
+    await expect(newPage.locator("html")).not.toHaveClass(/dark/);
 
     // Reload - should use user preference (light) not system (dark)
-    await page.reload();
-    await page.waitForSelector("html:not(.dark)");
-    await expect(page.locator("html")).not.toHaveClass(/dark/);
+    await newPage.reload();
+    await newPage.waitForSelector("html:not(.dark)");
+    await expect(newPage.locator("html")).not.toHaveClass(/dark/);
+
+    await newPage.close();
   });
 
   test("theme transitions work smoothly without flash", async ({ page }) => {

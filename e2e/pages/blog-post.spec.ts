@@ -12,10 +12,8 @@ test.describe("Blog Post Page", () => {
     await expect(header.locator("h1")).toBeVisible();
     await expect(header.locator("h1")).toContainText("Announcing Volvox");
 
-    // Check that the date element exists (Calendar icon + date text)
-    const dateElement = page
-      .locator('article header div:has([class*="lucide-calendar"])')
-      .last();
+    // Check that the date element exists using data-testid for reliable selection
+    const dateElement = page.locator('[data-testid="post-date"]');
     await expect(dateElement).toBeVisible();
     // Verify date format (YYYY-MM-DD) rather than specific date
     await expect(dateElement).toContainText(/\d{4}-\d{2}-\d{2}/);

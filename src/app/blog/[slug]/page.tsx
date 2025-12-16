@@ -167,7 +167,10 @@ export default async function BlogPostPage({
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1">
+                <div
+                  className="flex items-center gap-1"
+                  data-testid="post-date"
+                >
                   <Calendar className="h-4 w-4" />
                   <span>{frontmatter.date}</span>
                 </div>

@@ -1,11 +1,12 @@
 import { test, expect } from "../fixtures/base.fixture";
+import { DATE_FORMAT_REGEX } from "../utils/test-helpers";
 
 test.describe("Blog List (Homepage Section)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    // Wait for the blog section to be attached to the DOM
+    // Wait for the blog section to be visible and scroll it into view
     const blogSection = page.locator("[data-testid='blog-section']");
-    await blogSection.waitFor({ state: "attached" });
+    await blogSection.waitFor({ state: "visible" });
     await blogSection.scrollIntoViewIfNeeded();
   });
 
@@ -26,8 +27,8 @@ test.describe("Blog List (Homepage Section)", () => {
     const firstCard = page.locator('[data-testid="blog-card"]').first();
     // CardTitle is a div with data-slot="card-title"
     await expect(firstCard.locator('[data-slot="card-title"]')).toBeVisible();
-    // Date is shown as a span with the formatted date
-    await expect(firstCard.getByText(/\w{3}\s+\d{1,2},\s+\d{4}/)).toBeVisible();
+    // Date format: "Dec 15, 2024"
+    await expect(firstCard.getByText(DATE_FORMAT_REGEX)).toBeVisible();
   });
 
   test("blog card links to blog post", async ({ page }) => {

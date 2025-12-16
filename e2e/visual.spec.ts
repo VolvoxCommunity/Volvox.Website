@@ -1,17 +1,5 @@
 import { test, expect } from "./fixtures/base.fixture";
-
-// Helper to wait for all CSS animations to complete
-async function waitForAnimations(
-  page: import("@playwright/test").Page
-): Promise<void> {
-  await page.waitForFunction(() => {
-    const animations = document.getAnimations();
-    return (
-      animations.length === 0 ||
-      animations.every((a) => a.playState === "finished")
-    );
-  });
-}
+import { waitForAnimations, setInitialTheme } from "./utils/test-helpers";
 
 test.describe("Visual Regression", () => {
   // Only run visual tests on Chromium to avoid maintaining multiple baselines
@@ -101,11 +89,8 @@ test.describe("Visual Regression", () => {
     test.use({ viewport: { width: 1280, height: 720 } });
 
     test("dark mode homepage", async ({ page }) => {
-      // Set initial light theme to ensure consistent starting state
-      await page.addInitScript(() => {
-        localStorage.setItem("volvox-theme", "light");
-      });
-
+      // Set initial theme to light so clicking toggle produces dark mode
+      await setInitialTheme(page, "light");
       await page.goto("/");
       await page.waitForLoadState("networkidle");
       await page.waitForSelector("html.light");

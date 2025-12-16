@@ -31,7 +31,7 @@ test.describe("Homepage", () => {
   test("scroll-based section tracking updates navigation", async ({ page }) => {
     const blogSection = page.locator("#blog, [data-testid='blog-section']");
     await blogSection.scrollIntoViewIfNeeded();
-    // Wait for section to be in viewport instead of fixed timeout
+    // Wait for section to be in viewport using an assertion timeout (not an arbitrary wait)
     await expect(blogSection).toBeInViewport({ timeout: 2000 });
   });
 

@@ -1,19 +1,5 @@
 import { test, expect } from "../fixtures/base.fixture";
-import type { Page } from "@playwright/test";
-
-// Helper to dismiss cookie banner if present
-async function dismissCookieBanner(page: Page): Promise<void> {
-  const cookieBanner = page.locator('[data-testid="cookie-consent-banner"]');
-  if ((await cookieBanner.count()) > 0 && (await cookieBanner.isVisible())) {
-    const acceptButton = cookieBanner.getByRole("button", {
-      name: /accept|agree/i,
-    });
-    if ((await acceptButton.count()) > 0) {
-      await acceptButton.click();
-      await page.waitForLoadState("domcontentloaded");
-    }
-  }
-}
+import { dismissCookieBanner } from "../utils/test-helpers";
 
 test.describe("Footer", () => {
   test.beforeEach(async ({ page }) => {
@@ -167,11 +153,10 @@ test.describe("Footer", () => {
   test("footer maintains consistent styling across themes", async ({
     page,
   }) => {
-    // Set initial light theme to ensure consistent starting state
+    // Set initial theme to light so clicking toggle produces dark mode
     await page.addInitScript(() => {
       localStorage.setItem("volvox-theme", "light");
     });
-
     await page.goto("/");
     await page.waitForLoadState("domcontentloaded");
     await page.waitForSelector("html.light");
