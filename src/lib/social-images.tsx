@@ -255,7 +255,6 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       }}
     >
       {logoSrc ? (
-        // eslint-disable-next-line @next/next/no-img-element
         <img
           src={logoSrc}
           width={120}
@@ -413,7 +412,6 @@ export async function generateSocialImage(
           }}
         >
           {logoSrc && (
-            // eslint-disable-next-line @next/next/no-img-element
             <img
               src={logoSrc}
               width={48}
@@ -628,7 +626,6 @@ export async function generateBlogPostSocialImage(
               }}
             >
               {logoSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={logoSrc}
                   width={56}
@@ -671,7 +668,6 @@ export async function generateBlogPostSocialImage(
                   boxShadow: `0 25px 50px -12px ${BRAND_COLORS.secondary}30`,
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={bannerSrc}
                   width={480}
@@ -842,7 +838,6 @@ export async function generateProductSocialImage(
               }}
             >
               {logoSrc ? (
-                // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={logoSrc}
                   width={56}
@@ -885,7 +880,6 @@ export async function generateProductSocialImage(
                   boxShadow: `0 25px 50px -12px ${BRAND_COLORS.primary}30`,
                 }}
               >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={screenshotSrc}
                   width={480}
