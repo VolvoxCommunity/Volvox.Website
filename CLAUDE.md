@@ -52,34 +52,33 @@ pnpm format:check
 
 ## Code Quality Requirements
 
-**MANDATORY**: After changing or editing any files, you MUST follow this workflow:
+**Pre-commit Hooks (Husky)**: This project uses Husky pre-commit hooks that automatically run all validation checks before each commit. The hooks run:
 
-1. **Formatting**: Run `pnpm format` to ensure consistent code formatting
-2. **Type Checking**: Run `pnpm typecheck` to verify TypeScript type safety
-3. **Linting**: Run `pnpm lint` to check for code quality issues (includes type-aware linting)
-4. **Testing**: Run `pnpm test` to ensure all unit tests pass
-5. **Build**: Run `pnpm build` to verify production build passes
-6. **Commit and Push**: After all checks pass, commit and push all changes
+1. **lint-staged**: Formats and lints only staged files (fast)
+2. **typecheck**: Full TypeScript type checking
+3. **test**: All unit tests
+4. **build**: Production build verification
 
-These checks are not optional. All validation steps must pass before committing. If any check fails, fix the issues and re-run all checks before proceeding.
+If any check fails, the commit will be blocked. Fix the issues and try again.
 
-**Complete Workflow:**
+**Manual Workflow** (if needed):
 
 ```bash
-# Step 1-5: Run all validation checks
+# Run all validation checks manually
 pnpm format && pnpm typecheck && pnpm lint && pnpm test && pnpm build
 
-# Step 6: If all checks pass, commit and push
+# Then commit
 git add .
 git commit -m "your commit message"
 git push
 ```
 
-**Important:**
+**Bypassing Hooks** (use sparingly):
 
-- Do NOT commit or push changes - allow the user to do this manually
-- Do NOT skip the validation checks to save time
-- All validation checks must pass before changes are considered complete
+```bash
+# Skip pre-commit hooks for WIP commits (not recommended for final commits)
+git commit --no-verify -m "WIP: work in progress"
+```
 
 **Why this matters:**
 
@@ -89,7 +88,6 @@ git push
 - Catches potential bugs and issues early (floating promises, unsafe any usage, etc.)
 - Verifies all unit tests pass before changes are committed
 - Ensures CI/CD pipeline will pass
-- Keeps remote repository in sync with local changes
 
 ## Architecture
 

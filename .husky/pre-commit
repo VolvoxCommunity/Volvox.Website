@@ -1,0 +1,14 @@
+# Run lint-staged on staged files (format + lint)
+pnpm lint-staged
+
+# Run TypeScript type checking
+echo "Running typecheck..."
+pnpm typecheck
+
+# Run unit tests
+echo "Running tests..."
+pnpm test
+
+# Run production build
+echo "Running build..."
+pnpm build
