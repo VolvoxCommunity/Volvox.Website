@@ -147,13 +147,34 @@ git commit --no-verify -m "WIP: work in progress"
 ```
 /content
   /blog/*.mdx - Blog posts with frontmatter
+  /products/[slug]/ - Product-specific content (changelog.mdx, index.json)
   authors.json - Author profiles
   products.json - Product information
   mentors.json - Mentor profiles
   mentees.json - Mentee profiles
 
 /e2e
-  blog-view-tracking.spec.ts - Playwright E2E test for blog view tracking
+  /fixtures/base.fixture.ts - Extended Playwright fixtures with error tracking
+  /pages/ - Page-specific E2E tests
+    homepage.spec.ts - Homepage tests
+    blog-list.spec.ts - Blog listing tests
+    blog-post.spec.ts - Blog post detail tests
+    products-list.spec.ts - Products listing tests
+    product-detail.spec.ts - Product detail tests
+    privacy.spec.ts - Privacy policy tests
+    terms.spec.ts - Terms of service tests
+  /features/ - Feature-specific E2E tests
+    navigation.spec.ts - Navigation and routing tests
+    theme.spec.ts - Theme toggle and persistence tests
+    cookie-consent.spec.ts - Cookie consent banner tests
+    footer.spec.ts - Footer tests
+  /utils/test-helpers.ts - Shared test utilities
+  accessibility.spec.ts - Automated accessibility (axe-core) tests
+  seo.spec.ts - SEO meta tags and structured data tests
+  responsive.spec.ts - Mobile/tablet/desktop viewport tests
+  visual.spec.ts - Visual regression screenshot tests
+  performance.spec.ts - Page load and interaction performance tests
+  errors.spec.ts - Error handling and 404 tests
 
 /tests
   /app - API route and app-level tests
@@ -165,13 +186,17 @@ git commit --no-verify -m "WIP: work in progress"
 /src
   /app
     /blog/[slug] - Dynamic blog post pages
+    /products/[slug] - Dynamic product detail pages
+    /products - Products listing page
     /privacy - Privacy policy page
+    /terms - Terms of service page
     layout.tsx - Root layout
     page.tsx - Homepage server component
     global-error.tsx - Global error boundary
   /components
     /blog - Blog-specific components
     /mdx - Custom MDX components
+    /products - Product-specific components
     /ui - Reusable UI primitives
     /providers - React context providers
   /hooks - Custom React hooks
@@ -261,6 +286,9 @@ Located in `src/lib/`:
   - `class-variance-authority` for component variants
   - `clsx` and `tailwind-merge` combined in `cn()` utility
   - `@radix-ui/colors` for color scales
+- **Testing**:
+  - `@axe-core/playwright` for automated accessibility testing in E2E tests
+  - `@playwright/test` for E2E testing framework
 
 ### Build Output
 
@@ -291,11 +319,52 @@ Located in `src/lib/`:
   - Run with: `pnpm test`
   - Watch mode: `pnpm test:watch`
   - Coverage: `pnpm test:coverage`
-- **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
-  - Configuration: `playwright.config.ts` (multi-browser: Chromium, Firefox, Safari + mobile)
-  - Visual regression tests run on Chromium only to avoid multiple baselines
-  - Run with: `pnpm exec playwright test`
-  - Interactive UI: `pnpm exec playwright test --ui`
+- **E2E Tests**: Comprehensive Playwright test suite (located in `e2e/`)
+  - **Configuration**: `playwright.config.ts`
+    - Multi-browser: Chromium, Firefox, Safari + mobile viewports (Pixel 5, iPhone 13)
+    - Dev server for local testing (faster), production build for CI (more accurate)
+    - Visual regression tests run on Chromium only to avoid multiple baselines
+    - Traces, screenshots, and videos on failure
+  - **Test Categories**:
+    - Page tests (`e2e/pages/`): Homepage, blog list, blog post, products, privacy, terms
+    - Feature tests (`e2e/features/`): Navigation, theme toggle, cookie consent, footer
+    - Accessibility tests: Automated axe-core scans with known violations excluded
+    - SEO tests: Meta tags, Open Graph images, structured data validation
+    - Responsive tests: Mobile, tablet, and desktop viewport testing
+    - Visual regression tests: Screenshot comparisons with configurable thresholds
+    - Performance tests: Page load times, no console errors, no failed requests
+    - Error tests: 404 handling, error boundaries
+  - **Test Utilities** (`e2e/utils/test-helpers.ts`):
+    - `DATE_FORMAT_REGEX`: Shared regex for date format matching
+    - `waitForAnimations(page)`: Wait for all animations to complete
+    - `dismissCookieBanner(page)`: Handle cookie consent banner
+    - `setInitialTheme(page, theme)`: Set theme via localStorage before page load
+  - **Custom Fixtures** (`e2e/fixtures/base.fixture.ts`):
+    - `consoleErrors`: Captures console errors during tests
+    - `failedRequests`: Tracks failed network requests
+    - `assertNoConsoleErrors()`: Assert no console errors occurred
+    - `assertNoFailedRequests()`: Assert no network requests failed
+  - **Run Commands**:
+    - `pnpm exec playwright test` - Run all E2E tests
+    - `pnpm exec playwright test --ui` - Interactive UI mode
+    - `pnpm exec playwright test --project=chromium` - Single browser
+    - `pnpm exec playwright test e2e/pages/` - Run specific test folder
+  - **CI Integration**: GitHub Actions workflow with 4-way sharding for parallel execution
+
+### Test Selectors (data-testid attributes)
+
+Components use `data-testid` attributes for reliable E2E test selectors:
+
+- `hero-section` - Homepage hero section
+- `footer` - Site footer
+- `theme-toggle` - Theme toggle button
+- `mobile-menu-button` - Mobile navigation menu button
+- `cookie-consent-banner` - Cookie consent banner
+- `post-date` - Blog post publication date
+- `author-name` - Blog post author name
+- `product-features` - Product features list
+
+When adding new components that need E2E testing, add appropriate `data-testid` attributes.
 
 ### Data Resilience
 
