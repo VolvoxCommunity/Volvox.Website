@@ -37,15 +37,14 @@ test.describe("Navigation", () => {
 
     test("nav links scroll to correct sections", async ({ page }) => {
       await page.goto("/");
-      const blogLink = page
-        .locator('nav a[href*="blog"], nav a[href="#blog"]')
-        .first();
-      if ((await blogLink.count()) > 0) {
-        await blogLink.click();
-        await page.waitForTimeout(500);
-        const blogSection = page.locator("#blog, [data-testid='blog-section']");
-        await expect(blogSection).toBeInViewport();
-      }
+      // Find blog button in navigation (uses buttons for scroll navigation)
+      const blogButton = page
+        .locator('[data-testid="desktop-nav"]')
+        .getByRole("button", { name: /blog/i });
+      await blogButton.click();
+
+      const blogSection = page.locator("#blog, [data-testid='blog-section']");
+      await expect(blogSection).toBeInViewport({ timeout: 2000 });
     });
   });
 

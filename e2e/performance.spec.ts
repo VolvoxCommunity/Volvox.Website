@@ -99,8 +99,12 @@ test.describe("Performance", () => {
       });
 
       page.on("response", (res) => {
-        if (res.url().endsWith(".js") && res.status() >= 400) {
-          jsErrors.push(`Failed to load: ${res.url()}`);
+        const url = res.url();
+        // Match .js, .mjs files and bundled chunks with query strings
+        const isJsFile =
+          /\.(js|mjs)(\?|$)/.test(url) || url.includes("/_next/static/chunks/");
+        if (isJsFile && res.status() >= 400) {
+          jsErrors.push(`Failed to load: ${url}`);
         }
       });
 

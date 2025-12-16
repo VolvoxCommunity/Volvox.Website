@@ -24,28 +24,22 @@ test.describe("Error States", () => {
     test("404 page has navigation to return home", async ({ page }) => {
       await page.goto("/invalid-page-123");
 
-      const homeLink = page.getByRole("link", {
-        name: /home|back|return|volvox/i,
-      });
-      if ((await homeLink.count()) > 0) {
-        await expect(homeLink).toBeVisible();
-      }
+      // Check for navigation or logo link back to home
+      const homeLink = page
+        .getByRole("link", { name: /home|back|return|volvox/i })
+        .first();
+      await expect(homeLink).toBeVisible();
     });
 
     test("404 page maintains site styling", async ({ page }) => {
       await page.goto("/invalid-page");
 
-      // Check if custom 404 page has navigation, or at minimum the page has content
+      // 404 page should have navigation and content
       const nav = page.locator("nav");
-      const navCount = await nav.count();
+      await expect(nav).toBeVisible();
 
-      if (navCount > 0) {
-        await expect(nav).toBeVisible();
-      } else {
-        // Default Next.js 404 - just verify page has some content
-        const heading = page.locator("h1");
-        await expect(heading).toBeVisible();
-      }
+      const heading = page.locator("h1");
+      await expect(heading).toBeVisible();
     });
   });
 

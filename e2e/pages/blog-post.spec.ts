@@ -89,10 +89,12 @@ test.describe("Blog Post Page", () => {
     await expect(backButton).toBeVisible();
 
     // Click and wait for navigation to complete
-    await Promise.all([page.waitForURL(/\/#blog$/), backButton.click()]);
+    await backButton.click();
+    // Wait for URL to contain #blog (handles both localhost:3000/#blog and /#blog patterns)
+    await page.waitForURL(/#blog$/);
 
     // Verify we're on the homepage with the blog section hash
-    expect(page.url()).toContain("/#blog");
+    expect(page.url()).toMatch(/#blog$/);
   });
 
   test("has correct page title", async ({ page }) => {

@@ -31,6 +31,7 @@ test.describe("Visual Regression", () => {
       await waitForAnimations(page);
       const hero = page.locator('[data-testid="hero-section"]');
       await expect(hero).toBeVisible();
+      // Higher threshold for hero: animated background canvas has subtle randomness
       await expect(hero).toHaveScreenshot("homepage-hero.png", {
         maxDiffPixels: 300,
       });
@@ -60,6 +61,7 @@ test.describe("Visual Regression", () => {
       await page.waitForLoadState("networkidle");
       await page.evaluate(() => document.fonts.ready);
       await waitForAnimations(page);
+      // Higher threshold: full-page screenshots include animated background
       await expect(page).toHaveScreenshot("products-listing.png", {
         maxDiffPixels: 300,
       });
@@ -74,6 +76,7 @@ test.describe("Visual Regression", () => {
       await page.waitForLoadState("networkidle");
       await page.evaluate(() => document.fonts.ready);
       await waitForAnimations(page);
+      // Higher threshold: full-page screenshots include animated background
       await expect(page).toHaveScreenshot("homepage-mobile.png", {
         maxDiffPixels: 300,
       });
@@ -87,6 +90,7 @@ test.describe("Visual Regression", () => {
       await menuButton.click();
       // Wait for menu animation to complete
       await waitForAnimations(page);
+      // Higher threshold: menu overlay may have slight animation timing variance
       await expect(page).toHaveScreenshot("mobile-menu-open.png", {
         maxDiffPixels: 300,
       });
@@ -105,6 +109,7 @@ test.describe("Visual Regression", () => {
       await page.waitForSelector("html.dark");
       await page.evaluate(() => document.fonts.ready);
       await waitForAnimations(page);
+      // Higher threshold: full-page screenshots include animated background
       await expect(page).toHaveScreenshot("homepage-dark.png", {
         maxDiffPixels: 300,
       });
