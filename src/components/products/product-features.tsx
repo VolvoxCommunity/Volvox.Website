@@ -11,6 +11,10 @@ interface ProductFeaturesProps {
  * Features section displaying product capabilities as an animated checklist.
  */
 export function ProductFeatures({ features }: ProductFeaturesProps) {
+  if (features.length === 0) {
+    return null;
+  }
+
   return (
     <section id="features" className="py-16 px-4 scroll-mt-32">
       <div className="container mx-auto max-w-4xl">
@@ -18,7 +22,7 @@ export function ProductFeatures({ features }: ProductFeaturesProps) {
         <ul className="grid gap-4 md:grid-cols-2">
           {features.map((feature, idx) => (
             <motion.li
-              key={feature}
+              key={`${feature}-${idx}`}
               className="flex items-start gap-3 p-4 rounded-lg bg-card/50 border border-border/50"
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
