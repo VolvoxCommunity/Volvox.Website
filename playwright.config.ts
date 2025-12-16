@@ -30,8 +30,10 @@ export default defineConfig({
     { name: "mobile-safari", use: { ...devices["iPhone 13"] } },
   ],
   webServer: {
-    // Use dev server for local development (faster), prod build for CI (more accurate)
-    command: process.env.CI ? "pnpm build && pnpm start" : "pnpm dev",
+    // Use dev server for local development (faster startup)
+    // In CI, the build is already done by the workflow before tests run,
+    // so we just start the production server
+    command: process.env.CI ? "pnpm start" : "pnpm dev",
     url: "http://localhost:3000",
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
