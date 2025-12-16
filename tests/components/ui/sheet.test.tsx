@@ -274,7 +274,7 @@ describe("Sheet Components", () => {
   });
 
   describe("SheetTitle", () => {
-    it("renders title text", () => {
+    it("renders title with heading semantics", () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
@@ -282,7 +282,10 @@ describe("Sheet Components", () => {
           </SheetContent>
         </Sheet>
       );
-      expect(screen.getByText("My Title")).toBeInTheDocument();
+      // Use role-based query for semantic verification
+      expect(
+        screen.getByRole("heading", { name: /my title/i })
+      ).toBeInTheDocument();
     });
 
     it("has data-slot attribute", () => {
