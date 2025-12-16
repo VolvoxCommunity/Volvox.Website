@@ -33,18 +33,19 @@ test.describe("SEO", () => {
       );
     });
 
-    test("has canonical URL", async ({ page }) => {
+    test("has canonical URL if implemented", async ({ page }) => {
       // Canonical URLs help with SEO but are optional
-      // When implemented, verify it has a valid href
       const canonical = page.locator('link[rel="canonical"]');
       const count = await canonical.count();
 
-      // Skip assertion if canonical is not implemented
-      if (count > 0) {
-        await expect(canonical).toHaveAttribute("href", /.+/);
+      if (count === 0) {
+        // Skip test if canonical is not implemented
+        test.skip();
+        return;
       }
-      // Pass regardless - canonical is recommended but not required
-      expect(true).toBe(true);
+
+      // Verify canonical URL has a valid href
+      await expect(canonical).toHaveAttribute("href", /.+/);
     });
   });
 
