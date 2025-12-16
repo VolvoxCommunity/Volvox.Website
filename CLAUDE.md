@@ -52,11 +52,7 @@ pnpm format:check
 
 ## Code Quality Requirements
 
-**Pre-commit Hooks (Husky)**: This project uses Husky pre-commit hooks that automatically run validation checks before commits.
-
-**On feature branches**: Only lint-staged runs (fast formatting/linting of staged files)
-
-**On main branch**: Full validation suite runs:
+**Pre-commit Hooks (Husky)**: This project uses Husky pre-commit hooks that automatically run all validation checks before each commit. The hooks run:
 
 1. **lint-staged**: Formats and lints only staged files (fast)
 2. **typecheck**: Full TypeScript type checking

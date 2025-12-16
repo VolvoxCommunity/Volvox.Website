@@ -1,28 +1,14 @@
-#!/bin/sh
-
-# Get current branch name
-BRANCH=$(git rev-parse --abbrev-ref HEAD)
-
-# Always run lint-staged for formatting/linting staged files
+# Run lint-staged on staged files (format + lint)
 pnpm lint-staged
 
-# Only run full validation suite when committing to main
-if [ "$BRANCH" = "main" ]; then
-  echo "Committing to main - running full validation suite..."
+# Run TypeScript type checking
+echo "Running typecheck..."
+pnpm typecheck
 
-  # Run TypeScript type checking
-  echo "Running typecheck..."
-  pnpm typecheck
+# Run unit tests
+echo "Running tests..."
+pnpm test
 
-  # Run unit tests
-  echo "Running tests..."
-  pnpm test
-
-  # Run production build
-  echo "Running build..."
-  pnpm build
-
-  echo "All checks passed!"
-else
-  echo "Skipping full validation (not on main branch)"
-fi
+# Run production build
+echo "Running build..."
+pnpm build
