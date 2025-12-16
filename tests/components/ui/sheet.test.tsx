@@ -1,4 +1,4 @@
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import {
   Sheet,
   SheetTrigger,
@@ -20,28 +20,50 @@ describe("Sheet Components", () => {
       );
       expect(screen.getByText("Open")).toBeInTheDocument();
     });
+
+    it("opens and shows content when trigger is clicked", () => {
+      render(
+        <Sheet>
+          <SheetTrigger>Open Sheet</SheetTrigger>
+          <SheetContent>
+            <SheetTitle>Sheet Title</SheetTitle>
+            <div>Sheet Body Content</div>
+          </SheetContent>
+        </Sheet>
+      );
+
+      // Content should not be visible initially
+      expect(screen.queryByText("Sheet Body Content")).not.toBeInTheDocument();
+
+      // Click the trigger button
+      fireEvent.click(screen.getByRole("button", { name: /open sheet/i }));
+
+      // Content should now be visible
+      expect(screen.getByText("Sheet Body Content")).toBeInTheDocument();
+      expect(screen.getByRole("dialog")).toBeInTheDocument();
+    });
   });
 
   describe("SheetTrigger", () => {
-    it("renders trigger button", () => {
+    it("renders as a button with accessible name", () => {
       render(
         <Sheet>
           <SheetTrigger>Open Sheet</SheetTrigger>
         </Sheet>
       );
-      expect(screen.getByText("Open Sheet")).toBeInTheDocument();
+      expect(
+        screen.getByRole("button", { name: /open sheet/i })
+      ).toBeInTheDocument();
     });
 
-    it("has data-slot attribute", () => {
+    it("has data-slot attribute for component identification", () => {
       render(
         <Sheet>
           <SheetTrigger>Open</SheetTrigger>
         </Sheet>
       );
-      expect(screen.getByText("Open")).toHaveAttribute(
-        "data-slot",
-        "sheet-trigger"
-      );
+      const trigger = screen.getByRole("button", { name: /open/i });
+      expect(trigger).toHaveAttribute("data-slot", "sheet-trigger");
     });
   });
 
