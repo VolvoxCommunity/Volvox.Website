@@ -10,10 +10,12 @@ describe("Hero", () => {
     expect(screen.getByText("Volvox")).toBeInTheDocument();
   });
 
-  it("renders Explore Products as link to /#products", () => {
-    render(<Hero onNavigate={jest.fn()} />);
-    const link = screen.getByRole("link", { name: /Explore Products/i });
-    expect(link).toHaveAttribute("href", "/#products");
+  it("calls onNavigate with 'products' when Explore Products is clicked", () => {
+    const onNavigate = jest.fn();
+    render(<Hero onNavigate={onNavigate} />);
+    const button = screen.getByRole("button", { name: /Explore Products/i });
+    fireEvent.click(button);
+    expect(onNavigate).toHaveBeenCalledWith("products");
   });
 
   it("calls onNavigate when Join as Mentee clicked", () => {
