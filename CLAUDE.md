@@ -356,13 +356,31 @@ Located in `src/lib/`:
 
 Components use `data-testid` attributes for reliable E2E test selectors:
 
+**Homepage sections:**
+
 - `hero-section` - Homepage hero section
+- `products-section` - Products showcase section
+- `blog-section` - Blog posts section
+- `mentorship-section` - Mentorship section
+- `about-section` - About section
+
+**Navigation & UI:**
+
 - `footer` - Site footer
 - `theme-toggle` - Theme toggle button
 - `mobile-menu-button` - Mobile navigation menu button
 - `cookie-consent-banner` - Cookie consent banner
+
+**Blog:**
+
+- `blog-header` - Blog post header
 - `post-date` - Blog post publication date
-- `author-name` - Blog post author name
+- `author-info` - Blog post author info container (name and role)
+- `author-role` - Blog post author role
+- `blog-content` - Blog post MDX content
+
+**Products:**
+
 - `product-features` - Product features list
 
 When adding new components that need E2E testing, add appropriate `data-testid` attributes.
