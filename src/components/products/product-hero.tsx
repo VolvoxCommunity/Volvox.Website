@@ -1,6 +1,7 @@
 "use client";
 
 // Framework
+import { useState } from "react";
 import Image from "next/image";
 
 // Third-party
@@ -10,10 +11,12 @@ import {
   AppleLogo,
   GooglePlayLogo,
 } from "@phosphor-icons/react";
+import { X } from "lucide-react";
 import { motion } from "framer-motion";
 
 // Local
 import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent } from "@/components/ui/dialog";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 
@@ -26,6 +29,7 @@ interface ProductHeroProps {
  * Displays product name, tagline, primary screenshot, and action buttons.
  */
 export function ProductHero({ product }: ProductHeroProps) {
+  const [isZoomOpen, setIsZoomOpen] = useState(false);
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
 
@@ -121,14 +125,21 @@ export function ProductHero({ product }: ProductHeroProps) {
             className="relative aspect-video md:aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20"
           >
             {imagePath ? (
-              <Image
-                src={imagePath}
-                alt={product.name}
-                fill
-                className="object-contain p-4"
-                sizes="(max-width: 768px) 100vw, 50vw"
-                priority
-              />
+              <button
+                type="button"
+                onClick={() => setIsZoomOpen(true)}
+                className="relative w-full h-full cursor-zoom-in"
+                aria-label={`Expand image: ${product.name}`}
+              >
+                <Image
+                  src={imagePath}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4"
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  priority
+                />
+              </button>
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <span className="text-[120px] font-bold text-foreground/10">
@@ -139,6 +150,34 @@ export function ProductHero({ product }: ProductHeroProps) {
           </motion.div>
         </div>
       </div>
+
+      {/* Image Zoom Dialog */}
+      {imagePath && (
+        <Dialog open={isZoomOpen} onOpenChange={setIsZoomOpen}>
+          <DialogContent
+            className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg"
+            showCloseButton={false}
+          >
+            <button
+              type="button"
+              onClick={() => setIsZoomOpen(false)}
+              className="absolute top-4 right-4 z-50 rounded-full bg-background/80 p-3 border border-border hover:bg-background transition-colors cursor-pointer"
+              aria-label="Close"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            <div className="relative flex items-center justify-center w-full h-full p-8">
+              <Image
+                src={imagePath}
+                alt={product.name}
+                fill
+                className="object-contain"
+                sizes="95vw"
+              />
+            </div>
+          </DialogContent>
+        </Dialog>
+      )}
     </section>
   );
 }
