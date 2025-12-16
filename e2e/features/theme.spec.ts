@@ -1,9 +1,12 @@
 import { test, expect } from "../fixtures/base.fixture";
 
 test.describe("Theme Toggle", () => {
-  test.beforeEach(async ({ context }) => {
-    // Clear any stored theme preferences
-    await context.clearCookies();
+  test.beforeEach(async ({ page }) => {
+    // Clear any stored theme preferences from localStorage
+    // Theme is stored as 'volvox-theme' key, not in cookies
+    await page.addInitScript(() => {
+      localStorage.removeItem("volvox-theme");
+    });
   });
 
   test("toggles between light and dark mode", async ({ page }) => {
@@ -219,7 +222,11 @@ test.describe("Theme Toggle", () => {
       return (window as WindowWithThemeChanges).__themeChanges || [];
     });
 
-    // Should only have one change (no flickering)
-    expect(Array.isArray(changes)).toBe(true);
+    // Should have minimal changes (no flickering between states)
+    // A single toggle should result in at most 1-2 class changes
+    expect(
+      changes.length,
+      `Unexpected theme flickering: ${changes.join(" -> ")}`
+    ).toBeLessThanOrEqual(2);
   });
 });
