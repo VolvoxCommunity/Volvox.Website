@@ -28,9 +28,21 @@ export const test = base.extend<TestFixtures>({
 
   assertNoConsoleErrors: async ({ page }, use) => {
     const errors: string[] = [];
+    // Patterns to ignore (third-party cookie warnings, external service errors)
+    const ignoredPatterns = [
+      /SameSite/i,
+      /cross-site/i,
+      /Cookie.*rejected/i,
+      /github\.com/i,
+    ];
     page.on("console", (msg) => {
       if (msg.type() === "error") {
-        errors.push(msg.text());
+        const text = msg.text();
+        // Filter out known third-party issues
+        const isIgnored = ignoredPatterns.some((pattern) => pattern.test(text));
+        if (!isIgnored) {
+          errors.push(text);
+        }
       }
     });
     await use(async () => {

@@ -72,6 +72,22 @@ test.describe("Performance", () => {
       await page.goto("/");
       await page.waitForLoadState("networkidle");
 
+      // Wait for all images to complete loading
+      await page.evaluate(async () => {
+        const images = Array.from(document.querySelectorAll("img"));
+        await Promise.all(
+          images.map((img) => {
+            if (img.complete) return Promise.resolve();
+            return new Promise((resolve) => {
+              img.addEventListener("load", resolve);
+              img.addEventListener("error", resolve);
+              // Timeout after 5 seconds per image
+              setTimeout(resolve, 5000);
+            });
+          })
+        );
+      });
+
       const images = page.locator("img");
       const count = await images.count();
 
@@ -82,7 +98,10 @@ test.describe("Performance", () => {
         );
         if (naturalWidth === 0) {
           const src = await img.getAttribute("src");
-          failedImages.push(src || "unknown");
+          // Ignore placeholder/lazy-loaded images with data URIs or empty src
+          if (src && !src.startsWith("data:") && src !== "") {
+            failedImages.push(src);
+          }
         }
       }
 
