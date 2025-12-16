@@ -60,9 +60,13 @@ jest.mock("remark-gfm", () => () => {});
 // Mock Dialog components to make sure they render in JSDOM environment without issues
 jest.mock("@/components/ui/dialog", () => {
   return {
-    Dialog: ({ open, children }: { open: boolean; children: React.ReactNode }) => (
-      <>{open && <div role="dialog">{children}</div>}</>
-    ),
+    Dialog: ({
+      open,
+      children,
+    }: {
+      open: boolean;
+      children: React.ReactNode;
+    }) => <>{open && <div role="dialog">{children}</div>}</>,
     DialogContent: ({ children }: { children: React.ReactNode }) => (
       <div>{children}</div>
     ),

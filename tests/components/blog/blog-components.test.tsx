@@ -226,9 +226,7 @@ describe("Blog Components", () => {
       render(<ReadingProgress />);
 
       // Find the progress bar inner element (the one with width style)
-      const progressBar = document.querySelector(
-        ".fixed > div"
-      ) as HTMLElement;
+      const progressBar = document.querySelector(".fixed > div") as HTMLElement;
       expect(progressBar).toBeInTheDocument();
 
       // Initially at 0% (scrollY is 0)
@@ -251,9 +249,7 @@ describe("Blog Components", () => {
     it("clamps progress to 100% at bottom of page", () => {
       render(<ReadingProgress />);
 
-      const progressBar = document.querySelector(
-        ".fixed > div"
-      ) as HTMLElement;
+      const progressBar = document.querySelector(".fixed > div") as HTMLElement;
 
       // Scroll past the end
       act(() => {

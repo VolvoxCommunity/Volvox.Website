@@ -29,9 +29,15 @@ jest.mock("@/components/navigation", () => ({
     currentSection: string;
   }) => (
     <nav data-testid="navigation" data-current-section={currentSection}>
-      <button type="button" onClick={() => onNavigate("home")}>Home</button>
-      <button type="button" onClick={() => onNavigate("products")}>Products</button>
-      <button type="button" onClick={() => onNavigate("blog")}>Blog</button>
+      <button type="button" onClick={() => onNavigate("home")}>
+        Home
+      </button>
+      <button type="button" onClick={() => onNavigate("products")}>
+        Products
+      </button>
+      <button type="button" onClick={() => onNavigate("blog")}>
+        Blog
+      </button>
     </nav>
   ),
 }));

@@ -13,7 +13,7 @@
     "Accountability loop supporting effective sponsorship",
     "Cross-platform support (iOS, Android, Web)"
   ],
-  "techStack": ["React Native", "Expo", "TypeScript", "Firebase"],
+  "techStack": ["React Native", "Expo", "iOS", "Android", "Web"],
   "links": {
     "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
     "demo": "https://sobrietywaypoint.com",
