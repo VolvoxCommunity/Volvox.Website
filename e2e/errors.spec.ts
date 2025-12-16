@@ -21,17 +21,28 @@ test.describe("Error States", () => {
       expect(response?.status()).toBe(404);
     });
 
-    test("404 page has navigation to return home", async ({ page }) => {
+    test("404 page renders correctly and user can navigate away", async ({
+      page,
+    }) => {
       await page.goto("/invalid-page-123");
 
-      // Check for a way to navigate home - could be link, or user can use browser back
-      // Note: Default Next.js 404 page doesn't include navigation,
-      // but the cookie consent banner has a Privacy Policy link
-      const anyLink = page.getByRole("link").first();
-      // At minimum, there should be some navigable link on the page
-      // If no links exist, user can still navigate via browser
-      const linkCount = await anyLink.count();
-      expect(linkCount).toBeGreaterThanOrEqual(0); // Test passes - navigation is via browser back
+      // Verify 404 page content is visible
+      const heading = page.locator("h1");
+      await expect(heading).toBeVisible();
+      await expect(heading).toHaveText("404");
+
+      // Verify user can navigate away using browser history
+      // Go to homepage first to have a history entry
+      await page.goto("/");
+      await expect(page.locator("h1")).toBeVisible();
+
+      // Navigate to 404 page
+      await page.goto("/invalid-page-123");
+      await expect(page.locator("h1")).toHaveText("404");
+
+      // Use browser back to return to homepage
+      await page.goBack();
+      await expect(page).toHaveURL("/");
     });
 
     test("404 page maintains site styling", async ({ page }) => {
