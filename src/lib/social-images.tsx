@@ -59,6 +59,10 @@ const BRAND_COLORS = {
   backgroundLight: "#1a1a2e",
   text: "#ffffff",
   textMuted: "#a1a1aa",
+  textSubtitle: "#d1d5db",
+  badgeBackground: "#1f2937",
+  badgeText: "#60a5fa",
+  brandBlue: "#3b82f6",
 };
 
 /**
@@ -251,7 +255,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
         flexDirection: "column",
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#0a0a0a",
+        backgroundColor: BRAND_COLORS.background,
       }}
     >
       {logoSrc ? (
@@ -267,7 +271,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           style={{
             fontSize: 80,
             fontWeight: 700,
-            color: "#3b82f6",
+            color: BRAND_COLORS.brandBlue,
           }}
         >
           VOLVOX
@@ -276,7 +280,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
       <div
         style={{
           fontSize: 36,
-          color: "#a1a1aa",
+          color: BRAND_COLORS.textMuted,
           marginTop: logoSrc ? 0 : 24,
         }}
       >
@@ -316,121 +320,123 @@ export async function generateSocialImage(
     } = config;
 
     return new ImageResponse(
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "space-between",
-          padding: 60,
-          backgroundColor: "#0a0a0a",
-          fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
-        }}
-      >
-        {/* Content */}
+      (
         <div
           style={{
+            height: "100%",
+            width: "100%",
             display: "flex",
             flexDirection: "column",
+            justifyContent: "space-between",
+            padding: 60,
+            backgroundColor: BRAND_COLORS.background,
+            fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
           }}
         >
-          {/* Title */}
+          {/* Content */}
           <div
             style={{
-              fontSize: titleSize,
-              fontWeight: 700,
-              color: "#ffffff",
-              lineHeight: 1.1,
-              marginBottom: 24,
+              display: "flex",
+              flexDirection: "column",
             }}
           >
-            {title}
+            {/* Title */}
+            <div
+              style={{
+                fontSize: titleSize,
+                fontWeight: 700,
+                color: BRAND_COLORS.text,
+                lineHeight: 1.1,
+                marginBottom: 24,
+              }}
+            >
+              {title}
+            </div>
+
+            {/* Subtitle */}
+            {subtitle && (
+              <div
+                style={{
+                  fontSize: 30,
+                  color: BRAND_COLORS.textSubtitle,
+                  lineHeight: 1.4,
+                  marginBottom: 32,
+                  display: "flex",
+                }}
+              >
+                {subtitle}
+              </div>
+            )}
+
+            {/* Metadata */}
+            {metadata && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  fontSize: 24,
+                  color: BRAND_COLORS.textMuted,
+                  marginBottom: 32,
+                }}
+              >
+                {metadata}
+              </div>
+            )}
+
+            {/* Badges */}
+            {badges && badges.length > 0 && (
+              <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
+                {badges.map((badge) => (
+                  <div
+                    key={badge}
+                    style={{
+                      backgroundColor: BRAND_COLORS.badgeBackground,
+                      color: BRAND_COLORS.badgeText,
+                      padding: "8px 16px",
+                      borderRadius: badgePrefix ? 999 : 8,
+                      fontSize: 20,
+                      fontWeight: 600,
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                    }}
+                  >
+                    {`${badgePrefix}${badge}`}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
 
-          {/* Subtitle */}
-          {subtitle && (
-            <div
-              style={{
-                fontSize: 30,
-                color: "#d1d5db",
-                lineHeight: 1.4,
-                marginBottom: 32,
-                display: "flex",
-              }}
-            >
-              {subtitle}
-            </div>
-          )}
-
-          {/* Metadata */}
-          {metadata && (
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-                fontSize: 24,
-                color: "#a1a1aa",
-                marginBottom: 32,
-              }}
-            >
-              {metadata}
-            </div>
-          )}
-
-          {/* Badges */}
-          {badges && badges.length > 0 && (
-            <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
-              {badges.map((badge) => (
-                <div
-                  key={badge}
-                  style={{
-                    backgroundColor: "#1f2937",
-                    color: "#60a5fa",
-                    padding: "8px 16px",
-                    borderRadius: badgePrefix ? 999 : 8,
-                    fontSize: 20,
-                    fontWeight: 600,
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}
-                >
-                  {`${badgePrefix}${badge}`}
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Footer */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "flex-end",
-          }}
-        >
-          {logoSrc && (
-            <img
-              src={logoSrc}
-              width={48}
-              height={48}
-              style={{ marginRight: 16 }}
-              alt="Volvox logo"
-            />
-          )}
+          {/* Footer */}
           <div
             style={{
-              fontSize: 28,
-              fontWeight: 700,
-              color: "#3b82f6",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-end",
             }}
           >
-            VOLVOX
+            {logoSrc && (
+              <img
+                src={logoSrc}
+                width={48}
+                height={48}
+                style={{ marginRight: 16 }}
+                alt="Volvox logo"
+              />
+            )}
+            <div
+              style={{
+                fontSize: 28,
+                fontWeight: 700,
+                color: BRAND_COLORS.brandBlue,
+              }}
+            >
+              VOLVOX
+            </div>
           </div>
         </div>
-      </div>,
+      ),
       options
     );
   } catch (e) {
@@ -468,222 +474,224 @@ export async function generateBlogPostSocialImage(
     const tagBadges = frontmatter.tags?.slice(0, 4) || [];
 
     return new ImageResponse(
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          position: "relative",
-          fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
-        }}
-      >
-        {/* Gradient background */}
+      (
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `linear-gradient(135deg, ${BRAND_COLORS.background} 0%, ${BRAND_COLORS.backgroundLight} 50%, ${BRAND_COLORS.background} 100%)`,
-            display: "flex",
-          }}
-        />
-
-        {/* Subtle accent gradient overlay */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `radial-gradient(ellipse at 100% 0%, ${BRAND_COLORS.secondary}15 0%, transparent 50%)`,
-            display: "flex",
-          }}
-        />
-
-        {/* Main content container */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
             height: "100%",
-            padding: 48,
+            width: "100%",
+            display: "flex",
             position: "relative",
+            fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
           }}
         >
-          {/* Left side - Text content */}
+          {/* Gradient background */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `linear-gradient(135deg, ${BRAND_COLORS.background} 0%, ${BRAND_COLORS.backgroundLight} 50%, ${BRAND_COLORS.background} 100%)`,
+              display: "flex",
+            }}
+          />
+
+          {/* Subtle accent gradient overlay */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `radial-gradient(ellipse at 100% 0%, ${BRAND_COLORS.secondary}15 0%, transparent 50%)`,
+              display: "flex",
+            }}
+          />
+
+          {/* Main content container */}
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              flex: bannerSrc ? "0 0 55%" : "1",
-              paddingRight: bannerSrc ? 32 : 0,
+              flexDirection: "row",
+              width: "100%",
+              height: "100%",
+              padding: 48,
+              position: "relative",
             }}
           >
-            {/* Top section */}
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {/* Blog badge */}
+            {/* Left side - Text content */}
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                flex: bannerSrc ? "0 0 55%" : "1",
+                paddingRight: bannerSrc ? 32 : 0,
+              }}
+            >
+              {/* Top section */}
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {/* Blog badge */}
+                <div
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    marginBottom: 20,
+                  }}
+                >
+                  <div
+                    style={{
+                      backgroundColor: BRAND_COLORS.secondary,
+                      color: BRAND_COLORS.text,
+                      padding: "6px 14px",
+                      borderRadius: 6,
+                      fontSize: 14,
+                      fontWeight: 700,
+                      letterSpacing: "0.05em",
+                      textTransform: "uppercase",
+                      display: "flex",
+                    }}
+                  >
+                    Blog
+                  </div>
+                </div>
+
+                {/* Post title */}
+                <div
+                  style={{
+                    fontSize: bannerSrc ? 48 : 56,
+                    fontWeight: 700,
+                    color: BRAND_COLORS.text,
+                    lineHeight: 1.1,
+                    marginBottom: 16,
+                    display: "flex",
+                  }}
+                >
+                  {frontmatter.title}
+                </div>
+
+                {/* Excerpt - only show if no banner to save space */}
+                {frontmatter.excerpt && !bannerSrc && (
+                  <div
+                    style={{
+                      fontSize: 24,
+                      color: BRAND_COLORS.textSubtitle,
+                      lineHeight: 1.4,
+                      marginBottom: 20,
+                      display: "flex",
+                    }}
+                  >
+                    {frontmatter.excerpt}
+                  </div>
+                )}
+
+                {/* Author and date */}
+                <div
+                  style={{
+                    fontSize: 20,
+                    color: BRAND_COLORS.textMuted,
+                    marginBottom: 24,
+                    display: "flex",
+                  }}
+                >
+                  {authorName} · {frontmatter.date}
+                </div>
+
+                {/* Tag badges */}
+                {tagBadges.length > 0 && (
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {tagBadges.map((tag) => (
+                      <div
+                        key={tag}
+                        style={{
+                          backgroundColor: `${BRAND_COLORS.secondary}20`,
+                          border: `1px solid ${BRAND_COLORS.secondary}40`,
+                          color: BRAND_COLORS.secondary,
+                          padding: "8px 14px",
+                          borderRadius: 999,
+                          fontSize: 16,
+                          fontWeight: 600,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        #{tag}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer with Volvox branding */}
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginBottom: 20,
                 }}
               >
+                {logoSrc ? (
+                  <img
+                    src={logoSrc}
+                    width={56}
+                    height={56}
+                    style={{ marginRight: 16, display: "flex" }}
+                    alt="Volvox logo"
+                  />
+                ) : null}
                 <div
                   style={{
-                    backgroundColor: BRAND_COLORS.secondary,
-                    color: BRAND_COLORS.text,
-                    padding: "6px 14px",
-                    borderRadius: 6,
-                    fontSize: 14,
+                    fontSize: 32,
                     fontWeight: 700,
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
+                    color: BRAND_COLORS.primary,
                     display: "flex",
                   }}
                 >
-                  Blog
+                  VOLVOX
                 </div>
               </div>
+            </div>
 
-              {/* Post title */}
+            {/* Right side - Banner image */}
+            {bannerSrc && (
               <div
                 style={{
-                  fontSize: bannerSrc ? 48 : 56,
-                  fontWeight: 700,
-                  color: BRAND_COLORS.text,
-                  lineHeight: 1.1,
-                  marginBottom: 16,
                   display: "flex",
+                  flex: "0 0 45%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
                 }}
               >
-                {frontmatter.title}
-              </div>
-
-              {/* Excerpt - only show if no banner to save space */}
-              {frontmatter.excerpt && !bannerSrc && (
+                {/* Banner container with subtle shadow effect */}
                 <div
                   style={{
-                    fontSize: 24,
-                    color: "#d1d5db",
-                    lineHeight: 1.4,
-                    marginBottom: 20,
                     display: "flex",
+                    position: "relative",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: `0 25px 50px -12px ${BRAND_COLORS.secondary}30`,
                   }}
                 >
-                  {frontmatter.excerpt}
+                  <img
+                    src={bannerSrc}
+                    width={480}
+                    height={520}
+                    style={{
+                      objectFit: "contain",
+                      borderRadius: 16,
+                      display: "flex",
+                    }}
+                    alt="Blog post banner"
+                  />
                 </div>
-              )}
-
-              {/* Author and date */}
-              <div
-                style={{
-                  fontSize: 20,
-                  color: BRAND_COLORS.textMuted,
-                  marginBottom: 24,
-                  display: "flex",
-                }}
-              >
-                {authorName} · {frontmatter.date}
               </div>
-
-              {/* Tag badges */}
-              {tagBadges.length > 0 && (
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                  {tagBadges.map((tag) => (
-                    <div
-                      key={tag}
-                      style={{
-                        backgroundColor: `${BRAND_COLORS.secondary}20`,
-                        border: `1px solid ${BRAND_COLORS.secondary}40`,
-                        color: BRAND_COLORS.secondary,
-                        padding: "8px 14px",
-                        borderRadius: 999,
-                        fontSize: 16,
-                        fontWeight: 600,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      #{tag}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Footer with Volvox branding */}
-            <div
-              style={{
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              {logoSrc ? (
-                <img
-                  src={logoSrc}
-                  width={56}
-                  height={56}
-                  style={{ marginRight: 16, display: "flex" }}
-                  alt="Volvox logo"
-                />
-              ) : null}
-              <div
-                style={{
-                  fontSize: 32,
-                  fontWeight: 700,
-                  color: BRAND_COLORS.primary,
-                  display: "flex",
-                }}
-              >
-                VOLVOX
-              </div>
-            </div>
+            )}
           </div>
-
-          {/* Right side - Banner image */}
-          {bannerSrc && (
-            <div
-              style={{
-                display: "flex",
-                flex: "0 0 45%",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-              }}
-            >
-              {/* Banner container with subtle shadow effect */}
-              <div
-                style={{
-                  display: "flex",
-                  position: "relative",
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  boxShadow: `0 25px 50px -12px ${BRAND_COLORS.secondary}30`,
-                }}
-              >
-                <img
-                  src={bannerSrc}
-                  width={480}
-                  height={520}
-                  style={{
-                    objectFit: "contain",
-                    borderRadius: 16,
-                    display: "flex",
-                  }}
-                  alt="Blog post banner"
-                />
-              </div>
-            </div>
-          )}
         </div>
-      </div>,
+      ),
       options
     );
   } catch (e) {
@@ -719,183 +727,185 @@ export async function generateProductSocialImage(
     const techBadges = product.techStack || [];
 
     return new ImageResponse(
-      <div
-        style={{
-          height: "100%",
-          width: "100%",
-          display: "flex",
-          position: "relative",
-          fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
-        }}
-      >
-        {/* Gradient background */}
+      (
         <div
           style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `linear-gradient(135deg, ${BRAND_COLORS.background} 0%, ${BRAND_COLORS.backgroundLight} 50%, ${BRAND_COLORS.background} 100%)`,
-            display: "flex",
-          }}
-        />
-
-        {/* Subtle accent gradient overlay */}
-        <div
-          style={{
-            position: "absolute",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: `radial-gradient(ellipse at 0% 0%, ${BRAND_COLORS.primary}15 0%, transparent 50%)`,
-            display: "flex",
-          }}
-        />
-
-        {/* Main content container */}
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            width: "100%",
             height: "100%",
-            padding: 48,
+            width: "100%",
+            display: "flex",
             position: "relative",
+            fontFamily: fontData ? '"JetBrains Mono"' : "monospace",
           }}
         >
-          {/* Left side - Text content */}
+          {/* Gradient background */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `linear-gradient(135deg, ${BRAND_COLORS.background} 0%, ${BRAND_COLORS.backgroundLight} 50%, ${BRAND_COLORS.background} 100%)`,
+              display: "flex",
+            }}
+          />
+
+          {/* Subtle accent gradient overlay */}
+          <div
+            style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: `radial-gradient(ellipse at 0% 0%, ${BRAND_COLORS.primary}15 0%, transparent 50%)`,
+              display: "flex",
+            }}
+          />
+
+          {/* Main content container */}
           <div
             style={{
               display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              flex: screenshotSrc ? "0 0 55%" : "1",
-              paddingRight: screenshotSrc ? 32 : 0,
+              flexDirection: "row",
+              width: "100%",
+              height: "100%",
+              padding: 48,
+              position: "relative",
             }}
           >
-            {/* Top section */}
-            <div style={{ display: "flex", flexDirection: "column" }}>
-              {/* Product name */}
-              <div
-                style={{
-                  fontSize: 64,
-                  fontWeight: 700,
-                  color: BRAND_COLORS.text,
-                  lineHeight: 1.1,
-                  marginBottom: 16,
-                  display: "flex",
-                }}
-              >
-                {product.name}
-              </div>
-
-              {/* Tagline */}
-              <div
-                style={{
-                  fontSize: 26,
-                  color: "#d1d5db",
-                  lineHeight: 1.4,
-                  marginBottom: 24,
-                  display: "flex",
-                }}
-              >
-                {product.tagline}
-              </div>
-
-              {/* Tech stack badges */}
-              {techBadges.length > 0 && (
-                <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
-                  {techBadges.map((tech) => (
-                    <div
-                      key={tech}
-                      style={{
-                        backgroundColor: `${BRAND_COLORS.accent}20`,
-                        border: `1px solid ${BRAND_COLORS.accent}40`,
-                        color: BRAND_COLORS.accent,
-                        padding: "8px 14px",
-                        borderRadius: 6,
-                        fontSize: 16,
-                        fontWeight: 600,
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                      }}
-                    >
-                      {tech}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-
-            {/* Footer with Volvox branding */}
+            {/* Left side - Text content */}
             <div
               style={{
                 display: "flex",
-                alignItems: "center",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                flex: screenshotSrc ? "0 0 55%" : "1",
+                paddingRight: screenshotSrc ? 32 : 0,
               }}
             >
-              {logoSrc ? (
-                <img
-                  src={logoSrc}
-                  width={56}
-                  height={56}
-                  style={{ marginRight: 16, display: "flex" }}
-                  alt="Volvox logo"
-                />
-              ) : null}
-              <div
-                style={{
-                  fontSize: 32,
-                  fontWeight: 700,
-                  color: BRAND_COLORS.primary,
-                  display: "flex",
-                }}
-              >
-                VOLVOX
-              </div>
-            </div>
-          </div>
-
-          {/* Right side - Screenshot */}
-          {screenshotSrc && (
-            <div
-              style={{
-                display: "flex",
-                flex: "0 0 45%",
-                alignItems: "center",
-                justifyContent: "center",
-                position: "relative",
-              }}
-            >
-              {/* Screenshot container with subtle shadow effect */}
-              <div
-                style={{
-                  display: "flex",
-                  position: "relative",
-                  borderRadius: 16,
-                  overflow: "hidden",
-                  boxShadow: `0 25px 50px -12px ${BRAND_COLORS.primary}30`,
-                }}
-              >
-                <img
-                  src={screenshotSrc}
-                  width={480}
-                  height={520}
+              {/* Top section */}
+              <div style={{ display: "flex", flexDirection: "column" }}>
+                {/* Product name */}
+                <div
                   style={{
-                    objectFit: "contain",
-                    borderRadius: 16,
+                    fontSize: 64,
+                    fontWeight: 700,
+                    color: BRAND_COLORS.text,
+                    lineHeight: 1.1,
+                    marginBottom: 16,
                     display: "flex",
                   }}
-                  alt="Product screenshot"
-                />
+                >
+                  {product.name}
+                </div>
+
+                {/* Tagline */}
+                <div
+                  style={{
+                    fontSize: 26,
+                    color: BRAND_COLORS.textSubtitle,
+                    lineHeight: 1.4,
+                    marginBottom: 24,
+                    display: "flex",
+                  }}
+                >
+                  {product.tagline}
+                </div>
+
+                {/* Tech stack badges */}
+                {techBadges.length > 0 && (
+                  <div style={{ display: "flex", gap: 10, flexWrap: "wrap" }}>
+                    {techBadges.map((tech) => (
+                      <div
+                        key={tech}
+                        style={{
+                          backgroundColor: `${BRAND_COLORS.accent}20`,
+                          border: `1px solid ${BRAND_COLORS.accent}40`,
+                          color: BRAND_COLORS.accent,
+                          padding: "8px 14px",
+                          borderRadius: 6,
+                          fontSize: 16,
+                          fontWeight: 600,
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        {tech}
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Footer with Volvox branding */}
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                {logoSrc ? (
+                  <img
+                    src={logoSrc}
+                    width={56}
+                    height={56}
+                    style={{ marginRight: 16, display: "flex" }}
+                    alt="Volvox logo"
+                  />
+                ) : null}
+                <div
+                  style={{
+                    fontSize: 32,
+                    fontWeight: 700,
+                    color: BRAND_COLORS.primary,
+                    display: "flex",
+                  }}
+                >
+                  VOLVOX
+                </div>
               </div>
             </div>
-          )}
+
+            {/* Right side - Screenshot */}
+            {screenshotSrc && (
+              <div
+                style={{
+                  display: "flex",
+                  flex: "0 0 45%",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
+                }}
+              >
+                {/* Screenshot container with subtle shadow effect */}
+                <div
+                  style={{
+                    display: "flex",
+                    position: "relative",
+                    borderRadius: 16,
+                    overflow: "hidden",
+                    boxShadow: `0 25px 50px -12px ${BRAND_COLORS.primary}30`,
+                  }}
+                >
+                  <img
+                    src={screenshotSrc}
+                    width={480}
+                    height={520}
+                    style={{
+                      objectFit: "contain",
+                      borderRadius: 16,
+                      display: "flex",
+                    }}
+                    alt="Product screenshot"
+                  />
+                </div>
+              </div>
+            )}
+          </div>
         </div>
-      </div>,
+      ),
       options
     );
   } catch (e) {

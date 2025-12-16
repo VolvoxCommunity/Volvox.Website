@@ -107,8 +107,9 @@ describe("views lib", () => {
       delete process.env.UPSTASH_REDIS_REST_URL;
 
       jest.resetModules();
-      const { getPostViewsBatch: getBatchUnconfig } =
-        await import("@/lib/views");
+      const { getPostViewsBatch: getBatchUnconfig } = await import(
+        "@/lib/views"
+      );
 
       const views = await getBatchUnconfig(["slug1", "slug2"]);
 
@@ -148,8 +149,9 @@ describe("views lib", () => {
       delete process.env.UPSTASH_REDIS_REST_URL;
 
       jest.resetModules();
-      const { incrementPostViews: incrementUnconfig } =
-        await import("@/lib/views");
+      const { incrementPostViews: incrementUnconfig } = await import(
+        "@/lib/views"
+      );
 
       const newCount = await incrementUnconfig("test-slug");
 

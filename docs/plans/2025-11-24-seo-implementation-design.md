@@ -128,39 +128,41 @@ export const contentType = "image/png";
 
 export default async function Image() {
   return new ImageResponse(
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#0a0a0a",
-        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
-      }}
-    >
+    (
       <div
         style={{
-          fontSize: 72,
-          fontWeight: "bold",
-          color: "#3b82f6",
-          marginBottom: 20,
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          justifyContent: "center",
+          backgroundColor: "#0a0a0a",
+          backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
         }}
       >
-        VOLVOX
+        <div
+          style={{
+            fontSize: 72,
+            fontWeight: "bold",
+            color: "#3b82f6",
+            marginBottom: 20,
+          }}
+        >
+          VOLVOX
+        </div>
+        <div
+          style={{
+            fontSize: 32,
+            color: "#a1a1aa",
+            textAlign: "center",
+            maxWidth: 800,
+          }}
+        >
+          Software Development & Learning Community
+        </div>
       </div>
-      <div
-        style={{
-          fontSize: 32,
-          color: "#a1a1aa",
-          textAlign: "center",
-          maxWidth: 800,
-        }}
-      >
-        Software Development & Learning Community
-      </div>
-    </div>,
+    ),
     { ...size }
   );
 }
@@ -182,49 +184,51 @@ export default async function Image({ params }: { params: { slug: string } }) {
   const { frontmatter } = await getPostBySlug(params.slug);
 
   return new ImageResponse(
-    <div
-      style={{
-        height: "100%",
-        width: "100%",
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        padding: 60,
-        backgroundColor: "#0a0a0a",
-        backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
-      }}
-    >
-      <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
-        <div
-          style={{
-            fontSize: 48,
-            fontWeight: "bold",
-            color: "#ffffff",
-            lineHeight: 1.2,
-            maxWidth: 900,
-          }}
-        >
-          {frontmatter.title}
-        </div>
-        <div
-          style={{
-            fontSize: 24,
-            color: "#a1a1aa",
-          }}
-        >
-          By {frontmatter.author?.name} · {frontmatter.date}
-        </div>
-      </div>
+    (
       <div
         style={{
-          fontSize: 28,
-          fontWeight: "bold",
-          color: "#3b82f6",
+          height: "100%",
+          width: "100%",
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          padding: 60,
+          backgroundColor: "#0a0a0a",
+          backgroundImage: "linear-gradient(to bottom right, #0a0a0a, #1a1a2e)",
         }}
       >
-        VOLVOX
+        <div style={{ display: "flex", flexDirection: "column", gap: 20 }}>
+          <div
+            style={{
+              fontSize: 48,
+              fontWeight: "bold",
+              color: "#ffffff",
+              lineHeight: 1.2,
+              maxWidth: 900,
+            }}
+          >
+            {frontmatter.title}
+          </div>
+          <div
+            style={{
+              fontSize: 24,
+              color: "#a1a1aa",
+            }}
+          >
+            By {frontmatter.author?.name} · {frontmatter.date}
+          </div>
+        </div>
+        <div
+          style={{
+            fontSize: 28,
+            fontWeight: "bold",
+            color: "#3b82f6",
+          }}
+        >
+          VOLVOX
+        </div>
       </div>
-    </div>,
+    ),
     { ...size }
   );
 }

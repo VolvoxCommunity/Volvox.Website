@@ -24,11 +24,18 @@ export function About() {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
+    // Retrieve theme colors dynamically
+    const styles = getComputedStyle(document.documentElement);
+    const primary = styles.getPropertyValue("--primary").trim() || "#007aff";
+    const secondary =
+      styles.getPropertyValue("--secondary").trim() || "#af58da";
+    const accent = styles.getPropertyValue("--accent").trim() || "#ff9500";
+
     const promise = confettiLib({
       particleCount: 50,
       spread: 60,
       origin: { x, y },
-      colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
+      colors: [primary, secondary, accent],
     });
 
     if (promise) {
