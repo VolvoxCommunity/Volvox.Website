@@ -112,7 +112,7 @@ test.describe("Performance", () => {
   });
 
   test.describe("Interaction Responsiveness", () => {
-    test("theme toggle responds within 100ms", async ({ page }) => {
+    test("theme toggle responds within 500ms", async ({ page }) => {
       await page.goto("/");
       const toggle = page.locator('[data-testid="theme-toggle"]');
 
