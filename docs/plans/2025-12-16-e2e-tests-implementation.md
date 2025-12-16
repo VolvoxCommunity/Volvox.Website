@@ -21,7 +21,7 @@
 Run:
 
 ```bash
-cd /Users/billchirico/Developer/Volvox/Volvox.Website/.worktrees/feat-e2e-tests && pnpm add -D @axe-core/playwright
+pnpm add -D @axe-core/playwright
 ```
 
 **Step 2: Verify installation**
