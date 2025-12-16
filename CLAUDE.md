@@ -329,6 +329,7 @@ Located in `src/lib/`:
     - Page tests (`e2e/pages/`): Homepage, blog list, blog post, products, privacy, terms
     - Feature tests (`e2e/features/`): Navigation, theme toggle, cookie consent, footer
     - Accessibility tests: Automated axe-core scans with known violations excluded
+      - **Known Issue**: Footer has color contrast violations that are excluded from axe scans (tracked separately to fix)
     - SEO tests: Meta tags, Open Graph images, structured data validation
     - Responsive tests: Mobile, tablet, and desktop viewport testing
     - Visual regression tests: Screenshot comparisons with configurable thresholds
