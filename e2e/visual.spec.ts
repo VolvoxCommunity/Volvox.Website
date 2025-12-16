@@ -101,8 +101,14 @@ test.describe("Visual Regression", () => {
     test.use({ viewport: { width: 1280, height: 720 } });
 
     test("dark mode homepage", async ({ page }) => {
+      // Set initial light theme to ensure consistent starting state
+      await page.addInitScript(() => {
+        localStorage.setItem("volvox-theme", "light");
+      });
+
       await page.goto("/");
       await page.waitForLoadState("networkidle");
+      await page.waitForSelector("html.light");
       const toggle = page.locator('[data-testid="theme-toggle"]');
       await expect(toggle).toBeVisible();
       await toggle.click();

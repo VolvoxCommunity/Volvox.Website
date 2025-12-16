@@ -167,8 +167,18 @@ test.describe("Footer", () => {
   test("footer maintains consistent styling across themes", async ({
     page,
   }) => {
+    // Set initial light theme to ensure consistent starting state
+    await page.addInitScript(() => {
+      localStorage.setItem("volvox-theme", "light");
+    });
+
+    await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
+    await page.waitForSelector("html.light");
+
     // Check initial state
     const footer = page.locator('[data-testid="footer"]');
+    await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
     await expect(footer).toHaveCSS("border-top-width", "1px");
 

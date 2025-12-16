@@ -131,10 +131,13 @@ test.describe("Theme Toggle", () => {
     await page.goto("/");
     const toggle = page.getByRole("button", { name: /toggle theme/i });
 
-    // Button should have aria-label
-    const ariaLabel = await toggle.getAttribute("aria-label");
-    expect(ariaLabel).toBeTruthy();
-    expect(ariaLabel?.toLowerCase()).toContain("theme");
+    // Button should be accessible via its sr-only span text
+    // The component uses <span className="sr-only">Toggle theme</span>
+    await expect(toggle).toBeVisible();
+    const accessibleName = await toggle.evaluate(
+      (el) => el.textContent?.trim() || el.getAttribute("aria-label") || ""
+    );
+    expect(accessibleName.toLowerCase()).toContain("theme");
   });
 
   test("theme toggle shows correct icon for current theme", async ({

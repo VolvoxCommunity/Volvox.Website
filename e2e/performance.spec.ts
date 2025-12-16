@@ -117,7 +117,13 @@ test.describe("Performance", () => {
 
   test.describe("Interaction Responsiveness", () => {
     test("theme toggle responds within 500ms", async ({ page }) => {
+      // Set initial light theme to ensure consistent starting state
+      await page.addInitScript(() => {
+        localStorage.setItem("volvox-theme", "light");
+      });
+
       await page.goto("/");
+      await page.waitForSelector("html.light");
       const toggle = page.locator('[data-testid="theme-toggle"]');
 
       if ((await toggle.count()) > 0) {
