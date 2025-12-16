@@ -3,6 +3,7 @@ import { test, expect } from "../fixtures/base.fixture";
 test.describe("Products List Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/products");
+    await page.waitForLoadState("networkidle");
   });
 
   test("loads successfully", async ({ page }) => {
@@ -50,7 +51,8 @@ test.describe("Products List Page", () => {
   test("displays footer", async ({ page }) => {
     // Use consistent data-testid selector for footer
     const footer = page.locator('[data-testid="footer"]');
-    await footer.waitFor({ state: "attached" });
+    await footer.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100); // Allow hydration to complete
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
   });

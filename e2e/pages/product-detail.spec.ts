@@ -3,6 +3,7 @@ import { test, expect } from "../fixtures/base.fixture";
 test.describe("Product Detail Page", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/products/sobriety-waypoint");
+    await page.waitForLoadState("networkidle");
   });
 
   test("loads successfully with product name in title", async ({ page }) => {
@@ -29,6 +30,8 @@ test.describe("Product Detail Page", () => {
     const featuresCount = await featuresSection.count();
 
     if (featuresCount > 0) {
+      await featuresSection.waitFor({ state: "visible", timeout: 10000 });
+      await page.waitForTimeout(100); // Allow hydration to complete
       await featuresSection.scrollIntoViewIfNeeded();
       await expect(featuresSection).toBeVisible();
 
@@ -50,6 +53,8 @@ test.describe("Product Detail Page", () => {
 
   test("has footer", async ({ page }) => {
     const footer = page.locator('[data-testid="footer"], footer');
+    await footer.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100); // Allow hydration to complete
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
   });
