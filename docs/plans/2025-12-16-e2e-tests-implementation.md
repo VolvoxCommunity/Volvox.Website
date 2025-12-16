@@ -13,11 +13,13 @@
 ## Task 1: Install Dependencies
 
 **Files:**
+
 - Modify: `package.json`
 
 **Step 1: Add @axe-core/playwright dependency**
 
 Run:
+
 ```bash
 cd /Users/billchirico/Developer/Volvox/Volvox.Website/.worktrees/feat-e2e-tests && pnpm add -D @axe-core/playwright
 ```
@@ -25,6 +27,7 @@ cd /Users/billchirico/Developer/Volvox/Volvox.Website/.worktrees/feat-e2e-tests 
 **Step 2: Verify installation**
 
 Run:
+
 ```bash
 pnpm list @axe-core/playwright
 ```
@@ -43,6 +46,7 @@ git commit -m "chore(deps): add @axe-core/playwright for accessibility testing"
 ## Task 2: Update Playwright Configuration
 
 **Files:**
+
 - Modify: `playwright.config.ts`
 
 **Step 1: Read current config**
@@ -64,10 +68,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    ["html"],
-    ["json", { outputFile: "test-results/results.json" }],
-  ],
+  reporter: [["html"], ["json", { outputFile: "test-results/results.json" }]],
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
@@ -107,6 +108,7 @@ git commit -m "feat(e2e): configure full browser matrix with mobile viewports"
 ## Task 3: Create Base Test Fixture
 
 **Files:**
+
 - Create: `e2e/fixtures/base.fixture.ts`
 
 **Step 1: Create fixtures directory**
@@ -179,6 +181,7 @@ git commit -m "feat(e2e): add base test fixture with axe and error assertions"
 ## Task 4: Add data-testid to Navigation Component
 
 **Files:**
+
 - Modify: `src/components/navigation.tsx`
 
 **Step 1: Read the navigation component**
@@ -188,6 +191,7 @@ Read the file to understand its structure.
 **Step 2: Add data-testid attributes**
 
 Add these attributes:
+
 - `data-testid="desktop-nav"` to the desktop navigation container
 - `data-testid="mobile-menu-button"` to the hamburger/menu button
 - `data-testid="mobile-menu"` to the mobile menu panel/sheet
@@ -204,6 +208,7 @@ git commit -m "feat(e2e): add data-testid attributes to navigation component"
 ## Task 5: Add data-testid to Theme Toggle Component
 
 **Files:**
+
 - Modify: `src/components/theme-toggle.tsx`
 
 **Step 1: Read the theme toggle component**
@@ -226,6 +231,7 @@ git commit -m "feat(e2e): add data-testid to theme toggle component"
 ## Task 6: Add data-testid to Cookie Consent Banner
 
 **Files:**
+
 - Modify: `src/components/cookie-consent-banner.tsx`
 
 **Step 1: Read the cookie consent component**
@@ -248,6 +254,7 @@ git commit -m "feat(e2e): add data-testid to cookie consent banner"
 ## Task 7: Add data-testid to Homepage Section Components
 
 **Files:**
+
 - Modify: `src/components/hero.tsx`
 - Modify: `src/components/products.tsx`
 - Modify: `src/components/blog.tsx`
@@ -278,6 +285,7 @@ git commit -m "feat(e2e): add data-testid to homepage section components"
 ## Task 8: Add data-testid to Blog Components
 
 **Files:**
+
 - Modify: `src/components/blog/blog-post-header.tsx`
 - Modify: `src/components/blog/blog-content-wrapper.tsx`
 - Modify: `src/components/blog/table-of-contents.tsx`
@@ -308,6 +316,7 @@ git commit -m "feat(e2e): add data-testid to blog components"
 ## Task 9: Add data-testid to Footer Component
 
 **Files:**
+
 - Modify: `src/components/footer.tsx`
 
 **Step 1: Read the footer component**
@@ -330,6 +339,7 @@ git commit -m "feat(e2e): add data-testid to footer component"
 ## Task 10: Create Homepage E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/homepage.spec.ts`
 - Delete: `e2e/homepage.spec.ts` (old file)
 
@@ -379,7 +389,9 @@ test.describe("Homepage", () => {
   });
 
   test("scroll-based section tracking updates navigation", async ({ page }) => {
-    await page.locator("#blog, [data-testid='blog-section']").scrollIntoViewIfNeeded();
+    await page
+      .locator("#blog, [data-testid='blog-section']")
+      .scrollIntoViewIfNeeded();
     await page.waitForTimeout(500);
     // Verify the page scrolled (blog section is in viewport)
     const blogSection = page.locator("#blog, [data-testid='blog-section']");
@@ -427,6 +439,7 @@ git commit -m "feat(e2e): add comprehensive homepage tests"
 ## Task 11: Create Blog List E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/blog-list.spec.ts`
 
 **Step 1: Create blog-list.spec.ts**
@@ -437,7 +450,9 @@ import { test, expect } from "../fixtures/base.fixture";
 test.describe("Blog List (Homepage Section)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    await page.locator("#blog, [data-testid='blog-section']").scrollIntoViewIfNeeded();
+    await page
+      .locator("#blog, [data-testid='blog-section']")
+      .scrollIntoViewIfNeeded();
   });
 
   test("displays blog section heading", async ({ page }) => {
@@ -485,6 +500,7 @@ git commit -m "feat(e2e): add blog list section tests"
 ## Task 12: Create Blog Post E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/blog-post.spec.ts`
 
 **Step 1: Create blog-post.spec.ts**
@@ -528,7 +544,7 @@ test.describe("Blog Post Page", () => {
   test("clicking TOC link scrolls to heading", async ({ page }) => {
     const toc = page.locator('[data-testid="table-of-contents"]');
     const tocCount = await toc.count();
-    if (tocCount > 0 && await toc.isVisible()) {
+    if (tocCount > 0 && (await toc.isVisible())) {
       const firstLink = toc.locator("a[href^='#']").first();
       const href = await firstLink.getAttribute("href");
       if (href) {
@@ -576,6 +592,7 @@ git commit -m "feat(e2e): add blog post page tests"
 ## Task 13: Create Products List E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/products-list.spec.ts`
 
 **Step 1: Create products-list.spec.ts**
@@ -641,6 +658,7 @@ git commit -m "feat(e2e): add products list page tests"
 ## Task 14: Create Product Detail E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/product-detail.spec.ts`
 
 **Step 1: Create product-detail.spec.ts**
@@ -687,7 +705,9 @@ test.describe("Product Detail Page", () => {
   });
 
   test("has external links (GitHub, Demo)", async ({ page }) => {
-    const links = page.locator('a[href*="github.com"], a[href*="sobrietywaypoint"]');
+    const links = page.locator(
+      'a[href*="github.com"], a[href*="sobrietywaypoint"]'
+    );
     await expect(links).toHaveCount({ min: 1 });
   });
 });
@@ -711,6 +731,7 @@ git commit -m "feat(e2e): add product detail page tests"
 ## Task 15: Create Privacy and Terms Page E2E Tests
 
 **Files:**
+
 - Create: `e2e/pages/privacy.spec.ts`
 - Create: `e2e/pages/terms.spec.ts`
 
@@ -808,6 +829,7 @@ git commit -m "feat(e2e): add privacy and terms page tests"
 ## Task 16: Create Navigation Feature Tests
 
 **Files:**
+
 - Create: `e2e/features/navigation.spec.ts`
 
 **Step 1: Create features directory**
@@ -835,23 +857,27 @@ test.describe("Navigation", () => {
       await expect(nav.getByRole("link", { name: /blog/i })).toBeVisible();
     });
 
-    test("desktop nav is visible, mobile menu button is hidden", async ({ page }) => {
+    test("desktop nav is visible, mobile menu button is hidden", async ({
+      page,
+    }) => {
       await page.goto("/");
       const desktopNav = page.locator('[data-testid="desktop-nav"]');
       const mobileButton = page.locator('[data-testid="mobile-menu-button"]');
 
-      if (await desktopNav.count() > 0) {
+      if ((await desktopNav.count()) > 0) {
         await expect(desktopNav).toBeVisible();
       }
-      if (await mobileButton.count() > 0) {
+      if ((await mobileButton.count()) > 0) {
         await expect(mobileButton).not.toBeVisible();
       }
     });
 
     test("nav links scroll to correct sections", async ({ page }) => {
       await page.goto("/");
-      const blogLink = page.locator('nav a[href*="blog"], nav a[href="#blog"]').first();
-      if (await blogLink.count() > 0) {
+      const blogLink = page
+        .locator('nav a[href*="blog"], nav a[href="#blog"]')
+        .first();
+      if ((await blogLink.count()) > 0) {
         await blogLink.click();
         await page.waitForTimeout(500);
         const blogSection = page.locator("#blog, [data-testid='blog-section']");
@@ -866,7 +892,7 @@ test.describe("Navigation", () => {
     test("shows mobile menu button", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if (await menuButton.count() > 0) {
+      if ((await menuButton.count()) > 0) {
         await expect(menuButton).toBeVisible();
       }
     });
@@ -875,7 +901,7 @@ test.describe("Navigation", () => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
 
-      if (await menuButton.count() > 0 && await menuButton.isVisible()) {
+      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
         await menuButton.click();
         const mobileMenu = page.locator('[data-testid="mobile-menu"]');
         await expect(mobileMenu).toBeVisible();
@@ -890,12 +916,14 @@ test.describe("Navigation", () => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
 
-      if (await menuButton.count() > 0 && await menuButton.isVisible()) {
+      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
         await menuButton.click();
         const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-        const productsLink = mobileMenu.getByRole("link", { name: /products/i });
+        const productsLink = mobileMenu.getByRole("link", {
+          name: /products/i,
+        });
 
-        if (await productsLink.count() > 0) {
+        if ((await productsLink.count()) > 0) {
           await productsLink.click();
           await expect(page).toHaveURL(/products/);
         }
@@ -923,6 +951,7 @@ git commit -m "feat(e2e): add navigation feature tests"
 ## Task 17: Create Theme Toggle Feature Tests
 
 **Files:**
+
 - Create: `e2e/features/theme.spec.ts`
 
 **Step 1: Create theme.spec.ts**
@@ -935,7 +964,7 @@ test.describe("Theme Toggle", () => {
     await page.goto("/");
     const toggle = page.locator('[data-testid="theme-toggle"]');
 
-    if (await toggle.count() > 0) {
+    if ((await toggle.count()) > 0) {
       await toggle.click();
       await expect(page.locator("html")).toHaveClass(/dark/);
 
@@ -948,7 +977,7 @@ test.describe("Theme Toggle", () => {
     await page.goto("/");
     const toggle = page.locator('[data-testid="theme-toggle"]');
 
-    if (await toggle.count() > 0) {
+    if ((await toggle.count()) > 0) {
       await toggle.click();
       await expect(page.locator("html")).toHaveClass(/dark/);
 
@@ -970,7 +999,7 @@ test.describe("Theme Toggle", () => {
     await page.goto("/");
     const toggle = page.locator('[data-testid="theme-toggle"]');
 
-    if (await toggle.count() > 0) {
+    if ((await toggle.count()) > 0) {
       await toggle.focus();
       await page.keyboard.press("Enter");
       // Toggle should have activated
@@ -998,6 +1027,7 @@ git commit -m "feat(e2e): add theme toggle feature tests"
 ## Task 18: Create Cookie Consent Feature Tests
 
 **Files:**
+
 - Create: `e2e/features/cookie-consent.spec.ts`
 
 **Step 1: Create cookie-consent.spec.ts**
@@ -1015,7 +1045,7 @@ test.describe("Cookie Consent", () => {
     // Banner should appear (may have animation delay)
     await page.waitForTimeout(500);
 
-    if (await banner.count() > 0) {
+    if ((await banner.count()) > 0) {
       await expect(banner).toBeVisible();
     }
   });
@@ -1027,9 +1057,11 @@ test.describe("Cookie Consent", () => {
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
     await page.waitForTimeout(500);
 
-    if (await banner.count() > 0 && await banner.isVisible()) {
-      const acceptButton = banner.getByRole("button", { name: /accept|agree|allow/i });
-      if (await acceptButton.count() > 0) {
+    if ((await banner.count()) > 0 && (await banner.isVisible())) {
+      const acceptButton = banner.getByRole("button", {
+        name: /accept|agree|allow/i,
+      });
+      if ((await acceptButton.count()) > 0) {
         await acceptButton.click();
         await expect(banner).not.toBeVisible();
 
@@ -1047,9 +1079,11 @@ test.describe("Cookie Consent", () => {
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
     await page.waitForTimeout(500);
 
-    if (await banner.count() > 0 && await banner.isVisible()) {
-      const rejectButton = banner.getByRole("button", { name: /reject|decline|deny|no/i });
-      if (await rejectButton.count() > 0) {
+    if ((await banner.count()) > 0 && (await banner.isVisible())) {
+      const rejectButton = banner.getByRole("button", {
+        name: /reject|decline|deny|no/i,
+      });
+      if ((await rejectButton.count()) > 0) {
         await rejectButton.click();
         await expect(banner).not.toBeVisible();
 
@@ -1080,6 +1114,7 @@ git commit -m "feat(e2e): add cookie consent feature tests"
 ## Task 19: Create Footer Feature Tests
 
 **Files:**
+
 - Create: `e2e/features/footer.spec.ts`
 
 **Step 1: Create footer.spec.ts**
@@ -1103,7 +1138,7 @@ test.describe("Footer", () => {
     const footer = page.locator('[data-testid="footer"], footer');
     const privacyLink = footer.getByRole("link", { name: /privacy/i });
 
-    if (await privacyLink.count() > 0) {
+    if ((await privacyLink.count()) > 0) {
       await expect(privacyLink).toBeVisible();
       const href = await privacyLink.getAttribute("href");
       expect(href).toContain("privacy");
@@ -1114,7 +1149,7 @@ test.describe("Footer", () => {
     const footer = page.locator('[data-testid="footer"], footer');
     const termsLink = footer.getByRole("link", { name: /terms/i });
 
-    if (await termsLink.count() > 0) {
+    if ((await termsLink.count()) > 0) {
       await expect(termsLink).toBeVisible();
       const href = await termsLink.getAttribute("href");
       expect(href).toContain("terms");
@@ -1123,13 +1158,15 @@ test.describe("Footer", () => {
 
   test("has social links", async ({ page }) => {
     const footer = page.locator('[data-testid="footer"], footer');
-    const socialLinks = footer.locator('a[href*="github.com"], a[href*="discord"], a[href*="twitter"]');
+    const socialLinks = footer.locator(
+      'a[href*="github.com"], a[href*="discord"], a[href*="twitter"]'
+    );
     await expect(socialLinks).toHaveCount({ min: 1 });
   });
 
   test("copyright text is present", async ({ page }) => {
     const footer = page.locator('[data-testid="footer"], footer');
-    const copyright = footer.locator('text=/©|copyright|Volvox/i');
+    const copyright = footer.locator("text=/©|copyright|Volvox/i");
     await expect(copyright).toBeVisible();
   });
 });
@@ -1153,6 +1190,7 @@ git commit -m "feat(e2e): add footer feature tests"
 ## Task 20: Create Accessibility Tests
 
 **Files:**
+
 - Create: `e2e/accessibility.spec.ts`
 
 **Step 1: Create accessibility.spec.ts**
@@ -1171,7 +1209,10 @@ const pages = [
 
 test.describe("Accessibility", () => {
   for (const { name, path } of pages) {
-    test(`${name} page passes axe accessibility scan`, async ({ page, axe }) => {
+    test(`${name} page passes axe accessibility scan`, async ({
+      page,
+      axe,
+    }) => {
       await page.goto(path);
       await page.waitForLoadState("networkidle");
 
@@ -1214,7 +1255,9 @@ test.describe("Accessibility", () => {
 
   test("links have discernible text", async ({ page }) => {
     await page.goto("/");
-    const emptyLinks = page.locator('a:not([aria-label]):not(:has(img)):not(:has(svg))').filter({ hasNotText: /.+/ });
+    const emptyLinks = page
+      .locator("a:not([aria-label]):not(:has(img)):not(:has(svg))")
+      .filter({ hasNotText: /.+/ });
     const count = await emptyLinks.count();
     expect(count, "Links without discernible text").toBe(0);
   });
@@ -1226,8 +1269,13 @@ test.describe("Accessibility", () => {
 
     for (let i = 0; i < count; i++) {
       const button = buttons.nth(i);
-      const name = await button.getAttribute("aria-label") || await button.textContent();
-      expect(name?.trim().length, `Button ${i} has no accessible name`).toBeGreaterThan(0);
+      const name =
+        (await button.getAttribute("aria-label")) ||
+        (await button.textContent());
+      expect(
+        name?.trim().length,
+        `Button ${i} has no accessible name`
+      ).toBeGreaterThan(0);
     }
   });
 });
@@ -1251,6 +1299,7 @@ git commit -m "feat(e2e): add accessibility tests with axe-core"
 ## Task 21: Create SEO Tests
 
 **Files:**
+
 - Create: `e2e/seo.spec.ts`
 
 **Step 1: Create seo.spec.ts**
@@ -1271,13 +1320,24 @@ test.describe("SEO", () => {
     });
 
     test("has Open Graph tags", async ({ page }) => {
-      await expect(page.locator('meta[property="og:title"]')).toHaveAttribute("content", /.+/);
-      await expect(page.locator('meta[property="og:description"]')).toHaveAttribute("content", /.+/);
-      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute("content", /.+/);
+      await expect(page.locator('meta[property="og:title"]')).toHaveAttribute(
+        "content",
+        /.+/
+      );
+      await expect(
+        page.locator('meta[property="og:description"]')
+      ).toHaveAttribute("content", /.+/);
+      await expect(page.locator('meta[property="og:image"]')).toHaveAttribute(
+        "content",
+        /.+/
+      );
     });
 
     test("has Twitter card tags", async ({ page }) => {
-      await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute("content", /.+/);
+      await expect(page.locator('meta[name="twitter:card"]')).toHaveAttribute(
+        "content",
+        /.+/
+      );
     });
 
     test("has canonical URL", async ({ page }) => {
@@ -1353,6 +1413,7 @@ git commit -m "feat(e2e): add SEO tests for meta tags and OG"
 ## Task 22: Create Responsive Tests
 
 **Files:**
+
 - Create: `e2e/responsive.spec.ts`
 
 **Step 1: Create responsive.spec.ts**
@@ -1373,7 +1434,7 @@ test.describe("Responsive Design", () => {
     test("navigation shows mobile menu button", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if (await menuButton.count() > 0) {
+      if ((await menuButton.count()) > 0) {
         await expect(menuButton).toBeVisible();
       }
     });
@@ -1416,11 +1477,11 @@ test.describe("Responsive Design", () => {
     test("navigation shows desktop layout", async ({ page }) => {
       await page.goto("/");
       const desktopNav = page.locator('[data-testid="desktop-nav"]');
-      if (await desktopNav.count() > 0) {
+      if ((await desktopNav.count()) > 0) {
         await expect(desktopNav).toBeVisible();
       }
       const mobileButton = page.locator('[data-testid="mobile-menu-button"]');
-      if (await mobileButton.count() > 0) {
+      if ((await mobileButton.count()) > 0) {
         await expect(mobileButton).not.toBeVisible();
       }
     });
@@ -1428,7 +1489,7 @@ test.describe("Responsive Design", () => {
     test("blog post shows sidebar TOC", async ({ page }) => {
       await page.goto("/blog/announcing-volvox");
       const toc = page.locator('[data-testid="table-of-contents"]');
-      if (await toc.count() > 0) {
+      if ((await toc.count()) > 0) {
         await expect(toc).toBeVisible();
       }
     });
@@ -1466,6 +1527,7 @@ git commit -m "feat(e2e): add responsive design tests"
 ## Task 23: Create Visual Regression Tests
 
 **Files:**
+
 - Create: `e2e/visual.spec.ts`
 
 **Step 1: Create visual.spec.ts**
@@ -1475,7 +1537,10 @@ import { test, expect } from "./fixtures/base.fixture";
 
 test.describe("Visual Regression", () => {
   // Only run visual tests on Chromium to avoid maintaining multiple baselines
-  test.skip(({ browserName }) => browserName !== "chromium", "Visual tests only on Chromium");
+  test.skip(
+    ({ browserName }) => browserName !== "chromium",
+    "Visual tests only on Chromium"
+  );
 
   test.describe("Desktop Screenshots", () => {
     test.use({ viewport: { width: 1280, height: 720 } });
@@ -1484,7 +1549,7 @@ test.describe("Visual Regression", () => {
       await page.goto("/");
       await page.waitForTimeout(1000);
       const hero = page.locator('[data-testid="hero-section"]');
-      if (await hero.count() > 0) {
+      if ((await hero.count()) > 0) {
         await expect(hero).toHaveScreenshot("homepage-hero.png");
       }
     });
@@ -1521,7 +1586,7 @@ test.describe("Visual Regression", () => {
     test("mobile menu open", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if (await menuButton.count() > 0 && await menuButton.isVisible()) {
+      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
         await menuButton.click();
         await page.waitForTimeout(300);
         await expect(page).toHaveScreenshot("mobile-menu-open.png");
@@ -1535,7 +1600,7 @@ test.describe("Visual Regression", () => {
     test("dark mode homepage", async ({ page }) => {
       await page.goto("/");
       const toggle = page.locator('[data-testid="theme-toggle"]');
-      if (await toggle.count() > 0) {
+      if ((await toggle.count()) > 0) {
         await toggle.click();
         await page.waitForTimeout(500);
         await expect(page).toHaveScreenshot("homepage-dark.png");
@@ -1569,6 +1634,7 @@ git commit -m "feat(e2e): add visual regression tests with baselines"
 ## Task 24: Create Performance Tests
 
 **Files:**
+
 - Create: `e2e/performance.spec.ts`
 
 **Step 1: Create performance.spec.ts**
@@ -1692,7 +1758,7 @@ test.describe("Performance", () => {
       await page.goto("/");
       const toggle = page.locator('[data-testid="theme-toggle"]');
 
-      if (await toggle.count() > 0) {
+      if ((await toggle.count()) > 0) {
         const start = Date.now();
         await toggle.click();
         await expect(page.locator("html")).toHaveClass(/dark/);
@@ -1723,6 +1789,7 @@ git commit -m "feat(e2e): add performance tests for load times and resources"
 ## Task 25: Create Error State Tests
 
 **Files:**
+
 - Create: `e2e/errors.spec.ts`
 
 **Step 1: Create errors.spec.ts**
@@ -1754,8 +1821,10 @@ test.describe("Error States", () => {
     test("404 page has navigation to return home", async ({ page }) => {
       await page.goto("/invalid-page-123");
 
-      const homeLink = page.getByRole("link", { name: /home|back|return|volvox/i });
-      if (await homeLink.count() > 0) {
+      const homeLink = page.getByRole("link", {
+        name: /home|back|return|volvox/i,
+      });
+      if ((await homeLink.count()) > 0) {
         await expect(homeLink).toBeVisible();
       }
     });
@@ -1833,7 +1902,7 @@ test.describe("Error States", () => {
       await page.goto("/");
 
       const toggle = page.locator('[data-testid="theme-toggle"]');
-      if (await toggle.count() > 0) {
+      if ((await toggle.count()) > 0) {
         await toggle.click();
       }
 
@@ -1861,6 +1930,7 @@ git commit -m "feat(e2e): add error state tests for 404s and resource failures"
 ## Task 26: Create GitHub Actions Workflow
 
 **Files:**
+
 - Create: `.github/workflows/e2e.yml`
 
 **Step 1: Create .github/workflows directory**

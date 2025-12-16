@@ -13,7 +13,9 @@ test.describe("Blog Post Page", () => {
     await expect(header.locator("h1")).toContainText("Announcing Volvox");
 
     // Check that the date element exists (Calendar icon + date text)
-    const dateElement = page.locator('article header div:has([class*="lucide-calendar"])').last();
+    const dateElement = page
+      .locator('article header div:has([class*="lucide-calendar"])')
+      .last();
     await expect(dateElement).toBeVisible();
     await expect(dateElement).toContainText("2025-11-28");
   });
@@ -32,7 +34,9 @@ test.describe("Blog Post Page", () => {
     await expect(content.locator("p").first()).toBeVisible();
 
     // Check for specific headings from the "Announcing Volvox" post
-    await expect(content.locator("h2").filter({ hasText: /More Than a Dev Shop/i })).toBeVisible();
+    await expect(
+      content.locator("h2").filter({ hasText: /More Than a Dev Shop/i })
+    ).toBeVisible();
   });
 
   test("displays table of contents with clickable items", async ({ page }) => {
@@ -65,7 +69,9 @@ test.describe("Blog Post Page", () => {
         await page.waitForTimeout(500); // Wait for smooth scroll
 
         // Find the heading with matching text
-        const targetHeading = page.locator(`h2, h3`).filter({ hasText: buttonText.trim() });
+        const targetHeading = page
+          .locator(`h2, h3`)
+          .filter({ hasText: buttonText.trim() });
         await expect(targetHeading).toBeInViewport();
       }
     }
@@ -83,10 +89,7 @@ test.describe("Blog Post Page", () => {
     await expect(backButton).toBeVisible();
 
     // Click and wait for navigation to complete
-    await Promise.all([
-      page.waitForURL(/\/#blog$/),
-      backButton.click(),
-    ]);
+    await Promise.all([page.waitForURL(/\/#blog$/), backButton.click()]);
 
     // Verify we're on the homepage with the blog section hash
     expect(page.url()).toContain("/#blog");

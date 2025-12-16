@@ -25,9 +25,7 @@ test.describe("Blog List (Homepage Section)", () => {
   test("blog cards have title and date", async ({ page }) => {
     const firstCard = page.locator('[data-testid="blog-card"]').first();
     // CardTitle is a div with data-slot="card-title"
-    await expect(
-      firstCard.locator('[data-slot="card-title"]')
-    ).toBeVisible();
+    await expect(firstCard.locator('[data-slot="card-title"]')).toBeVisible();
     // Date is shown as a span with the formatted date
     await expect(firstCard.getByText(/\w{3}\s+\d{1,2},\s+\d{4}/)).toBeVisible();
   });

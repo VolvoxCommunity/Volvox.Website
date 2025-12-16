@@ -10,17 +10,17 @@ A comprehensive Playwright E2E test suite covering all pages, features, accessib
 
 ## Key Decisions
 
-| Decision | Choice |
-|----------|--------|
-| Coverage Level | Full coverage including edge cases |
-| Browsers | Chromium, Firefox, Safari + Mobile Chrome/Safari |
-| File Organization | Hybrid (pages + features) |
-| Accessibility | Automated with @axe-core/playwright |
-| Visual Regression | Screenshot comparisons (Chromium only) |
-| Performance | Load times, console errors, network failures |
-| Test Data Strategy | Structure-based, not content-specific |
-| CI/CD | GitHub Actions with 4 parallel shards |
-| Error States | 404s, error boundaries, resource failures |
+| Decision           | Choice                                           |
+| ------------------ | ------------------------------------------------ |
+| Coverage Level     | Full coverage including edge cases               |
+| Browsers           | Chromium, Firefox, Safari + Mobile Chrome/Safari |
+| File Organization  | Hybrid (pages + features)                        |
+| Accessibility      | Automated with @axe-core/playwright              |
+| Visual Regression  | Screenshot comparisons (Chromium only)           |
+| Performance        | Load times, console errors, network failures     |
+| Test Data Strategy | Structure-based, not content-specific            |
+| CI/CD              | GitHub Actions with 4 parallel shards            |
+| Error States       | 404s, error boundaries, resource failures        |
 
 ## Test Structure
 
@@ -51,17 +51,17 @@ e2e/
 
 ## Test Count Breakdown
 
-| Category | Files | Est. Tests |
-|----------|-------|------------|
-| Page tests | 7 files | ~25 tests |
-| Feature tests | 4 files | ~15 tests |
-| Accessibility | 1 file | ~8 tests |
-| SEO | 1 file | ~10 tests |
-| Responsive | 1 file | ~10 tests |
-| Visual regression | 1 file | ~12 tests |
-| Performance | 1 file | ~15 tests |
-| Error states | 1 file | ~12 tests |
-| **Total** | **17 files** | **~107 tests** |
+| Category          | Files        | Est. Tests     |
+| ----------------- | ------------ | -------------- |
+| Page tests        | 7 files      | ~25 tests      |
+| Feature tests     | 4 files      | ~15 tests      |
+| Accessibility     | 1 file       | ~8 tests       |
+| SEO               | 1 file       | ~10 tests      |
+| Responsive        | 1 file       | ~10 tests      |
+| Visual regression | 1 file       | ~12 tests      |
+| Performance       | 1 file       | ~15 tests      |
+| Error states      | 1 file       | ~12 tests      |
+| **Total**         | **17 files** | **~107 tests** |
 
 ## Playwright Configuration
 
@@ -74,10 +74,7 @@ export default defineConfig({
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 2 : 0,
   workers: process.env.CI ? 1 : undefined,
-  reporter: [
-    ["html"],
-    ["json", { outputFile: "test-results/results.json" }],
-  ],
+  reporter: [["html"], ["json", { outputFile: "test-results/results.json" }]],
   use: {
     baseURL: "http://localhost:3000",
     trace: "on-first-retry",
@@ -214,17 +211,21 @@ jobs:
 ## Required data-testid Attributes
 
 ### Navigation (`src/components/navigation.tsx`)
+
 - `data-testid="desktop-nav"` - Desktop navigation container
 - `data-testid="mobile-menu-button"` - Hamburger menu button
 - `data-testid="mobile-menu"` - Mobile menu panel
 
 ### Theme (`src/components/theme-toggle.tsx`)
+
 - `data-testid="theme-toggle"` - Theme toggle button
 
 ### Cookie Consent (`src/components/cookie-consent-banner.tsx`)
+
 - `data-testid="cookie-consent-banner"` - Banner container
 
 ### Homepage Sections
+
 - `data-testid="hero-section"` - Hero component
 - `data-testid="products-section"` - Products component
 - `data-testid="blog-section"` - Blog component
@@ -232,6 +233,7 @@ jobs:
 - `data-testid="about-section"` - About component
 
 ### Blog (`src/components/blog/*.tsx`)
+
 - `data-testid="blog-card"` - Each blog post card
 - `data-testid="blog-post-header"` - Post header component
 - `data-testid="blog-content"` - MDX content wrapper
@@ -241,9 +243,11 @@ jobs:
 - `data-testid="author-name"` - Author display
 
 ### Products
+
 - `data-testid="product-card"` - Each product card
 
 ### Footer (`src/components/footer.tsx`)
+
 - `data-testid="footer"` - Footer container
 
 ## Dependencies to Add

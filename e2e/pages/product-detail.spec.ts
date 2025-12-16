@@ -30,7 +30,9 @@ test.describe("Product Detail Page", () => {
     await expect(featuresSection).toBeVisible();
 
     // Check that features are displayed
-    const featuresList = featuresSection.locator("ul, [data-testid='product-features']");
+    const featuresList = featuresSection.locator(
+      "ul, [data-testid='product-features']"
+    );
     await expect(featuresList.first()).toBeVisible();
   });
 

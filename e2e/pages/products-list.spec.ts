@@ -48,7 +48,11 @@ test.describe("Products List Page", () => {
   });
 
   test("displays footer", async ({ page }) => {
-    const footer = page.locator('[data-testid="footer"], footer');
+    const footer = page
+      .locator('[data-testid="footer"]')
+      .or(page.locator("footer"))
+      .first();
+    await footer.waitFor({ state: "attached" });
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
   });

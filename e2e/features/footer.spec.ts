@@ -157,8 +157,13 @@ test.describe("Footer", () => {
       await page.goto(path);
 
       // Dismiss cookie consent banner if present
-      const cookieBanner = page.locator('[data-testid="cookie-consent-banner"]');
-      if ((await cookieBanner.count()) > 0 && (await cookieBanner.isVisible())) {
+      const cookieBanner = page.locator(
+        '[data-testid="cookie-consent-banner"]'
+      );
+      if (
+        (await cookieBanner.count()) > 0 &&
+        (await cookieBanner.isVisible())
+      ) {
         const acceptButton = cookieBanner.getByRole("button", {
           name: /accept|agree/i,
         });
@@ -174,7 +179,9 @@ test.describe("Footer", () => {
     }
   });
 
-  test("footer maintains consistent styling across themes", async ({ page }) => {
+  test("footer maintains consistent styling across themes", async ({
+    page,
+  }) => {
     // Check initial state
     const footer = page.locator('[data-testid="footer"]');
     await expect(footer).toBeVisible();
