@@ -29,7 +29,10 @@ test.describe("Homepage", () => {
   });
 
   test("scroll-based section tracking updates navigation", async ({ page }) => {
+    await page.waitForLoadState("networkidle");
     const blogSection = page.locator("#blog, [data-testid='blog-section']");
+    await blogSection.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100);
     await blogSection.scrollIntoViewIfNeeded();
     // Wait for section to be in viewport using an assertion timeout (not an arbitrary wait)
     await expect(blogSection).toBeInViewport({ timeout: 2000 });
@@ -50,7 +53,10 @@ test.describe("Homepage", () => {
   });
 
   test("displays footer", async ({ page }) => {
+    await page.waitForLoadState("networkidle");
     const footer = page.locator('[data-testid="footer"], footer');
+    await footer.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100);
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
   });

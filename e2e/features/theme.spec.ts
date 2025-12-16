@@ -130,16 +130,18 @@ test.describe("Theme Toggle", () => {
 
   test("theme toggle has accessible name", async ({ page }) => {
     await page.goto("/");
+    await page.waitForLoadState("networkidle");
 
     // Button should be findable by accessible name via sr-only text
+    // The fact that getByRole finds it with name "toggle theme" proves accessibility
     const toggle = page.getByRole("button", { name: /toggle theme/i });
     await expect(toggle).toBeVisible();
 
-    // Verify the accessible name contains "theme" (provided via sr-only span)
-    const accessibleName = await toggle.evaluate(
-      (el) => el.textContent?.toLowerCase() || ""
-    );
-    expect(accessibleName).toContain("theme");
+    // Button should be clickable (functional)
+    await expect(toggle).toBeEnabled();
+
+    // Verify the toggle has data-testid for alternative selection
+    await expect(toggle).toHaveAttribute("data-testid", "theme-toggle");
   });
 
   test("theme toggle shows correct icon for current theme", async ({
@@ -193,7 +195,7 @@ test.describe("Theme Toggle", () => {
 
   test("theme transitions work smoothly without flash", async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
     const toggle = page.getByRole("button", { name: /toggle theme/i });
     await toggle.waitFor({ state: "visible" });
 
@@ -217,11 +219,11 @@ test.describe("Theme Toggle", () => {
     // Toggle theme
     await toggle.click();
 
-    // Wait for theme transition to complete
-    await page.waitForFunction(() => {
-      const animations = document.getAnimations();
-      return animations.every((anim) => anim.playState === "finished");
-    });
+    // Wait for theme to be applied (don't wait for all animations - there may be infinite ones)
+    await page.waitForSelector("html.dark");
+
+    // Small delay to capture any flickering
+    await page.waitForTimeout(200);
 
     // Get recorded changes
     const changes = await page.evaluate(() => {

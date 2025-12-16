@@ -4,9 +4,12 @@ import { dismissCookieBanner } from "../utils/test-helpers";
 test.describe("Footer", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
+    // Wait for hydration to complete before interacting with footer
     const footer = page.locator('[data-testid="footer"]');
-    await footer.waitFor({ state: "attached" });
+    await footer.waitFor({ state: "visible", timeout: 10000 });
+    // Small delay to ensure hydration is complete
+    await page.waitForTimeout(100);
     await footer.scrollIntoViewIfNeeded();
   });
 
@@ -104,11 +107,17 @@ test.describe("Footer", () => {
     await privacyLink.click();
     await expect(page).toHaveURL("/privacy");
 
-    // Go back and click terms link
+    // Go back and wait for page to fully reload
     await page.goBack();
-    await footer.scrollIntoViewIfNeeded();
+    await page.waitForLoadState("networkidle");
 
-    const termsLink = footer.getByRole("link", {
+    // Re-locate footer after navigation (page has re-rendered)
+    const footerAfterBack = page.locator('[data-testid="footer"]');
+    await footerAfterBack.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100);
+    await footerAfterBack.scrollIntoViewIfNeeded();
+
+    const termsLink = footerAfterBack.getByRole("link", {
       name: /terms of service/i,
     });
     await termsLink.click();
@@ -142,9 +151,12 @@ test.describe("Footer", () => {
 
     for (const path of pages) {
       await page.goto(path);
+      await page.waitForLoadState("networkidle");
       await dismissCookieBanner(page);
 
       const footer = page.locator('[data-testid="footer"]');
+      await footer.waitFor({ state: "visible", timeout: 10000 });
+      await page.waitForTimeout(100);
       await footer.scrollIntoViewIfNeeded();
       await expect(footer).toBeVisible();
     }
@@ -158,11 +170,13 @@ test.describe("Footer", () => {
       localStorage.setItem("volvox-theme", "light");
     });
     await page.goto("/");
-    await page.waitForLoadState("domcontentloaded");
+    await page.waitForLoadState("networkidle");
     await page.waitForSelector("html.light");
 
     // Check initial state
     const footer = page.locator('[data-testid="footer"]');
+    await footer.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100);
     await footer.scrollIntoViewIfNeeded();
     await expect(footer).toBeVisible();
     await expect(footer).toHaveCSS("border-top-width", "1px");
@@ -174,6 +188,8 @@ test.describe("Footer", () => {
 
     // Re-locate footer after theme change (page may have re-rendered)
     const footerAfterToggle = page.locator('[data-testid="footer"]');
+    await footerAfterToggle.waitFor({ state: "visible", timeout: 10000 });
+    await page.waitForTimeout(100);
     await footerAfterToggle.scrollIntoViewIfNeeded();
 
     // Footer should still be visible and have border

@@ -26,7 +26,10 @@ test.describe("Responsive Design", () => {
 
     test("footer is visible and properly styled", async ({ page }) => {
       await page.goto("/");
+      await page.waitForLoadState("networkidle");
       const footer = page.locator('[data-testid="footer"], footer');
+      await footer.waitFor({ state: "visible", timeout: 10000 });
+      await page.waitForTimeout(100);
       await footer.scrollIntoViewIfNeeded();
       await expect(footer).toBeVisible();
     });

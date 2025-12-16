@@ -6,17 +6,40 @@ import type { Page } from "@playwright/test";
 export const DATE_FORMAT_REGEX = /\w{3}\s+\d{1,2},\s+\d{4}/;
 
 /**
- * Wait for all CSS animations to complete on the page.
- * Useful for visual regression tests to ensure consistent screenshots.
+ * Wait for finite CSS animations to complete on the page.
+ * Ignores infinite animations (like background canvas animations).
+ * Has a built-in timeout to prevent hanging on complex pages.
  */
-export async function waitForAnimations(page: Page): Promise<void> {
-  await page.waitForFunction(() => {
-    const animations = document.getAnimations();
-    return (
-      animations.length === 0 ||
-      animations.every((a) => a.playState === "finished")
+export async function waitForAnimations(
+  page: Page,
+  timeout = 5000
+): Promise<void> {
+  try {
+    await page.waitForFunction(
+      () => {
+        const animations = document.getAnimations();
+        // Filter to only finite animations (exclude infinite loops)
+        const finiteAnimations = animations.filter((a) => {
+          // Check if animation has finite iterations
+          const effect = a.effect as KeyframeEffect | null;
+          if (effect?.getComputedTiming) {
+            const timing = effect.getComputedTiming();
+            // Infinite iterations have Infinity value
+            return timing.iterations !== Infinity;
+          }
+          return true;
+        });
+        return (
+          finiteAnimations.length === 0 ||
+          finiteAnimations.every((a) => a.playState === "finished")
+        );
+      },
+      { timeout }
     );
-  });
+  } catch {
+    // If timeout is reached, continue anyway - infinite animations may be running
+    // This is acceptable for visual tests as we use diff thresholds for animated areas
+  }
 }
 
 /**

@@ -72,9 +72,11 @@ test.describe("Cookie Consent", () => {
     const banner = page.locator('[data-testid="cookie-consent-banner"]');
     await expect(banner).toBeVisible();
 
-    // Use flexible regex pattern for reject button, consistent with accept button pattern
+    // Use exact match for decline button to avoid matching multiple elements
+    // (there's both an icon button and text button for decline)
     const rejectButton = banner.getByRole("button", {
-      name: /decline|reject|deny/i,
+      name: "Decline All",
+      exact: true,
     });
     test.skip(
       (await rejectButton.count()) === 0,

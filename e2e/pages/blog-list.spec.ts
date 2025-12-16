@@ -4,9 +4,12 @@ import { DATE_FORMAT_REGEX } from "../utils/test-helpers";
 test.describe("Blog List (Homepage Section)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
+    await page.waitForLoadState("networkidle");
     // Wait for the blog section to be visible and scroll it into view
     const blogSection = page.locator("[data-testid='blog-section']");
-    await blogSection.waitFor({ state: "visible" });
+    await blogSection.waitFor({ state: "visible", timeout: 10000 });
+    // Small delay to ensure hydration is complete
+    await page.waitForTimeout(100);
     await blogSection.scrollIntoViewIfNeeded();
   });
 

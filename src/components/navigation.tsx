@@ -164,6 +164,7 @@ export function Navigation({
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
                 aria-label="Toggle theme"
+                data-testid="theme-toggle"
               >
                 {theme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />

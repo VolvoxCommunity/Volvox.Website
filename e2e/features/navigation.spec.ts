@@ -72,6 +72,7 @@ test.describe("Navigation", () => {
 
     test("mobile menu links navigate correctly", async ({ page }) => {
       await page.goto("/");
+      await page.waitForLoadState("networkidle");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
       await expect(menuButton).toBeVisible();
 
@@ -79,12 +80,21 @@ test.describe("Navigation", () => {
       const mobileMenu = page.locator('[data-testid="mobile-menu"]');
       await expect(mobileMenu).toBeVisible();
 
-      const productsLink = mobileMenu.getByRole("link", {
+      // On homepage, nav items are buttons that scroll to sections
+      const productsButton = mobileMenu.getByRole("button", {
         name: /products/i,
       });
-      await expect(productsLink).toBeVisible();
-      await productsLink.click();
-      await expect(page).toHaveURL(/products/);
+      await expect(productsButton).toBeVisible();
+      await productsButton.click();
+
+      // Menu should close after clicking
+      await expect(mobileMenu).not.toBeVisible();
+
+      // Should scroll to products section
+      const productsSection = page.locator(
+        '[data-testid="products-section"], #products'
+      );
+      await expect(productsSection).toBeInViewport();
     });
   });
 });
