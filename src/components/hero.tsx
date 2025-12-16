@@ -126,7 +126,7 @@ export function Hero({ onNavigate }: HeroProps) {
             size="lg"
             variant="outline"
             onClick={() => onNavigate("mentorship")}
-            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary/10 hover:border-secondary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
+            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
           >
             Join as Mentee
             <ArrowRight

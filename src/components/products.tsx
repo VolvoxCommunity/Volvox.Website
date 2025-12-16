@@ -39,41 +39,48 @@ function ProductCard({ product, index }: ProductCardProps) {
     >
       <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
         <div className="grid md:grid-cols-2 gap-0">
-          <motion.div
-            className="bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center p-4"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          >
-            {imagePath ? (
-              <Image
-                src={imagePath}
-                alt={product.name}
-                width={600}
-                height={400}
-                className="w-full h-auto object-contain"
-              />
-            ) : (
-              <div className="aspect-video w-full relative">
-                <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <motion.div
-                    className="text-[120px] md:text-[180px] font-bold text-foreground/5"
-                    whileHover={{ scale: 1.05, rotate: 2 }}
-                    transition={{ duration: 0.3 }}
-                  >
-                    {product.name.charAt(0)}
-                  </motion.div>
+          <Link href={`/products/${product.slug}`} className="block">
+            <motion.div
+              className="bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden flex items-center justify-center p-4 cursor-pointer"
+              whileHover={{ scale: 1.02 }}
+              transition={{ duration: 0.3 }}
+            >
+              {imagePath ? (
+                <Image
+                  src={imagePath}
+                  alt={product.name}
+                  width={600}
+                  height={400}
+                  className="w-full h-auto object-contain"
+                />
+              ) : (
+                <div className="aspect-video w-full relative">
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <motion.div
+                      className="text-[120px] md:text-[180px] font-bold text-foreground/5"
+                      whileHover={{ scale: 1.05, rotate: 2 }}
+                      transition={{ duration: 0.3 }}
+                    >
+                      {product.name.charAt(0)}
+                    </motion.div>
+                  </div>
                 </div>
-              </div>
-            )}
-            {/* Gradient accent line */}
-            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
-          </motion.div>
+              )}
+              {/* Gradient accent line */}
+              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
+            </motion.div>
+          </Link>
 
           <div className="flex flex-col">
             <CardHeader className="pb-4 pt-6 md:pt-8 px-6 md:px-8">
               <CardTitle className="text-2xl md:text-3xl font-bold transition-colors duration-300">
-                {product.name}
+                <Link
+                  href={`/products/${product.slug}`}
+                  className="hover:text-primary transition-colors"
+                >
+                  {product.name}
+                </Link>
               </CardTitle>
               <CardDescription className="text-base mt-3 leading-relaxed">
                 {product.description}

@@ -5,6 +5,17 @@ import * as fs from "fs";
 import * as path from "path";
 import { reportError } from "./logger";
 
+/**
+ * Converts a Node.js Buffer to an ArrayBuffer.
+ * This is necessary because Buffer.buffer can return a shared ArrayBuffer
+ * with incorrect offsets.
+ */
+function bufferToArrayBuffer(buffer: Buffer): ArrayBuffer {
+  // Create a new Uint8Array copy to ensure we have a proper ArrayBuffer
+  const copy = new Uint8Array(buffer);
+  return copy.buffer;
+}
+
 /** Standard image size for social media images */
 const IMAGE_SIZE = { width: 1200, height: 630 };
 
@@ -88,7 +99,7 @@ export function getLogoData(): ArrayBuffer | null {
   try {
     const logoPath = path.join(process.cwd(), "public", "logo.png");
     if (fs.existsSync(logoPath)) {
-      return fs.readFileSync(logoPath).buffer;
+      return bufferToArrayBuffer(fs.readFileSync(logoPath));
     }
   } catch (e) {
     reportError("Failed to read logo file", e);
@@ -117,7 +128,7 @@ export function getProductScreenshotData(
       filename
     );
     if (fs.existsSync(screenshotPath)) {
-      return fs.readFileSync(screenshotPath).buffer;
+      return bufferToArrayBuffer(fs.readFileSync(screenshotPath));
     }
   } catch (e) {
     reportError(`Failed to read product screenshot: ${slug}/${filename}`, e);
@@ -139,7 +150,7 @@ export function getBlogBannerData(bannerPath: string): ArrayBuffer | null {
       : bannerPath;
     const fullPath = path.join(process.cwd(), "public", cleanPath);
     if (fs.existsSync(fullPath)) {
-      return fs.readFileSync(fullPath).buffer;
+      return bufferToArrayBuffer(fs.readFileSync(fullPath));
     }
   } catch (e) {
     reportError(`Failed to read blog banner: ${bannerPath}`, e);
@@ -709,7 +720,7 @@ export async function generateProductSocialImage(
   const options = createImageResponseOptions(fontData);
 
   try {
-    const techBadges = product.techStack?.slice(0, 4) || [];
+    const techBadges = product.techStack || [];
 
     return new ImageResponse(
       <div
@@ -770,31 +781,6 @@ export async function generateProductSocialImage(
           >
             {/* Top section */}
             <div style={{ display: "flex", flexDirection: "column" }}>
-              {/* Product badge */}
-              <div
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  marginBottom: 20,
-                }}
-              >
-                <div
-                  style={{
-                    backgroundColor: BRAND_COLORS.primary,
-                    color: BRAND_COLORS.text,
-                    padding: "6px 14px",
-                    borderRadius: 6,
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: "0.05em",
-                    textTransform: "uppercase",
-                    display: "flex",
-                  }}
-                >
-                  Product
-                </div>
-              </div>
-
               {/* Product name */}
               <div
                 style={{
