@@ -147,7 +147,9 @@ export function getAllExtendedProducts(): ExtendedProduct[] {
         if (validated.slug !== folder.name) {
           reportError(
             `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`,
-            new Error("Slug mismatch")
+            new Error(
+              `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`
+            )
           );
           continue;
         }
