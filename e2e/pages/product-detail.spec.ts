@@ -47,6 +47,7 @@ test.describe("Product Detail Page", () => {
   });
 
   test("has navigation", async ({ page }) => {
+    // Using semantic nav element (no data-testid on nav currently)
     const nav = page.locator("nav").first();
     await expect(nav).toBeVisible();
   });
