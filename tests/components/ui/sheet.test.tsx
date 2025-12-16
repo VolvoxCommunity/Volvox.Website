@@ -193,7 +193,7 @@ describe("Sheet Components", () => {
   });
 
   describe("SheetHeader", () => {
-    it("renders header content", () => {
+    it("renders header content with proper heading semantics", () => {
       render(
         <Sheet defaultOpen>
           <SheetContent>
@@ -203,7 +203,10 @@ describe("Sheet Components", () => {
           </SheetContent>
         </Sheet>
       );
-      expect(screen.getByText("Header Title")).toBeInTheDocument();
+      // Verify heading semantics for accessibility
+      expect(
+        screen.getByRole("heading", { name: /header title/i })
+      ).toBeInTheDocument();
     });
 
     it("has data-slot attribute", () => {
