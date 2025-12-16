@@ -4,13 +4,13 @@ test.describe("Blog List (Homepage Section)", () => {
   test.beforeEach(async ({ page }) => {
     await page.goto("/");
     // Wait for the blog section to be attached to the DOM
-    const blogSection = page.locator("#blog, [data-testid='blog-section']");
+    const blogSection = page.locator("[data-testid='blog-section']");
     await blogSection.waitFor({ state: "attached" });
     await blogSection.scrollIntoViewIfNeeded();
   });
 
   test("displays blog section heading", async ({ page }) => {
-    const blogSection = page.locator("#blog, [data-testid='blog-section']");
+    const blogSection = page.locator("[data-testid='blog-section']");
     await expect(blogSection).toBeVisible();
     const heading = blogSection.locator("h2");
     await expect(heading).toBeVisible();
