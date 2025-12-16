@@ -287,6 +287,9 @@ describe("content lib", () => {
         expect(isValidSlug("product-1")).toBe(true);
         expect(isValidSlug("my-app")).toBe(true);
         expect(isValidSlug("test123")).toBe(true);
+        // Numeric-only slugs should also be valid
+        expect(isValidSlug("123")).toBe(true);
+        expect(isValidSlug("456789")).toBe(true);
       });
 
       it("rejects uppercase slugs", () => {
