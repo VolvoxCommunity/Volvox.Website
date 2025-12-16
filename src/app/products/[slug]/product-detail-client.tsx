@@ -74,7 +74,7 @@ export function ProductDetailClient({
               {product.techStack && product.techStack.length > 0 && (
                 <div className="mt-8">
                   <h3 className="font-semibold mb-4 text-sm uppercase tracking-wider text-muted-foreground">
-                    Built With
+                    Tech Stack
                   </h3>
                   <div className="flex flex-wrap gap-2">
                     {product.techStack.map((tech) => (
