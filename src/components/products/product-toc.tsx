@@ -31,6 +31,11 @@ export function ProductToc({
   );
 
   useEffect(() => {
+    // Early return if no sections to observe
+    if (sections.length === 0) {
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
