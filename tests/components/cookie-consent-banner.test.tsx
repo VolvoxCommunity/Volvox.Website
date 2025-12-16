@@ -56,6 +56,7 @@ jest.mock("@/components/ui/button", () => ({
     className?: string;
   }) => (
     <button
+      type="button"
       onClick={onClick}
       data-variant={variant}
       data-size={size}
