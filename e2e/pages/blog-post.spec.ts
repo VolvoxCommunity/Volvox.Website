@@ -20,9 +20,9 @@ test.describe("Blog Post Page", () => {
   });
 
   test("renders author information", async ({ page }) => {
-    const author = page.locator('[data-testid="author-name"]');
-    await expect(author).toBeVisible();
-    await expect(author).toContainText(/.+/); // Has some author name
+    const authorInfo = page.locator('[data-testid="author-info"]');
+    await expect(authorInfo).toBeVisible();
+    await expect(authorInfo).toContainText(/.+/); // Has some author name
   });
 
   test("renders MDX content correctly", async ({ page }) => {

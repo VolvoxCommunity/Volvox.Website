@@ -162,14 +162,13 @@ export default async function BlogPostPage({
                       className="w-10 h-10 rounded-full"
                     />
                   )}
-                  <div>
-                    <p
-                      className="font-medium text-foreground"
-                      data-testid="author-name"
-                    >
+                  <div data-testid="author-info">
+                    <p className="font-medium text-foreground">
                       {frontmatter.author?.name}
                     </p>
-                    <p className="text-xs">{frontmatter.author?.role}</p>
+                    <p className="text-xs" data-testid="author-role">
+                      {frontmatter.author?.role}
+                    </p>
                   </div>
                 </div>
 
