@@ -6,10 +6,25 @@ import {
   ProductsArraySchema,
   MentorsArraySchema,
   MenteesArraySchema,
+  extendedProductSchema,
 } from "./schemas";
-import type { Author, Product, Mentor, Mentee } from "./types";
+import type { Author, Product, Mentor, Mentee, ExtendedProduct } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
+const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
+
+/**
+ * Validates a slug to prevent path traversal attacks.
+ * Only allows lowercase alphanumeric characters and hyphens.
+ *
+ * @param slug - The slug to validate
+ * @returns True if the slug is valid, false otherwise
+ */
+export function isValidSlug(slug: string): boolean {
+  // Case-sensitive: only lowercase alphanumeric and hyphens allowed
+  // Must match the schema validation in schemas.ts
+  return /^[a-z0-9-]+$/.test(slug);
+}
 
 /**
  * Reads and validates authors from JSON file
@@ -88,5 +103,118 @@ export function getAllMentees(): Mentee[] {
   } catch (error) {
     reportError("Failed to read mentees.json", error);
     return [];
+  }
+}
+
+/**
+ * Retrieves all extended products from the folder-based content structure.
+ * Each product folder should contain an index.json file.
+ *
+ * @returns Array of validated ExtendedProduct objects
+ */
+export function getAllExtendedProducts(): ExtendedProduct[] {
+  try {
+    if (!fs.existsSync(PRODUCTS_DIR)) {
+      return [];
+    }
+
+    const productFolders = fs.readdirSync(PRODUCTS_DIR, {
+      withFileTypes: true,
+    });
+    const products: ExtendedProduct[] = [];
+
+    for (const folder of productFolders) {
+      if (!folder.isDirectory()) continue;
+
+      // Validate folder name is a valid slug to prevent issues
+      if (!isValidSlug(folder.name)) {
+        reportError(
+          `Invalid product folder slug: ${folder.name}`,
+          new Error("Invalid slug")
+        );
+        continue;
+      }
+
+      const indexPath = path.join(PRODUCTS_DIR, folder.name, "index.json");
+      if (!fs.existsSync(indexPath)) continue;
+
+      try {
+        const content = fs.readFileSync(indexPath, "utf-8");
+        const data: unknown = JSON.parse(content);
+        const validated = extendedProductSchema.parse(data);
+
+        // Ensure folder name matches the slug in JSON to prevent broken links
+        if (validated.slug !== folder.name) {
+          reportError(
+            `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`,
+            new Error(
+              `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`
+            )
+          );
+          continue;
+        }
+
+        products.push(validated);
+      } catch (err) {
+        reportError(`Failed to load product: ${folder.name}`, err);
+      }
+    }
+
+    return products;
+  } catch (err) {
+    reportError("Failed to read products directory", err);
+    return [];
+  }
+}
+
+/**
+ * Retrieves a single extended product by its slug.
+ *
+ * @param slug - The product slug (folder name)
+ * @returns The validated ExtendedProduct or null if not found
+ */
+export function getExtendedProductBySlug(slug: string): ExtendedProduct | null {
+  // Validate slug to prevent path traversal attacks
+  if (!isValidSlug(slug)) {
+    return null;
+  }
+
+  try {
+    const indexPath = path.join(PRODUCTS_DIR, slug, "index.json");
+    if (!fs.existsSync(indexPath)) {
+      return null;
+    }
+
+    const content = fs.readFileSync(indexPath, "utf-8");
+    const data: unknown = JSON.parse(content);
+    return extendedProductSchema.parse(data);
+  } catch (err) {
+    reportError(`Failed to load product: ${slug}`, err);
+    return null;
+  }
+}
+
+/**
+ * Retrieves the changelog MDX content for a product.
+ *
+ * @param slug - The product slug (folder name)
+ * @returns The raw MDX content or null if not found
+ */
+export function getProductChangelog(slug: string): string | null {
+  // Validate slug to prevent path traversal attacks
+  if (!isValidSlug(slug)) {
+    return null;
+  }
+
+  try {
+    const changelogPath = path.join(PRODUCTS_DIR, slug, "changelog.mdx");
+    if (!fs.existsSync(changelogPath)) {
+      return null;
+    }
+
+    return fs.readFileSync(changelogPath, "utf-8");
+  } catch (err) {
+    reportError(`Failed to load changelog for: ${slug}`, err);
+    return null;
   }
 }

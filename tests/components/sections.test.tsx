@@ -3,7 +3,7 @@ import { Blog } from "@/components/blog";
 import { Products } from "@/components/products";
 import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
-import type { BlogPost, Product, Mentor, Mentee } from "@/lib/types";
+import type { BlogPost, ExtendedProduct, Mentor, Mentee } from "@/lib/types";
 
 jest.mock("next/image", () => ({
   __esModule: true,
@@ -101,16 +101,23 @@ describe("Sections", () => {
   });
 
   describe("Products", () => {
-    const mockProducts: Product[] = [
+    const mockProducts: ExtendedProduct[] = [
       {
         id: "1",
         name: "Product 1",
+        slug: "product-1",
+        tagline: "Tagline 1",
         description: "Desc 1",
         longDescription: "Long Desc 1",
         features: ["F1"],
-        image: "I1",
-        githubUrl: "http://github.com",
-        demoUrl: "http://demo.com",
+        techStack: ["Tech 1"],
+        links: {
+          github: "http://github.com",
+          demo: "http://demo.com",
+        },
+        screenshots: [],
+        faq: [],
+        testimonials: [],
       },
     ];
 
@@ -124,7 +131,7 @@ describe("Sections", () => {
     it("renders empty state", () => {
       render(<Products products={[]} />);
       expect(
-        screen.getByText("No product available yet. Check back soon!")
+        screen.getByText("No products available yet. Check back soon!")
       ).toBeInTheDocument();
     });
   });

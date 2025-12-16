@@ -40,6 +40,17 @@ export interface Product {
 }
 
 /**
+ * Re-export schema-inferred types for extended product data.
+ * These are the canonical types - use these throughout the codebase.
+ */
+export type {
+  ExtendedProduct,
+  FaqItem,
+  Testimonial,
+  ProductLinks,
+} from "./schemas";
+
+/**
  * Captures mentor profile information.
  */
 export interface Mentor {

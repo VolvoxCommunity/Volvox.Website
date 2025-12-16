@@ -1,0 +1,55 @@
+{
+  "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
+  "name": "Sobriety Waypoint",
+  "slug": "sobriety-waypoint",
+  "tagline": "Track the journey, not just the days.",
+  "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
+  "longDescription": "Sobriety Waypoint transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
+  "features": [
+    "Secure sponsor-sponsee pairing with invite code system",
+    "Sobriety timeline with transparent relapse tracking",
+    "Task management with sponsor assignment and sponsee completion notes",
+    "Visual journey timeline displaying milestones, tasks, and step progress",
+    "Accountability loop supporting effective sponsorship",
+    "Cross-platform support (iOS, Android, Web)"
+  ],
+  "techStack": ["React Native", "Expo", "iOS", "Android", "Web"],
+  "links": {
+    "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
+    "demo": "https://sobrietywaypoint.com",
+    "appStore": "https://apps.apple.com/us/app/sobriety-waypoint/id6755614815",
+    "playStore": "https://play.google.com/apps/internaltest/4701660329596082968"
+  },
+  "screenshots": ["hero.png"],
+  "faq": [
+    {
+      "question": "Is Sobriety Waypoint free to use?",
+      "answer": "Completely free. No ads, no premium tiers, no 'unlock your third milestone for $4.99.' We believe recovery tools should be accessible to everyone—your sobriety journey has enough obstacles without a paywall."
+    },
+    {
+      "question": "How do I connect with my sponsor?",
+      "answer": "Your sponsor generates a unique 8-character invite code from their profile. Enter it in your app, and you're connected. It's like a friend code, but for accountability instead of Mario Kart."
+    },
+    {
+      "question": "Is my data private?",
+      "answer": "Your sobriety data and personal notes are only visible to you and your connected sponsor. We use bank-level encryption and never share your information with third parties. What happens in your recovery stays in your recovery."
+    },
+    {
+      "question": "Can I be both a sponsor and a sponsee?",
+      "answer": "Absolutely. No role restrictions here—you can guide others while receiving guidance yourself. Just like real 12-step programs, except the app won't ask you to make coffee."
+    },
+    {
+      "question": "What happens if I relapse?",
+      "answer": "Recovery isn't a straight line. You can honestly document relapses, which resets your counter but preserves your entire journey history. No shame, no judgment—just transparent tracking, because real recovery requires real honesty."
+    },
+    {
+      "question": "What 12-step programs does the app support?",
+      "answer": "All of them. AA, NA, CA, OA, GA—if it has 12 steps and accountability partners, we've got you covered. The features work universally because recovery principles are universal."
+    },
+    {
+      "question": "What platforms is Sobriety Waypoint available on?",
+      "answer": "iOS, Android, and Web. Your data syncs across all platforms, so you can check in whether you're on your phone, tablet, or pretending to work at your computer."
+    }
+  ],
+  "testimonials": []
+}

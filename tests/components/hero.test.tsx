@@ -10,12 +10,17 @@ describe("Hero", () => {
     expect(screen.getByText("Volvox")).toBeInTheDocument();
   });
 
-  it("calls onNavigate when buttons clicked", () => {
+  it("calls onNavigate with 'products' when Explore Products is clicked", () => {
     const onNavigate = jest.fn();
     render(<Hero onNavigate={onNavigate} />);
-
-    fireEvent.click(screen.getByText("Explore Products"));
+    const button = screen.getByRole("button", { name: /Explore Products/i });
+    fireEvent.click(button);
     expect(onNavigate).toHaveBeenCalledWith("products");
+  });
+
+  it("calls onNavigate when Join as Mentee clicked", () => {
+    const onNavigate = jest.fn();
+    render(<Hero onNavigate={onNavigate} />);
 
     fireEvent.click(screen.getByText("Join as Mentee"));
     expect(onNavigate).toHaveBeenCalledWith("mentorship");
