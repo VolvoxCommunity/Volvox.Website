@@ -151,6 +151,7 @@ describe("CookieConsentProvider", () => {
       fireEvent.click(screen.getByText("Accept All"));
     });
 
+    // Verify localStorage persistence
     expect(mockSetItem).toHaveBeenCalled();
     const calls = mockSetItem.mock.calls as [string, string][];
     const savedConsent = JSON.parse(calls[0][1]) as Record<string, unknown>;
@@ -158,6 +159,12 @@ describe("CookieConsentProvider", () => {
     expect(savedConsent.analytics).toBe(true);
     expect(savedConsent.advertising).toBe(true);
     expect(savedConsent.performance).toBe(true);
+
+    // Verify UI state updates
+    expect(screen.getByTestId("analytics")).toHaveTextContent("true");
+    expect(screen.getByTestId("advertising")).toHaveTextContent("true");
+    expect(screen.getByTestId("performance")).toHaveTextContent("true");
+    expect(screen.getByTestId("show-banner")).toHaveTextContent("false");
   });
 
   it("declineAll disables non-essential cookies", () => {
@@ -171,6 +178,7 @@ describe("CookieConsentProvider", () => {
       fireEvent.click(screen.getByText("Decline All"));
     });
 
+    // Verify localStorage persistence
     expect(mockSetItem).toHaveBeenCalled();
     const calls = mockSetItem.mock.calls as [string, string][];
     const savedConsent = JSON.parse(calls[0][1]) as Record<string, unknown>;
@@ -179,6 +187,12 @@ describe("CookieConsentProvider", () => {
     expect(savedConsent.analytics).toBe(false);
     expect(savedConsent.advertising).toBe(false);
     expect(savedConsent.performance).toBe(false);
+
+    // Verify UI state updates
+    expect(screen.getByTestId("analytics")).toHaveTextContent("false");
+    expect(screen.getByTestId("advertising")).toHaveTextContent("false");
+    expect(screen.getByTestId("performance")).toHaveTextContent("false");
+    expect(screen.getByTestId("show-banner")).toHaveTextContent("false");
   });
 
   it("updateConsent updates specific preferences", () => {
@@ -192,11 +206,16 @@ describe("CookieConsentProvider", () => {
       fireEvent.click(screen.getByText("Enable Analytics"));
     });
 
+    // Verify localStorage persistence
     expect(mockSetItem).toHaveBeenCalled();
     const calls = mockSetItem.mock.calls as [string, string][];
     const savedConsent = JSON.parse(calls[0][1]) as Record<string, unknown>;
     expect(savedConsent.analytics).toBe(true);
     expect(savedConsent.hasConsented).toBe(true);
+
+    // Verify UI state updates
+    expect(screen.getByTestId("analytics")).toHaveTextContent("true");
+    expect(screen.getByTestId("has-consented")).toHaveTextContent("true");
   });
 
   it("resetConsent removes consent from localStorage", () => {

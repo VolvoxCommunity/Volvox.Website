@@ -363,7 +363,7 @@ describe("Sheet Components", () => {
         <Sheet defaultOpen>
           <SheetContent>
             <SheetTitle>Title</SheetTitle>
-            <SheetDescription id="sheet-desc">
+            <SheetDescription data-testid="sheet-desc">
               This is a sheet description
             </SheetDescription>
           </SheetContent>
@@ -371,8 +371,12 @@ describe("Sheet Components", () => {
       );
 
       const dialog = screen.getByRole("dialog");
+      const description = screen.getByTestId("sheet-desc");
+
       // Radix UI automatically wires SheetDescription to aria-describedby
-      expect(dialog).toHaveAttribute("aria-describedby", "sheet-desc");
+      // using its own generated ID
+      expect(dialog).toHaveAttribute("aria-describedby");
+      expect(dialog.getAttribute("aria-describedby")).toBe(description.id);
     });
   });
 });
