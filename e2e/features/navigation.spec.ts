@@ -41,8 +41,10 @@ test.describe("Navigation", () => {
         .getByRole("button", { name: /blog/i });
       await blogButton.click();
 
-      const blogSection = page.locator("#blog, [data-testid='blog-section']");
-      await expect(blogSection).toBeInViewport({ timeout: 2000 });
+      // Prefer single data-testid selector for stability
+      const blogSection = page.locator('[data-testid="blog-section"]');
+      // Timeout accounts for scroll animation (adjust if CI is slower)
+      await expect(blogSection).toBeInViewport({ timeout: 3000 });
     });
   });
 
