@@ -125,15 +125,14 @@ test.describe("Performance", () => {
       await page.waitForSelector("html.light");
 
       const toggle = page.locator('[data-testid="theme-toggle"]');
+      await expect(toggle).toBeVisible();
 
-      if ((await toggle.count()) > 0) {
-        const start = Date.now();
-        await toggle.click();
-        await expect(page.locator("html")).toHaveClass(/dark/);
-        const responseTime = Date.now() - start;
+      const start = Date.now();
+      await toggle.click();
+      await expect(page.locator("html")).toHaveClass(/dark/);
+      const responseTime = Date.now() - start;
 
-        expect(responseTime).toBeLessThan(500);
-      }
+      expect(responseTime).toBeLessThan(500);
     });
   });
 });

@@ -27,12 +27,10 @@ test.describe("Navigation", () => {
       const desktopNav = page.locator('[data-testid="desktop-nav"]');
       const mobileButton = page.locator('[data-testid="mobile-menu-button"]');
 
-      if ((await desktopNav.count()) > 0) {
-        await expect(desktopNav).toBeVisible();
-      }
-      if ((await mobileButton.count()) > 0) {
-        await expect(mobileButton).not.toBeVisible();
-      }
+      // Desktop nav must be visible at this viewport
+      await expect(desktopNav).toBeVisible();
+      // Mobile menu button must not be visible at desktop viewport
+      await expect(mobileButton).not.toBeVisible();
     });
 
     test("nav links scroll to correct sections", async ({ page }) => {
@@ -54,42 +52,39 @@ test.describe("Navigation", () => {
     test("shows mobile menu button", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
-      if ((await menuButton.count()) > 0) {
-        await expect(menuButton).toBeVisible();
-      }
+      // Mobile menu button must be visible at mobile viewport
+      await expect(menuButton).toBeVisible();
     });
 
     test("mobile menu opens and closes", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
+      await expect(menuButton).toBeVisible();
 
-      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
-        await menuButton.click();
-        const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-        await expect(mobileMenu).toBeVisible();
+      await menuButton.click();
+      const mobileMenu = page.locator('[data-testid="mobile-menu"]');
+      await expect(mobileMenu).toBeVisible();
 
-        // Close menu by pressing Escape
-        await page.keyboard.press("Escape");
-        await expect(mobileMenu).not.toBeVisible();
-      }
+      // Close menu by pressing Escape
+      await page.keyboard.press("Escape");
+      await expect(mobileMenu).not.toBeVisible();
     });
 
     test("mobile menu links navigate correctly", async ({ page }) => {
       await page.goto("/");
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
+      await expect(menuButton).toBeVisible();
 
-      if ((await menuButton.count()) > 0 && (await menuButton.isVisible())) {
-        await menuButton.click();
-        const mobileMenu = page.locator('[data-testid="mobile-menu"]');
-        const productsLink = mobileMenu.getByRole("link", {
-          name: /products/i,
-        });
+      await menuButton.click();
+      const mobileMenu = page.locator('[data-testid="mobile-menu"]');
+      await expect(mobileMenu).toBeVisible();
 
-        if ((await productsLink.count()) > 0) {
-          await productsLink.click();
-          await expect(page).toHaveURL(/products/);
-        }
-      }
+      const productsLink = mobileMenu.getByRole("link", {
+        name: /products/i,
+      });
+      await expect(productsLink).toBeVisible();
+      await productsLink.click();
+      await expect(page).toHaveURL(/products/);
     });
   });
 });

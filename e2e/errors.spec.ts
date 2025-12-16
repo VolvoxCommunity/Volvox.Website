@@ -108,9 +108,8 @@ test.describe("Error States", () => {
       await page.goto("/");
 
       const toggle = page.locator('[data-testid="theme-toggle"]');
-      if ((await toggle.count()) > 0) {
-        await toggle.click();
-      }
+      await expect(toggle).toBeVisible();
+      await toggle.click();
 
       expect(errors).toEqual([]);
     });
