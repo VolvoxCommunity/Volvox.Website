@@ -31,7 +31,8 @@ export async function dismissCookieBanner(page: Page): Promise<void> {
     });
     if ((await acceptButton.count()) > 0) {
       await acceptButton.click();
-      await page.waitForTimeout(300);
+      // Wait for the banner to be hidden after clicking accept
+      await cookieBanner.waitFor({ state: "hidden", timeout: 5000 });
     }
   }
 }
