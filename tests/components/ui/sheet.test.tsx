@@ -78,6 +78,27 @@ describe("Sheet Components", () => {
       );
       expect(screen.getByTestId("close-btn")).toBeInTheDocument();
     });
+
+    it("closes sheet when clicked", () => {
+      render(
+        <Sheet defaultOpen>
+          <SheetContent>
+            <SheetTitle>Title</SheetTitle>
+            <SheetClose data-testid="close-btn">Close</SheetClose>
+            <div data-testid="sheet-body">Sheet Body Content</div>
+          </SheetContent>
+        </Sheet>
+      );
+
+      // Verify sheet is initially open
+      expect(screen.getByTestId("sheet-body")).toBeInTheDocument();
+
+      // Click the close button
+      fireEvent.click(screen.getByTestId("close-btn"));
+
+      // Verify sheet content is removed
+      expect(screen.queryByTestId("sheet-body")).not.toBeInTheDocument();
+    });
   });
 
   describe("SheetContent", () => {
