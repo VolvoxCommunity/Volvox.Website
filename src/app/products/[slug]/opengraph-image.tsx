@@ -1,4 +1,8 @@
-import { generateProductSocialImage, getLogoData } from "@/lib/social-images";
+import {
+  generateProductSocialImage,
+  getLogoData,
+  getProductScreenshotData,
+} from "@/lib/social-images";
 import { getExtendedProductBySlug } from "@/lib/content";
 
 export const runtime = "nodejs";
@@ -8,7 +12,8 @@ export const alt = "Volvox Product";
 
 /**
  * Generates a dynamic OpenGraph image for each product page.
- * Displays product name, tagline, tech stack, and Volvox branding.
+ * Features product name, tagline, tech stack, hero screenshot, and Volvox branding
+ * with a gradient background and enhanced visual design.
  */
 export default async function Image({
   params,
@@ -19,11 +24,19 @@ export default async function Image({
   const product = getExtendedProductBySlug(slug);
   const logoData = getLogoData();
 
+  // Get the first screenshot (hero) if available
+  const screenshotFilename = product?.screenshots?.[0];
+  const screenshotData =
+    screenshotFilename && product
+      ? getProductScreenshotData(slug, screenshotFilename)
+      : null;
+
   const productData = product
     ? {
         name: product.name,
         tagline: product.tagline,
         techStack: product.techStack,
+        screenshotData,
       }
     : null;
 

@@ -40,6 +40,10 @@ export async function generateMetadata({
     };
   }
 
+  // Note: openGraph.images and twitter.images are NOT specified here.
+  // Next.js auto-discovers the opengraph-image.tsx file in this directory
+  // and generates the correct URL. Explicitly setting relative URLs would
+  // resolve them against metadataBase (production URL), breaking local dev.
   return {
     title: product.name,
     description: product.tagline,
@@ -47,25 +51,11 @@ export async function generateMetadata({
       title: product.name,
       description: product.tagline,
       type: "website",
-      images: [
-        {
-          url: `/products/${slug}/opengraph-image`,
-          width: 1200,
-          height: 630,
-          alt: `${product.name} - ${product.tagline}`,
-        },
-      ],
     },
     twitter: {
       card: "summary_large_image",
       title: product.name,
       description: product.tagline,
-      images: [
-        {
-          url: `/products/${slug}/opengraph-image`,
-          alt: `${product.name} - ${product.tagline}`,
-        },
-      ],
     },
   };
 }

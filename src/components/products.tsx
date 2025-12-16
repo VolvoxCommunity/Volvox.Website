@@ -45,16 +45,13 @@ function ProductCard({ product, index }: ProductCardProps) {
             transition={{ duration: 0.3 }}
           >
             {imagePath ? (
-              <>
-                <Image
-                  src={imagePath}
-                  alt={product.name}
-                  width={600}
-                  height={400}
-                  className="w-full h-auto object-contain"
-                />
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
-              </>
+              <Image
+                src={imagePath}
+                alt={product.name}
+                width={600}
+                height={400}
+                className="w-full h-auto object-contain"
+              />
             ) : (
               <div className="aspect-video w-full relative">
                 <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_120%,rgba(120,119,198,0.1),rgba(255,255,255,0))]" />
@@ -67,9 +64,10 @@ function ProductCard({ product, index }: ProductCardProps) {
                     {product.name.charAt(0)}
                   </motion.div>
                 </div>
-                <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
               </div>
             )}
+            {/* Gradient accent line */}
+            <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
           </motion.div>
 
           <div className="flex flex-col">

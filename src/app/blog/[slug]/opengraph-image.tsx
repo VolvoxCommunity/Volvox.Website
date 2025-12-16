@@ -1,4 +1,8 @@
-import { generateBlogPostSocialImage, getLogoData } from "@/lib/social-images";
+import {
+  generateBlogPostSocialImage,
+  getLogoData,
+  getBlogBannerData,
+} from "@/lib/social-images";
 import { getPostBySlug } from "@/lib/blog";
 
 // Use Node.js runtime to access file system
@@ -9,8 +13,8 @@ export const alt = "Volvox Blog Post";
 
 /**
  * Generates a dynamic OpenGraph image for each blog post.
- * Displays post title, author name, date, and Volvox branding.
- * Falls back to generic branding if post data cannot be loaded.
+ * Features post title, author name, date, optional banner image, and Volvox branding
+ * with a gradient background and enhanced visual design.
  *
  * @param params - Route parameters containing the blog post slug
  * @returns ImageResponse with post-specific social preview image
@@ -24,12 +28,18 @@ export default async function Image({
   const post = await getPostBySlug(slug).catch(() => null);
   const logoData = getLogoData();
 
+  // Get banner data if the post has a banner
+  const bannerData = post?.frontmatter.banner
+    ? getBlogBannerData(post.frontmatter.banner)
+    : null;
+
   const frontmatter = post
     ? {
         ...post.frontmatter,
         author: post.frontmatter.author
           ? { name: post.frontmatter.author.name }
           : undefined,
+        bannerData,
       }
     : null;
 

@@ -51,6 +51,7 @@ export function ProductScreenshots({
             if (!imagePath) return null;
             return (
               <motion.button
+                type="button"
                 key={screenshot}
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
