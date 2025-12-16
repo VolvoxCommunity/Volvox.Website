@@ -46,46 +46,41 @@ export function ProductHero({ product }: ProductHeroProps) {
               {product.tagline}
             </p>
 
-            {/* App Store Badges */}
-            {(product.links.appStore || product.links.playStore) && (
-              <div className="flex flex-wrap gap-3 mb-6">
-                {product.links.appStore && (
-                  <a
-                    href={product.links.appStore}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Download ${product.name} on the App Store`}
-                    className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
-                  >
-                    <AppleLogo weight="fill" className="h-6 w-6" />
-                    <div className="text-left">
-                      <div className="text-xs leading-none">
-                        Download on the
-                      </div>
-                      <div className="text-sm font-semibold">App Store</div>
-                    </div>
-                  </a>
-                )}
-                {product.links.playStore && (
-                  <a
-                    href={product.links.playStore}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={`Get ${product.name} on Google Play`}
-                    className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
-                  >
-                    <GooglePlayLogo weight="fill" className="h-6 w-6" />
-                    <div className="text-left">
-                      <div className="text-xs leading-none">Get it on</div>
-                      <div className="text-sm font-semibold">Google Play</div>
-                    </div>
-                  </a>
-                )}
-              </div>
-            )}
+            {/* Buttons Container */}
+            <div className="grid grid-cols-2 gap-3 max-w-md">
+              {/* App Store Badges */}
+              {product.links.appStore && (
+                <a
+                  href={product.links.appStore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Download ${product.name} on the App Store`}
+                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                >
+                  <AppleLogo weight="fill" className="h-6 w-6" />
+                  <div className="text-left">
+                    <div className="text-xs leading-none">Download on the</div>
+                    <div className="text-sm font-semibold">App Store</div>
+                  </div>
+                </a>
+              )}
+              {product.links.playStore && (
+                <a
+                  href={product.links.playStore}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Get ${product.name} on Google Play`}
+                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                >
+                  <GooglePlayLogo weight="fill" className="h-6 w-6" />
+                  <div className="text-left">
+                    <div className="text-xs leading-none">Get it on</div>
+                    <div className="text-sm font-semibold">Google Play</div>
+                  </div>
+                </a>
+              )}
 
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-3">
+              {/* Action Buttons */}
               {product.links.demo && (
                 <Button
                   variant="accent"
