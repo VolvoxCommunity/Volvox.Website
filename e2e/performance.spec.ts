@@ -50,13 +50,13 @@ test.describe("Performance", () => {
 
   test.describe("Critical Resources", () => {
     test("fonts load correctly", async ({ page }) => {
-      const fontRequests: string[] = [];
+      const fontRequests: Array<{ url: string; status: number }> = [];
       page.on("response", (res) => {
         if (
           res.url().includes("fonts") ||
           res.headers()["content-type"]?.includes("font")
         ) {
-          fontRequests.push(res.url());
+          fontRequests.push({ url: res.url(), status: res.status() });
         }
       });
 
@@ -64,6 +64,11 @@ test.describe("Performance", () => {
       await page.waitForLoadState("networkidle");
 
       expect(fontRequests.length).toBeGreaterThan(0);
+      const failedFonts = fontRequests.filter((req) => req.status >= 400);
+      expect(
+        failedFonts,
+        `Failed font requests: ${failedFonts.map((f) => f.url).join(", ")}`
+      ).toEqual([]);
     });
 
     test("critical images load", async ({ page }) => {
