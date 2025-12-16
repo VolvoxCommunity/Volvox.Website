@@ -157,6 +157,7 @@ export function ProductHero({ product }: ProductHeroProps) {
           <DialogContent
             className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg"
             showCloseButton={false}
+            aria-describedby={undefined}
           >
             <DialogTitle className="sr-only">
               {product.name} - Expanded View
