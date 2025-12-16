@@ -9,6 +9,13 @@ export const DATE_FORMAT_REGEX = /\w{3}\s+\d{1,2},\s+\d{4}/;
  * Wait for finite CSS animations to complete on the page.
  * Ignores infinite animations (like background canvas animations).
  * Has a built-in timeout to prevent hanging on complex pages.
+ *
+ * @remarks
+ * If the timeout is reached before animations complete, the function
+ * returns silently rather than throwing. This is intentional because:
+ * 1. Infinite animations (like the animated background) never complete
+ * 2. Visual regression tests use diff thresholds for animated areas
+ * 3. Tests should not fail due to animation timing variance
  */
 export async function waitForAnimations(
   page: Page,
@@ -36,9 +43,18 @@ export async function waitForAnimations(
       },
       { timeout }
     );
-  } catch {
-    // If timeout is reached, continue anyway - infinite animations may be running
-    // This is acceptable for visual tests as we use diff thresholds for animated areas
+  } catch (error: unknown) {
+    // Timeout is expected when infinite animations are present.
+    // Only log for debugging if it's an unexpected error type.
+    if (
+      error instanceof Error &&
+      !error.message.includes("Timeout") &&
+      !error.message.includes("waiting for function")
+    ) {
+       
+      console.warn("waitForAnimations: Unexpected error:", error.message);
+    }
+    // Continue regardless - tests use visual diff thresholds for animated areas
   }
 }
 
