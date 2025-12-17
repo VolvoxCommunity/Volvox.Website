@@ -1,27 +1,41 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+/* eslint-disable @next/next/no-img-element */
+/* eslint-disable jsx-a11y/alt-text */
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ImageZoom } from "@/components/mdx/image-zoom";
+import type { ReactNode } from "react";
+
+interface ImageMockProps {
+  [key: string]: unknown;
+}
+
+interface DialogMockProps {
+  open?: boolean;
+  children: ReactNode;
+}
+
+interface DialogContentMockProps {
+  children: ReactNode;
+}
 
 // Mock next/image
 jest.mock("next/image", () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: (props: ImageMockProps) => <img {...props} />,
 }));
 
 // Mock dialog component since Radix UI can be complex in tests
 jest.mock("@/components/ui/dialog", () => ({
-  Dialog: ({ open, children }: any) => (open ? <div data-testid="dialog">{children}</div> : null),
-  DialogContent: ({ children }: any) => <div data-testid="dialog-content">{children}</div>,
+  Dialog: ({ open, children }: DialogMockProps) =>
+    open ? <div data-testid="dialog">{children}</div> : null,
+  DialogContent: ({ children }: DialogContentMockProps) => (
+    <div data-testid="dialog-content">{children}</div>
+  ),
 }));
 
 describe("ImageZoom", () => {
   it("renders next/image when width and height are provided", () => {
     render(
-      <ImageZoom
-        src="/test.jpg"
-        alt="Test Image"
-        width={100}
-        height={100}
-      />
+      <ImageZoom src="/test.jpg" alt="Test Image" width={100} height={100} />
     );
     // Should render the button and image inside
     const img = screen.getByRole("img");
@@ -38,13 +52,7 @@ describe("ImageZoom", () => {
   });
 
   it("renders caption if provided", () => {
-    render(
-      <ImageZoom
-        src="/test.jpg"
-        alt="Alt Text"
-        caption="My Caption"
-      />
-    );
+    render(<ImageZoom src="/test.jpg" alt="Alt Text" caption="My Caption" />);
     expect(screen.getByText("My Caption")).toBeInTheDocument();
   });
 
@@ -65,12 +73,7 @@ describe("ImageZoom", () => {
 
   it("renders correct image in dialog (with dimensions)", () => {
     render(
-      <ImageZoom
-        src="/test.jpg"
-        alt="Test Image"
-        width={200}
-        height={200}
-      />
+      <ImageZoom src="/test.jpg" alt="Test Image" width={200} height={200} />
     );
 
     // Open dialog

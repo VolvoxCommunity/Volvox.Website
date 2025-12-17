@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/require-await */
+/* eslint-disable @typescript-eslint/unbound-method */
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import { CodeBlock } from "@/components/mdx/code-block";
 import { reportError } from "@/lib/logger";
@@ -27,7 +29,7 @@ describe("CodeBlock", () => {
   it("renders children correctly", () => {
     render(
       <CodeBlock className="language-js">
-        <code>console.log('hello')</code>
+        <code>{"console.log('hello')"}</code>
       </CodeBlock>
     );
     expect(screen.getByText("console.log('hello')")).toBeInTheDocument();
@@ -46,7 +48,7 @@ describe("CodeBlock", () => {
   it("renders language even without filename", () => {
     render(
       <CodeBlock className="language-python">
-        <code>print('hello')</code>
+        <code>{"print('hello')"}</code>
       </CodeBlock>
     );
     expect(screen.getByText("python")).toBeInTheDocument();
@@ -94,14 +96,25 @@ describe("CodeBlock", () => {
       fireEvent.click(copyButton);
     });
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("raw string content");
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+      "raw string content"
+    );
   });
 
   it("reports error when no text content found", async () => {
-    // Pass a non-string child structure that fails extraction logic
+    // This tests the error path when extractTextContent cannot find text.
+    // The CodeBlock component expects either:
+    // 1. A string child directly, or
+    // 2. A <code> element with textContent
+    // By passing a nested <div><span>...</span></div> structure without a <code>
+    // wrapper, the extraction logic fails to find valid text content,
+    // triggering the error handling path we want to test.
     render(
       <CodeBlock>
-        <div><span>Complex</span><span>Child</span></div>
+        <div>
+          <span>Complex</span>
+          <span>Child</span>
+        </div>
       </CodeBlock>
     );
 

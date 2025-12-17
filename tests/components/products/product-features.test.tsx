@@ -1,10 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import { ProductFeatures } from "@/components/products/product-features";
+import type { ReactNode, HTMLAttributes } from "react";
+
+interface MotionLiProps extends HTMLAttributes<HTMLLIElement> {
+  children: ReactNode;
+}
 
 // Mock framer-motion to avoid animation issues in tests
 jest.mock("framer-motion", () => ({
   motion: {
-    li: ({ children, className, ...props }: any) => (
+    li: ({ children, className, ...props }: MotionLiProps) => (
       <li className={className} data-testid="motion-li" {...props}>
         {children}
       </li>
