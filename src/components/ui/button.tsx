@@ -39,6 +39,20 @@ const buttonVariants = cva(
   }
 );
 
+/**
+ * Interactive button component with various variants and sizes.
+ * Supports rendering as a child component via `asChild` prop.
+ *
+ * @param props - Button properties including variant, size, and asChild
+ * @returns Button element or the child element enhanced with button styles
+ *
+ * @example
+ * ```tsx
+ * <Button variant="default" size="lg" onClick={handleClick}>
+ *   Click Me
+ * </Button>
+ * ```
+ */
 function Button({
   className,
   variant,
