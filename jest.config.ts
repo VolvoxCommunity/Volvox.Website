@@ -33,6 +33,14 @@ const config: Config = {
     "!src/**/index.ts",
     "!src/instrumentation*.ts",
   ],
+  coverageThreshold: {
+    global: {
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async

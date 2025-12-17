@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v4.
 
-**Package Manager**: This project uses pnpm (pinned to v10.25.0). The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
+**Package Manager**: This project uses pnpm (pinned to v10.26.0). The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
 
 **Tailwind CSS v4**: This project uses Tailwind CSS v4 with CSS-first configuration. Theme customization is done via the `@theme` directive in `src/app/globals.css` instead of a JavaScript config file. Lightning CSS is used automatically by Next.js for faster builds.
 
@@ -52,34 +52,33 @@ pnpm format:check
 
 ## Code Quality Requirements
 
-**MANDATORY**: After changing or editing any files, you MUST follow this workflow:
+**Pre-commit Hooks (Husky)**: This project uses Husky pre-commit hooks that automatically run all validation checks before each commit. The hooks run:
 
-1. **Formatting**: Run `pnpm format` to ensure consistent code formatting
-2. **Type Checking**: Run `pnpm typecheck` to verify TypeScript type safety
-3. **Linting**: Run `pnpm lint` to check for code quality issues (includes type-aware linting)
-4. **Testing**: Run `pnpm test` to ensure all unit tests pass
-5. **Build**: Run `pnpm build` to verify production build passes
-6. **Commit and Push**: After all checks pass, commit and push all changes
+1. **lint-staged**: Formats and lints only staged files (fast)
+2. **typecheck**: Full TypeScript type checking
+3. **test**: All unit tests
+4. **build**: Production build verification
 
-These checks are not optional. All validation steps must pass before committing. If any check fails, fix the issues and re-run all checks before proceeding.
+If any check fails, the commit will be blocked. Fix the issues and try again.
 
-**Complete Workflow:**
+**Manual Workflow** (if needed):
 
 ```bash
-# Step 1-5: Run all validation checks
+# Run all validation checks manually
 pnpm format && pnpm typecheck && pnpm lint && pnpm test && pnpm build
 
-# Step 6: If all checks pass, commit and push
+# Then commit
 git add .
 git commit -m "your commit message"
 git push
 ```
 
-**Important:**
+**Bypassing Hooks** (use sparingly):
 
-- Do NOT commit or push changes - allow the user to do this manually
-- Do NOT skip the validation checks to save time
-- All validation checks must pass before changes are considered complete
+```bash
+# Skip pre-commit hooks for WIP commits (not recommended for final commits)
+git commit --no-verify -m "WIP: work in progress"
+```
 
 **Why this matters:**
 
@@ -89,7 +88,6 @@ git push
 - Catches potential bugs and issues early (floating promises, unsafe any usage, etc.)
 - Verifies all unit tests pass before changes are committed
 - Ensures CI/CD pipeline will pass
-- Keeps remote repository in sync with local changes
 
 ## Architecture
 
@@ -149,13 +147,34 @@ git push
 ```
 /content
   /blog/*.mdx - Blog posts with frontmatter
+  /products/[slug]/ - Product-specific content (changelog.mdx, index.json)
   authors.json - Author profiles
   products.json - Product information
   mentors.json - Mentor profiles
   mentees.json - Mentee profiles
 
 /e2e
-  blog-view-tracking.spec.ts - Playwright E2E test for blog view tracking
+  /fixtures/base.fixture.ts - Extended Playwright fixtures with error tracking
+  /pages/ - Page-specific E2E tests
+    homepage.spec.ts - Homepage tests
+    blog-list.spec.ts - Blog listing tests
+    blog-post.spec.ts - Blog post detail tests
+    products-list.spec.ts - Products listing tests
+    product-detail.spec.ts - Product detail tests
+    privacy.spec.ts - Privacy policy tests
+    terms.spec.ts - Terms of service tests
+  /features/ - Feature-specific E2E tests
+    navigation.spec.ts - Navigation and routing tests
+    theme.spec.ts - Theme toggle and persistence tests
+    cookie-consent.spec.ts - Cookie consent banner tests
+    footer.spec.ts - Footer tests
+  /utils/test-helpers.ts - Shared test utilities
+  accessibility.spec.ts - Automated accessibility (axe-core) tests
+  seo.spec.ts - SEO meta tags and structured data tests
+  responsive.spec.ts - Mobile/tablet/desktop viewport tests
+  visual.spec.ts - Visual regression screenshot tests
+  performance.spec.ts - Page load and interaction performance tests
+  errors.spec.ts - Error handling and 404 tests
 
 /tests
   /app - API route and app-level tests
@@ -167,13 +186,17 @@ git push
 /src
   /app
     /blog/[slug] - Dynamic blog post pages
+    /products/[slug] - Dynamic product detail pages
+    /products - Products listing page
     /privacy - Privacy policy page
+    /terms - Terms of service page
     layout.tsx - Root layout
     page.tsx - Homepage server component
     global-error.tsx - Global error boundary
   /components
     /blog - Blog-specific components
     /mdx - Custom MDX components
+    /products - Product-specific components
     /ui - Reusable UI primitives
     /providers - React context providers
   /hooks - Custom React hooks
@@ -263,6 +286,9 @@ Located in `src/lib/`:
   - `class-variance-authority` for component variants
   - `clsx` and `tailwind-merge` combined in `cn()` utility
   - `@radix-ui/colors` for color scales
+- **Testing**:
+  - `@axe-core/playwright` for automated accessibility testing in E2E tests
+  - `@playwright/test` for E2E testing framework
 
 ### Build Output
 
@@ -293,11 +319,71 @@ Located in `src/lib/`:
   - Run with: `pnpm test`
   - Watch mode: `pnpm test:watch`
   - Coverage: `pnpm test:coverage`
-- **E2E Tests**: Uses Playwright for end-to-end testing (located in `e2e/`)
-  - Configuration: `playwright.config.ts` (targets Chromium)
-  - Example: `blog-view-tracking.spec.ts` tests blog page interactions
-  - Run with: `pnpm exec playwright test`
-  - Interactive UI: `pnpm exec playwright test --ui`
+- **E2E Tests**: Comprehensive Playwright test suite (located in `e2e/`)
+  - **Configuration**: `playwright.config.ts`
+    - Multi-browser: Chromium, Firefox, Safari + mobile viewports (Pixel 5, iPhone 13)
+    - Dev server for local testing (faster), production build for CI (more accurate)
+    - Visual regression tests run on Chromium only to avoid multiple baselines
+    - Traces, screenshots, and videos on failure
+  - **Test Categories**:
+    - Page tests (`e2e/pages/`): Homepage, blog list, blog post, products, privacy, terms
+    - Feature tests (`e2e/features/`): Navigation, theme toggle, cookie consent, footer
+    - Accessibility tests: Automated axe-core scans with known violations excluded
+      - **Known Issue**: Footer has color contrast violations that are excluded from axe scans (tracked separately to fix)
+    - SEO tests: Meta tags, Open Graph images, structured data validation
+    - Responsive tests: Mobile, tablet, and desktop viewport testing
+    - Visual regression tests: Screenshot comparisons with configurable thresholds
+    - Performance tests: Page load times, no console errors, no failed requests
+    - Error tests: 404 handling, error boundaries
+  - **Test Utilities** (`e2e/utils/test-helpers.ts`):
+    - `DATE_FORMAT_REGEX`: Shared regex for date format matching
+    - `waitForAnimations(page)`: Wait for all animations to complete
+    - `dismissCookieBanner(page)`: Handle cookie consent banner
+    - `setInitialTheme(page, theme)`: Set theme via localStorage before page load
+  - **Custom Fixtures** (`e2e/fixtures/base.fixture.ts`):
+    - `consoleErrors`: Captures console errors during tests
+    - `failedRequests`: Tracks failed network requests
+    - `assertNoConsoleErrors()`: Assert no console errors occurred
+    - `assertNoFailedRequests()`: Assert no network requests failed
+  - **Run Commands**:
+    - `pnpm exec playwright test` - Run all E2E tests
+    - `pnpm exec playwright test --ui` - Interactive UI mode
+    - `pnpm exec playwright test --project=chromium` - Single browser
+    - `pnpm exec playwright test e2e/pages/` - Run specific test folder
+  - **CI Integration**: GitHub Actions workflow with 4-way sharding for parallel execution
+
+### Test Selectors (data-testid attributes)
+
+Components use `data-testid` attributes for reliable E2E test selectors:
+
+**Homepage sections:**
+
+- `hero-section` - Homepage hero section
+- `products-section` - Products showcase section
+- `blog-section` - Blog posts section
+- `mentorship-section` - Mentorship section
+- `about-section` - About section
+
+**Navigation & UI:**
+
+- `footer` - Site footer
+- `theme-toggle` - Theme toggle button
+- `mobile-menu-button` - Mobile navigation menu button
+- `cookie-consent-banner` - Cookie consent banner
+
+**Blog:**
+
+- `blog-header` - Blog post header
+- `post-date` - Blog post publication date
+- `author-info` - Blog post author info container (name and role)
+- `author-role` - Blog post author role
+- `blog-content` - Blog post MDX content
+
+**Products:**
+
+- `product-features` - Product features list
+
+When adding new components that need E2E testing, add appropriate `data-testid` attributes.
 
 ### Data Resilience
 

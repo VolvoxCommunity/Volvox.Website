@@ -53,7 +53,10 @@ export function Hero({ onNavigate }: HeroProps) {
   };
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4">
+    <section
+      className="relative min-h-screen flex items-center justify-center px-4"
+      data-testid="hero-section"
+    >
       <div className="container mx-auto max-w-6xl text-center py-32">
         <motion.div
           initial={{ opacity: 0, y: 20 }}

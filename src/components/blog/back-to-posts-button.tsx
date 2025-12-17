@@ -41,6 +41,7 @@ export function BackToPostsButton() {
             variant="outline"
             asChild
             className="shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background border-border/50"
+            data-testid="back-to-posts"
           >
             <Link href="/#blog" className="flex items-center gap-2">
               <ArrowLeft className="h-4 w-4" />
