@@ -7,6 +7,7 @@ import { GithubLogo, DiscordLogo, Moon, Sun } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
 import { motion } from "framer-motion";
+import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
 
 /**
  * Renders the blog post header with back-to-home navigation, branding, a theme toggle, and social links.
@@ -76,11 +77,7 @@ export function BlogPostHeader() {
                 asChild
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
               >
-                <a
-                  href="https://github.com/VolvoxCommunity"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
                   <GithubLogo weight="fill" className="h-5 w-5" />
                 </a>
               </Button>
@@ -93,11 +90,7 @@ export function BlogPostHeader() {
                 asChild
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
               >
-                <a
-                  href="https://discord.gg/8ahXACdamN"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
+                <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
                   <DiscordLogo weight="fill" className="h-5 w-5" />
                 </a>
               </Button>

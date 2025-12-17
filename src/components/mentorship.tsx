@@ -21,6 +21,7 @@ import {
 import { motion } from "framer-motion";
 import { Mentor, Mentee } from "@/lib/types";
 import confettiLib from "canvas-confetti";
+import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
 
 interface MentorshipProps {
   mentors: Mentor[];
@@ -328,7 +329,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
               >
                 <Button size="lg" asChild className="gap-2">
                   <a
-                    href="https://discord.gg/8ahXACdamN"
+                    href={DISCORD_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={handleDiscordClick}
@@ -344,7 +345,7 @@ export function Mentorship({ mentors, mentees }: MentorshipProps) {
               >
                 <Button size="lg" variant="outline" asChild className="gap-2">
                   <a
-                    href="https://github.com/VolvoxCommunity"
+                    href={GITHUB_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                   >

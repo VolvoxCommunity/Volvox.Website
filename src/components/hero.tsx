@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, GithubLogo, DiscordLogo } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
+import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
 
 interface HeroProps {
   onNavigate: (section: string) => void;
@@ -143,7 +144,7 @@ export function Hero({ onNavigate }: HeroProps) {
           className="flex gap-8 justify-center items-center"
         >
           <a
-            href="https://github.com/VolvoxCommunity"
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
@@ -156,7 +157,7 @@ export function Hero({ onNavigate }: HeroProps) {
           </a>
           <div className="h-4 w-px bg-border" />
           <a
-            href="https://discord.gg/8ahXACdamN"
+            href={DISCORD_URL}
             target="_blank"
             rel="noopener noreferrer"
             onClick={handleDiscordClick}

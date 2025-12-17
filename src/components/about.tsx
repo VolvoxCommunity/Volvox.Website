@@ -10,6 +10,7 @@ import {
 import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
+import { GITHUB_URL } from "@/lib/constants";
 
 /**
  * Renders the "About Volvox" section with informational cards, animated highlights, and a GitHub CTA that spawns confetti on hover.
@@ -24,11 +25,25 @@ export function About() {
     const x = (rect.left + rect.width / 2) / window.innerWidth;
     const y = (rect.top + rect.height / 2) / window.innerHeight;
 
+    // Get theme colors from CSS variables to ensure consistency
+    const style = getComputedStyle(document.documentElement);
+    const colors = [
+      style.getPropertyValue("--primary").trim(),
+      style.getPropertyValue("--secondary").trim(),
+      style.getPropertyValue("--accent").trim(),
+    ].filter((c) => c && c.startsWith("#")); // Ensure we only use hex colors that confetti supports
+
+    // Fallback to brand colors if variables aren't available or aren't hex
+    const confettiColors =
+      colors.length > 0
+        ? colors
+        : ["#007aff", "#af58da", "#ff9500", "#6446ff", "#c864ff"];
+
     const promise = confettiLib({
       particleCount: 50,
       spread: 60,
       origin: { x, y },
-      colors: ["#6446ff", "#c864ff", "#78b4ff", "#9678ff", "#b464ff"],
+      colors: confettiColors,
     });
 
     if (promise) {
@@ -168,7 +183,7 @@ export function About() {
 
         <div className="mt-12 text-center">
           <a
-            href="https://github.com/VolvoxCommunity"
+            href={GITHUB_URL}
             target="_blank"
             rel="noopener noreferrer"
             onMouseEnter={handleConfetti}
