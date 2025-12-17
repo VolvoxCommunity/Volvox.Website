@@ -32,19 +32,24 @@ describe("social-images", () => {
   beforeEach(() => {
     originalFetch = global.fetch;
     global.fetch = jest.fn((url) => {
-      // Mock CSS fetch
-      if (typeof url === 'string' && url.includes('fonts.googleapis.com')) {
-         return Promise.resolve({
-            text: () => Promise.resolve("css content src: url(http://font.ttf)"),
-            ok: true
-         });
+      // Mock CSS fetch - check hostname to ensure it's actually fonts.googleapis.com
+      if (typeof url === 'string') {
+        try {
+          const parsedUrl = new URL(url);
+          if (parsedUrl.hostname === 'fonts.googleapis.com') {
+            return Promise.resolve({
+              text: () => Promise.resolve("css content src: url(http://font.ttf)"),
+              ok: true,
+            });
+          }
+        } catch {
+          // Invalid URL, fall through to font file mock
+        }
       }
       // Mock Font file fetch (or any other fetch)
       return Promise.resolve({
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)),
         ok: true,
-        // Helper for when fetch result is chained directly (though our code awaits .text() or .arrayBuffer())
-        then: (cb: any) => cb({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)) }),
       });
     }) as jest.Mock;
 
@@ -61,11 +66,12 @@ describe("social-images", () => {
   describe("getLogoData", () => {
     it("reads logo data from file system when file exists", () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.readFileSync as jest.Mock).mockReturnValue({
-        buffer: new ArrayBuffer(8),
-      });
+      // Return a real Buffer (which is a Uint8Array subclass)
+      (fs.readFileSync as jest.Mock).mockReturnValue(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
       const data = getLogoData();
       expect(data).toBeTruthy();
+      expect(data).toBeInstanceOf(ArrayBuffer);
+      expect(new Uint8Array(data!)[0]).toBe(0x89); // Verify PNG magic byte is preserved
       expect(fs.readFileSync).toHaveBeenCalledWith("/app/public/logo.png");
     });
 
@@ -87,11 +93,11 @@ describe("social-images", () => {
   describe("getProductScreenshotData", () => {
     it("reads screenshot data when file exists", () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.readFileSync as jest.Mock).mockReturnValue({
-        buffer: new ArrayBuffer(8),
-      });
+      // Return a real Buffer (which is a Uint8Array subclass)
+      (fs.readFileSync as jest.Mock).mockReturnValue(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
       const data = getProductScreenshotData("slug", "shot.png");
       expect(data).toBeTruthy();
+      expect(data).toBeInstanceOf(ArrayBuffer);
       expect(fs.readFileSync).toHaveBeenCalledWith(
         "/app/content/products/slug/screenshots/shot.png"
       );
@@ -115,11 +121,11 @@ describe("social-images", () => {
   describe("getBlogBannerData", () => {
     it("reads banner data when file exists", () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.readFileSync as jest.Mock).mockReturnValue({
-        buffer: new ArrayBuffer(8),
-      });
+      // Return a real Buffer (which is a Uint8Array subclass)
+      (fs.readFileSync as jest.Mock).mockReturnValue(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
       const data = getBlogBannerData("/images/banner.png");
       expect(data).toBeTruthy();
+      expect(data).toBeInstanceOf(ArrayBuffer);
       expect(fs.readFileSync).toHaveBeenCalledWith(
         "/app/public/images/banner.png"
       );
@@ -127,11 +133,11 @@ describe("social-images", () => {
 
     it("handles paths without leading slash", () => {
       (fs.existsSync as jest.Mock).mockReturnValue(true);
-      (fs.readFileSync as jest.Mock).mockReturnValue({
-        buffer: new ArrayBuffer(8),
-      });
+      // Return a real Buffer (which is a Uint8Array subclass)
+      (fs.readFileSync as jest.Mock).mockReturnValue(Buffer.from([0x89, 0x50, 0x4e, 0x47]));
       const data = getBlogBannerData("images/banner.png");
       expect(data).toBeTruthy();
+      expect(data).toBeInstanceOf(ArrayBuffer);
       expect(fs.readFileSync).toHaveBeenCalledWith(
         "/app/public/images/banner.png"
       );
