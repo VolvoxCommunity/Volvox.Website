@@ -1,4 +1,9 @@
-import { SITE_URL, SITE_NAME, SITE_DESCRIPTION } from "./constants";
+import {
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+  TWITTER_URL,
+} from "./constants";
 
 /**
  * Schema.org Organization structured data for Volvox.
@@ -12,7 +17,7 @@ export function generateOrganizationSchema() {
     url: SITE_URL,
     logo: `${SITE_URL}/volvox-logo.png`,
     description: SITE_DESCRIPTION,
-    sameAs: ["https://twitter.com/VolvoxLLC"],
+    sameAs: [TWITTER_URL],
   };
 }
 

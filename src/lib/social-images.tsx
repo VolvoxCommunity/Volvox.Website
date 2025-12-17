@@ -4,6 +4,7 @@ import { ImageResponse } from "next/og";
 import * as fs from "fs";
 import * as path from "path";
 import { reportError } from "./logger";
+import { BRAND_COLORS } from "./constants";
 
 /**
  * Converts a Node.js Buffer to an ArrayBuffer.
@@ -49,17 +50,6 @@ export interface SocialImageConfig {
   badgePrefix?: string;
   titleSize?: number;
 }
-
-/** Brand colors for OG images. */
-const BRAND_COLORS = {
-  primary: "#007aff",
-  secondary: "#af58da",
-  accent: "#ff9500",
-  background: "#0a0a0a",
-  backgroundLight: "#1a1a2e",
-  text: "#ffffff",
-  textMuted: "#a1a1aa",
-};
 
 /**
  * Fetches JetBrains Mono font in TTF format from Google Fonts.

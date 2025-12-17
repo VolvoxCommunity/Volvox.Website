@@ -7,12 +7,12 @@ describe("image-utils", () => {
     });
 
     it("returns external URLs as-is", () => {
-      expect(resolveProductImagePath("https://example.com/image.png", "slug")).toBe(
-        "https://example.com/image.png"
-      );
-      expect(resolveProductImagePath("http://example.com/image.png", "slug")).toBe(
-        "http://example.com/image.png"
-      );
+      expect(
+        resolveProductImagePath("https://example.com/image.png", "slug")
+      ).toBe("https://example.com/image.png");
+      expect(
+        resolveProductImagePath("http://example.com/image.png", "slug")
+      ).toBe("http://example.com/image.png");
     });
 
     it("returns absolute paths as-is", () => {

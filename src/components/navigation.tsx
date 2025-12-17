@@ -15,7 +15,7 @@ import { useTheme } from "@/components/providers/theme-provider";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
 import Image from "next/image";
-import { NAV_HEIGHT } from "@/lib/constants";
+import { NAV_HEIGHT, GITHUB_URL, DISCORD_URL } from "@/lib/constants";
 
 interface NavigationProps {
   /** Callback invoked with section id when navigating (for homepage scroll mode) */
@@ -182,7 +182,7 @@ export function Navigation({
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
               >
                 <a
-                  href="https://github.com/VolvoxCommunity"
+                  href={GITHUB_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label="GitHub"
@@ -200,7 +200,7 @@ export function Navigation({
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
               >
                 <a
-                  href="https://discord.gg/8ahXACdamN"
+                  href={DISCORD_URL}
                   target="_blank"
                   rel="noopener noreferrer"
                   onClick={handleDiscordClick}
@@ -261,7 +261,7 @@ export function Navigation({
                       className="rounded-full"
                     >
                       <a
-                        href="https://github.com/VolvoxCommunity"
+                        href={GITHUB_URL}
                         target="_blank"
                         rel="noopener noreferrer"
                         aria-label="GitHub"
@@ -276,7 +276,7 @@ export function Navigation({
                       className="rounded-full"
                     >
                       <a
-                        href="https://discord.gg/8ahXACdamN"
+                        href={DISCORD_URL}
                         target="_blank"
                         rel="noopener noreferrer"
                         onClick={handleDiscordClick}

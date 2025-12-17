@@ -18,7 +18,9 @@ describe("Button", () => {
   it("handles mouse move for glow effect", () => {
     // We need to spy on onMouseMove prop if provided
     const handleMouseMove = jest.fn();
-    const { getByRole } = render(<Button onMouseMove={handleMouseMove}>Glow</Button>);
+    const { getByRole } = render(
+      <Button onMouseMove={handleMouseMove}>Glow</Button>
+    );
     const button = getByRole("button", { name: "Glow" });
 
     // Mock getBoundingClientRect
@@ -59,14 +61,14 @@ describe("Button", () => {
   });
 
   it("renders different sizes", () => {
-     render(<Button size="sm">Small</Button>);
-     const btn = screen.getByRole("button", { name: "Small" });
-     expect(btn.className).toContain("h-8");
+    render(<Button size="sm">Small</Button>);
+    const btn = screen.getByRole("button", { name: "Small" });
+    expect(btn.className).toContain("h-8");
   });
 
   it("renders icon size", () => {
-     render(<Button size="icon">X</Button>);
-     const btn = screen.getByRole("button", { name: "X" });
-     expect(btn.className).toContain("size-9");
+    render(<Button size="icon">X</Button>);
+    const btn = screen.getByRole("button", { name: "X" });
+    expect(btn.className).toContain("size-9");
   });
 });
