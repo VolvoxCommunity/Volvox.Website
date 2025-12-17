@@ -51,7 +51,6 @@ export async function waitForAnimations(
       !error.message.includes("Timeout") &&
       !error.message.includes("waiting for function")
     ) {
-       
       console.warn("waitForAnimations: Unexpected error:", error.message);
     }
     // Continue regardless - tests use visual diff thresholds for animated areas
