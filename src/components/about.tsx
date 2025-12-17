@@ -10,7 +10,7 @@ import {
 import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
-import { GITHUB_URL } from "@/lib/constants";
+import { CONFETTI_COLORS, GITHUB_URL } from "@/lib/constants";
 
 /**
  * Renders the "About Volvox" section with informational cards, animated highlights, and a GitHub CTA that spawns confetti on hover.
@@ -34,10 +34,7 @@ export function About() {
     ].filter(Boolean);
 
     // Fallback to brand colors if CSS variables aren't available
-    const confettiColors =
-      colors.length > 0
-        ? colors
-        : ["#007aff", "#af58da", "#ff9500", "#6446ff", "#c864ff"];
+    const confettiColors = colors.length > 0 ? colors : CONFETTI_COLORS;
 
     const promise = confettiLib({
       particleCount: 50,

@@ -36,6 +36,15 @@ export const BRAND_COLORS = {
   textMuted: "#a1a1aa",
 };
 
+/** Vibrant colors for confetti effects - uses brand colors plus complementary purples */
+export const CONFETTI_COLORS = [
+  BRAND_COLORS.primary, // Blue
+  BRAND_COLORS.secondary, // Purple
+  BRAND_COLORS.accent, // Orange
+  "#6446ff", // Indigo
+  "#c864ff", // Violet
+];
+
 /**
  * Safely serializes an object to JSON for use in script tags.
  * Escapes angle brackets and ampersands to prevent script tag injection.
