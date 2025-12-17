@@ -16,10 +16,14 @@ describe("Button", () => {
   });
 
   it("handles mouse move for glow effect", () => {
-    const { getByRole } = render(<Button>Glow</Button>);
+    // We need to spy on onMouseMove prop if provided
+    const handleMouseMove = jest.fn();
+    const { getByRole } = render(<Button onMouseMove={handleMouseMove}>Glow</Button>);
     const button = getByRole("button", { name: "Glow" });
 
     // Mock getBoundingClientRect
+    // Note: in jsdom, getBoundingClientRect returns zeros by default.
+    // We override it on the element instance.
     button.getBoundingClientRect = jest.fn(() => ({
       left: 10,
       top: 10,
@@ -38,6 +42,9 @@ describe("Button", () => {
     // 30 - 10 = 20
     expect(button.style.getPropertyValue("--mouse-x")).toBe("50px");
     expect(button.style.getPropertyValue("--mouse-y")).toBe("20px");
+
+    // Verify external handler is called
+    expect(handleMouseMove).toHaveBeenCalled();
   });
 
   it("renders as child", () => {
@@ -49,5 +56,17 @@ describe("Button", () => {
     const link = screen.getByRole("link", { name: "Link Button" });
     expect(link).toBeInTheDocument();
     expect(link.className).toContain("inline-flex"); // Part of button base styles
+  });
+
+  it("renders different sizes", () => {
+     render(<Button size="sm">Small</Button>);
+     const btn = screen.getByRole("button", { name: "Small" });
+     expect(btn.className).toContain("h-8");
+  });
+
+  it("renders icon size", () => {
+     render(<Button size="icon">X</Button>);
+     const btn = screen.getByRole("button", { name: "X" });
+     expect(btn.className).toContain("size-9");
   });
 });

@@ -103,7 +103,10 @@ export function TableOfContents() {
   };
 
   return (
-    <nav className="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto">
+    <nav
+      className="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
+      data-testid="table-of-contents"
+    >
       <div className="border-l-2 border-border pl-4">
         <p className="text-sm font-medium text-foreground mb-3 uppercase tracking-wide">
           On This Page

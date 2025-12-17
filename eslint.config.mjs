@@ -41,6 +41,8 @@ const eslintConfig = defineConfig([
     "next-env.d.ts",
     // Git worktrees directory:
     ".worktrees/**",
+    // Test coverage reports:
+    "coverage/**",
   ]),
 ]);
 

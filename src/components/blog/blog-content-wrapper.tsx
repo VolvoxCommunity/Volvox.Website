@@ -21,7 +21,12 @@ export function BlogContentWrapper({ children }: BlogContentWrapperProps) {
       <main className="container mx-auto px-4 py-16 max-w-7xl">
         <div className="flex gap-12">
           {/* Main content */}
-          <article className="flex-1 min-w-0 max-w-4xl">{children}</article>
+          <article
+            className="flex-1 min-w-0 max-w-4xl"
+            data-testid="blog-content"
+          >
+            {children}
+          </article>
 
           {/* Table of Contents - desktop only */}
           <aside className="hidden lg:block w-64 flex-shrink-0">
