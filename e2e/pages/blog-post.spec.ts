@@ -83,8 +83,9 @@ test.describe("Blog Post Page", () => {
   });
 
   test("back to posts button navigates correctly", async ({ page }) => {
-    // The blog post page has a sticky "Back to All Posts" link in the navigation area
-    const backButton = page.getByRole("link", { name: /back to all posts/i });
+    // Use data-testid for reliable selection across all viewports
+    // The button text is responsive: "Back" on mobile, "Back to All Posts" on desktop
+    const backButton = page.locator('[data-testid="back-to-posts"]');
 
     await expect(backButton).toBeVisible();
 
