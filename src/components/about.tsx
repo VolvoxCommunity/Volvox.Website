@@ -31,9 +31,9 @@ export function About() {
       style.getPropertyValue("--primary").trim(),
       style.getPropertyValue("--secondary").trim(),
       style.getPropertyValue("--accent").trim(),
-    ].filter((c) => c && c.startsWith("#")); // Ensure we only use hex colors that confetti supports
+    ].filter(Boolean);
 
-    // Fallback to brand colors if variables aren't available or aren't hex
+    // Fallback to brand colors if CSS variables aren't available
     const confettiColors =
       colors.length > 0
         ? colors
