@@ -31,13 +31,22 @@ describe("social-images", () => {
 
   beforeEach(() => {
     originalFetch = global.fetch;
-    global.fetch = jest.fn(() =>
-      Promise.resolve({
-        text: () => Promise.resolve("css content src: url(http://font.ttf)"),
+    global.fetch = jest.fn((url) => {
+      // Mock CSS fetch
+      if (typeof url === 'string' && url.includes('fonts.googleapis.com')) {
+         return Promise.resolve({
+            text: () => Promise.resolve("css content src: url(http://font.ttf)"),
+            ok: true
+         });
+      }
+      // Mock Font file fetch (or any other fetch)
+      return Promise.resolve({
         arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)),
+        ok: true,
+        // Helper for when fetch result is chained directly (though our code awaits .text() or .arrayBuffer())
         then: (cb: any) => cb({ arrayBuffer: () => Promise.resolve(new ArrayBuffer(10)) }),
-      })
-    ) as jest.Mock;
+      });
+    }) as jest.Mock;
 
     // Mock cwd to return a fixed path
     jest.spyOn(process, "cwd").mockReturnValue("/app");
@@ -133,6 +142,76 @@ describe("social-images", () => {
       const data = getBlogBannerData("banner.png");
       expect(data).toBeNull();
     });
+
+    it("returns null on error", () => {
+      (fs.existsSync as jest.Mock).mockImplementation(() => {
+        throw new Error("FS Error");
+      });
+      const data = getBlogBannerData("banner.png");
+      expect(data).toBeNull();
+    });
+  });
+
+  describe("detectImageMimeType and toBase64DataUrl", () => {
+    it("detects JPEG correctly", () => {
+       const jpegBytes = new Uint8Array([0xff, 0xd8, 0xff, 0x00]);
+       const logoData = jpegBytes.buffer;
+       const element = createFallbackImage(logoData);
+       expect(JSON.stringify(element)).toContain("data:image/jpeg");
+    });
+
+    it("detects PNG correctly", () => {
+       const pngBytes = new Uint8Array([0x89, 0x50, 0x4e, 0x47]);
+       const logoData = pngBytes.buffer;
+       const element = createFallbackImage(logoData);
+       expect(JSON.stringify(element)).toContain("data:image/png");
+    });
+
+    it("detects WebP correctly", () => {
+       const webpBytes = new Uint8Array([0x52, 0x49, 0x46, 0x46, 0,0,0,0, 0x57, 0x45, 0x42, 0x50]);
+       const logoData = webpBytes.buffer;
+       const element = createFallbackImage(logoData);
+       expect(JSON.stringify(element)).toContain("data:image/webp");
+    });
+
+    it("detects GIF correctly", () => {
+       const gifBytes = new Uint8Array([0x47, 0x49, 0x46, 0x38]);
+       const logoData = gifBytes.buffer;
+       const element = createFallbackImage(logoData);
+       expect(JSON.stringify(element)).toContain("data:image/gif");
+    });
+
+    it("defaults to PNG for unknown types", () => {
+       const unknownBytes = new Uint8Array([0x00, 0x00, 0x00, 0x00]);
+       const logoData = unknownBytes.buffer;
+       const element = createFallbackImage(logoData);
+       expect(JSON.stringify(element)).toContain("data:image/png");
+    });
+  });
+
+  describe("fetchJetBrainsMonoFont", () => {
+    it("fetches font successfully", async () => {
+      const config = { title: "Title" };
+      await generateSocialImage(config, null);
+      // It should call fetch for CSS, then parse it to find url(), then fetch that URL.
+      expect(global.fetch).toHaveBeenCalledTimes(2);
+    });
+
+    it("handles fetch failure gracefully", async () => {
+      (global.fetch as jest.Mock).mockRejectedValue(new Error("Font fetch failed"));
+      const config = { title: "Title" };
+      await generateSocialImage(config, null);
+      expect(ImageResponse).toHaveBeenCalled();
+    });
+
+    it("handles CSS parsing failure (no src url)", async () => {
+      (global.fetch as jest.Mock).mockResolvedValue({
+        text: () => Promise.resolve("invalid css"),
+      });
+      const config = { title: "Title" };
+      await generateSocialImage(config, null);
+      expect(ImageResponse).toHaveBeenCalled();
+    });
   });
 
   describe("generateSocialImage", () => {
@@ -145,6 +224,7 @@ describe("social-images", () => {
         metadata: "Metadata",
         badges: ["Badge1"],
         badgePrefix: "v",
+        titleSize: 80,
       };
 
       const response = await generateSocialImage(config, logoData);
@@ -152,17 +232,20 @@ describe("social-images", () => {
       expect(response).toEqual({ type: "ImageResponse" });
     });
 
+    it("generates image without badges", async () => {
+      const config = {
+        title: "Title",
+      };
+      const response = await generateSocialImage(config, logoData);
+      expect(ImageResponse).toHaveBeenCalled();
+    });
+
     it("throws and uses fallback if config is missing", async () => {
       const response = await generateSocialImage(null, logoData);
       expect(ImageResponse).toHaveBeenCalled();
-      // Should verify it called with fallback content
     });
 
     it("handles generation error gracefully", async () => {
-       // Force error by passing invalid logoData that might cause issues if we were actually rendering,
-       // but here we are mocking ImageResponse so we need another way to trigger the catch block.
-       // Actually, generateSocialImage throws "No config provided" if config is null.
-       // Let's test fetch failure.
        (global.fetch as jest.Mock).mockRejectedValueOnce(new Error("Network error"));
 
        const config = { title: "Title" };
