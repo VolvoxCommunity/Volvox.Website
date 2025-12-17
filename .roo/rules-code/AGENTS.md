@@ -94,7 +94,7 @@ import { cn } from "@/lib/utils";
 
 ### E2E Tests
 
-- Playwright configuration in `playwright.config.ts` targets Chromium only
+- Playwright configuration in `playwright.config.ts` targets multi-browser (Chromium, Firefox, Safari + mobile)
 - Run E2E tests with `pnpm exec playwright test`
 - Use interactive UI mode with `pnpm exec playwright test --ui`
 

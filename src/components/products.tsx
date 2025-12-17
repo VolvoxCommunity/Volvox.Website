@@ -37,7 +37,10 @@ function ProductCard({ product, index }: ProductCardProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Card className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm">
+      <Card
+        className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm"
+        data-testid="product-card"
+      >
         <div className="grid md:grid-cols-2 gap-0">
           <Link href={`/products/${product.slug}`} className="block">
             <motion.div
@@ -195,7 +198,11 @@ function ProductCard({ product, index }: ProductCardProps) {
 export function Products({ products }: ProductsProps) {
   if (products.length === 0) {
     return (
-      <section id="products" className="py-16 md:py-24 px-4">
+      <section
+        id="products"
+        className="py-16 md:py-24 px-4"
+        data-testid="products-section"
+      >
         <div className="container mx-auto max-w-7xl">
           <div className="text-center py-12">
             <p className="text-muted-foreground">
@@ -208,7 +215,11 @@ export function Products({ products }: ProductsProps) {
   }
 
   return (
-    <section id="products" className="py-16 md:py-24 px-4">
+    <section
+      id="products"
+      className="py-16 md:py-24 px-4"
+      data-testid="products-section"
+    >
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12 md:mb-16">
           <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Products</h2>

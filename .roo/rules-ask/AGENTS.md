@@ -98,7 +98,7 @@ This file provides analysis and documentation guidance for agents working in Ask
 ### Testing Infrastructure
 
 - Unit tests using Jest with Testing Library in `tests/` directory
-- E2E tests with Playwright (Chromium only)
+- E2E tests with Playwright (multi-browser: Chromium, Firefox, Safari + mobile)
 - Test commands: `pnpm test` (unit), `pnpm exec playwright test` (E2E)
 
 ## Analysis Best Practices

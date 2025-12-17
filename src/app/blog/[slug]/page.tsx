@@ -130,6 +130,7 @@ export default async function BlogPostPage({
             <Link
               href="/#blog"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
+              data-testid="back-to-posts"
             >
               <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
               Back to All Posts
@@ -162,15 +163,20 @@ export default async function BlogPostPage({
                       className="w-10 h-10 rounded-full"
                     />
                   )}
-                  <div>
+                  <div data-testid="author-info">
                     <p className="font-medium text-foreground">
                       {frontmatter.author?.name}
                     </p>
-                    <p className="text-xs">{frontmatter.author?.role}</p>
+                    <p className="text-xs" data-testid="author-role">
+                      {frontmatter.author?.role}
+                    </p>
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1">
+                <div
+                  className="flex items-center gap-1"
+                  data-testid="post-date"
+                >
                   <Calendar className="h-4 w-4" />
                   <span>{frontmatter.date}</span>
                 </div>

@@ -21,7 +21,7 @@ Volvox is a software development and learning community that:
 - **Animations**: Framer Motion for motion effects, canvas-confetti for celebratory animations
 - **Icons**: Phosphor Icons (`@phosphor-icons/react`), Lucide React (`lucide-react`)
 - **Monitoring**: Sentry (error tracking with replay), Vercel Analytics & Speed Insights
-- **Testing**: Node test runner (unit), Playwright (E2E)
+- **Testing**: Jest + Testing Library (unit), Playwright (E2E with accessibility via axe-core)
 - **Notifications**: Sonner (toast notifications)
 - **Date Handling**: date-fns for date manipulation and formatting
 
@@ -63,14 +63,26 @@ pnpm lint
 ### Testing
 
 ```bash
-# Run unit tests (Node test runner)
+# Run unit tests (Jest)
 pnpm test
 
-# Run E2E tests (Playwright)
+# Run unit tests in watch mode
+pnpm test:watch
+
+# Run unit tests with coverage
+pnpm test:coverage
+
+# Run E2E tests (Playwright - all browsers)
 pnpm exec playwright test
 
-# Open Playwright UI
+# Run E2E tests on specific browser
+pnpm exec playwright test --project=chromium
+
+# Open Playwright UI for interactive testing
 pnpm exec playwright test --ui
+
+# Run specific E2E test file
+pnpm exec playwright test e2e/pages/homepage.spec.ts
 ```
 
 ### Formatting
@@ -115,20 +127,45 @@ src/
 ├── instrumentation.ts     # Server instrumentation for Sentry
 └── instrumentation-client.ts # Client instrumentation for Sentry
 
-tests/                     # Node test suites
-├── slug-validation.test.ts
-├── generate-heading-id.test.ts
+tests/                     # Jest unit tests
+├── app/                   # API route and app-level tests
+├── components/            # Component tests (UI, sections, MDX)
+├── hooks/                 # Custom React hook tests
+├── lib/                   # Utility and library function tests
 └── postcss-tailwind.test.ts
 
 content/
 ├── blog/                  # MDX blog posts with frontmatter
+├── products/              # Product-specific content (changelog, metadata)
 ├── authors.json           # Author profiles
 ├── products.json          # Product information
 ├── mentors.json           # Mentor profiles
 └── mentees.json           # Mentee profiles
 
 e2e/                       # Playwright E2E tests
-└── blog-view-tracking.spec.ts
+├── fixtures/              # Extended test fixtures
+│   └── base.fixture.ts    # Custom fixtures with error tracking
+├── pages/                 # Page-specific tests
+│   ├── homepage.spec.ts
+│   ├── blog-list.spec.ts
+│   ├── blog-post.spec.ts
+│   ├── products-list.spec.ts
+│   ├── product-detail.spec.ts
+│   ├── privacy.spec.ts
+│   └── terms.spec.ts
+├── features/              # Feature-specific tests
+│   ├── navigation.spec.ts
+│   ├── theme.spec.ts
+│   ├── cookie-consent.spec.ts
+│   └── footer.spec.ts
+├── utils/                 # Shared test utilities
+│   └── test-helpers.ts
+├── accessibility.spec.ts  # axe-core accessibility tests
+├── seo.spec.ts            # SEO and meta tag tests
+├── responsive.spec.ts     # Viewport/responsive tests
+├── visual.spec.ts         # Visual regression tests
+├── performance.spec.ts    # Performance tests
+└── errors.spec.ts         # Error handling tests
 ```
 
 ## Key Features
@@ -162,7 +199,29 @@ e2e/                       # Playwright E2E tests
 
 - Promise.allSettled data fetching guards against partial failures
 - Local file-based content with Zod validation for type safety
-- Node-based unit tests cover validation logic to prevent regressions
+- Comprehensive unit tests cover validation logic to prevent regressions
+
+### E2E Testing
+
+Comprehensive Playwright test suite with multi-browser support:
+
+- **Browsers**: Chromium, Firefox, Safari + mobile viewports (Pixel 5, iPhone 13)
+- **Test Categories**:
+  - Page tests: Verify each page loads and displays expected content
+  - Feature tests: Navigation, theme toggle, cookie consent, footer
+  - Accessibility: Automated axe-core scans for WCAG violations
+  - SEO: Meta tags, Open Graph images, structured data
+  - Responsive: Mobile, tablet, and desktop viewport testing
+  - Visual regression: Screenshot comparisons with configurable thresholds
+  - Performance: Page load times, console errors, failed requests
+  - Error handling: 404 pages, error boundaries
+
+- **Custom Test Utilities** (`e2e/utils/test-helpers.ts`):
+  - `waitForAnimations()` - Wait for CSS/JS animations to complete
+  - `dismissCookieBanner()` - Handle cookie consent interactions
+  - `setInitialTheme()` - Set theme state before page load
+
+- **CI Integration**: GitHub Actions workflow with 4-way sharding for parallel execution
 
 ### Error Monitoring & Analytics
 
