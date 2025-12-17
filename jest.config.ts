@@ -30,6 +30,14 @@ const config: Config = {
     "!src/app/**/opengraph-image.tsx",
     "!src/app/**/twitter-image.tsx",
   ],
+  coverageThreshold: {
+    global: {
+      branches: 85,
+      functions: 85,
+      lines: 85,
+      statements: 85,
+    },
+  },
 };
 
 // createJestConfig is exported this way to ensure that next/jest can load the Next.js config which is async
