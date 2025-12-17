@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { render, screen } from "@testing-library/react";
 import { ProductFeatures } from "@/components/products/product-features";
 import type { ReactNode, HTMLAttributes } from "react";
@@ -9,7 +12,16 @@ interface MotionLiProps extends HTMLAttributes<HTMLLIElement> {
 // Mock framer-motion to avoid animation issues in tests
 jest.mock("framer-motion", () => ({
   motion: {
-    li: ({ children, className, ...props }: MotionLiProps) => (
+    li: ({
+      children,
+      className,
+      whileInView,
+      initial,
+      animate,
+      transition,
+      viewport,
+      ...props
+    }: any) => (
       <li className={className} data-testid="motion-li" {...props}>
         {children}
       </li>
