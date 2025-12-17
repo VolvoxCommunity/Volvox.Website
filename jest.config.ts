@@ -29,6 +29,9 @@ const config: Config = {
     "!src/app/global-error.tsx",
     "!src/app/**/opengraph-image.tsx",
     "!src/app/**/twitter-image.tsx",
+    "!src/lib/types.ts",
+    "!src/**/index.ts",
+    "!src/instrumentation*.ts",
   ],
 };
 
