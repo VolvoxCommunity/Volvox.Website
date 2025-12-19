@@ -7,10 +7,12 @@ test.describe("Footer", () => {
     await page.waitForLoadState("networkidle");
     // Wait for hydration to complete before interacting with footer
     const footer = page.locator('[data-testid="footer"]');
+    await footer.waitFor({ state: "attached", timeout: 10000 });
     await footer.waitFor({ state: "visible", timeout: 10000 });
-    // Small delay to ensure hydration is complete
-    await page.waitForTimeout(100);
-    await footer.scrollIntoViewIfNeeded();
+    // Retry scroll if it fails due to detachment (hydration)
+    await expect(async () => {
+      await footer.scrollIntoViewIfNeeded();
+    }).toPass({ timeout: 5000 });
   });
 
   test("displays footer", async ({ page }) => {

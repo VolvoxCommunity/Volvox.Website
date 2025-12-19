@@ -30,13 +30,13 @@ jest.mock("framer-motion", () => ({
   motion: {
     div: ({
       children,
-      whileHover,
-      whileInView,
-      viewport,
-      initial,
-      animate,
-      exit,
-      transition,
+      whileHover: _whileHover,
+      whileInView: _whileInView,
+      viewport: _viewport,
+      initial: _initial,
+      animate: _animate,
+      exit: _exit,
+      transition: _transition,
       ...props
     }: MotionProps) => (
       <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
@@ -75,6 +75,9 @@ jest.mock("@/components/ui/dialog", () => {
     ),
     DialogTitle: ({ children }: { children: React.ReactNode }) => (
       <h2>{children}</h2>
+    ),
+    DialogDescription: ({ children }: { children: React.ReactNode }) => (
+      <p>{children}</p>
     ),
   };
 });

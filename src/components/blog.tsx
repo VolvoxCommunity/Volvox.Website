@@ -18,6 +18,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { ArrowRight, Eye } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
@@ -229,9 +230,9 @@ export function Blog({ posts: initialPosts }: BlogProps) {
                   </DialogTitle>
 
                   {/* Excerpt */}
-                  <p className="text-lg text-muted-foreground">
+                  <DialogDescription className="text-lg text-muted-foreground">
                     {selectedPost.excerpt}
-                  </p>
+                  </DialogDescription>
 
                   {/* Tags */}
                   <div className="flex flex-wrap gap-2">

@@ -1,0 +1,69 @@
+
+> volvox@1.0.0 lint /app
+> eslint
+
+
+/app/jest.setup.ts
+  21:9   error  Unsafe assignment of an `any` value                    @typescript-eslint/no-unsafe-assignment
+  21:17  error  A `require()` style import is forbidden                @typescript-eslint/no-require-imports
+  22:9   error  Unsafe assignment of an `any` value                    @typescript-eslint/no-unsafe-assignment
+  25:5   error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+  25:12  error  Unsafe call of a(n) `any` typed value                  @typescript-eslint/no-unsafe-call
+  25:12  error  Component definition is missing display name           react/display-name
+  25:18  error  Unsafe member access .forwardRef on an `any` value     @typescript-eslint/no-unsafe-member-access
+  29:11  error  'whileHover' is defined but never used                 @typescript-eslint/no-unused-vars
+  30:11  error  'whileTap' is defined but never used                   @typescript-eslint/no-unused-vars
+  31:11  error  'whileInView' is defined but never used                @typescript-eslint/no-unused-vars
+  32:11  error  'viewport' is defined but never used                   @typescript-eslint/no-unused-vars
+  33:11  error  'initial' is defined but never used                    @typescript-eslint/no-unused-vars
+  34:11  error  'animate' is defined but never used                    @typescript-eslint/no-unused-vars
+  35:11  error  'exit' is defined but never used                       @typescript-eslint/no-unused-vars
+  36:11  error  'variants' is defined but never used                   @typescript-eslint/no-unused-vars
+  37:11  error  'transition' is defined but never used                 @typescript-eslint/no-unused-vars
+  39:12  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+  40:14  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+  42:9   error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+  42:16  error  Unsafe call of a(n) `any` typed value                  @typescript-eslint/no-unsafe-call
+  42:22  error  Unsafe member access .createElement on an `any` value  @typescript-eslint/no-unsafe-member-access
+  42:53  error  Unsafe assignment of an `any` value                    @typescript-eslint/no-unsafe-assignment
+  47:3   error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+  54:13  error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+  56:11  error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+  56:25  error  Unsafe member access .motion on an `any` value         @typescript-eslint/no-unsafe-member-access
+  60:37  error  Unexpected any. Specify a different type               @typescript-eslint/no-explicit-any
+  60:45  error  Unsafe return of a value of type `any`                 @typescript-eslint/no-unsafe-return
+
+/app/tests/components/blog/blog-components.test.tsx
+  52:7  error  'whileHover' is defined but never used   @typescript-eslint/no-unused-vars
+  53:7  error  'whileTap' is defined but never used     @typescript-eslint/no-unused-vars
+  54:7  error  'whileInView' is defined but never used  @typescript-eslint/no-unused-vars
+  55:7  error  'viewport' is defined but never used     @typescript-eslint/no-unused-vars
+  56:7  error  'initial' is defined but never used      @typescript-eslint/no-unused-vars
+  57:7  error  'animate' is defined but never used      @typescript-eslint/no-unused-vars
+  58:7  error  'exit' is defined but never used         @typescript-eslint/no-unused-vars
+  59:7  error  'variants' is defined but never used     @typescript-eslint/no-unused-vars
+  60:7  error  'transition' is defined but never used   @typescript-eslint/no-unused-vars
+
+/app/tests/components/sections.test.tsx
+  26:7  error  'whileHover' is defined but never used   @typescript-eslint/no-unused-vars
+  27:7  error  'whileTap' is defined but never used     @typescript-eslint/no-unused-vars
+  28:7  error  'whileInView' is defined but never used  @typescript-eslint/no-unused-vars
+  29:7  error  'viewport' is defined but never used     @typescript-eslint/no-unused-vars
+  30:7  error  'initial' is defined but never used      @typescript-eslint/no-unused-vars
+  31:7  error  'animate' is defined but never used      @typescript-eslint/no-unused-vars
+  32:7  error  'exit' is defined but never used         @typescript-eslint/no-unused-vars
+  33:7  error  'variants' is defined but never used     @typescript-eslint/no-unused-vars
+  34:7  error  'transition' is defined but never used   @typescript-eslint/no-unused-vars
+  41:7  error  'whileHover' is defined but never used   @typescript-eslint/no-unused-vars
+  42:7  error  'whileTap' is defined but never used     @typescript-eslint/no-unused-vars
+  43:7  error  'whileInView' is defined but never used  @typescript-eslint/no-unused-vars
+  44:7  error  'viewport' is defined but never used     @typescript-eslint/no-unused-vars
+  45:7  error  'initial' is defined but never used      @typescript-eslint/no-unused-vars
+  46:7  error  'animate' is defined but never used      @typescript-eslint/no-unused-vars
+  47:7  error  'exit' is defined but never used         @typescript-eslint/no-unused-vars
+  48:7  error  'variants' is defined but never used     @typescript-eslint/no-unused-vars
+  49:7  error  'transition' is defined but never used   @typescript-eslint/no-unused-vars
+
+✖ 55 problems (55 errors, 0 warnings)
+
+ ELIFECYCLE  Command failed with exit code 1.
