@@ -53,6 +53,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <DialogClose data-testid="close-btn">Close Me</DialogClose>
           </DialogContent>
         </Dialog>
@@ -65,6 +66,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <DialogClose data-testid="close-btn">Close</DialogClose>
           </DialogContent>
         </Dialog>
@@ -133,6 +135,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <div>Dialog Content</div>
           </DialogContent>
         </Dialog>
@@ -145,6 +148,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <div>Content</div>
           </DialogContent>
         </Dialog>
@@ -157,6 +161,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent showCloseButton={false}>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <div>Content</div>
           </DialogContent>
         </Dialog>
@@ -169,6 +174,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent className="custom-content">
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <div data-testid="inner">Content</div>
           </DialogContent>
         </Dialog>
@@ -182,6 +188,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <div data-testid="inner">Content</div>
           </DialogContent>
         </Dialog>
@@ -198,6 +205,7 @@ describe("Dialog Components", () => {
           <DialogContent>
             <DialogHeader>
               <DialogTitle>Header Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -211,6 +219,7 @@ describe("Dialog Components", () => {
           <DialogContent>
             <DialogHeader data-testid="header">
               <DialogTitle>Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -227,6 +236,7 @@ describe("Dialog Components", () => {
           <DialogContent>
             <DialogHeader className="custom-header" data-testid="header">
               <DialogTitle>Title</DialogTitle>
+              <DialogDescription>Description</DialogDescription>
             </DialogHeader>
           </DialogContent>
         </Dialog>
@@ -241,6 +251,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <DialogFooter>Footer Content</DialogFooter>
           </DialogContent>
         </Dialog>
@@ -253,6 +264,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <DialogFooter data-testid="footer">Footer</DialogFooter>
           </DialogContent>
         </Dialog>
@@ -268,6 +280,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
             <DialogFooter className="custom-footer" data-testid="footer">
               Footer
             </DialogFooter>
@@ -284,6 +297,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle>My Dialog Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
           </DialogContent>
         </Dialog>
       );
@@ -295,6 +309,7 @@ describe("Dialog Components", () => {
         <Dialog defaultOpen>
           <DialogContent>
             <DialogTitle data-testid="title">Title</DialogTitle>
+            <DialogDescription>Description</DialogDescription>
           </DialogContent>
         </Dialog>
       );
@@ -311,6 +326,7 @@ describe("Dialog Components", () => {
             <DialogTitle className="custom-title" data-testid="title">
               Title
             </DialogTitle>
+            <DialogDescription>Description</DialogDescription>
           </DialogContent>
         </Dialog>
       );

@@ -69,7 +69,9 @@ export function CodeBlock({
     try {
       await navigator.clipboard.writeText(text);
       setCopied(true);
-      setTimeout(() => setCopied(false), 2000);
+      setTimeout(() => {
+        setCopied(false);
+      }, 2000);
     } catch (err) {
       reportError("CodeBlock: Failed to copy to clipboard", err);
     }

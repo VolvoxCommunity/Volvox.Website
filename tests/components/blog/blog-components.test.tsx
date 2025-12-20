@@ -45,10 +45,52 @@ interface MotionProps {
   [key: string]: unknown;
 }
 
+// Helper to filter out motion props from DOM elements
+const filterMotionProps = (props: Record<string, unknown>) => {
+  const {
+    whileHover,
+    whileTap,
+    whileInView,
+    viewport,
+    initial,
+    animate,
+    transition,
+    variants,
+    ...rest
+  } = props;
+  void whileHover;
+  void whileTap;
+  void whileInView;
+  void viewport;
+  void initial;
+  void animate;
+  void transition;
+  void variants;
+  return rest;
+};
+
 jest.mock("framer-motion", () => ({
   motion: {
     div: ({ children, ...props }: MotionProps) => (
-      <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
+      <div
+        {...(filterMotionProps(props) as React.HTMLAttributes<HTMLDivElement>)}
+      >
+        {children}
+      </div>
+    ),
+    a: ({ children, ...props }: MotionProps) => (
+      <a
+        {...(filterMotionProps(props) as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
+      >
+        {children}
+      </a>
+    ),
+    button: ({ children, ...props }: MotionProps) => (
+      <button
+        {...(filterMotionProps(props) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+      >
+        {children}
+      </button>
     ),
   },
   AnimatePresence: ({ children }: { children: React.ReactNode }) => (
@@ -190,12 +232,16 @@ describe("Blog Components", () => {
       expect(heading).toHaveAttribute("id", "my-test-heading");
     });
 
-    it("copies link to clipboard on button click", () => {
+    it("copies link to clipboard on button click", async () => {
       render(<HeadingWithAnchor as="h2">Test</HeadingWithAnchor>);
       const copyButton = screen.getByRole("button", {
         name: /copy link to heading/i,
       });
-      fireEvent.click(copyButton);
+
+      await act(async () => {
+        fireEvent.click(copyButton);
+      });
+
       expect(mockWriteText).toHaveBeenCalled();
     });
   });

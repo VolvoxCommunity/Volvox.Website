@@ -46,35 +46,51 @@ interface MotionProps {
   [key: string]: unknown;
 }
 
+// Helper to filter out motion props from DOM elements
+const filterMotionProps = (props: Record<string, unknown>) => {
+  const {
+    whileHover,
+    whileTap,
+    whileInView,
+    viewport,
+    initial,
+    animate,
+    transition,
+    variants,
+    ...rest
+  } = props;
+  void whileHover;
+  void whileTap;
+  void whileInView;
+  void viewport;
+  void initial;
+  void animate;
+  void transition;
+  void variants;
+  return rest;
+};
+
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({
-      children,
-      initial,
-      animate,
-      transition,
-      viewport,
-      whileInView,
-      ...props
-    }: MotionProps) => (
-      <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
+    div: ({ children, ...props }: MotionProps) => (
+      <div
+        {...(filterMotionProps(props) as React.HTMLAttributes<HTMLDivElement>)}
+      >
+        {children}
+      </div>
     ),
-    li: ({
-      children,
-      initial,
-      animate,
-      transition,
-      viewport,
-      whileInView,
-      ...props
-    }: MotionProps) => (
-      <li {...(props as React.LiHTMLAttributes<HTMLLIElement>)}>{children}</li>
+    li: ({ children, ...props }: MotionProps) => (
+      <li
+        {...(filterMotionProps(props) as React.LiHTMLAttributes<HTMLLIElement>)}
+      >
+        {children}
+      </li>
     ),
     button: ({ children, onClick, ...props }: MotionProps) => (
       <button
         type="button"
         onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}
-        {...(props as React.ButtonHTMLAttributes<HTMLButtonElement>)}
+        {...(filterMotionProps(props) as React.ButtonHTMLAttributes<HTMLButtonElement>)}
       >
         {children}
       </button>
