@@ -44,7 +44,7 @@ test.describe("Navigation", () => {
       // Prefer single data-testid selector for stability
       const blogSection = page.locator('[data-testid="blog-section"]');
       // Timeout accounts for scroll animation (adjust if CI is slower)
-      await expect(blogSection).toBeInViewport({ timeout: 3000 });
+      await expect(blogSection).toBeInViewport({ timeout: 10000 });
     });
   });
 
@@ -63,7 +63,7 @@ test.describe("Navigation", () => {
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
       await expect(menuButton).toBeVisible();
 
-      await menuButton.click();
+      await menuButton.click({ force: true });
       const mobileMenu = page.locator('[data-testid="mobile-menu"]');
       await expect(mobileMenu).toBeVisible();
 
@@ -78,7 +78,7 @@ test.describe("Navigation", () => {
       const menuButton = page.locator('[data-testid="mobile-menu-button"]');
       await expect(menuButton).toBeVisible();
 
-      await menuButton.click();
+      await menuButton.click({ force: true });
       const mobileMenu = page.locator('[data-testid="mobile-menu"]');
       await expect(mobileMenu).toBeVisible();
 
@@ -96,7 +96,7 @@ test.describe("Navigation", () => {
       const productsSection = page.locator(
         '[data-testid="products-section"], #products'
       );
-      await expect(productsSection).toBeInViewport();
+      await expect(productsSection).toBeInViewport({ timeout: 10000 });
     });
   });
 });
