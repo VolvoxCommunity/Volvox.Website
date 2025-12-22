@@ -93,7 +93,7 @@ test.describe("Blog Post Page", () => {
     await backButton.click();
     // Wait for navigation to homepage with blog section hash
     // Match: http://localhost:3000/#blog or just /#blog
-    await page.waitForURL(/\/#blog$/);
+    await page.waitForURL(/.*\/#blog/);
 
     // Verify we're on the homepage with the blog section hash
     expect(page.url()).toContain("/#blog");

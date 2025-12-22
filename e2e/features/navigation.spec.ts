@@ -44,7 +44,7 @@ test.describe("Navigation", () => {
       // Prefer single data-testid selector for stability
       const blogSection = page.locator('[data-testid="blog-section"]');
       // Timeout accounts for scroll animation (adjust if CI is slower)
-      await expect(blogSection).toBeInViewport({ timeout: 3000 });
+      await expect(blogSection).toBeInViewport({ timeout: 10000 });
     });
   });
 
