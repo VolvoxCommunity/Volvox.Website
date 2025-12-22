@@ -16,7 +16,7 @@
   "techStack": ["React Native", "Expo", "iOS", "Android", "Web"],
   "links": {
     "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
-    "demo": "https://sobrietywaypoint.com",
+    "demo": "https://sobers.app",
     "appStore": "https://apps.apple.com/us/app/sobriety-waypoint/id6755614815",
     "playStore": "https://play.google.com/apps/internaltest/4701660329596082968"
   },
@@ -32,7 +32,7 @@
     },
     {
       "question": "Is my data private?",
-      "answer": "Your sobriety data and personal notes are only visible to you and your connected sponsor. We use bank-level encryption and never share your information with third parties. What happens in your recovery stays in your recovery."
+      "answer": "Your sobriety data and personal notes are only visible to you and your connected sponsor. We never share your information with third parties. What happens in your recovery stays in your recovery."
     },
     {
       "question": "Can I be both a sponsor and a sponsee?",

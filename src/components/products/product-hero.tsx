@@ -97,7 +97,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    Try Demo
+                    Visit
                     <ArrowUpRight weight="bold" className="h-5 w-5" />
                   </a>
                 </Button>
