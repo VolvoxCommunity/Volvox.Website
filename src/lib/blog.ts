@@ -86,6 +86,13 @@ export async function getAllPosts(): Promise<BlogPost[]> {
   }
 }
 
+/**
+ * Retrieves a single blog post by its slug.
+ *
+ * @param slug - The URL slug of the post to retrieve.
+ * @returns An object containing the post's frontmatter, content, slug, and view count.
+ * @throws If the slug is invalid or the post does not exist.
+ */
 export async function getPostBySlug(slug: string) {
   // Validate slug first - fail fast without logging as system error
   const validSlug = normalizeSlug(slug);
