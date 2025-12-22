@@ -169,12 +169,11 @@ describe("content lib", () => {
         ]);
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
-          name: "Sobriety Waypoint",
+          name: "Sobers",
           slug: "sobriety-waypoint",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
-          longDescription:
-            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          longDescription: "Sobers transforms the sponsor-sponsee relationship",
           features: ["Feature 1"],
           techStack: ["React Native"],
           links: {},
@@ -197,12 +196,11 @@ describe("content lib", () => {
         ]);
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
-          name: "Sobriety Waypoint",
+          name: "Sobers",
           slug: "sobriety-waypoint",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
-          longDescription:
-            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          longDescription: "Sobers transforms the sponsor-sponsee relationship",
           features: ["Feature 1"],
           techStack: ["React Native"],
           links: {},
@@ -231,12 +229,11 @@ describe("content lib", () => {
         (fs.existsSync as jest.Mock).mockReturnValue(true);
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
-          name: "Sobriety Waypoint",
+          name: "Sobers",
           slug: "sobriety-waypoint",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
-          longDescription:
-            "Sobriety Waypoint transforms the sponsor-sponsee relationship",
+          longDescription: "Sobers transforms the sponsor-sponsee relationship",
           features: ["Feature 1"],
           techStack: ["React Native"],
           links: {},

@@ -8,13 +8,13 @@ test.describe("Product Detail Page", () => {
 
   test("loads successfully with product name in title", async ({ page }) => {
     const title = await page.title();
-    expect(title.toLowerCase()).toContain("sobriety");
+    expect(title.toLowerCase()).toContain("sobers");
   });
 
   test("displays product name as heading", async ({ page }) => {
     const heading = page.locator("h1").first();
     await expect(heading).toBeVisible();
-    await expect(heading).toContainText(/Sobriety Waypoint/i);
+    await expect(heading).toContainText(/Sobers/i);
   });
 
   test("displays product description", async ({ page }) => {
@@ -67,7 +67,7 @@ test.describe("Product Detail Page", () => {
     expect(githubCount).toBeGreaterThanOrEqual(1);
 
     // Look for Demo link
-    const demoLink = page.locator('a[href*="sobrietywaypoint"]');
+    const demoLink = page.locator('a[href*="sobers.app"]');
     const demoCount = await demoLink.count();
     expect(demoCount).toBeGreaterThanOrEqual(1);
   });
