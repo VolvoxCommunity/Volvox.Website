@@ -9,7 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { CheckCircle, AppleLogo, GooglePlayLogo } from "@phosphor-icons/react";
+import {
+  CheckCircle,
+  AppleLogo,
+  GooglePlayLogo,
+  ArrowUpRight,
+} from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
@@ -173,12 +178,30 @@ function ProductCard({ product, index }: ProductCardProps) {
                   )}
                 </div>
               )}
-              <Button asChild className="gap-2 group/btn">
-                <Link href={`/products/${product.slug}`}>
-                  View Details
-                  <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
+              <div className="flex flex-wrap gap-3">
+                <Button asChild className="gap-2 group/btn">
+                  <Link href={`/products/${product.slug}`}>
+                    View Details
+                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </Link>
+                </Button>
+                {product.links?.demo && (
+                  <Button
+                    variant="accent"
+                    asChild
+                    className="gap-2 shadow-lg shadow-accent/20"
+                  >
+                    <a
+                      href={product.links.demo}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Visit
+                      <ArrowUpRight weight="bold" className="h-4 w-4" />
+                    </a>
+                  </Button>
+                )}
+              </div>
             </CardFooter>
           </div>
         </div>

@@ -68,10 +68,10 @@ test.describe("SEO", () => {
 
   test.describe("Product Page", () => {
     test("has product-specific meta tags", async ({ page }) => {
-      await page.goto("/products/sobriety-waypoint");
+      await page.goto("/products/sobers");
 
       const title = await page.title();
-      expect(title.toLowerCase()).toContain("sobriety");
+      expect(title.toLowerCase()).toContain("sobers");
 
       // Product pages should have a meta description
       const description = page.locator('meta[name="description"]');

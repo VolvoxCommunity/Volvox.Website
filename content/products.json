@@ -1,9 +1,9 @@
 [
   {
     "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
-    "name": "Sobriety Waypoint",
+    "name": "Sobers",
     "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
-    "longDescription": "Sobriety Waypoint transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
+    "longDescription": "Sobers transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
     "features": [
       "Secure sponsor-sponsee pairing with invite code system",
       "Sobriety timeline with transparent relapse tracking",
@@ -12,8 +12,8 @@
       "Accountability loop supporting effective sponsorship",
       "Cross-platform support (iOS, Android, Web)"
     ],
-    "githubUrl": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
-    "demoUrl": "https://sobrietywaypoint.com",
-    "image": "/images/product/sobriety-waypoint.png"
+    "githubUrl": "https://github.com/VolvoxCommunity/sobers",
+    "demoUrl": "https://sobers.app",
+    "image": "/images/product/sobers.png"
   }
 ]

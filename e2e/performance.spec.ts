@@ -4,7 +4,7 @@ const pages = [
   { name: "Homepage", path: "/" },
   { name: "Blog Post", path: "/blog/announcing-volvox" },
   { name: "Products", path: "/products" },
-  { name: "Product Detail", path: "/products/sobriety-waypoint" },
+  { name: "Product Detail", path: "/products/sobers" },
   { name: "Privacy", path: "/privacy" },
   { name: "Terms", path: "/terms" },
 ];
