@@ -1,4 +1,5 @@
-import { render, screen, fireEvent, act } from "@testing-library/react";
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { BackToPostsButton } from "@/components/blog/back-to-posts-button";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogNavigation } from "@/components/blog/blog-navigation";
@@ -47,7 +48,19 @@ interface MotionProps {
 
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: MotionProps) => (
+    div: ({
+      children,
+      whileHover: _whileHover,
+      whileTap: _whileTap,
+      whileInView: _whileInView,
+      viewport: _viewport,
+      initial: _initial,
+      animate: _animate,
+      exit: _exit,
+      variants: _variants,
+      transition: _transition,
+      ...props
+    }: MotionProps) => (
       <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
     ),
   },
@@ -113,7 +126,7 @@ describe("Blog Components", () => {
       expect(screen.queryByText("Back to All Posts")).not.toBeInTheDocument();
     });
 
-    it("becomes visible after scrolling", () => {
+    it("becomes visible after scrolling", async () => {
       render(<BackToPostsButton />);
       act(() => {
         Object.defineProperty(window, "scrollY", {
@@ -122,7 +135,9 @@ describe("Blog Components", () => {
         });
         window.dispatchEvent(new Event("scroll"));
       });
-      expect(screen.getByText("Back to All Posts")).toBeInTheDocument();
+      await waitFor(() => {
+        expect(screen.getByText("Back to All Posts")).toBeInTheDocument();
+      });
     });
   });
 
@@ -190,13 +205,15 @@ describe("Blog Components", () => {
       expect(heading).toHaveAttribute("id", "my-test-heading");
     });
 
-    it("copies link to clipboard on button click", () => {
+    it("copies link to clipboard on button click", async () => {
       render(<HeadingWithAnchor as="h2">Test</HeadingWithAnchor>);
       const copyButton = screen.getByRole("button", {
         name: /copy link to heading/i,
       });
       fireEvent.click(copyButton);
-      expect(mockWriteText).toHaveBeenCalled();
+      await waitFor(() => {
+        expect(mockWriteText).toHaveBeenCalled();
+      });
     });
   });
 

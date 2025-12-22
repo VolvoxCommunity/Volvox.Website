@@ -25,7 +25,7 @@ describe("Sheet Components", () => {
       render(
         <Sheet>
           <SheetTrigger>Open Sheet</SheetTrigger>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Sheet Title</SheetTitle>
             <div>Sheet Body Content</div>
           </SheetContent>
@@ -71,7 +71,8 @@ describe("Sheet Components", () => {
     it("renders close button", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
+            <SheetTitle>Title</SheetTitle>
             <SheetClose data-testid="close-btn">Close</SheetClose>
           </SheetContent>
         </Sheet>
@@ -82,7 +83,7 @@ describe("Sheet Components", () => {
     it("closes sheet when clicked", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <SheetClose data-testid="close-btn">Close</SheetClose>
             <div data-testid="sheet-body">Sheet Body Content</div>
@@ -105,7 +106,7 @@ describe("Sheet Components", () => {
     it("renders content when open", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Sheet Content</div>
           </SheetContent>
@@ -117,7 +118,7 @@ describe("Sheet Components", () => {
     it("renders with right side by default", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Content</div>
           </SheetContent>
@@ -130,7 +131,7 @@ describe("Sheet Components", () => {
     it("renders with left side", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent side="left">
+          <SheetContent side="left" aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Left Content</div>
           </SheetContent>
@@ -143,7 +144,7 @@ describe("Sheet Components", () => {
     it("renders with top side", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent side="top">
+          <SheetContent side="top" aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Top Content</div>
           </SheetContent>
@@ -156,7 +157,7 @@ describe("Sheet Components", () => {
     it("renders with bottom side", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent side="bottom">
+          <SheetContent side="bottom" aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Bottom Content</div>
           </SheetContent>
@@ -169,7 +170,7 @@ describe("Sheet Components", () => {
     it("renders close button with X icon", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Content</div>
           </SheetContent>
@@ -181,7 +182,7 @@ describe("Sheet Components", () => {
     it("applies custom className", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent className="custom-class">
+          <SheetContent className="custom-class" aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <div>Content</div>
           </SheetContent>
@@ -196,7 +197,7 @@ describe("Sheet Components", () => {
     it("renders header content with proper heading semantics", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetHeader>
               <SheetTitle>Header Title</SheetTitle>
             </SheetHeader>
@@ -212,7 +213,7 @@ describe("Sheet Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetHeader data-testid="header">
               <SheetTitle>Title</SheetTitle>
             </SheetHeader>
@@ -228,7 +229,7 @@ describe("Sheet Components", () => {
     it("applies custom className", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetHeader className="custom-header" data-testid="header">
               <SheetTitle>Title</SheetTitle>
             </SheetHeader>
@@ -243,7 +244,7 @@ describe("Sheet Components", () => {
     it("renders footer content within the sheet", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <SheetFooter data-testid="footer">Footer Content</SheetFooter>
           </SheetContent>
@@ -261,7 +262,7 @@ describe("Sheet Components", () => {
     it("applies custom className", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>Title</SheetTitle>
             <SheetFooter className="custom-footer" data-testid="footer">
               Footer
@@ -277,7 +278,7 @@ describe("Sheet Components", () => {
     it("renders title with heading semantics", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle>My Title</SheetTitle>
           </SheetContent>
         </Sheet>
@@ -291,7 +292,7 @@ describe("Sheet Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle data-testid="title">Title</SheetTitle>
           </SheetContent>
         </Sheet>
@@ -305,7 +306,7 @@ describe("Sheet Components", () => {
     it("applies custom className", () => {
       render(
         <Sheet defaultOpen>
-          <SheetContent>
+          <SheetContent aria-describedby={undefined}>
             <SheetTitle className="custom-title" data-testid="title">
               Title
             </SheetTitle>

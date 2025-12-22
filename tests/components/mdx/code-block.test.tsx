@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/require-await */
 /* eslint-disable @typescript-eslint/unbound-method */
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { CodeBlock } from "@/components/mdx/code-block";
 import { reportError } from "@/lib/logger";
 
@@ -72,33 +72,35 @@ describe("CodeBlock", () => {
 
     const copyButton = screen.getByLabelText("Copy code");
 
-    // Use act to handle state update
-    await act(async () => {
-      fireEvent.click(copyButton);
-    });
+    // Click triggers async action
+    fireEvent.click(copyButton);
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("const a = 1;");
-    expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith("const a = 1;");
+      expect(screen.getByLabelText("Copied!")).toBeInTheDocument();
+    });
 
     // Fast-forward timeout to reset state
     await act(async () => {
       jest.advanceTimersByTime(2000);
     });
 
-    expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByLabelText("Copy code")).toBeInTheDocument();
+    });
   });
 
   it("handles string children directly", async () => {
     render(<CodeBlock>raw string content</CodeBlock>);
 
     const copyButton = screen.getByLabelText("Copy code");
-    await act(async () => {
-      fireEvent.click(copyButton);
-    });
+    fireEvent.click(copyButton);
 
-    expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
-      "raw string content"
-    );
+    await waitFor(() => {
+      expect(navigator.clipboard.writeText).toHaveBeenCalledWith(
+        "raw string content"
+      );
+    });
   });
 
   it("reports error when no text content found", async () => {
@@ -119,15 +121,15 @@ describe("CodeBlock", () => {
     );
 
     const copyButton = screen.getByLabelText("Copy code");
-    await act(async () => {
-      fireEvent.click(copyButton);
-    });
+    fireEvent.click(copyButton);
 
-    expect(reportError).toHaveBeenCalledWith(
-      "CodeBlock: No text content found to copy",
-      expect.any(Error)
-    );
-    expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+    await waitFor(() => {
+      expect(reportError).toHaveBeenCalledWith(
+        "CodeBlock: No text content found to copy",
+        expect.any(Error)
+      );
+      expect(navigator.clipboard.writeText).not.toHaveBeenCalled();
+    });
   });
 
   it("reports error when clipboard write fails", async () => {
@@ -141,13 +143,13 @@ describe("CodeBlock", () => {
     );
 
     const copyButton = screen.getByLabelText("Copy code");
-    await act(async () => {
-      fireEvent.click(copyButton);
-    });
+    fireEvent.click(copyButton);
 
-    expect(reportError).toHaveBeenCalledWith(
-      "CodeBlock: Failed to copy to clipboard",
-      error
-    );
+    await waitFor(() => {
+      expect(reportError).toHaveBeenCalledWith(
+        "CodeBlock: Failed to copy to clipboard",
+        error
+      );
+    });
   });
 });

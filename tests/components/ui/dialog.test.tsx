@@ -51,7 +51,7 @@ describe("Dialog Components", () => {
     it("renders close button", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <DialogClose data-testid="close-btn">Close Me</DialogClose>
           </DialogContent>
@@ -63,7 +63,7 @@ describe("Dialog Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <DialogClose data-testid="close-btn">Close</DialogClose>
           </DialogContent>
@@ -131,7 +131,7 @@ describe("Dialog Components", () => {
     it("renders content when open", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <div>Dialog Content</div>
           </DialogContent>
@@ -143,7 +143,7 @@ describe("Dialog Components", () => {
     it("renders close button by default", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <div>Content</div>
           </DialogContent>
@@ -155,7 +155,7 @@ describe("Dialog Components", () => {
     it("hides close button when showCloseButton is false", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent showCloseButton={false}>
+          <DialogContent showCloseButton={false} aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <div>Content</div>
           </DialogContent>
@@ -167,7 +167,7 @@ describe("Dialog Components", () => {
     it("applies custom className", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent className="custom-content">
+          <DialogContent className="custom-content" aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <div data-testid="inner">Content</div>
           </DialogContent>
@@ -180,7 +180,7 @@ describe("Dialog Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <div data-testid="inner">Content</div>
           </DialogContent>
@@ -195,7 +195,7 @@ describe("Dialog Components", () => {
     it("renders header content", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogHeader>
               <DialogTitle>Header Title</DialogTitle>
             </DialogHeader>
@@ -208,7 +208,7 @@ describe("Dialog Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogHeader data-testid="header">
               <DialogTitle>Title</DialogTitle>
             </DialogHeader>
@@ -224,7 +224,7 @@ describe("Dialog Components", () => {
     it("applies custom className", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogHeader className="custom-header" data-testid="header">
               <DialogTitle>Title</DialogTitle>
             </DialogHeader>
@@ -239,7 +239,7 @@ describe("Dialog Components", () => {
     it("renders footer content", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <DialogFooter>Footer Content</DialogFooter>
           </DialogContent>
@@ -251,7 +251,7 @@ describe("Dialog Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <DialogFooter data-testid="footer">Footer</DialogFooter>
           </DialogContent>
@@ -266,7 +266,7 @@ describe("Dialog Components", () => {
     it("applies custom className", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>Title</DialogTitle>
             <DialogFooter className="custom-footer" data-testid="footer">
               Footer
@@ -282,7 +282,7 @@ describe("Dialog Components", () => {
     it("renders title text", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle>My Dialog Title</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -293,7 +293,7 @@ describe("Dialog Components", () => {
     it("has data-slot attribute", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle data-testid="title">Title</DialogTitle>
           </DialogContent>
         </Dialog>
@@ -307,7 +307,7 @@ describe("Dialog Components", () => {
     it("applies custom className", () => {
       render(
         <Dialog defaultOpen>
-          <DialogContent>
+          <DialogContent aria-describedby={undefined}>
             <DialogTitle className="custom-title" data-testid="title">
               Title
             </DialogTitle>

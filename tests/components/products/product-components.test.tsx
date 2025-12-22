@@ -50,27 +50,48 @@ jest.mock("framer-motion", () => ({
   motion: {
     div: ({
       children,
-      initial,
-      animate,
-      transition,
-      viewport,
-      whileInView,
+      initial: _initial,
+      animate: _animate,
+      transition: _transition,
+      viewport: _viewport,
+      whileInView: _whileInView,
+      whileHover: _whileHover,
+      whileTap: _whileTap,
+      exit: _exit,
+      variants: _variants,
       ...props
     }: MotionProps) => (
       <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
     ),
     li: ({
       children,
-      initial,
-      animate,
-      transition,
-      viewport,
-      whileInView,
+      initial: _initial,
+      animate: _animate,
+      transition: _transition,
+      viewport: _viewport,
+      whileInView: _whileInView,
+      whileHover: _whileHover,
+      whileTap: _whileTap,
+      exit: _exit,
+      variants: _variants,
       ...props
     }: MotionProps) => (
       <li {...(props as React.LiHTMLAttributes<HTMLLIElement>)}>{children}</li>
     ),
-    button: ({ children, onClick, ...props }: MotionProps) => (
+    button: ({
+      children,
+      onClick,
+      initial: _initial,
+      animate: _animate,
+      transition: _transition,
+      viewport: _viewport,
+      whileInView: _whileInView,
+      whileHover: _whileHover,
+      whileTap: _whileTap,
+      exit: _exit,
+      variants: _variants,
+      ...props
+    }: MotionProps) => (
       <button
         type="button"
         onClick={onClick as React.MouseEventHandler<HTMLButtonElement>}

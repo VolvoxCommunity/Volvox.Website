@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { Callout } from "@/components/mdx/callout";
 import { CustomLink } from "@/components/mdx/link";
 import { CodeBlock } from "@/components/mdx/code-block";
@@ -36,7 +36,7 @@ describe("MDX Components", () => {
     expect(screen.getByText("js")).toBeInTheDocument();
   });
 
-  it("CodeBlock copy button", () => {
+  it("CodeBlock copy button", async () => {
     const writeText = jest.fn();
     Object.assign(navigator, {
       clipboard: { writeText },
@@ -45,6 +45,8 @@ describe("MDX Components", () => {
     render(<CodeBlock>const a = 1;</CodeBlock>);
     const copyBtn = screen.getByLabelText("Copy code");
     fireEvent.click(copyBtn);
-    expect(writeText).toHaveBeenCalledWith("const a = 1;");
+    await waitFor(() => {
+      expect(writeText).toHaveBeenCalledWith("const a = 1;");
+    });
   });
 });
