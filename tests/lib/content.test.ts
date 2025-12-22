@@ -165,12 +165,12 @@ describe("content lib", () => {
       it("returns array of extended products", () => {
         (fs.existsSync as jest.Mock).mockReturnValue(true);
         (fs.readdirSync as jest.Mock).mockReturnValue([
-          { name: "sobriety-waypoint", isDirectory: () => true },
+          { name: "sobers", isDirectory: () => true },
         ]);
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobers",
-          slug: "sobriety-waypoint",
+          slug: "sobers",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription: "Sobers transforms the sponsor-sponsee relationship",
@@ -192,12 +192,12 @@ describe("content lib", () => {
       it("returns products with required fields", () => {
         (fs.existsSync as jest.Mock).mockReturnValue(true);
         (fs.readdirSync as jest.Mock).mockReturnValue([
-          { name: "sobriety-waypoint", isDirectory: () => true },
+          { name: "sobers", isDirectory: () => true },
         ]);
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobers",
-          slug: "sobriety-waypoint",
+          slug: "sobers",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription: "Sobers transforms the sponsor-sponsee relationship",
@@ -230,7 +230,7 @@ describe("content lib", () => {
         const mockProduct = {
           id: "ee7a459b-9319-4568-8c70-a9842e3c3558",
           name: "Sobers",
-          slug: "sobriety-waypoint",
+          slug: "sobers",
           tagline: "Recovery made simple",
           description: "A comprehensive accountability app",
           longDescription: "Sobers transforms the sponsor-sponsee relationship",
@@ -245,9 +245,9 @@ describe("content lib", () => {
           JSON.stringify(mockProduct)
         );
 
-        const product = getExtendedProductBySlug("sobriety-waypoint");
+        const product = getExtendedProductBySlug("sobers");
         expect(product).not.toBeNull();
-        expect(product?.slug).toBe("sobriety-waypoint");
+        expect(product?.slug).toBe("sobers");
       });
 
       it("returns null for invalid slug", () => {
@@ -264,7 +264,7 @@ describe("content lib", () => {
           "# Changelog\n\nAll notable changes"
         );
 
-        const changelog = getProductChangelog("sobriety-waypoint");
+        const changelog = getProductChangelog("sobers");
         expect(changelog).not.toBeNull();
         expect(changelog).toContain("Changelog");
       });
@@ -280,7 +280,7 @@ describe("content lib", () => {
   describe("Path Traversal Prevention", () => {
     describe("isValidSlug", () => {
       it("accepts valid lowercase slugs", () => {
-        expect(isValidSlug("sobriety-waypoint")).toBe(true);
+        expect(isValidSlug("sobers")).toBe(true);
         expect(isValidSlug("product-1")).toBe(true);
         expect(isValidSlug("my-app")).toBe(true);
         expect(isValidSlug("test123")).toBe(true);

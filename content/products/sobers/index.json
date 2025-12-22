@@ -1,7 +1,7 @@
 {
   "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
   "name": "Sobers",
-  "slug": "sobriety-waypoint",
+  "slug": "sobers",
   "tagline": "Track the journey, not just the days.",
   "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
   "longDescription": "Sobers transforms the sponsor-sponsee relationship with powerful accountability tools designed for adults in recovery. Sponsors create secure connections via invite codes, assign tasks with optional due dates, and monitor their sponsees' journey through an intuitive timeline view. Sponsees track continuous sobriety, document relapses transparently, complete sponsor-assigned tasks with private notes, and visualize their progress through milestones and step completion. Built with React Native and Expo for seamless cross-platform performance on iOS, Android, and Web.",
@@ -15,9 +15,9 @@
   ],
   "techStack": ["React Native", "Expo", "iOS", "Android", "Web"],
   "links": {
-    "github": "https://github.com/VolvoxCommunity/Sobriety-Waypoint",
+    "github": "https://github.com/VolvoxCommunity/sobers",
     "demo": "https://sobers.app",
-    "appStore": "https://apps.apple.com/us/app/sobriety-waypoint/id6755614815",
+    "appStore": "https://apps.apple.com/app/id6755614815",
     "playStore": "https://play.google.com/apps/internaltest/4701660329596082968"
   },
   "screenshots": ["hero.png"],

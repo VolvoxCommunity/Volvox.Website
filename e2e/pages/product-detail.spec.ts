@@ -2,7 +2,7 @@ import { test, expect } from "../fixtures/base.fixture";
 
 test.describe("Product Detail Page", () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto("/products/sobriety-waypoint");
+    await page.goto("/products/sobers");
     await page.waitForLoadState("networkidle");
   });
 
