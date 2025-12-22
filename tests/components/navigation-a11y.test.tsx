@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import { Navigation } from "@/components/navigation";
@@ -19,12 +21,28 @@ jest.mock("next/image", () => ({
 // Mock framer-motion to render children directly
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: React.ComponentProps<"div">) => (
-      <div {...props}>{children}</div>
-    ),
-    button: ({ children, ...props }: React.ComponentProps<"button">) => (
-      <button {...props}>{children}</button>
-    ),
+    div: ({
+      children,
+      whileTap,
+      whileHover,
+      initial,
+      animate,
+      exit,
+      transition,
+      variants,
+      ...props
+    }: any) => <div {...props}>{children}</div>,
+    button: ({
+      children,
+      whileTap,
+      whileHover,
+      initial,
+      animate,
+      exit,
+      transition,
+      variants,
+      ...props
+    }: any) => <button {...props}>{children}</button>,
   },
 }));
 

@@ -27,7 +27,9 @@ export function isValidSlug(slug: string): boolean {
 }
 
 /**
- * Reads and validates authors from JSON file
+ * Reads and validates authors from JSON file.
+ *
+ * @returns Array of validated Author objects
  */
 export function getAllAuthors(): Author[] {
   try {
@@ -45,7 +47,10 @@ export function getAllAuthors(): Author[] {
 }
 
 /**
- * Gets a single author by ID
+ * Gets a single author by ID.
+ *
+ * @param id - The author ID to search for
+ * @returns The Author object if found, null otherwise
  */
 export function getAuthorById(id: string): Author | null {
   const authors = getAllAuthors();
@@ -53,7 +58,9 @@ export function getAuthorById(id: string): Author | null {
 }
 
 /**
- * Reads and validates products from JSON file
+ * Reads and validates products from JSON file.
+ *
+ * @returns Array of validated Product objects
  */
 export function getAllProducts(): Product[] {
   try {
@@ -71,7 +78,9 @@ export function getAllProducts(): Product[] {
 }
 
 /**
- * Reads and validates mentors from JSON file
+ * Reads and validates mentors from JSON file.
+ *
+ * @returns Array of validated Mentor objects
  */
 export function getAllMentors(): Mentor[] {
   try {
@@ -89,7 +98,9 @@ export function getAllMentors(): Mentor[] {
 }
 
 /**
- * Reads and validates mentees from JSON file
+ * Reads and validates mentees from JSON file.
+ *
+ * @returns Array of validated Mentee objects
  */
 export function getAllMentees(): Mentee[] {
   try {

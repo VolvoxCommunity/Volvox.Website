@@ -28,9 +28,13 @@ describe("sitemap", () => {
   });
 
   it("handles errors", async () => {
+    const consoleSpy = jest
+      .spyOn(console, "error")
+      .mockImplementation(() => {});
     (getAllPosts as jest.Mock).mockRejectedValue(new Error("Fail"));
     const result = await sitemap();
     // Should return static routes
     expect(result.length).toBeGreaterThan(0);
+    consoleSpy.mockRestore();
   });
 });

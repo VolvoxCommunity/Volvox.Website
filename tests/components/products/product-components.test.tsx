@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductFeatures } from "@/components/products/product-features";
@@ -47,10 +48,26 @@ interface MotionProps {
 
 jest.mock("framer-motion", () => ({
   motion: {
-    div: ({ children, ...props }: MotionProps) => (
+    div: ({
+      children,
+      initial,
+      animate,
+      transition,
+      viewport,
+      whileInView,
+      ...props
+    }: MotionProps) => (
       <div {...(props as React.HTMLAttributes<HTMLDivElement>)}>{children}</div>
     ),
-    li: ({ children, ...props }: MotionProps) => (
+    li: ({
+      children,
+      initial,
+      animate,
+      transition,
+      viewport,
+      whileInView,
+      ...props
+    }: MotionProps) => (
       <li {...(props as React.LiHTMLAttributes<HTMLLIElement>)}>{children}</li>
     ),
     button: ({ children, onClick, ...props }: MotionProps) => (

@@ -21,20 +21,20 @@ export function Footer() {
           >
             Privacy Policy
           </Link>
-          <span className="text-muted-foreground/50">|</span>
+          <span className="text-muted-foreground/70">|</span>
           <Link
             href="/terms"
             className="hover:text-foreground transition-colors underline-offset-4 hover:underline"
           >
             Terms of Service
           </Link>
-          <span className="text-muted-foreground/50">|</span>
+          <span className="text-muted-foreground/70">|</span>
           <CookieSettingsButton />
         </div>
         <p className="text-sm text-muted-foreground">
           © {new Date().getFullYear()} Volvox. All rights reserved.
         </p>
-        <p className="text-xs text-muted-foreground/60">v{version}</p>
+        <p className="text-xs text-muted-foreground/80">v{version}</p>
       </div>
     </footer>
   );
