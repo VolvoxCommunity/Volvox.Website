@@ -10,7 +10,8 @@ const pages = [
 ];
 
 // Known accessibility issues to be fixed separately
-// Color contrast issues fixed in PR #132
+// TODO: Fix color contrast issues in footer text and re-enable this rule
+// Tracked in: https://github.com/VolvoxCommunity/Volvox.Website/issues/102
 // TODO: Fix link-name issues on Product Detail page (icons without accessible names)
 const EXCLUDED_RULES = ["link-name"];
 
