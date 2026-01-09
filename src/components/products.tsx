@@ -90,7 +90,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                   {product.name}
                 </Link>
               </CardTitle>
-              <CardDescription className="text-base mt-3 leading-relaxed text-muted-foreground">
+              <CardDescription className="text-base mt-3 leading-relaxed">
                 {product.description}
               </CardDescription>
             </CardHeader>
