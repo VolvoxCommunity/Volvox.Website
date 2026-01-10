@@ -1,10 +1,13 @@
 import { test, expect } from "../fixtures/base.fixture";
+import { dismissCookieBanner } from "../utils/test-helpers";
 
 test.describe("404 Not Found Page", () => {
   test.beforeEach(async ({ page }) => {
     // Navigate to a non-existent page
     await page.goto("/this-page-definitely-does-not-exist-12345");
     await page.waitForLoadState("networkidle");
+    // Dismiss cookie banner if present (can block clicks)
+    await dismissCookieBanner(page);
   });
 
   test("displays 404 as decorative element", async ({ page }) => {

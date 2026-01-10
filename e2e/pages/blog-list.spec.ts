@@ -51,9 +51,11 @@ test.describe("Blog List (Homepage Section)", () => {
     await link.click();
     await page.waitForURL(/\/blog\/.+/);
 
-    // Verify we're on a blog post page
-    const blogHeader = page.locator('[data-testid="blog-post-header"]');
-    await expect(blogHeader).toBeVisible();
+    // Verify we're on a blog post page by checking for the article and h1
+    const article = page.locator("article");
+    await expect(article).toBeVisible();
+    const heading = article.locator("h1");
+    await expect(heading).toBeVisible();
   });
 
   test("View All Posts button links to blog page", async ({ page }) => {

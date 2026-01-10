@@ -290,15 +290,9 @@ export function BlogListClient({ posts }: BlogListClientProps) {
             )
           ) : (
             <div className="text-center py-16">
-              <p className="text-muted-foreground mb-4">
+              <p className="text-muted-foreground">
                 No posts found. Try adjusting your search or filters.
               </p>
-              <button
-                onClick={handleClearAll}
-                className="text-secondary hover:underline"
-              >
-                Clear all filters
-              </button>
             </div>
           )}
         </main>

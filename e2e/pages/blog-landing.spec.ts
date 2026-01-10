@@ -105,10 +105,10 @@ test.describe("Blog Landing Page", () => {
     test("search updates URL", async ({ page }) => {
       const searchInput = page.getByPlaceholder(/search/i);
       await searchInput.fill("test");
-      // Wait for debounce (300ms) plus URL update
-      await page.waitForTimeout(500);
-
-      expect(page.url()).toContain("q=test");
+      // Wait for debounce (300ms) and poll for URL change
+      await expect
+        .poll(() => page.url(), { timeout: 5000 })
+        .toContain("q=test");
     });
 
     test("shows no results message when search has no matches", async ({
@@ -125,29 +125,42 @@ test.describe("Blog Landing Page", () => {
 
   test.describe("Tag Filtering", () => {
     test("displays tag filter chips", async ({ page }) => {
+      // Dismiss cookie banner if present
+      const acceptButton = page.getByRole("button", { name: "Accept All" });
+      if ((await acceptButton.count()) > 0) {
+        await acceptButton.click();
+        await page.waitForTimeout(100);
+      }
+
       // Tags are shown as buttons next to the "Tags:" label
       const tagsLabel = page.getByText("Tags:");
       await expect(tagsLabel).toBeVisible();
-      // The "All" button should always be present
-      const allButton = page.getByRole("button", { name: "All" });
+      // The "All" button for tag filtering (use exact match to avoid cookie buttons)
+      const allButton = page.getByRole("button", { name: "All", exact: true });
       await expect(allButton).toBeVisible();
     });
 
     test("clicking a tag filters posts", async ({ page }) => {
-      // Find tag buttons after the Tags: label (not the "All" button)
-      // Tags are rounded-full buttons with single-word text
-      const tagButtons = page.locator(
+      // Dismiss cookie banner if present
+      const acceptButton = page.getByRole("button", { name: "Accept All" });
+      if ((await acceptButton.count()) > 0) {
+        await acceptButton.click();
+        await page.waitForTimeout(100);
+      }
+
+      // Find tag buttons in the tags section (exclude "All" button)
+      // Tags are small rounded buttons next to the "Tags:" label
+      const tagsSection = page.locator("text=Tags:").locator("..");
+      const tagButtons = tagsSection.locator(
         'button.rounded-full:not(:has-text("All"))'
       );
       const tagCount = await tagButtons.count();
 
       if (tagCount > 0) {
-        // Click the first actual tag (after "All")
+        // Click the first actual tag
         await tagButtons.first().click();
-        await page.waitForTimeout(200);
-
-        // URL should be updated with tag
-        expect(page.url()).toMatch(/tags=/);
+        // Wait for URL to update with tag (shallow routing)
+        await expect.poll(() => page.url(), { timeout: 5000 }).toMatch(/tags=/);
       }
     });
   });
@@ -167,6 +180,7 @@ test.describe("Blog Landing Page", () => {
   test.describe("View Mode Toggle", () => {
     test("has view mode toggle", async ({ page }) => {
       // View mode toggle buttons have aria-label
+      // Note: Hidden on mobile viewports via CSS (hidden sm:flex)
       const gridButton = page.getByLabel("Grid view");
       const listButton = page.getByLabel("List view");
 
@@ -179,12 +193,13 @@ test.describe("Blog Landing Page", () => {
     test("can switch between grid and list view", async ({ page }) => {
       const listButton = page.getByLabel("List view");
 
-      if ((await listButton.count()) > 0) {
+      // View toggle is hidden on mobile viewports
+      if ((await listButton.count()) > 0 && (await listButton.isVisible())) {
         await listButton.click();
-        await page.waitForTimeout(200);
-
-        // URL should reflect view mode
-        expect(page.url()).toContain("view=list");
+        // Wait for URL update (shallow routing)
+        await expect
+          .poll(() => page.url(), { timeout: 5000 })
+          .toContain("view=list");
       }
     });
   });
@@ -216,22 +231,32 @@ test.describe("Blog Landing Page", () => {
 
   test.describe("Clear Filters", () => {
     test("can clear all filters", async ({ page }) => {
+      // Dismiss cookie banner if present
+      const acceptButton = page.getByRole("button", { name: "Accept All" });
+      if ((await acceptButton.count()) > 0) {
+        await acceptButton.click();
+        await page.waitForTimeout(100);
+      }
+
       // Apply a search filter first
       const searchInput = page.getByPlaceholder(/search/i);
       await searchInput.fill("test");
-      await page.waitForTimeout(300);
+      // Wait for debounce and URL update (shallow routing)
+      await expect
+        .poll(() => page.url(), { timeout: 5000 })
+        .toContain("q=test");
 
-      // Look for clear all button
-      const clearButton = page.getByRole("button", { name: /clear all/i });
-      if ((await clearButton.count()) > 0) {
-        await clearButton.click();
-        await page.waitForTimeout(100);
+      // Look for clear all button (use first() in case there are multiple)
+      const clearButton = page
+        .getByRole("button", { name: /clear all filters/i })
+        .first();
+      await clearButton.click();
 
-        // Search should be cleared
-        await expect(searchInput).toHaveValue("");
-        // URL should not have query params
-        expect(page.url()).not.toContain("q=");
-      }
+      // Wait for URL to be cleared (shallow routing)
+      await expect.poll(() => page.url(), { timeout: 5000 }).toMatch(/\/blog$/);
+
+      // Search should be cleared
+      await expect(searchInput).toHaveValue("");
     });
   });
 });
