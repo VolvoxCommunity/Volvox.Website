@@ -156,25 +156,52 @@ export default async function BlogPostPage({
 
                   {/* Author Info & Meta */}
                   <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground mb-4">
-                    <div className="flex items-center gap-2">
-                      {frontmatter.author?.avatar && (
-                        <Image
-                          src={frontmatter.author.avatar}
-                          alt={frontmatter.author.name}
-                          width={40}
-                          height={40}
-                          className="w-10 h-10 rounded-full"
-                        />
-                      )}
-                      <div data-testid="author-info">
-                        <p className="font-medium text-foreground">
-                          {frontmatter.author?.name}
-                        </p>
-                        <p className="text-xs" data-testid="author-role">
-                          {frontmatter.author?.role}
-                        </p>
+                    {frontmatter.author?.website ? (
+                      <a
+                        href={frontmatter.author.website}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 hover:opacity-80 transition-opacity"
+                      >
+                        {frontmatter.author?.avatar && (
+                          <Image
+                            src={frontmatter.author.avatar}
+                            alt={frontmatter.author.name}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full"
+                          />
+                        )}
+                        <div data-testid="author-info">
+                          <p className="font-medium text-foreground hover:text-secondary transition-colors">
+                            {frontmatter.author?.name}
+                          </p>
+                          <p className="text-xs" data-testid="author-role">
+                            {frontmatter.author?.role}
+                          </p>
+                        </div>
+                      </a>
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        {frontmatter.author?.avatar && (
+                          <Image
+                            src={frontmatter.author.avatar}
+                            alt={frontmatter.author.name}
+                            width={40}
+                            height={40}
+                            className="w-10 h-10 rounded-full"
+                          />
+                        )}
+                        <div data-testid="author-info">
+                          <p className="font-medium text-foreground">
+                            {frontmatter.author?.name}
+                          </p>
+                          <p className="text-xs" data-testid="author-role">
+                            {frontmatter.author?.role}
+                          </p>
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div
                       className="flex items-center gap-1"
@@ -187,7 +214,8 @@ export default async function BlogPostPage({
                     <div className="flex items-center gap-1">
                       <Eye className="h-4 w-4" />
                       <span>
-                        {views.toLocaleString()} {views === 1 ? "view" : "views"}
+                        {views.toLocaleString()}{" "}
+                        {views === 1 ? "view" : "views"}
                       </span>
                     </div>
                   </div>

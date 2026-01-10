@@ -30,6 +30,19 @@ jest.mock("@/components/ui/dialog", () => ({
   DialogContent: ({ children }: DialogContentMockProps) => (
     <div data-testid="dialog-content">{children}</div>
   ),
+  DialogTitle: ({ children }: { children: ReactNode }) => (
+    <span data-testid="dialog-title">{children}</span>
+  ),
+  DialogDescription: ({ children }: { children: ReactNode }) => (
+    <span data-testid="dialog-description">{children}</span>
+  ),
+}));
+
+// Mock VisuallyHidden from Radix UI
+jest.mock("@radix-ui/react-visually-hidden", () => ({
+  VisuallyHidden: ({ children }: { children: ReactNode }) => (
+    <span data-testid="visually-hidden">{children}</span>
+  ),
 }));
 
 describe("ImageZoom", () => {

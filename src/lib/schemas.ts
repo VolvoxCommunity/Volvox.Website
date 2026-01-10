@@ -8,6 +8,7 @@ export const AuthorSchema = z.object({
   name: z.string(),
   role: z.string(),
   avatar: z.string(),
+  website: z.string().url().optional(),
 });
 
 /**
