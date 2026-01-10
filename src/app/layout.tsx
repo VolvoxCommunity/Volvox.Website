@@ -8,7 +8,12 @@ import { Toaster } from "@/components/ui/sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { generateOrganizationSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
+import {
+  safeJsonLdSerialize,
+  SITE_URL,
+  SITE_NAME,
+  SITE_DESCRIPTION,
+} from "@/lib/constants";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
@@ -20,11 +25,10 @@ const jetbrainsMono = JetBrains_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "Volvox - Software Development & Learning Community",
-    template: "%s | Volvox",
+    default: `${SITE_NAME} - Software Development & Learning Community`,
+    template: `%s | ${SITE_NAME}`,
   },
-  description:
-    "Building great software while fostering the next generation of developers through mentorship and open source.",
+  description: SITE_DESCRIPTION,
   keywords: [
     "software development",
     "mentorship",
@@ -35,18 +39,18 @@ export const metadata: Metadata = {
     "TypeScript",
   ],
   authors: [{ name: "Bill Chirico" }],
-  creator: "Volvox",
+  creator: SITE_NAME,
   openGraph: {
     type: "website",
     locale: "en_US",
     url: SITE_URL,
-    siteName: "Volvox",
+    siteName: SITE_NAME,
     images: [
       {
         url: "/banner.jpeg",
         width: 1200,
         height: 630,
-        alt: "Volvox Banner",
+        alt: `${SITE_NAME} Banner`,
       },
     ],
   },

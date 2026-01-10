@@ -9,9 +9,13 @@ echo "Running typecheck..."
 pnpm typecheck
 
 # Run unit tests
-echo "Running tests..."
+echo "Running unit tests..."
 pnpm test
 
 # Run production build
 echo "Running build..."
 pnpm build
+
+# Run E2E tests (Chromium only for speed)
+echo "Running E2E tests..."
+pnpm test:e2e

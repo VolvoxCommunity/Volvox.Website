@@ -15,7 +15,7 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { generateArticleSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize, NAV_HEIGHT } from "@/lib/constants";
+import { safeJsonLdSerialize, NAV_HEIGHT, SITE_NAME } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -43,13 +43,13 @@ export async function generateMetadata({
     return {
       title: frontmatter.title,
       description: frontmatter.excerpt,
-      authors: [{ name: frontmatter.author?.name || "Volvox" }],
+      authors: [{ name: frontmatter.author?.name || SITE_NAME }],
       openGraph: {
         title: frontmatter.title,
         description: frontmatter.excerpt,
         type: "article",
         publishedTime: frontmatter.date,
-        authors: [frontmatter.author?.name || "Volvox"],
+        authors: [frontmatter.author?.name || SITE_NAME],
       },
       twitter: {
         card: "summary_large_image",

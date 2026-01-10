@@ -4,7 +4,7 @@ import { ImageResponse } from "next/og";
 import * as fs from "fs";
 import * as path from "path";
 import { reportError } from "./logger";
-import { BRAND_COLORS } from "./constants";
+import { BRAND_COLORS, SITE_NAME } from "./constants";
 
 /**
  * Converts a Node.js Buffer to an ArrayBuffer.
@@ -250,7 +250,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           width={120}
           height={120}
           style={{ marginBottom: 24 }}
-          alt="Volvox logo"
+          alt={`${SITE_NAME} logo`}
         />
       ) : (
         <div
@@ -270,7 +270,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           marginTop: logoSrc ? 0 : 24,
         }}
       >
-        Volvox Community
+        {SITE_NAME} Community
       </div>
     </div>
   );
@@ -407,7 +407,7 @@ export async function generateSocialImage(
               width={48}
               height={48}
               style={{ marginRight: 16 }}
-              alt="Volvox logo"
+              alt={`${SITE_NAME} logo`}
             />
           )}
           <div
@@ -454,7 +454,7 @@ export async function generateBlogPostSocialImage(
   const options = createImageResponseOptions(fontData);
 
   try {
-    const authorName = frontmatter.author?.name || "Volvox";
+    const authorName = frontmatter.author?.name || SITE_NAME;
     const tagBadges = frontmatter.tags?.slice(0, 4) || [];
 
     return new ImageResponse(
@@ -621,7 +621,7 @@ export async function generateBlogPostSocialImage(
                   width={56}
                   height={56}
                   style={{ marginRight: 16, display: "flex" }}
-                  alt="Volvox logo"
+                  alt={`${SITE_NAME} logo`}
                 />
               ) : null}
               <div
@@ -833,7 +833,7 @@ export async function generateProductSocialImage(
                   width={56}
                   height={56}
                   style={{ marginRight: 16, display: "flex" }}
-                  alt="Volvox logo"
+                  alt={`${SITE_NAME} logo`}
                 />
               ) : null}
               <div

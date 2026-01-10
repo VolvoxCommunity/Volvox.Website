@@ -88,4 +88,30 @@ test.describe("SEO", () => {
       expect(content).not.toContain("noindex");
     }
   });
+
+  test.describe("Blog Landing Page", () => {
+    test("has correct meta tags", async ({ page }) => {
+      await page.goto("/blog");
+
+      await expect(page).toHaveTitle(/blog/i);
+
+      const description = page.locator('meta[name="description"]');
+      await expect(description).toHaveAttribute("content", /.{20,}/);
+    });
+  });
+
+  test.describe("404 Page", () => {
+    test("has noindex meta tag", async ({ page }) => {
+      await page.goto("/non-existent-page-12345");
+
+      const robots = page.locator('meta[name="robots"]');
+      await expect(robots).toHaveAttribute("content", /noindex/);
+    });
+
+    test("has appropriate title", async ({ page }) => {
+      await page.goto("/non-existent-page-12345");
+
+      await expect(page).toHaveTitle(/not found/i);
+    });
+  });
 });

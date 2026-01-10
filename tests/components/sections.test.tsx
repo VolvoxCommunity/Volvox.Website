@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import { Blog } from "@/components/blog";
 import { Products } from "@/components/products";
 import { Mentorship } from "@/components/mentorship";
@@ -87,11 +87,63 @@ describe("Sections", () => {
       expect(screen.getByText("Excerpt 1")).toBeInTheDocument();
     });
 
-    it("opens dialog on click", async () => {
+    it("links to blog post page", () => {
       render(<Blog posts={mockPosts} />);
-      fireEvent.click(screen.getByText("Post 1"));
+      const link = screen.getByRole("link", { name: /Post 1/i });
+      expect(link).toHaveAttribute("href", "/blog/post-1");
+    });
 
-      expect(await screen.findByText("Read Full Article")).toBeInTheDocument();
+    it("shows View All Posts button", () => {
+      render(<Blog posts={mockPosts} />);
+      const viewAllLink = screen.getByRole("link", { name: /View All Posts/i });
+      expect(viewAllLink).toHaveAttribute("href", "/blog");
+    });
+
+    it("limits to 3 most recent posts", () => {
+      const manyPosts: BlogPost[] = [
+        {
+          ...mockPosts[0],
+          id: "1",
+          slug: "post-1",
+          title: "Post 1",
+          date: "2023-01-01",
+        },
+        {
+          ...mockPosts[0],
+          id: "2",
+          slug: "post-2",
+          title: "Post 2",
+          date: "2023-02-01",
+        },
+        {
+          ...mockPosts[0],
+          id: "3",
+          slug: "post-3",
+          title: "Post 3",
+          date: "2023-03-01",
+        },
+        {
+          ...mockPosts[0],
+          id: "4",
+          slug: "post-4",
+          title: "Post 4",
+          date: "2023-04-01",
+        },
+        {
+          ...mockPosts[0],
+          id: "5",
+          slug: "post-5",
+          title: "Post 5",
+          date: "2023-05-01",
+        },
+      ];
+      render(<Blog posts={manyPosts} />);
+      // Should show only 3 most recent (Post 5, Post 4, Post 3)
+      expect(screen.getByText("Post 5")).toBeInTheDocument();
+      expect(screen.getByText("Post 4")).toBeInTheDocument();
+      expect(screen.getByText("Post 3")).toBeInTheDocument();
+      expect(screen.queryByText("Post 2")).not.toBeInTheDocument();
+      expect(screen.queryByText("Post 1")).not.toBeInTheDocument();
     });
 
     it("renders empty state", () => {

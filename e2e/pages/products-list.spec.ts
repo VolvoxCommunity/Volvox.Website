@@ -24,21 +24,19 @@ test.describe("Products List Page", () => {
     const firstProduct = page.locator('[data-testid="product-card"]').first();
     await expect(firstProduct).toBeVisible();
 
-    // Product cards have a title link to the product detail page
-    const titleLink = firstProduct
-      .locator('a[href^="/products/"]')
-      .filter({ hasText: /.+/ })
-      .first();
-    await expect(titleLink).toBeVisible();
+    // Product cards have a title - check for card-title
+    const title = firstProduct.locator('[data-slot="card-title"]');
+    await expect(title).toBeVisible();
 
-    // Product cards have a description paragraph with data-slot="card-description"
+    // Product cards have a description with data-slot="card-description"
     const description = firstProduct.locator('[data-slot="card-description"]');
     await expect(description).toBeVisible();
   });
 
   test("product card links to product detail", async ({ page }) => {
+    // The card is wrapped by a link, so find the ancestor link
     const firstProduct = page.locator('[data-testid="product-card"]').first();
-    const link = firstProduct.locator("a").first();
+    const link = firstProduct.locator("xpath=ancestor::a");
     const href = await link.getAttribute("href");
     expect(href).toMatch(/\/products\/.+/);
   });

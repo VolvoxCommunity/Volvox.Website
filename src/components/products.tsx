@@ -245,7 +245,11 @@ export function Products({ products }: ProductsProps) {
     >
       <div className="container mx-auto max-w-6xl">
         <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">Our Products</h2>
+          <Link href="/products" className="inline-block group">
+            <h2 className="text-3xl md:text-5xl font-bold mb-4 group-hover:text-secondary transition-colors">
+              Our Products
+            </h2>
+          </Link>
           <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
             Open-source applications built with care, designed to make a real
             difference.
@@ -256,6 +260,16 @@ export function Products({ products }: ProductsProps) {
           {products.map((product, index) => (
             <ProductCard key={product.id} product={product} index={index} />
           ))}
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center mt-10">
+          <Button asChild size="lg" variant="outline">
+            <Link href="/products">
+              View All Products
+              <ArrowRight className="h-4 w-4 ml-2" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

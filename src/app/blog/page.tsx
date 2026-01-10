@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { getAllPosts } from "@/lib/blog";
 import { BlogListClient } from "@/components/blog-list-client";
@@ -11,10 +12,15 @@ export const metadata: Metadata = {
 /**
  * Server component for the blog landing page.
  * Fetches all published posts and passes them to the client component for filtering.
+ * Wrapped in Suspense because BlogListClient uses useSearchParams.
  */
 export default async function BlogPage() {
   const allPosts = await getAllPosts();
   const posts = allPosts.filter((post) => post.published);
 
-  return <BlogListClient posts={posts} />;
+  return (
+    <Suspense fallback={null}>
+      <BlogListClient posts={posts} />
+    </Suspense>
+  );
 }

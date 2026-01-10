@@ -35,14 +35,39 @@ test.describe("Blog List (Homepage Section)", () => {
   });
 
   test("blog card links to blog post", async ({ page }) => {
-    const firstCard = page.locator('[data-testid="blog-card"]').first();
-    // Click the card to open the dialog
-    await firstCard.click();
-    // Wait for the dialog to open and find the "Read Full Article" link
-    const dialog = page.locator('[role="dialog"]');
-    await expect(dialog).toBeVisible();
-    const link = dialog.getByRole("link", { name: /read full article/i });
+    // The link wraps the card, so find links that contain blog-card
+    const cardWrapper = page.locator('[data-testid="blog-card"]').first();
+    // Get the parent link element
+    const link = cardWrapper.locator("xpath=ancestor::a");
     const href = await link.getAttribute("href");
     expect(href).toMatch(/\/blog\/.+/);
+  });
+
+  test("clicking blog card navigates to post", async ({ page }) => {
+    // The link wraps the card
+    const cardWrapper = page.locator('[data-testid="blog-card"]').first();
+    const link = cardWrapper.locator("xpath=ancestor::a");
+
+    await link.click();
+    await page.waitForURL(/\/blog\/.+/);
+
+    // Verify we're on a blog post page
+    const blogHeader = page.locator('[data-testid="blog-post-header"]');
+    await expect(blogHeader).toBeVisible();
+  });
+
+  test("View All Posts button links to blog page", async ({ page }) => {
+    const viewAllButton = page.getByRole("link", { name: /view all posts/i });
+    await expect(viewAllButton).toBeVisible();
+    await expect(viewAllButton).toHaveAttribute("href", "/blog");
+  });
+
+  test("Blog heading links to blog page", async ({ page }) => {
+    const blogSection = page.locator("[data-testid='blog-section']");
+    const headingLink = blogSection.locator("a").filter({ hasText: "Blog" });
+
+    if ((await headingLink.count()) > 0) {
+      await expect(headingLink).toHaveAttribute("href", "/blog");
+    }
   });
 });

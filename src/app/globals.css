@@ -140,9 +140,23 @@
     @apply border-border;
   }
 
+  /* WCAG Accessibility: Ensure base font size meets minimum requirements
+   * Reference: https://www.a11y-collective.com/blog/wcag-minimum-font-size/
+   * - Minimum body text: 16px (12pt)
+   * - Large text: 24px (18pt) or 18.66px (14pt) bold for reduced contrast
+   * - Text must scale to 200% without loss of content or functionality
+   */
+  html {
+    font-size: 100%; /* 16px default - WCAG recommended minimum */
+    text-size-adjust: 100%; /* Prevent font scaling in landscape on mobile */
+    -webkit-text-size-adjust: 100%;
+  }
+
   body {
     @apply bg-background text-foreground;
     font-family: "JetBrains Mono", monospace;
+    font-size: 1rem; /* 16px - WCAG minimum for body text */
+    line-height: 1.5; /* Minimum recommended line height */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
@@ -231,9 +245,10 @@
       filter: brightness(1.2);
     }
 
-    /* Code styling */
+    /* Code styling - 0.9375rem (15px) balances readability with code density
+     * WCAG notes: Code is auxiliary content; primary body text remains at 16px+ */
     :where(code) {
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: var(--line-height-code);
       padding: 0.25rem 0.375rem;
       border: 1px solid oklch(from var(--border) l c h / 0.5);
@@ -242,7 +257,7 @@
     }
 
     :where(pre) {
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: var(--line-height-code);
       padding: 1rem 1.5rem;
       border-radius: 0.5rem;
@@ -281,9 +296,10 @@
       padding: var(--spacing-3);
     }
 
-    /* Tables */
+    /* Tables - 0.9375rem (15px) for data tables while maintaining readability
+     * WCAG notes: Tables are auxiliary content; headers use standard weight for scannability */
     :where(table) {
-      font-size: 0.875rem;
+      font-size: 0.9375rem;
       line-height: 1.5;
     }
 

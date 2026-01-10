@@ -123,7 +123,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       }
 
       if (params.tags !== undefined) {
-        if (params.tags.length > 0) newParams.set("tags", params.tags.join(","));
+        if (params.tags.length > 0)
+          newParams.set("tags", params.tags.join(","));
         else newParams.delete("tags");
       }
 
@@ -195,7 +196,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     setSortOption("newest");
     router.replace("/blog", { scroll: false });
   }, [router]);
-
 
   const hasActiveFilters =
     searchQuery || selectedTags.length > 0 || sortOption !== "newest";
