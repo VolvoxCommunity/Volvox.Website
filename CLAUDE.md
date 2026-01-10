@@ -29,7 +29,7 @@ pnpm exec playwright test --ui                 # Interactive UI mode
 
 **NEVER push changes to git without:**
 
-1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only** (`pnpm test:e2e`) for validation.
+1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only** (`pnpm exec playwright test --project=chromium`) for validation.
 2. Explicit approval from the user
 
 Always ask before pushing. No exceptions.

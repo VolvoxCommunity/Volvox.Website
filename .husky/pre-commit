@@ -18,4 +18,4 @@ pnpm build
 
 # Run E2E tests (Chromium only for speed)
 echo "Running E2E tests..."
-pnpm test:e2e
+pnpm exec playwright test --project=chromium
