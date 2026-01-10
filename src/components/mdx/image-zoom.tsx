@@ -2,7 +2,13 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import {
+  Dialog,
+  DialogContent,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { X } from "lucide-react";
 
 interface ImageZoomProps {
@@ -72,6 +78,10 @@ export function ImageZoom({
           className="max-w-7xl w-[95vw] h-[95vh] p-0 bg-background/95 backdrop-blur-lg"
           showCloseButton={false}
         >
+          <VisuallyHidden>
+            <DialogTitle>Image Preview</DialogTitle>
+            <DialogDescription>{alt}</DialogDescription>
+          </VisuallyHidden>
           <button
             type="button"
             onClick={() => setIsOpen(false)}

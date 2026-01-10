@@ -143,62 +143,81 @@ export default async function BlogPostPage({
           <BlogContentWrapper>
             {/* Post Header */}
             <header className="mb-12">
-              <h1 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
-                {frontmatter.title}
-              </h1>
+              <div className="flex flex-col-reverse md:flex-row md:items-start md:gap-8">
+                {/* Text Content */}
+                <div className="flex-1">
+                  <h1 className="text-2xl md:text-3xl font-bold mb-4 leading-tight">
+                    {frontmatter.title}
+                  </h1>
 
-              <p className="text-lg text-muted-foreground mb-6">
-                {frontmatter.excerpt}
-              </p>
+                  <p className="text-lg text-muted-foreground mb-6">
+                    {frontmatter.excerpt}
+                  </p>
 
-              {/* Author Info & Meta */}
-              <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground mb-4">
-                <div className="flex items-center gap-2">
-                  {frontmatter.author?.avatar && (
-                    <Image
-                      src={frontmatter.author.avatar}
-                      alt={frontmatter.author.name}
-                      width={40}
-                      height={40}
-                      className="w-10 h-10 rounded-full"
-                    />
-                  )}
-                  <div data-testid="author-info">
-                    <p className="font-medium text-foreground">
-                      {frontmatter.author?.name}
-                    </p>
-                    <p className="text-xs" data-testid="author-role">
-                      {frontmatter.author?.role}
-                    </p>
+                  {/* Author Info & Meta */}
+                  <div className="flex items-center gap-6 flex-wrap text-sm text-muted-foreground mb-4">
+                    <div className="flex items-center gap-2">
+                      {frontmatter.author?.avatar && (
+                        <Image
+                          src={frontmatter.author.avatar}
+                          alt={frontmatter.author.name}
+                          width={40}
+                          height={40}
+                          className="w-10 h-10 rounded-full"
+                        />
+                      )}
+                      <div data-testid="author-info">
+                        <p className="font-medium text-foreground">
+                          {frontmatter.author?.name}
+                        </p>
+                        <p className="text-xs" data-testid="author-role">
+                          {frontmatter.author?.role}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div
+                      className="flex items-center gap-1"
+                      data-testid="post-date"
+                    >
+                      <Calendar className="h-4 w-4" />
+                      <span>{frontmatter.date}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Eye className="h-4 w-4" />
+                      <span>
+                        {views.toLocaleString()} {views === 1 ? "view" : "views"}
+                      </span>
+                    </div>
                   </div>
+
+                  {/* Categories */}
+                  {frontmatter.tags && frontmatter.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {frontmatter.tags.map((tag: string) => (
+                        <Badge key={tag} variant="secondary">
+                          {tag}
+                        </Badge>
+                      ))}
+                    </div>
+                  )}
                 </div>
 
-                <div
-                  className="flex items-center gap-1"
-                  data-testid="post-date"
-                >
-                  <Calendar className="h-4 w-4" />
-                  <span>{frontmatter.date}</span>
-                </div>
-
-                <div className="flex items-center gap-1">
-                  <Eye className="h-4 w-4" />
-                  <span>
-                    {views.toLocaleString()} {views === 1 ? "view" : "views"}
-                  </span>
-                </div>
+                {/* Banner Image - Top Right */}
+                {frontmatter.banner && (
+                  <div className="mb-6 md:mb-0 md:flex-shrink-0">
+                    <Image
+                      src={frontmatter.banner}
+                      alt={frontmatter.title}
+                      width={280}
+                      height={280}
+                      className="w-full md:w-64 lg:w-72 h-auto rounded-lg border border-border shadow-lg"
+                      priority
+                    />
+                  </div>
+                )}
               </div>
-
-              {/* Categories */}
-              {frontmatter.tags && frontmatter.tags.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {frontmatter.tags.map((tag: string) => (
-                    <Badge key={tag} variant="secondary">
-                      {tag}
-                    </Badge>
-                  ))}
-                </div>
-              )}
             </header>
 
             {/* MDX Content */}

@@ -4,7 +4,7 @@
  */
 
 /** Base URL for the production website (must match canonical domain to avoid redirects) */
-export const SITE_URL = "https://www.volvoxdev.com";
+export const SITE_URL = "https://www.volvox.dev";
 
 /** Site name used in metadata and branding */
 export const SITE_NAME = "Volvox";

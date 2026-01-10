@@ -428,10 +428,10 @@ export function TermsClient() {
                   You may request deletion of your account and associated data
                   at any time. To initiate account deletion, please email{" "}
                   <a
-                    href="mailto:privacy@volvoxdev.com?subject=Data%20Deletion%20Request"
+                    href="mailto:privacy@volvox.dev?subject=Data%20Deletion%20Request"
                     className="text-primary hover:underline"
                   >
-                    privacy@volvoxdev.com
+                    privacy@volvox.dev
                   </a>{" "}
                   with the subject line &ldquo;Data Deletion Request&rdquo;. We
                   will process your request in accordance with our Privacy

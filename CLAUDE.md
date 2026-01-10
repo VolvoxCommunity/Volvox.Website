@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 Volvox is a Next.js 16 application showcasing software development, mentorship programs, and blog content. The project was migrated from Vite to Next.js App Router and uses React 19, TypeScript, and Tailwind CSS v4.
 
-**Package Manager**: This project uses pnpm (pinned to v10.26.0). The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
+**Package Manager**: This project uses pnpm (pinned to v10.27.0). The `.npmrc` file configures strict peer dependencies and disables shamefully-hoist for better dependency management.
 
 **Tailwind CSS v4**: This project uses Tailwind CSS v4 with CSS-first configuration. Theme customization is done via the `@theme` directive in `src/app/globals.css` instead of a JavaScript config file. Lightning CSS is used automatically by Next.js for faster builds.
 

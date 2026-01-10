@@ -85,8 +85,31 @@ export function TableOfContents() {
       observer.observe(element);
     });
 
+    // Handle bottom of page - activate last visible heading when near bottom
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + window.innerHeight;
+      const documentHeight = document.documentElement.scrollHeight;
+      const isNearBottom = scrollPosition >= documentHeight - 100;
+
+      if (isNearBottom && headingData.length > 0) {
+        // Find the last heading that is above the current scroll position
+        const elementsArray = Array.from(elements);
+        for (let i = elementsArray.length - 1; i >= 0; i--) {
+          const element = elementsArray[i];
+          const rect = element.getBoundingClientRect();
+          if (rect.top < window.innerHeight) {
+            setActiveId(element.id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+
     return () => {
       observer.disconnect();
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -104,7 +127,7 @@ export function TableOfContents() {
 
   return (
     <nav
-      className="hidden lg:block sticky top-24 max-h-[calc(100vh-8rem)] overflow-y-auto"
+      className="hidden lg:block sticky top-36 max-h-[calc(100vh-10rem)] overflow-y-auto"
       data-testid="table-of-contents"
     >
       <div className="border-l-2 border-border pl-4">
