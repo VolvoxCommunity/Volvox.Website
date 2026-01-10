@@ -139,7 +139,7 @@ export default async function BlogPostPage({
         </div>
 
         {/* Blog Post Content with Reading Progress and TOC */}
-        <main>
+        <main id="main-content">
           <BlogContentWrapper>
             {/* Post Header */}
             <header className="mb-12">

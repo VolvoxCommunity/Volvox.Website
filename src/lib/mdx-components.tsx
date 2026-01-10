@@ -86,10 +86,28 @@ export const mdxComponents = {
   img: ({ src, alt, width, height, ...props }: ImgPropsWithCaption) => {
     // Use caption from data attribute if provided
     const caption = props["data-caption"];
+    const srcString = typeof src === "string" ? src : "unknown";
+
+    // Development warning for accessibility: missing or generic alt text
+    if (process.env.NODE_ENV === "development") {
+      const genericAltPatterns =
+        /^(image|photo|picture|img|graphic|icon|banner|screenshot)$/i;
+      if (!alt || alt.trim() === "") {
+        console.warn(
+          `[A11Y Warning] Image missing alt text: ${srcString}\n` +
+            'Add descriptive alt text for screen readers, or use alt="" for decorative images.'
+        );
+      } else if (genericAltPatterns.test(alt.trim())) {
+        console.warn(
+          `[A11Y Warning] Image has generic alt text "${alt}": ${srcString}\n` +
+            "Use descriptive alt text that conveys the image's meaning or purpose."
+        );
+      }
+    }
 
     return (
       <ImageZoom
-        src={typeof src === "string" ? src : ""}
+        src={srcString}
         alt={alt || ""}
         width={
           typeof width === "string"

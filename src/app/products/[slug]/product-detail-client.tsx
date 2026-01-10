@@ -58,7 +58,7 @@ export function ProductDetailClient({
         {/* Combined Back Navigation + Table of Contents */}
         <ProductToc sections={tocSections} />
 
-        <main>
+        <main id="main-content">
           {/* Hero Section */}
           <ProductHero product={product} />
 

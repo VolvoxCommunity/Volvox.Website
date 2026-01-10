@@ -74,6 +74,7 @@ export function CustomLink({
     >
       {children}
       <ExternalLink className="h-3 w-3 inline-block" aria-hidden="true" />
+      <span className="sr-only">(opens in new tab)</span>
     </a>
   );
 }

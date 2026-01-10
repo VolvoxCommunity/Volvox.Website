@@ -104,7 +104,8 @@ test.describe("SEO", () => {
     test("has noindex meta tag", async ({ page }) => {
       await page.goto("/non-existent-page-12345");
 
-      const robots = page.locator('meta[name="robots"]');
+      // Use .first() as there may be multiple robots meta tags
+      const robots = page.locator('meta[name="robots"]').first();
       await expect(robots).toHaveAttribute("content", /noindex/);
     });
 

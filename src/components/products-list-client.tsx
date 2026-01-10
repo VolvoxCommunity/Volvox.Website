@@ -265,6 +265,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         </div>
 
         <main
+          id="main-content"
           className="container mx-auto px-4 max-w-7xl py-8"
           data-testid="products-section"
         >
@@ -283,10 +284,12 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
             <div className="relative">
               <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
               <input
-                type="text"
+                type="search"
                 placeholder="Search products..."
                 value={debouncedQuery}
                 onChange={(e) => handleSearchInput(e.target.value)}
+                aria-label="Search products"
+                autoComplete="off"
                 className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-colors"
               />
               {debouncedQuery && (

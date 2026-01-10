@@ -161,6 +161,17 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  /* Custom selection colors for better accessibility and brand consistency */
+  ::selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
+  ::-moz-selection {
+    background-color: var(--primary);
+    color: var(--primary-foreground);
+  }
+
   /* Enhanced Typography System for Blog Reading Experience */
 
   /* Typography variables */

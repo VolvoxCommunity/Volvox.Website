@@ -138,7 +138,7 @@ export function HomepageClient({
           currentSection={currentSection}
         />
 
-        <main>
+        <main id="main-content">
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />

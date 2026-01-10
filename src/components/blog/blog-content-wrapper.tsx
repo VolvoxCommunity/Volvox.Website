@@ -18,7 +18,7 @@ export function BlogContentWrapper({ children }: BlogContentWrapperProps) {
   return (
     <>
       <ReadingProgress />
-      <main className="container mx-auto px-4 py-16 max-w-7xl">
+      <div className="container mx-auto px-4 py-16 max-w-7xl">
         <div className="flex gap-12">
           {/* Main content */}
           <article
@@ -33,7 +33,7 @@ export function BlogContentWrapper({ children }: BlogContentWrapperProps) {
             <TableOfContents />
           </aside>
         </div>
-      </main>
+      </div>
     </>
   );
 }

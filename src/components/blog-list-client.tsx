@@ -231,7 +231,10 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           </div>
         </div>
 
-        <main className="container mx-auto px-4 max-w-7xl py-8">
+        <main
+          id="main-content"
+          className="container mx-auto px-4 max-w-7xl py-8"
+        >
           {/* Page Header */}
           <div className="text-center mb-8">
             <h1 className="text-3xl md:text-5xl font-bold mb-4">Blog</h1>

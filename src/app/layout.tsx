@@ -7,6 +7,7 @@ import { CookieConsentProvider } from "@/components/providers/cookie-consent-pro
 import { Toaster } from "@/components/ui/sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
+import { SkipLink } from "@/components/skip-link";
 import { generateOrganizationSchema } from "@/lib/structured-data";
 import {
   safeJsonLdSerialize,
@@ -88,6 +89,7 @@ export default function RootLayout({
         />
       </head>
       <body className={`${jetbrainsMono.variable} antialiased`}>
+        <SkipLink />
         <CookieConsentProvider>
           <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
             {children}

@@ -7,16 +7,18 @@ test.describe("404 Not Found Page", () => {
     await page.waitForLoadState("networkidle");
   });
 
-  test("displays 404 heading", async ({ page }) => {
-    const heading = page.locator("h1");
-    await expect(heading).toBeVisible();
-    await expect(heading).toHaveText("404");
+  test("displays 404 as decorative element", async ({ page }) => {
+    // 404 is now a decorative element for accessibility (h1 is "Page Not Found")
+    const decorative404 = page.locator("p").filter({ hasText: "404" });
+    await expect(decorative404).toBeVisible();
+    await expect(decorative404).toHaveAttribute("aria-hidden", "true");
   });
 
-  test("displays 'Page Not Found' message", async ({ page }) => {
-    const message = page.locator("h2");
-    await expect(message).toBeVisible();
-    await expect(message).toHaveText("Page Not Found");
+  test("displays 'Page Not Found' as main heading", async ({ page }) => {
+    // For accessibility, "Page Not Found" is the h1 (main heading)
+    const heading = page.locator("h1");
+    await expect(heading).toBeVisible();
+    await expect(heading).toHaveText("Page Not Found");
   });
 
   test("displays helpful description", async ({ page }) => {
@@ -39,7 +41,8 @@ test.describe("404 Not Found Page", () => {
   });
 
   test("has noindex meta tag", async ({ page }) => {
-    const robots = page.locator('meta[name="robots"]');
+    // Use .first() as there may be multiple robots meta tags
+    const robots = page.locator('meta[name="robots"]').first();
     await expect(robots).toHaveAttribute("content", /noindex/);
   });
 
@@ -83,8 +86,9 @@ test.describe("404 Page - Various Invalid URLs", () => {
       await page.goto(url);
       await page.waitForLoadState("networkidle");
 
+      // Verify 404 page by checking for the accessible h1 heading
       const heading = page.locator("h1");
-      await expect(heading).toHaveText("404");
+      await expect(heading).toHaveText("Page Not Found");
     });
   }
 });

@@ -26,10 +26,10 @@ test.describe("Error States", () => {
     }) => {
       await page.goto("/invalid-page-123");
 
-      // Verify 404 page content is visible
+      // Verify 404 page content is visible (h1 is "Page Not Found" for accessibility)
       const heading = page.locator("h1");
       await expect(heading).toBeVisible();
-      await expect(heading).toHaveText("404");
+      await expect(heading).toHaveText("Page Not Found");
 
       // Verify user can navigate away using browser history
       // Go to homepage first to have a history entry
@@ -38,7 +38,7 @@ test.describe("Error States", () => {
 
       // Navigate to 404 page
       await page.goto("/invalid-page-123");
-      await expect(page.locator("h1")).toHaveText("404");
+      await expect(page.locator("h1")).toHaveText("Page Not Found");
 
       // Use browser back to return to homepage
       await page.goBack();
@@ -52,7 +52,7 @@ test.describe("Error States", () => {
       // Note: Default Next.js 404 doesn't include full site navigation
       const heading = page.locator("h1");
       await expect(heading).toBeVisible();
-      await expect(heading).toHaveText("404");
+      await expect(heading).toHaveText("Page Not Found");
     });
   });
 
