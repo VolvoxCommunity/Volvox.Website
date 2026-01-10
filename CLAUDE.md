@@ -17,9 +17,10 @@ pnpm test         # Unit tests (Jest)
 pnpm test:e2e     # E2E tests (Chromium only)
 pnpm format       # Format with Prettier
 
-# E2E tests (all browsers)
-pnpm exec playwright test
-pnpm exec playwright test --ui
+# E2E tests with Playwright
+pnpm exec playwright test --project=chromium  # Chromium only
+pnpm exec playwright test                      # All browsers
+pnpm exec playwright test --ui                 # Interactive UI mode
 ```
 
 **Pre-commit hooks run automatically**: lint-staged → typecheck → test → build → test:e2e
@@ -28,7 +29,7 @@ pnpm exec playwright test --ui
 
 **NEVER push changes to git without:**
 
-1. All validation passing (typecheck, lint, test, build, test:e2e) (Run e2e tests in parralel to the other validation checks because it takes a long time)
+1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only** (`pnpm test:e2e`) for validation.
 2. Explicit approval from the user
 
 Always ask before pushing. No exceptions.
