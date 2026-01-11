@@ -1,283 +1,278 @@
-# Volvox
+<div align="center">
 
-A modern web platform for software development, mentorship, and community learning. Built with Next.js 16, React 19, and TypeScript.
+<img src="public/logo.png" alt="Volvox Logo" width="140" height="140">
 
-## About
+# **Volvox**
 
-Volvox is a software development and learning community that:
+_A modern web platform for software development, mentorship, and community learning._
 
-- Showcases open-source projects and products
-- Publishes technical blog content using MDX
-- Facilitates mentorship programs for developers
-- Promotes collaborative learning and growth
+[![build](https://img.shields.io/github/actions/workflow/status/VolvoxCommunity/Volvox.Website/ci.yml?branch=main&style=flat-square)](https://github.com/VolvoxCommunity/Volvox.Website/actions)
+[![codecov](https://img.shields.io/codecov/c/github/VolvoxCommunity/Volvox.Website?style=flat-square)](https://codecov.io/github/VolvoxCommunity/Volvox.Website)
+[![E2E Tests](https://github.com/VolvoxCommunity/Volvox.Website/actions/workflows/e2e.yml/badge.svg)](https://github.com/VolvoxCommunity/Volvox.Website/actions/workflows/e2e.yml)
+[![last-commit](https://img.shields.io/github/last-commit/VolvoxCommunity/Volvox.Website?style=flat-square)](https://github.com/VolvoxCommunity/Volvox.Website/commits/main)
+<a href="https://discord.gg/8ahXACdamN" target="_blank"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord"/></a>
+<a href="https://zread.ai/VolvoxCommunity/Volvox.Website" target="_blank"><img src="https://img.shields.io/badge/Ask_Zread-_.svg?style=flat&color=00b0aa&labelColor=000000&logo=data%3Aimage%2Fsvg%2Bxml%3Bbase64%2CPHN2ZyB3aWR0aD0iMTYiIGhlaWdodD0iMTYiIHZpZXdCb3g9IjAgMCAxNiAxNiIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTQuOTYxNTYgMS42MDAxSDIuMjQxNTZDMS44ODgxIDEuNjAwMSAxLjYwMTU2IDEuODg2NjQgMS42MDE1NiAyLjI0MDFWNC45NjAxQzEuNjAxNTYgNS4zMTM1NiAxLjg4ODEgNS42MDAxIDIuMjQxNTYgNS42MDAxSDQuOTYxNTZDNS4zMTUwMiA1LjYwMDEgNS42MDE1NiA1LjMxMzU2IDUuNjAxNTYgNC45NjAxVjIuMjQwMUM1LjYwMTU2IDEuODg2NjQgNS4zMTUwMiAxLjYwMDEgNC45NjE1NiAxLjYwMDFaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00Ljk2MTU2IDEwLjM5OTlIMi4yNDE1NkMxLjg4ODEgMTAuMzk5OSAxLjYwMTU2IDEwLjY4NjQgMS42MDE1NiAxMS4wMzk5VjEzLjc1OTlDMS42MDE1NiAxNC4xMTM0IDEuODg4MSAxNC4zOTk5IDIuMjQxNTYgMTQuMzk5OUg0Ljk2MTU2QzUuMzE1MDIgMTQuMzk5OSA1LjYwMTU2IDE0LjExMzQgNS42MDE1NiAxMy43NTk5VjExLjAzOTlDNS42MDE1NiAxMC42ODY0IDUuMzE1MDIgMTAuMzk5OSA0Ljk2MTU2IDEwLjM5OTlaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik0xMy43NTg0IDEuNjAwMUgxMS4wMzg0QzEwLjY4NSAxLjYwMDEgMTAuMzk4NCAxLjg4NjY0IDEwLjM5ODQgMi4yNDAxVjQuOTYwMUMxMC4zOTg0IDUuMzEzNTYgMTAuNjg1IDUuNjAwMSAxMS4wMzg0IDUuNjAwMUgxMy43NTg0QzE0LjExMTkgNS42MDAxIDE0LjM5ODQgNS4zMTM1NiAxNC4zOTg0IDQuOTYwMVYyLjI0MDFDMTQuMzk4NCAxLjg4NjY0IDE0LjExMTkgMS42MDAxIDEzLjc1ODQgMS42MDAxWiIgZmlsbD0iI2ZmZiIvPgo8cGF0aCBkPSJNNCAxMkwxMiA0TDQgMTJaIiBmaWxsPSIjZmZmIi8%2BCjxwYXRoIGQ9Ik00IDEyTDEyIDQiIHN0cm9rZT0iI2ZmZiIgc3Ryb2tlLXdpZHRoPSIxLjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPgo8L3N2Zz4K&logoColor=ffffff" alt="zread"/></a>
 
-## Tech Stack
+</div>
 
-- **Framework**: Next.js 16 (App Router)
-- **UI**: React 19, TypeScript
-- **Styling**: Tailwind CSS v4 (CSS-first with Lightning CSS)
-- **Content**: MDX with `next-mdx-remote`, syntax highlighting via `rehype-highlight`
-- **Components**: Radix UI primitives for accessible components
-- **Animations**: Framer Motion for motion effects, canvas-confetti for celebratory animations
-- **Icons**: Phosphor Icons (`@phosphor-icons/react`), Lucide React (`lucide-react`)
-- **Monitoring**: Sentry (error tracking with replay), Vercel Analytics & Speed Insights
-- **Testing**: Jest + Testing Library (unit), Playwright (E2E with accessibility via axe-core)
-- **Notifications**: Sonner (toast notifications)
-- **Date Handling**: date-fns for date manipulation and formatting
+---
 
-## Getting Started
+<br/>
 
-### Prerequisites
+<div align="center">
 
-- Node.js 20+ recommended
-- pnpm v10.23.0+ (install globally: `npm install -g pnpm`)
+**Volvox** is a software development and learning community built with modern web technologies.
 
-### Development
+Showcase open-source projects, publish technical blog content, and facilitate mentorship programs.
+
+</div>
+
+<br/>
+
+---
+
+## **Quick Links**
+
+&bull; [Getting Started](#quick-start) &bull; [Tech Stack](#-tech-stack) &bull; [Commands](#-commands) &bull; [Adding Content](#-adding-content)
+
+---
+
+> [!TIP]
+> **New here?** Start with the [Quick Start](#quick-start) guide to get up and running in minutes.
+
+## **Overview**
+
+Volvox combines powerful features with a beautiful, accessible interface:
+
+- **Blog System** — MDX-powered content with syntax highlighting, table of contents, and reading progress
+- **Product Showcase** — Dynamic product pages with changelogs, screenshots, and FAQ sections
+- **Mentorship Platform** — Connect mentors and mentees for growth opportunities
+- **Theme System** — Light/dark/system modes with persistent selection
+- **Single-Page Experience** — Smooth scrolling navigation with section tracking
+- **SEO Optimized** — Dynamic sitemaps, Open Graph images, and structured data
+
+---
+
+## **Quick Start**
+
+### **Prerequisites**
+
+- **Node.js** 20 or higher
+- **pnpm** v10.23.0 or higher
 
 ```bash
+# Install pnpm globally if needed
+npm install -g pnpm
+```
+
+### **Installation**
+
+```bash
+# Clone the repository
+git clone https://github.com/yourusername/volvox.git
+cd volvox
+
 # Install dependencies
 pnpm install
 
-# Run development server
+# Start development server
 pnpm dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) to view the application.
 
-### Build
+---
 
-```bash
-# Create production build
-pnpm build
+## **Tech Stack**
 
-# Start production server
-pnpm start
-```
+| Category            | Technology                                                                         |
+| ------------------- | ---------------------------------------------------------------------------------- |
+| **Framework**       | [Next.js 16](https://nextjs.org/) (App Router)                                     |
+| **UI Library**      | [React 19](https://react.dev/)                                                     |
+| **Language**        | [TypeScript](https://www.typescriptlang.org/) (strict mode)                        |
+| **Styling**         | [Tailwind CSS v4](https://tailwindcss.com/) with Lightning CSS                     |
+| **Components**      | [Radix UI](https://www.radix-ui.com/) primitives                                   |
+| **Animations**      | [Framer Motion](https://www.framer.com/motion/)                                    |
+| **Content**         | MDX via `next-mdx-remote`, `rehype-highlight`                                      |
+| **Icons**           | [@phosphor-icons/react](https://phosphoricons.com/), [Lucide](https://lucide.dev/) |
+| **Monitoring**      | [Sentry](https://sentry.io/) (error tracking + replay)                             |
+| **Analytics**       | [Vercel Analytics](https://vercel.com/analytics) & Speed Insights                  |
+| **Testing**         | [Jest](https://jestjs.io/) (unit), [Playwright](https://playwright.dev/) (E2E)     |
+| **Package Manager** | [pnpm](https://pnpm.io/) v10+                                                      |
 
-### Linting
+---
 
-```bash
-pnpm lint
-```
+## **Commands**
 
-### Testing
+| Command          | Description                                |
+| ---------------- | ------------------------------------------ |
+| `pnpm dev`       | Start development server on localhost:3000 |
+| `pnpm build`     | Create production build                    |
+| `pnpm start`     | Start production server                    |
+| `pnpm typecheck` | Run TypeScript type checking               |
+| `pnpm lint`      | Run ESLint                                 |
+| `pnpm test`      | Run Jest unit tests                        |
+| `pnpm test:e2e`  | Run Playwright E2E tests (Chromium only)   |
+| `pnpm format`    | Format code with Prettier                  |
 
-```bash
-# Run unit tests (Jest)
-pnpm test
+> **Note:** Pre-commit hooks automatically run: `lint-staged` → `typecheck` → `test` → `build` → `test:e2e`
 
-# Run unit tests in watch mode
-pnpm test:watch
+---
 
-# Run unit tests with coverage
-pnpm test:coverage
-
-# Run E2E tests (Playwright - all browsers)
-pnpm exec playwright test
-
-# Run E2E tests on specific browser
-pnpm exec playwright test --project=chromium
-
-# Open Playwright UI for interactive testing
-pnpm exec playwright test --ui
-
-# Run specific E2E test file
-pnpm exec playwright test e2e/pages/homepage.spec.ts
-```
-
-### Formatting
-
-```bash
-# Format all files
-pnpm format
-
-# Check formatting without making changes
-pnpm format:check
-```
-
-## Project Structure
+## **Project Structure**
 
 ```
 src/
 ├── app/                    # Next.js App Router pages
-│   ├── blog/[slug]/       # Dynamic blog post routes
+│   ├── blog/[slug]/       # Dynamic blog post routes with OG images
+│   ├── products/[slug]/   # Product detail pages with OG images
 │   ├── privacy/           # Privacy policy page
-│   ├── layout.tsx         # Root layout with theme provider
-│   ├── page.tsx           # Homepage (Server Component)
-│   └── global-error.tsx   # Global error boundary
+│   ├── terms/             # Terms of service page
+│   └── layout.tsx         # Root layout with theme provider
+│
 ├── components/            # React components
-│   ├── ui/               # Reusable UI primitives (button, card, badge, etc.)
-│   ├── providers/        # Context providers (theme)
-│   ├── blog/             # Blog-specific components (reading progress, TOC, heading anchors)
-│   ├── mdx/              # MDX custom components (callout, code-block, image-zoom, link)
-│   └── ...               # Section components (hero, blog, mentorship, etc.)
+│   ├── ui/               # Reusable UI primitives (button, card, dialog...)
+│   ├── blog/             # Blog-specific components
+│   ├── mdx/              # Custom MDX components (callout, code-block...)
+│   ├── products/         # Product showcase components
+│   └── providers/        # Context providers (theme)
+│
 ├── hooks/                 # Custom React hooks
-│   ├── use-mobile.ts     # Mobile viewport detection (useIsMobile hook)
+│   ├── use-mobile.ts     # Mobile viewport detection
 │   └── use-mouse-glow.ts # Mouse tracking glow effect
-├── lib/                   # Utilities and types
-│   ├── blog.ts           # Blog post utilities (MDX reading)
-│   ├── content.ts        # Content file readers (JSON)
-│   ├── data.ts           # Data accessor facades
-│   ├── logger.ts         # Centralized error reporting (Sentry integration)
-│   ├── mdx-components.tsx # Custom MDX component mappings
-│   ├── schemas.ts        # Zod validation schemas
-│   ├── types.ts          # TypeScript interfaces
-│   ├── utils.ts          # Utility functions (cn, generateHeadingId)
-│   └── validation.ts     # Slug validation helpers
-├── instrumentation.ts     # Server instrumentation for Sentry
-└── instrumentation-client.ts # Client instrumentation for Sentry
-
-tests/                     # Jest unit tests
-├── app/                   # API route and app-level tests
-├── components/            # Component tests (UI, sections, MDX)
-├── hooks/                 # Custom React hook tests
-├── lib/                   # Utility and library function tests
-└── postcss-tailwind.test.ts
+│
+└── lib/                   # Utilities and types
+    ├── blog.ts           # Blog post utilities
+    ├── content.ts        # Content file readers (JSON)
+    ├── constants.ts      # Site constants (URL, name, colors)
+    ├── schemas.ts        # Zod validation schemas
+    ├── types.ts          # TypeScript interfaces
+    ├── views.ts          # Blog view tracking (Upstash Redis)
+    ├── structured-data.ts # Schema.org JSON-LD generators
+    └── utils.ts          # Utility functions (cn, generateHeadingId)
 
 content/
-├── blog/                  # MDX blog posts with frontmatter
-├── products/              # Product-specific content (changelog, metadata)
-├── authors.json           # Author profiles
-├── products.json          # Product information
-├── mentors.json           # Mentor profiles
-└── mentees.json           # Mentee profiles
+├── blog/*.mdx              # Blog posts with frontmatter
+├── products/[slug]/        # Product content (changelog, index.json)
+├── authors.json            # Author profiles
+├── products.json           # Product data
+├── mentors.json            # Mentor profiles
+└── mentees.json            # Mentee profiles
 
-e2e/                       # Playwright E2E tests
-├── fixtures/              # Extended test fixtures
-│   └── base.fixture.ts    # Custom fixtures with error tracking
-├── pages/                 # Page-specific tests
-│   ├── homepage.spec.ts
-│   ├── blog-list.spec.ts
-│   ├── blog-post.spec.ts
-│   ├── products-list.spec.ts
-│   ├── product-detail.spec.ts
-│   ├── privacy.spec.ts
-│   └── terms.spec.ts
-├── features/              # Feature-specific tests
-│   ├── navigation.spec.ts
-│   ├── theme.spec.ts
-│   ├── cookie-consent.spec.ts
-│   └── footer.spec.ts
-├── utils/                 # Shared test utilities
-│   └── test-helpers.ts
-├── accessibility.spec.ts  # axe-core accessibility tests
-├── seo.spec.ts            # SEO and meta tag tests
-├── responsive.spec.ts     # Viewport/responsive tests
-├── visual.spec.ts         # Visual regression tests
-├── performance.spec.ts    # Performance tests
-└── errors.spec.ts         # Error handling tests
+e2e/                        # Playwright E2E tests
+tests/                      # Jest unit tests
 ```
 
-## Key Features
+---
 
-### Server/Client Component Architecture
+## **Adding Content**
 
-- Server Components for data fetching and SEO
-- Client Components for interactivity and browser APIs
-- Clear separation of concerns
+### **Blog Post**
 
-### MDX Blog System
+Create a new `.mdx` file in `content/blog/`:
 
-- Blog posts written in MDX (`content/blog/`)
-- Frontmatter metadata (title, author, date, tags)
-- Syntax highlighting with `rehype-highlight`
-- Static generation with `generateStaticParams()`
+```yaml
+---
+title: "Your Post Title"
+slug: "your-post-slug"
+excerpt: "Brief description of the post"
+authorId: "author-id-from-authors-json"
+date: "2024-01-15"
+tags: ["tag1", "tag2"]
+published: true
+banner: /images/your-banner.png
+---
+Your MDX content goes here...
+```
 
-### Theme System
+### **Product**
 
-- Light/dark/system modes via `next-themes`
-- CSS custom properties for colors
-- Persistent theme selection
+Create a new directory in `content/products/[slug]/`:
 
-### Single-Page Experience
+```
+content/products/
+└── your-product/
+    ├── index.json      # Product metadata
+    ├── changelog.mdx   # Optional changelog
+    └── screenshots/    # Optional screenshots directory
+        └── hero.png
+```
 
-- Smooth scrolling navigation
-- Section-based routing
-- Dynamic section tracking
+**index.json** format:
 
-### Resilient Data Loading
+```json
+{
+  "id": "unique-uuid",
+  "name": "Product Name",
+  "slug": "product-slug",
+  "tagline": "Short one-liner",
+  "description": "Brief description",
+  "longDescription": "Detailed product description",
+  "features": ["Feature 1", "Feature 2"],
+  "techStack": ["Tech 1", "Tech 2"],
+  "links": {
+    "github": "https://github.com/user/repo",
+    "demo": "https://demo-url.com"
+  },
+  "screenshots": ["hero.png"],
+  "faq": [
+    {
+      "question": "Common question?",
+      "answer": "Answer to the question."
+    }
+  ]
+}
+```
 
-- Promise.allSettled data fetching guards against partial failures
-- Local file-based content with Zod validation for type safety
-- Comprehensive unit tests cover validation logic to prevent regressions
+### **Authors & Mentors**
 
-### E2E Testing
+Edit the respective JSON files in `content/`:
 
-Comprehensive Playwright test suite with multi-browser support:
+- `authors.json` — Author profiles
+- `mentors.json` — Mentor profiles
+- `mentees.json` — Mentee profiles
 
-- **Browsers**: Chromium, Firefox, Safari + mobile viewports (Pixel 5, iPhone 13)
-- **Test Categories**:
-  - Page tests: Verify each page loads and displays expected content
-  - Feature tests: Navigation, theme toggle, cookie consent, footer
-  - Accessibility: Automated axe-core scans for WCAG violations
-  - SEO: Meta tags, Open Graph images, structured data
-  - Responsive: Mobile, tablet, and desktop viewport testing
-  - Visual regression: Screenshot comparisons with configurable thresholds
-  - Performance: Page load times, console errors, failed requests
-  - Error handling: 404 pages, error boundaries
+---
 
-- **Custom Test Utilities** (`e2e/utils/test-helpers.ts`):
-  - `waitForAnimations()` - Wait for CSS/JS animations to complete
-  - `dismissCookieBanner()` - Handle cookie consent interactions
-  - `setInitialTheme()` - Set theme state before page load
+## **Key Features**
 
-- **CI Integration**: GitHub Actions workflow with 4-way sharding for parallel execution
+### **Server/Client Component Pattern**
 
-### Error Monitoring & Analytics
+- **Server Components** — Data fetching, SEO, static generation
+- **Client Components** — Interactivity, browser APIs, state management
 
-- **Sentry Integration**: Automatic error tracking and performance monitoring
-  - Configured via environment variables (`NEXT_PUBLIC_SENTRY_DSN`)
-  - Server, edge, and client-side error capture
-  - Session replay with 10% sampling (100% on errors)
-  - Monitoring tunnel at `/monitoring` to bypass ad blockers
-  - Request error tracking via instrumentation
-- **Vercel Analytics**: User analytics and insights
-- **Vercel Speed Insights**: Performance monitoring
+### **Resilient Data Loading**
 
-## Content Management
+- `Promise.allSettled` guards against partial failures
+- Zod schema validation at runtime for type safety
+- Comprehensive unit tests for validation logic
 
-All content is stored as local files in the `content/` directory:
+### **Theme System**
 
-- **Blog posts**: `content/blog/*.mdx` - MDX files with frontmatter
-- **Authors**: `content/authors.json` - JSON array of author objects
-- **Products**: `content/products.json` - JSON array of product objects
-- **Mentors**: `content/mentors.json` - JSON array of mentor objects
-- **Mentees**: `content/mentees.json` - JSON array of mentee objects
+- Light, dark, and system preference modes via `next-themes`
+- CSS custom properties for color theming
+- Persistent theme selection stored as `volvox-theme`
 
-### Adding a New Blog Post
+### **E2E Testing**
 
-1. Create a new `.mdx` file in `content/blog/`
-2. Add frontmatter with required fields:
-   ```yaml
-   ---
-   title: "Post Title"
-   slug: "post-slug"
-   excerpt: "Brief description"
-   authorId: "author-id-from-authors-json"
-   date: "2024-01-15"
-   tags: ["tag1", "tag2"]
-   published: true
-   ---
-   ```
-3. Write your content in MDX format below the frontmatter
-4. Rebuild the site: `pnpm build`
+Multi-browser Playwright suite with:
 
-### Editing Other Content
+- **Browsers**: Chromium, Firefox, Safari + mobile viewports
+- **Accessibility**: Automated axe-core WCAG scans
+- **SEO**: Meta tags, Open Graph, structured data
+- **Visual Regression**: Screenshot comparisons
+- **Performance**: Page load times, console errors
 
-Edit the respective JSON files in `content/` and rebuild.
+---
 
-## Environment Variables
-
-| Variable                 | Required | Description                                                    |
-| ------------------------ | -------- | -------------------------------------------------------------- |
-| `NEXT_PUBLIC_SENTRY_DSN` | No       | Sentry DSN for error tracking. If not set, Sentry is disabled. |
-
-Create a `.env.local` file in the project root with the variable above for local development.
-
-## Contributing
-
-This is a personal project and learning platform. Feel free to explore the code and use it as a reference for your own projects.
-
-## License
+## **License**
 
 This project is private and not licensed for reuse.
+
+---
+
+<div align="center">
+
+**Built with ❤️ for the developer community**
+
+</div>
