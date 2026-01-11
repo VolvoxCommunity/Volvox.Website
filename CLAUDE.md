@@ -29,10 +29,35 @@ pnpm exec playwright test --ui                 # Interactive UI mode
 
 **NEVER push changes to git without:**
 
-1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only** (`pnpm exec playwright test --project=chromium`) for validation.
-2. Explicit approval from the user
+1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only for E2E tests** (`pnpm exec playwright test --project=chromium`) for validation.
+2. **⚠️ CHANGELOG.md updated** - Document ALL user-facing changes in `CHANGELOG.md` before committing. This is MANDATORY for every commit that adds features, fixes bugs, or makes user-visible changes. A pre-commit hook will auto-generate a draft for review.
+3. Explicit approval from the user
 
 Always ask before pushing. No exceptions.
+
+### CHANGELOG Guidelines
+
+When making changes that affect users, update `CHANGELOG.md` following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format with [Semantic Versioning](https://semver.org/):
+
+| Category   | SemVer | Description                      |
+| ---------- | ------ | -------------------------------- |
+| Added      | MINOR  | New features                     |
+| Changed    | PATCH  | Backwards-compatible changes     |
+| Deprecated | MINOR  | Soon-to-be removed features      |
+| Removed    | MAJOR  | Removed features (breaking)      |
+| Fixed      | PATCH  | Bug fixes                        |
+| Security   | PATCH  | Security vulnerability fixes     |
+| feat!      | MAJOR  | Breaking change (via `!` suffix) |
+
+Example entry:
+
+```markdown
+### Added
+
+- **Blog listing page** (`/blog`) with search and filters (abc1234)
+```
+
+**Auto-generation**: The pre-commit hook automatically generates a draft CHANGELOG entry from your commit message (must use conventional commit format like `feat: description`). Review and edit the draft before committing again. To generate manually from a range: `pnpm changelog:generate <commit-range>`
 
 ## Project Structure
 
