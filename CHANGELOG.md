@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
-- **SEO: Add IndexNow integration for instant search engine indexing** (`public/ab7bdf8bb88fd5da9ec425b57d8f0394.txt`, `src/app/api/indexnow/route.ts`)
+- **SEO: Add IndexNow GitHub Actions workflow for automatic search engine indexing** (`.github/workflows/indexnow.yml`)
 - **Changelog: Add CHANGELOG.md with Keep a Changelog and SemVer format** (changelog-check.ts, changelog-generate.ts)
 - **Changelog: Add pre-commit hook that auto-generates draft entries from commit messages** (.husky/pre-commit)
 - **Changelog: Add npm scripts for changelog generation and validation** (package.json)
@@ -23,6 +23,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Deprecated
 
 ### Removed
+
+- **SEO: Remove redundant IndexNow API route** (GitHub workflow calls IndexNow directly per best practices)
 
 ### Fixed
 
