@@ -16,7 +16,12 @@ import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Eye, ArrowLeft } from "@phosphor-icons/react";
 import { BlogPost } from "@/lib/types";
-import { BlogListControls } from "@/components/blog-list-controls";
+import {
+  FilterControls,
+  type BlogSortOption,
+  type ProductSortOption,
+  type ViewMode,
+} from "@/components/ui/filter-controls";
 import { BlogCardList } from "@/components/blog-card-list";
 import { BlogNavigation } from "@/components/blog/blog-navigation";
 import { AnimatedBackground } from "@/components/animated-background";
@@ -26,9 +31,6 @@ import { SITE_NAME, NAV_HEIGHT } from "@/lib/constants";
 interface BlogListClientProps {
   posts: BlogPost[];
 }
-
-type SortOption = "newest" | "oldest" | "views";
-type ViewMode = "grid" | "list";
 
 const STORAGE_KEY = "volvox-blog-view";
 
@@ -46,9 +48,9 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     const tags = searchParams.get("tags");
     return tags ? tags.split(",").filter(Boolean) : [];
   });
-  const [sortOption, setSortOption] = useState<SortOption>(() => {
+  const [sortOption, setSortOption] = useState<BlogSortOption>(() => {
     const sort = searchParams.get("sort");
-    return (sort as SortOption) || "newest";
+    return (sort as BlogSortOption) || "newest";
   });
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const view = searchParams.get("view");
@@ -112,7 +114,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     (params: {
       q?: string;
       tags?: string[];
-      sort?: SortOption;
+      sort?: BlogSortOption;
       view?: ViewMode;
     }) => {
       const newParams = new URLSearchParams(searchParams.toString());
@@ -174,9 +176,9 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   }, [updateUrl]);
 
   const handleSortChange = useCallback(
-    (value: SortOption) => {
-      setSortOption(value);
-      updateUrl({ sort: value });
+    (value: BlogSortOption | ProductSortOption) => {
+      setSortOption(value as BlogSortOption);
+      updateUrl({ sort: value as BlogSortOption });
     },
     [updateUrl]
   );
@@ -244,9 +246,12 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           </div>
 
           {/* Controls */}
-          <BlogListControls
+          <FilterControls
+            variant="blog"
             searchQuery={searchQuery}
             onSearchChange={handleSearchChange}
+            searchPlaceholder="Search posts..."
+            showResultsCount={false}
             allTags={allTags}
             selectedTags={selectedTags}
             onTagToggle={handleTagToggle}

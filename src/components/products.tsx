@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -21,9 +22,23 @@ import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  FilterControls,
+  type ProductSortOption,
+  type ViewMode,
+} from "@/components/ui/filter-controls";
 
 interface ProductsProps {
   products: ExtendedProduct[];
+  searchQuery?: string;
+  onSearchChange?: (value: string) => void;
+  sortOption?: ProductSortOption;
+  onSortChange?: (
+    value: ProductSortOption | "newest" | "oldest" | "views"
+  ) => void;
+  viewMode?: ViewMode;
+  onViewModeChange?: (value: ViewMode) => void;
+  enableFilters?: boolean;
 }
 
 interface ProductCardProps {
@@ -211,15 +226,61 @@ function ProductCard({ product, index }: ProductCardProps) {
 }
 
 /**
- * Render a "Our Products" section that displays all products as large, detailed cards.
+ * Render a "Our Products" section with optional filtering, sorting, and view modes.
  *
- * Renders responsive cards for each product in `products` including the product name, description, key features, and View Details button. If `products` is empty, renders a centered placeholder message.
- *
- * @param products - Array of ExtendedProduct objects to display.
- * @returns The JSX element for the products section or a fallback placeholder.
+ * @param products - Array of ExtendedProduct objects to display
+ * @param searchQuery - Optional search query to filter products
+ * @param onSearchChange - Optional callback when search query changes
+ * @param sortOption - Optional sort option (a-z, z-a)
+ * @param onSortChange - Optional callback when sort option changes
+ * @param viewMode - Optional view mode (grid or list)
+ * @param onViewModeChange - Optional callback when view mode changes
+ * @param enableFilters - Whether to enable filtering controls
+ * @returns The JSX element for the products section
  */
-export function Products({ products }: ProductsProps) {
-  if (products.length === 0) {
+export function Products({
+  products: allProducts,
+  searchQuery = "",
+  onSearchChange,
+  sortOption = "a-z",
+  onSortChange,
+  viewMode = "grid",
+  onViewModeChange,
+  enableFilters = false,
+}: ProductsProps) {
+  // Filter and sort products
+  const filteredProducts = useMemo(() => {
+    let result = [...allProducts];
+
+    // Apply search filter
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      result = result.filter(
+        (product) =>
+          product.name.toLowerCase().includes(query) ||
+          product.description.toLowerCase().includes(query) ||
+          product.tagline.toLowerCase().includes(query) ||
+          product.techStack?.some((tech) => tech.toLowerCase().includes(query))
+      );
+    }
+
+    // Sort products
+    result.sort((a, b) => {
+      switch (sortOption) {
+        case "z-a":
+          return b.name.localeCompare(a.name);
+        case "a-z":
+        default:
+          return a.name.localeCompare(b.name);
+      }
+    });
+
+    return result;
+  }, [allProducts, searchQuery, sortOption]);
+
+  const displayProducts = filteredProducts;
+
+  if (allProducts.length === 0) {
     return (
       <section
         id="products"
@@ -256,11 +317,153 @@ export function Products({ products }: ProductsProps) {
           </p>
         </div>
 
-        <div className="space-y-8">
-          {products.map((product, index) => (
-            <ProductCard key={product.id} product={product} index={index} />
-          ))}
-        </div>
+        {/* Filter Controls */}
+        {enableFilters &&
+          onSearchChange &&
+          onSortChange &&
+          onViewModeChange && (
+            <FilterControls
+              variant="homepage-product"
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+              sortOption={sortOption}
+              onSortChange={onSortChange}
+              viewMode={viewMode}
+              onViewModeChange={onViewModeChange}
+              searchPlaceholder="Search products..."
+              resultCount={displayProducts.length}
+              totalCount={allProducts.length}
+            />
+          )}
+
+        {/* Empty state for filtered results */}
+        {enableFilters && displayProducts.length === 0 && (
+          <div className="text-center py-12">
+            <p className="text-muted-foreground">
+              No products match your filters. Try adjusting your search.
+            </p>
+          </div>
+        )}
+
+        {/* Grid View (default large card layout) */}
+        {viewMode === "grid" && (
+          <div className="space-y-8">
+            {displayProducts.map((product, index) => (
+              <ProductCard key={product.id} product={product} index={index} />
+            ))}
+          </div>
+        )}
+
+        {/* List View (compact horizontal cards) */}
+        {viewMode === "list" && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {displayProducts.map((product, index) => (
+              <motion.div
+                key={product.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.05 }}
+              >
+                <Card
+                  className="group hover:shadow-2xl hover:shadow-secondary/5 transition-[box-shadow,border-color] duration-500 border-2 hover:border-secondary/30 overflow-hidden bg-card/80 backdrop-blur-sm h-full"
+                  data-testid="product-card"
+                >
+                  <Link
+                    href={`/products/${product.slug}`}
+                    className="block h-full"
+                  >
+                    <div className="flex flex-col h-full">
+                      {/* Image */}
+                      <div className="aspect-video bg-gradient-to-br from-primary/20 via-accent/15 to-secondary/20 relative overflow-hidden p-4 flex items-center justify-center">
+                        {product.screenshots[0] &&
+                        resolveProductImagePath(
+                          product.screenshots[0],
+                          product.slug
+                        ) ? (
+                          <Image
+                            src={
+                              resolveProductImagePath(
+                                product.screenshots[0],
+                                product.slug
+                              ) || ""
+                            }
+                            alt={product.name}
+                            width={400}
+                            height={225}
+                            className="w-full h-auto object-contain max-h-32"
+                          />
+                        ) : (
+                          <div className="text-5xl font-bold text-foreground/5">
+                            {product.name.charAt(0)}
+                          </div>
+                        )}
+                        <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-secondary" />
+                      </div>
+
+                      {/* Content */}
+                      <div className="flex-1 p-4 flex flex-col">
+                        <h3 className="text-xl font-bold mb-2 group-hover:text-primary transition-colors">
+                          {product.name}
+                        </h3>
+                        <p className="text-sm text-muted-foreground mb-4 line-clamp-2 flex-1">
+                          {product.description}
+                        </p>
+
+                        {/* Tech Stack */}
+                        {product.techStack && product.techStack.length > 0 && (
+                          <div className="flex flex-wrap gap-1.5 mb-4">
+                            {product.techStack.slice(0, 3).map((tech) => (
+                              <span
+                                key={`${product.slug}:tech:${tech}`}
+                                className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-secondary/20 text-foreground border border-secondary/30"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                            {product.techStack.length > 3 && (
+                              <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-muted text-muted-foreground">
+                                +{product.techStack.length - 3}
+                              </span>
+                            )}
+                          </div>
+                        )}
+
+                        {/* Links */}
+                        <div className="flex gap-2">
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            className="flex-1"
+                            asChild
+                          >
+                            <span>Details</span>
+                          </Button>
+                          {product.links?.demo && (
+                            <Button size="sm" variant="accent" asChild>
+                              <a
+                                href={product.links.demo}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Demo
+                                <ArrowUpRight
+                                  weight="bold"
+                                  className="h-3 w-3 ml-1"
+                                />
+                              </a>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        )}
 
         {/* View All Button */}
         <div className="text-center mt-10">

@@ -11,48 +11,97 @@ import {
 } from "@phosphor-icons/react";
 import { cn } from "@/lib/utils";
 
-type SortOption = "newest" | "oldest" | "views";
-type ViewMode = "grid" | "list";
+// Shared types
+export type ViewMode = "grid" | "list";
 
-interface BlogListControlsProps {
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
-  allTags: string[];
-  selectedTags: string[];
-  onTagToggle: (tag: string) => void;
-  onClearTags: () => void;
-  sortOption: SortOption;
-  onSortChange: (value: SortOption) => void;
-  viewMode: ViewMode;
-  onViewModeChange: (value: ViewMode) => void;
-}
-
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
+// Blog-specific types
+export type BlogSortOption = "newest" | "oldest" | "views";
+const BLOG_SORT_OPTIONS: { value: BlogSortOption; label: string }[] = [
   { value: "newest", label: "Newest First" },
   { value: "oldest", label: "Oldest First" },
   { value: "views", label: "Most Viewed" },
 ];
 
+// Product-specific types
+export type ProductSortOption = "a-z" | "z-a";
+const PRODUCT_SORT_OPTIONS: { value: ProductSortOption; label: string }[] = [
+  { value: "a-z", label: "Name A-Z" },
+  { value: "z-a", label: "Name Z-A" },
+];
+
 /**
- * Controls component for the blog listing page.
- * Includes search input, tag filters, sort dropdown, and layout toggle.
+ * Unified filter controls component for blog/products listings.
+ * Supports search, optional tag filtering, sort dropdown, and grid/list view toggle.
+ *
+ * @param variant - The type of controls: "blog", "product", "homepage-blog", or "homepage-product"
+ * @param searchQuery - Current search query value
+ * @param onSearchChange - Callback when search query changes (debounced by 300ms)
+ * @param searchPlaceholder - Placeholder text for search input
+ * @param showResultsCount - Whether to show results count (default: true)
+ * @param resultCount - Number of filtered results
+ * @param totalCount - Total number of items
+ * @param sortOption - Current sort option
+ * @param onSortChange - Callback when sort option changes
+ * @param viewMode - Current view mode (grid or list)
+ * @param onViewModeChange - Callback when view mode changes
+ * @param allTags - Array of all available tags for filtering (blog/product only)
+ * @param selectedTags - Array of currently selected tags
+ * @param onTagToggle - Callback when a tag is toggled
+ * @param onClearTags - Callback to clear all tag selections
  */
-export function BlogListControls({
+export interface FilterControlsProps {
+  variant: "blog" | "product" | "homepage-blog" | "homepage-product";
+  searchQuery: string;
+  onSearchChange: (value: string) => void;
+  searchPlaceholder: string;
+  showResultsCount?: boolean;
+  resultCount?: number;
+  totalCount?: number;
+  sortOption: BlogSortOption | ProductSortOption;
+  onSortChange: (value: BlogSortOption | ProductSortOption) => void;
+  viewMode: ViewMode;
+  onViewModeChange: (value: ViewMode) => void;
+  // Tag filtering (only used by blog/product variants)
+  allTags?: string[];
+  selectedTags?: string[];
+  onTagToggle?: (tag: string) => void;
+  onClearTags?: () => void;
+}
+
+export function FilterControls({
+  variant,
   searchQuery,
   onSearchChange,
-  allTags,
-  selectedTags,
-  onTagToggle,
-  onClearTags,
+  searchPlaceholder,
+  showResultsCount = true,
+  resultCount = 0,
+  totalCount = 0,
   sortOption,
   onSortChange,
   viewMode,
   onViewModeChange,
-}: BlogListControlsProps) {
+  // Tag filtering props (optional, only for blog/product variants)
+  allTags = [],
+  selectedTags = [],
+  onTagToggle = () => {},
+  onClearTags = () => {},
+}: FilterControlsProps) {
   const [sortOpen, setSortOpen] = useState(false);
   const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
   const sortRef = useRef<HTMLDivElement>(null);
   const debounceRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Determine sort options based on variant
+  const sortOptions =
+    variant === "homepage-product" || variant === "product"
+      ? PRODUCT_SORT_OPTIONS
+      : BLOG_SORT_OPTIONS;
+
+  // Determine if tag filtering should be shown
+  const showTagFilters =
+    (variant === "blog" || variant === "product") && allTags.length > 0;
+
+  const tagLabel = variant === "product" ? "Tech:" : "Tags:";
 
   // Debounce search input
   const handleSearchInput = useCallback(
@@ -88,19 +137,21 @@ export function BlogListControls({
   }, [searchQuery]);
 
   const currentSortLabel =
-    SORT_OPTIONS.find((opt) => opt.value === sortOption)?.label || "Sort";
+    sortOptions.find((opt) => opt.value === sortOption)?.label || "Sort";
+
+  const hasActiveFilters = debouncedQuery.length > 0 || selectedTags.length > 0;
 
   return (
-    <div className="space-y-4 mb-6">
+    <div className="space-y-4">
       {/* Search Input */}
       <div className="relative">
         <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
         <input
           type="search"
-          placeholder="Search posts..."
+          placeholder={searchPlaceholder}
           value={debouncedQuery}
           onChange={(e) => handleSearchInput(e.target.value)}
-          aria-label="Search blog posts"
+          aria-label="Search"
           autoComplete="off"
           className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-colors"
         />
@@ -120,35 +171,39 @@ export function BlogListControls({
 
       {/* Tags and Controls Row */}
       <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-        {/* Tags */}
-        <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-          <span className="text-sm text-muted-foreground shrink-0">Tags:</span>
-          <button
-            onClick={onClearTags}
-            className={cn(
-              "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
-              selectedTags.length === 0
-                ? "bg-secondary text-secondary-foreground border-secondary"
-                : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
-            )}
-          >
-            All
-          </button>
-          {allTags.map((tag) => (
+        {/* Tag Filters (optional) */}
+        {showTagFilters && (
+          <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
+            <span className="text-sm text-muted-foreground shrink-0">
+              {tagLabel}
+            </span>
             <button
-              key={tag}
-              onClick={() => onTagToggle(tag)}
+              onClick={onClearTags}
               className={cn(
                 "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
-                selectedTags.includes(tag)
+                selectedTags.length === 0
                   ? "bg-secondary text-secondary-foreground border-secondary"
                   : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
               )}
             >
-              {tag}
+              All
             </button>
-          ))}
-        </div>
+            {allTags.map((tag) => (
+              <button
+                key={tag}
+                onClick={() => onTagToggle(tag)}
+                className={cn(
+                  "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
+                  selectedTags.includes(tag)
+                    ? "bg-secondary text-secondary-foreground border-secondary"
+                    : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
+                )}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+        )}
 
         {/* Sort and View Controls */}
         <div className="flex items-center gap-2 shrink-0">
@@ -172,7 +227,7 @@ export function BlogListControls({
 
             {sortOpen && (
               <div className="absolute right-0 top-full mt-1 bg-background border border-border rounded-lg shadow-lg z-50 min-w-[150px]">
-                {SORT_OPTIONS.map((option) => (
+                {sortOptions.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => {
@@ -223,6 +278,25 @@ export function BlogListControls({
           </div>
         </div>
       </div>
+
+      {/* Results Count */}
+      {showResultsCount && (
+        <div className="text-sm text-muted-foreground">
+          {hasActiveFilters ? (
+            <>
+              Showing{" "}
+              <span className="font-medium text-foreground">{resultCount}</span>{" "}
+              of{" "}
+              <span className="font-medium text-foreground">{totalCount}</span>
+            </>
+          ) : (
+            <>
+              <span className="font-medium text-foreground">{totalCount}</span>{" "}
+              total
+            </>
+          )}
+        </div>
+      )}
     </div>
   );
 }

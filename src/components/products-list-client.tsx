@@ -19,36 +19,27 @@ import {
   AppleLogo,
   GooglePlayLogo,
   ArrowUpRight,
-  MagnifyingGlass,
-  X,
-  List,
-  SquaresFour,
-  CaretDown,
-  SortAscending,
   ArrowLeft,
 } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
+import {
+  FilterControls,
+  type BlogSortOption,
+  type ProductSortOption,
+  type ViewMode,
+} from "@/components/ui/filter-controls";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { BlogNavigation } from "@/components/blog/blog-navigation";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 import { NAV_HEIGHT } from "@/lib/constants";
-import { cn } from "@/lib/utils";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
 }
 
-type SortOption = "a-z" | "z-a";
-type ViewMode = "grid" | "list";
-
 const STORAGE_KEY = "volvox-products-view";
-
-const SORT_OPTIONS: { value: SortOption; label: string }[] = [
-  { value: "a-z", label: "Name (A-Z)" },
-  { value: "z-a", label: "Name (Z-A)" },
-];
 
 /**
  * Client component for the products listing page.
@@ -64,9 +55,9 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     const tech = searchParams.get("tech");
     return tech ? tech.split(",").filter(Boolean) : [];
   });
-  const [sortOption, setSortOption] = useState<SortOption>(() => {
+  const [sortOption, setSortOption] = useState<ProductSortOption>(() => {
     const sort = searchParams.get("sort");
-    return (sort as SortOption) || "a-z";
+    return (sort as ProductSortOption) || "a-z";
   });
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const view = searchParams.get("view");
@@ -78,10 +69,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     }
     return "grid";
   });
-
-  // UI state for dropdowns
-  const [sortOpen, setSortOpen] = useState(false);
-  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
 
   // Extract all unique tech stack items from products
   const allTechStack = useMemo(() => {
@@ -135,7 +122,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     (params: {
       q?: string;
       tech?: string[];
-      sort?: SortOption;
+      sort?: ProductSortOption;
       view?: ViewMode;
     }) => {
       const newParams = new URLSearchParams(searchParams.toString());
@@ -170,15 +157,11 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   );
 
   // Handlers
+  // Note: FilterControls handles debouncing internally, so this is called after debounce
   const handleSearchInput = useCallback(
     (value: string) => {
-      setDebouncedQuery(value);
-      // Debounce the actual search
-      const timeout = setTimeout(() => {
-        setSearchQuery(value);
-        updateUrl({ q: value });
-      }, 300);
-      return () => clearTimeout(timeout);
+      setSearchQuery(value);
+      updateUrl({ q: value });
     },
     [updateUrl]
   );
@@ -202,10 +185,9 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   }, [updateUrl]);
 
   const handleSortChange = useCallback(
-    (value: SortOption) => {
-      setSortOption(value);
-      updateUrl({ sort: value });
-      setSortOpen(false);
+    (value: BlogSortOption | ProductSortOption) => {
+      setSortOption(value as ProductSortOption);
+      updateUrl({ sort: value as ProductSortOption });
     },
     [updateUrl]
   );
@@ -221,7 +203,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
   const handleClearAll = useCallback(() => {
     setSearchQuery("");
-    setDebouncedQuery("");
     setSelectedTech([]);
     setSortOption("a-z");
     router.replace("/products", { scroll: false });
@@ -229,9 +210,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
   const hasActiveFilters =
     searchQuery || selectedTech.length > 0 || sortOption !== "a-z";
-
-  const currentSortLabel =
-    SORT_OPTIONS.find((opt) => opt.value === sortOption)?.label || "Sort";
 
   return (
     <div className="min-h-screen relative flex flex-col">
@@ -279,141 +257,21 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           </div>
 
           {/* Controls */}
-          <div className="space-y-4 mb-6">
-            {/* Search Input */}
-            <div className="relative">
-              <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-              <input
-                type="search"
-                placeholder="Search products..."
-                value={debouncedQuery}
-                onChange={(e) => handleSearchInput(e.target.value)}
-                aria-label="Search products"
-                autoComplete="off"
-                className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-colors"
-              />
-              {debouncedQuery && (
-                <button
-                  onClick={() => {
-                    setDebouncedQuery("");
-                    setSearchQuery("");
-                    updateUrl({ q: "" });
-                  }}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
-                  aria-label="Clear search"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              )}
-            </div>
-
-            {/* Tech Stack and Controls Row */}
-            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-              {/* Tech Stack Filter */}
-              {allTechStack.length > 0 && (
-                <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-                  <span className="text-sm text-muted-foreground shrink-0">
-                    Tech:
-                  </span>
-                  <button
-                    onClick={handleClearTech}
-                    className={cn(
-                      "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
-                      selectedTech.length === 0
-                        ? "bg-secondary text-secondary-foreground border-secondary"
-                        : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
-                    )}
-                  >
-                    All
-                  </button>
-                  {allTechStack.map((tech) => (
-                    <button
-                      key={tech}
-                      onClick={() => handleTechToggle(tech)}
-                      className={cn(
-                        "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
-                        selectedTech.includes(tech)
-                          ? "bg-secondary text-secondary-foreground border-secondary"
-                          : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
-                      )}
-                    >
-                      {tech}
-                    </button>
-                  ))}
-                </div>
-              )}
-
-              {/* Sort and View Controls */}
-              <div className="flex items-center gap-2 shrink-0">
-                {/* Sort Dropdown */}
-                <div className="relative">
-                  <button
-                    onClick={() => setSortOpen(!sortOpen)}
-                    className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-lg hover:border-secondary/50 transition-colors bg-background"
-                    aria-expanded={sortOpen}
-                    aria-haspopup="listbox"
-                  >
-                    <SortAscending className="h-4 w-4" />
-                    <span className="hidden sm:inline">{currentSortLabel}</span>
-                    <CaretDown
-                      className={cn(
-                        "h-3 w-3 transition-transform",
-                        sortOpen && "rotate-180"
-                      )}
-                    />
-                  </button>
-
-                  {sortOpen && (
-                    <div className="absolute right-0 top-full mt-1 bg-background border border-border rounded-lg shadow-lg z-50 min-w-[150px]">
-                      {SORT_OPTIONS.map((option) => (
-                        <button
-                          key={option.value}
-                          onClick={() => handleSortChange(option.value)}
-                          className={cn(
-                            "w-full px-3 py-2 text-sm text-left hover:bg-muted transition-colors first:rounded-t-lg last:rounded-b-lg",
-                            sortOption === option.value &&
-                              "bg-secondary/10 text-secondary"
-                          )}
-                        >
-                          {option.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* View Mode Toggle */}
-                <div className="hidden sm:flex items-center border border-border rounded-lg overflow-hidden">
-                  <button
-                    onClick={() => handleViewModeChange("grid")}
-                    className={cn(
-                      "p-2 transition-colors",
-                      viewMode === "grid"
-                        ? "bg-secondary text-secondary-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                    )}
-                    aria-label="Grid view"
-                    aria-pressed={viewMode === "grid"}
-                  >
-                    <SquaresFour className="h-4 w-4" />
-                  </button>
-                  <button
-                    onClick={() => handleViewModeChange("list")}
-                    className={cn(
-                      "p-2 transition-colors",
-                      viewMode === "list"
-                        ? "bg-secondary text-secondary-foreground"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                    )}
-                    aria-label="List view"
-                    aria-pressed={viewMode === "list"}
-                  >
-                    <List className="h-4 w-4" />
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+          <FilterControls
+            variant="product"
+            searchQuery={searchQuery}
+            onSearchChange={handleSearchInput}
+            searchPlaceholder="Search products..."
+            showResultsCount={false}
+            allTags={allTechStack}
+            selectedTags={selectedTech}
+            onTagToggle={handleTechToggle}
+            onClearTags={handleClearTech}
+            sortOption={sortOption}
+            onSortChange={handleSortChange}
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+          />
 
           {/* Results Count & Clear */}
           {hasActiveFilters && (

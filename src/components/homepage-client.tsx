@@ -21,10 +21,12 @@ interface HomepageClientProps {
 }
 
 /**
- * Render the scrolling homepage and manage section navigation and deep-link scrolling.
+ * Render the scrolling homepage and manage section navigation, deep-link scrolling,
+ * and filter state for blog posts and products.
  *
  * Handles in-page navigation (including URL hash on initial load), updates the active
- * navigation section based on scroll position, and renders the page sections.
+ * navigation section based on scroll position, and renders the page sections with
+ * optional filtering capabilities.
  *
  * @param blogPosts - Prefetched blog posts to display in the Blog section.
  * @param products - Prefetched products to display in the Products section.
@@ -39,7 +41,43 @@ export function HomepageClient({
   mentees,
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
+
+  // Blog filter state
+  const [blogSearchQuery, setBlogSearchQuery] = useState("");
+  const [blogSortOption, setBlogSortOption] = useState<
+    "newest" | "oldest" | "views"
+  >("newest");
+  const [blogViewMode, setBlogViewMode] = useState<"grid" | "list">("grid");
+
+  // Products filter state
+  const [productSearchQuery, setProductSearchQuery] = useState("");
+  const [productSortOption, setProductSortOption] = useState<"a-z" | "z-a">(
+    "a-z"
+  );
+  const [productViewMode, setProductViewMode] = useState<"grid" | "list">(
+    "grid"
+  );
+
   const router = useRouter();
+
+  // Sort change handlers with type filtering
+  const handleProductSortChange = useCallback(
+    (value: "a-z" | "z-a" | "newest" | "oldest" | "views") => {
+      if (value === "a-z" || value === "z-a") {
+        setProductSortOption(value);
+      }
+    },
+    []
+  );
+
+  const handleBlogSortChange = useCallback(
+    (value: "a-z" | "z-a" | "newest" | "oldest" | "views") => {
+      if (value === "newest" || value === "oldest" || value === "views") {
+        setBlogSortOption(value);
+      }
+    },
+    []
+  );
 
   const handleNavigate = useCallback(
     (section: string) => {
@@ -140,8 +178,26 @@ export function HomepageClient({
 
         <main id="main-content">
           <Hero onNavigate={handleNavigate} />
-          <Products products={products || []} />
-          <Blog posts={blogPosts || []} />
+          <Products
+            products={products || []}
+            searchQuery={productSearchQuery}
+            onSearchChange={setProductSearchQuery}
+            sortOption={productSortOption}
+            onSortChange={handleProductSortChange}
+            viewMode={productViewMode}
+            onViewModeChange={setProductViewMode}
+            enableFilters
+          />
+          <Blog
+            posts={blogPosts || []}
+            searchQuery={blogSearchQuery}
+            onSearchChange={setBlogSearchQuery}
+            sortOption={blogSortOption}
+            onSortChange={handleBlogSortChange}
+            viewMode={blogViewMode}
+            onViewModeChange={setBlogViewMode}
+            enableFilters
+          />
           <Mentorship mentors={mentors || []} mentees={mentees || []} />
           <About />
         </main>
