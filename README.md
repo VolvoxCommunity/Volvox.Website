@@ -31,12 +31,6 @@ Showcase open-source projects, publish technical blog content, and facilitate me
 
 ---
 
-## **Quick Links**
-
-&bull; [Getting Started](#quick-start) &bull; [Tech Stack](#-tech-stack) &bull; [Commands](#-commands) &bull; [Adding Content](#-adding-content)
-
----
-
 > [!TIP]
 > **New here?** Start with the [Quick Start](#quick-start) guide to get up and running in minutes.
 
@@ -58,12 +52,6 @@ Volvox combines powerful features with a beautiful, accessible interface:
 ### **Prerequisites**
 
 - **Node.js** 20 or higher
-- **pnpm** v10.23.0 or higher
-
-```bash
-# Install pnpm globally if needed
-npm install -g pnpm
-```
 
 ### **Installation**
 
@@ -116,52 +104,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 | `pnpm format`    | Format code with Prettier                  |
 
 > **Note:** Pre-commit hooks automatically run: `lint-staged` → `typecheck` → `test` → `build` → `test:e2e`
-
----
-
-## **Project Structure**
-
-```
-src/
-├── app/                    # Next.js App Router pages
-│   ├── blog/[slug]/       # Dynamic blog post routes with OG images
-│   ├── products/[slug]/   # Product detail pages with OG images
-│   ├── privacy/           # Privacy policy page
-│   ├── terms/             # Terms of service page
-│   └── layout.tsx         # Root layout with theme provider
-│
-├── components/            # React components
-│   ├── ui/               # Reusable UI primitives (button, card, dialog...)
-│   ├── blog/             # Blog-specific components
-│   ├── mdx/              # Custom MDX components (callout, code-block...)
-│   ├── products/         # Product showcase components
-│   └── providers/        # Context providers (theme)
-│
-├── hooks/                 # Custom React hooks
-│   ├── use-mobile.ts     # Mobile viewport detection
-│   └── use-mouse-glow.ts # Mouse tracking glow effect
-│
-└── lib/                   # Utilities and types
-    ├── blog.ts           # Blog post utilities
-    ├── content.ts        # Content file readers (JSON)
-    ├── constants.ts      # Site constants (URL, name, colors)
-    ├── schemas.ts        # Zod validation schemas
-    ├── types.ts          # TypeScript interfaces
-    ├── views.ts          # Blog view tracking (Upstash Redis)
-    ├── structured-data.ts # Schema.org JSON-LD generators
-    └── utils.ts          # Utility functions (cn, generateHeadingId)
-
-content/
-├── blog/*.mdx              # Blog posts with frontmatter
-├── products/[slug]/        # Product content (changelog, index.json)
-├── authors.json            # Author profiles
-├── products.json           # Product data
-├── mentors.json            # Mentor profiles
-└── mentees.json            # Mentee profiles
-
-e2e/                        # Playwright E2E tests
-tests/                      # Jest unit tests
-```
 
 ---
 
@@ -231,37 +173,6 @@ Edit the respective JSON files in `content/`:
 - `authors.json` — Author profiles
 - `mentors.json` — Mentor profiles
 - `mentees.json` — Mentee profiles
-
----
-
-## **Key Features**
-
-### **Server/Client Component Pattern**
-
-- **Server Components** — Data fetching, SEO, static generation
-- **Client Components** — Interactivity, browser APIs, state management
-
-### **Resilient Data Loading**
-
-- `Promise.allSettled` guards against partial failures
-- Zod schema validation at runtime for type safety
-- Comprehensive unit tests for validation logic
-
-### **Theme System**
-
-- Light, dark, and system preference modes via `next-themes`
-- CSS custom properties for color theming
-- Persistent theme selection stored as `volvox-theme`
-
-### **E2E Testing**
-
-Multi-browser Playwright suite with:
-
-- **Browsers**: Chromium, Firefox, Safari + mobile viewports
-- **Accessibility**: Automated axe-core WCAG scans
-- **SEO**: Meta tags, Open Graph, structured data
-- **Visual Regression**: Screenshot comparisons
-- **Performance**: Page load times, console errors
 
 ---
 

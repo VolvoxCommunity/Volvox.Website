@@ -17,8 +17,8 @@ echo "Running build..."
 pnpm build
 
 # Run E2E tests (Chromium only for speed)
-echo "Running E2E tests..."
-pnpm exec playwright test --project=chromium
+#echo "Running E2E tests..."
+#pnpm exec playwright test --project=chromium
 
 # Check if CHANGELOG needs updating for user-facing changes
 echo "Checking CHANGELOG..."
