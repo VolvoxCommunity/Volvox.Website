@@ -347,7 +347,7 @@ export function Products({
 
         {/* Grid View (default large card layout) */}
         {viewMode === "grid" && (
-          <div className="space-y-8">
+          <div className="relative z-0 space-y-8">
             {displayProducts.map((product, index) => (
               <ProductCard key={product.id} product={product} index={index} />
             ))}
@@ -356,7 +356,7 @@ export function Products({
 
         {/* List View (compact horizontal cards) */}
         {viewMode === "list" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 gap-6">
             {displayProducts.map((product, index) => (
               <motion.div
                 key={product.id}

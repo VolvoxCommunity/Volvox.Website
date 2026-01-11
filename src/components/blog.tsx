@@ -146,7 +146,7 @@ export function Blog({
 
         {/* Grid View */}
         {viewMode === "grid" && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {displayPosts.map((post, idx) => (
               <motion.div
                 key={post.id}
@@ -255,7 +255,7 @@ export function Blog({
 
         {/* List View */}
         {viewMode === "list" && (
-          <div className="space-y-4">
+          <div className="relative z-0 space-y-4">
             {displayPosts.map((post, idx) => (
               <motion.div
                 key={post.id}

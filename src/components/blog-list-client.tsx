@@ -235,7 +235,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl py-8"
+          className="container mx-auto px-4 max-w-7xl py-8 isolate"
         >
           {/* Page Header */}
           <div className="text-center mb-8">
@@ -264,7 +264,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
           {/* Results Count & Clear */}
           {hasActiveFilters && (
-            <div className="flex items-center justify-between mb-6">
+            <div className="relative z-50 flex items-center justify-between mb-6">
               <p className="text-sm text-muted-foreground">
                 {filteredPosts.length}{" "}
                 {filteredPosts.length === 1 ? "post" : "posts"} found
@@ -281,13 +281,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           {/* Posts Grid/List */}
           {filteredPosts.length > 0 ? (
             viewMode === "grid" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredPosts.map((post, idx) => (
                   <BlogCardGrid key={post.id} post={post} index={idx} />
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col gap-4">
+              <div className="relative z-0 flex flex-col gap-4">
                 {filteredPosts.map((post, idx) => (
                   <BlogCardList key={post.id} post={post} index={idx} />
                 ))}
@@ -323,11 +323,7 @@ function BlogCardGrid({ post, index }: { post: BlogPost; index: number }) {
     >
       <Link href={`/blog/${post.slug}`} className="block h-full">
         <Card className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col">
-          <motion.div
-            className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.div className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border">
             {post.banner ? (
               <Image
                 src={post.banner}

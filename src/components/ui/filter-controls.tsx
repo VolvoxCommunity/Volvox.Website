@@ -142,10 +142,10 @@ export function FilterControls({
   const hasActiveFilters = debouncedQuery.length > 0 || selectedTags.length > 0;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       {/* Search Input */}
       <div className="relative">
-        <MagnifyingGlass className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <MagnifyingGlass className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
         <input
           type="search"
           placeholder={searchPlaceholder}
@@ -153,7 +153,7 @@ export function FilterControls({
           onChange={(e) => handleSearchInput(e.target.value)}
           aria-label="Search"
           autoComplete="off"
-          className="w-full pl-10 pr-10 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-colors"
+          className="w-full pl-12 pr-12 py-3 bg-background border border-border rounded-xl text-base focus:outline-none focus:ring-2 focus:ring-secondary/50 focus:border-secondary transition-all placeholder:text-muted-foreground/70"
         />
         {debouncedQuery && (
           <button
@@ -161,29 +161,29 @@ export function FilterControls({
               setDebouncedQuery("");
               onSearchChange("");
             }}
-            className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+            className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors p-1 rounded-md hover:bg-muted"
             aria-label="Clear search"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </button>
         )}
       </div>
 
       {/* Tags and Controls Row */}
-      <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+      <div className="flex flex-col gap-4">
         {/* Tag Filters (optional) */}
         {showTagFilters && (
-          <div className="flex-1 flex items-center gap-2 overflow-x-auto pb-2 sm:pb-0 scrollbar-hide">
-            <span className="text-sm text-muted-foreground shrink-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className="text-sm font-medium text-muted-foreground shrink-0 pr-2">
               {tagLabel}
             </span>
             <button
               onClick={onClearTags}
               className={cn(
-                "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
+                "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
                 selectedTags.length === 0
-                  ? "bg-secondary text-secondary-foreground border-secondary"
-                  : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
+                  ? "bg-secondary text-secondary-foreground border-secondary font-medium"
+                  : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
               )}
             >
               All
@@ -193,10 +193,10 @@ export function FilterControls({
                 key={tag}
                 onClick={() => onTagToggle(tag)}
                 className={cn(
-                  "px-3 py-1 text-xs rounded-full border transition-colors shrink-0",
+                  "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
                   selectedTags.includes(tag)
-                    ? "bg-secondary text-secondary-foreground border-secondary"
-                    : "bg-transparent text-muted-foreground border-border hover:border-secondary/50"
+                    ? "bg-secondary text-secondary-foreground border-secondary font-medium"
+                    : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
                 )}
               >
                 {tag}
@@ -205,98 +205,107 @@ export function FilterControls({
           </div>
         )}
 
-        {/* Sort and View Controls */}
-        <div className="flex items-center gap-2 shrink-0">
-          {/* Sort Dropdown */}
-          <div className="relative" ref={sortRef}>
-            <button
-              onClick={() => setSortOpen(!sortOpen)}
-              className="flex items-center gap-2 px-3 py-2 text-sm border border-border rounded-lg hover:border-secondary/50 transition-colors bg-background"
-              aria-expanded={sortOpen}
-              aria-haspopup="listbox"
-            >
-              <SortAscending className="h-4 w-4" />
-              <span className="hidden sm:inline">{currentSortLabel}</span>
-              <CaretDown
+        {/* Controls and Results Count */}
+        <div className="flex items-center justify-between gap-4">
+          {/* Results Count */}
+          {showResultsCount && (
+            <div className="relative z-50 text-sm text-muted-foreground min-w-0">
+              {hasActiveFilters ? (
+                <>
+                  Showing{" "}
+                  <span className="font-medium text-foreground">
+                    {resultCount}
+                  </span>{" "}
+                  of{" "}
+                  <span className="font-medium text-foreground">
+                    {totalCount}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <span className="font-medium text-foreground">
+                    {totalCount}
+                  </span>{" "}
+                  total
+                </>
+              )}
+            </div>
+          )}
+
+          {/* Sort and View Controls */}
+          <div className="flex items-center gap-2 shrink-0 ml-auto">
+            {/* Sort Dropdown */}
+            <div className="relative" ref={sortRef}>
+              <button
+                onClick={() => setSortOpen(!sortOpen)}
+                className="flex items-center gap-2 px-4 py-2.5 text-sm border border-border rounded-xl hover:border-secondary/50 hover:bg-muted/50 transition-all bg-background"
+                aria-expanded={sortOpen}
+                aria-haspopup="listbox"
+              >
+                <SortAscending className="h-4 w-4" />
+                <span className="hidden sm:inline">{currentSortLabel}</span>
+                <CaretDown
+                  className={cn(
+                    "h-3 w-3 transition-transform",
+                    sortOpen && "rotate-180"
+                  )}
+                />
+              </button>
+
+              {sortOpen && (
+                <div className="absolute right-0 top-full mt-2 bg-background border border-border rounded-xl shadow-lg z-50 min-w-[160px] overflow-hidden">
+                  {sortOptions.map((option) => (
+                    <button
+                      key={option.value}
+                      onClick={() => {
+                        onSortChange(option.value);
+                        setSortOpen(false);
+                      }}
+                      className={cn(
+                        "w-full px-4 py-2.5 text-sm text-left hover:bg-muted transition-colors",
+                        sortOption === option.value &&
+                          "bg-secondary/10 text-secondary font-medium"
+                      )}
+                    >
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            {/* View Mode Toggle */}
+            <div className="hidden sm:flex items-center border border-border rounded-xl overflow-hidden">
+              <button
+                onClick={() => onViewModeChange("grid")}
                 className={cn(
-                  "h-3 w-3 transition-transform",
-                  sortOpen && "rotate-180"
+                  "px-3 py-2 transition-colors",
+                  viewMode === "grid"
+                    ? "bg-secondary text-secondary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
                 )}
-              />
-            </button>
-
-            {sortOpen && (
-              <div className="absolute right-0 top-full mt-1 bg-background border border-border rounded-lg shadow-lg z-50 min-w-[150px]">
-                {sortOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    onClick={() => {
-                      onSortChange(option.value);
-                      setSortOpen(false);
-                    }}
-                    className={cn(
-                      "w-full px-3 py-2 text-sm text-left hover:bg-muted transition-colors first:rounded-t-lg last:rounded-b-lg",
-                      sortOption === option.value &&
-                        "bg-secondary/10 text-secondary"
-                    )}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            )}
-          </div>
-
-          {/* View Mode Toggle */}
-          <div className="hidden sm:flex items-center border border-border rounded-lg overflow-hidden">
-            <button
-              onClick={() => onViewModeChange("grid")}
-              className={cn(
-                "p-2 transition-colors",
-                viewMode === "grid"
-                  ? "bg-secondary text-secondary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              )}
-              aria-label="Grid view"
-              aria-pressed={viewMode === "grid"}
-            >
-              <SquaresFour className="h-4 w-4" />
-            </button>
-            <button
-              onClick={() => onViewModeChange("list")}
-              className={cn(
-                "p-2 transition-colors",
-                viewMode === "list"
-                  ? "bg-secondary text-secondary-foreground"
-                  : "text-muted-foreground hover:text-foreground hover:bg-muted"
-              )}
-              aria-label="List view"
-              aria-pressed={viewMode === "list"}
-            >
-              <List className="h-4 w-4" />
-            </button>
+                aria-label="Grid view"
+                aria-pressed={viewMode === "grid"}
+              >
+                <SquaresFour className="h-4 w-4" />
+              </button>
+              <button
+                onClick={() => onViewModeChange("list")}
+                className={cn(
+                  "px-3 py-2 transition-colors",
+                  viewMode === "list"
+                    ? "bg-secondary text-secondary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+                aria-label="List view"
+                aria-pressed={viewMode === "list"}
+              >
+                <List className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
       </div>
-
-      {/* Results Count */}
-      {showResultsCount && (
-        <div className="text-sm text-muted-foreground">
-          {hasActiveFilters ? (
-            <>
-              Showing{" "}
-              <span className="font-medium text-foreground">{resultCount}</span>{" "}
-              of{" "}
-              <span className="font-medium text-foreground">{totalCount}</span>
-            </>
-          ) : (
-            <>
-              <span className="font-medium text-foreground">{totalCount}</span>{" "}
-              total
-            </>
-          )}
-        </div>
-      )}
     </div>
   );
 }

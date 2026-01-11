@@ -275,7 +275,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
           {/* Results Count & Clear */}
           {hasActiveFilters && (
-            <div className="flex items-center justify-between mb-6">
+            <div className="relative z-50 flex items-center justify-between mb-6">
               <p className="text-sm text-muted-foreground">
                 {filteredProducts.length}{" "}
                 {filteredProducts.length === 1 ? "product" : "products"} found
@@ -292,7 +292,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           {/* Products Grid/List */}
           {filteredProducts.length > 0 ? (
             viewMode === "grid" ? (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredProducts.map((product, idx) => (
                   <ProductCardGrid
                     key={product.id}
@@ -302,7 +302,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
                 ))}
               </div>
             ) : (
-              <div className="flex flex-col gap-6">
+              <div className="relative z-0 flex flex-col gap-6">
                 {filteredProducts.map((product, idx) => (
                   <ProductCardList
                     key={product.id}
@@ -360,11 +360,7 @@ function ProductCardGrid({
           className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col"
           data-testid="product-card"
         >
-          <motion.div
-            className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border"
-            whileHover={{ scale: 1.02 }}
-            transition={{ duration: 0.3 }}
-          >
+          <motion.div className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border">
             {imagePath ? (
               <Image
                 src={imagePath}
@@ -470,11 +466,7 @@ function ProductCardList({
             href={`/products/${product.slug}`}
             className="block md:col-span-1"
           >
-            <motion.div
-              className="aspect-video md:aspect-auto md:h-full bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b md:border-b-0 md:border-r border-border"
-              whileHover={{ scale: 1.02 }}
-              transition={{ duration: 0.3 }}
-            >
+            <motion.div className="aspect-video md:aspect-auto md:h-full bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b md:border-b-0 md:border-r border-border">
               {imagePath ? (
                 <Image
                   src={imagePath}
