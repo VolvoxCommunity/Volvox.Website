@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -47,6 +48,7 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, index }: ProductCardProps) {
+  const router = useRouter();
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
 
@@ -194,26 +196,27 @@ function ProductCard({ product, index }: ProductCardProps) {
                 </div>
               )}
               <div className="flex flex-wrap gap-3">
-                <Button asChild className="gap-2 group/btn">
-                  <Link href={`/products/${product.slug}`}>
-                    View Details
-                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+                <Button
+                  className="gap-2 group/btn"
+                  onClick={() => router.push(`/products/${product.slug}`)}
+                >
+                  View Details
+                  <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
                 {product.links?.demo && (
                   <Button
                     variant="accent"
-                    asChild
                     className="gap-2 shadow-lg shadow-accent/20"
+                    onClick={() =>
+                      window.open(
+                        product.links.demo,
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
                   >
-                    <a
-                      href={product.links.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit
-                      <ArrowUpRight weight="bold" className="h-4 w-4" />
-                    </a>
+                    Visit
+                    <ArrowUpRight weight="bold" className="h-4 w-4" />
                   </Button>
                 )}
               </div>
@@ -248,6 +251,7 @@ export function Products({
   onViewModeChange,
   enableFilters = false,
 }: ProductsProps) {
+  const router = useRouter();
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let result = [...allProducts];
@@ -435,24 +439,28 @@ export function Products({
                             size="sm"
                             variant="outline"
                             className="flex-1"
-                            asChild
                           >
-                            <span>Details</span>
+                            Details
                           </Button>
                           {product.links?.demo && (
-                            <Button size="sm" variant="accent" asChild>
-                              <a
-                                href={product.links.demo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                Demo
-                                <ArrowUpRight
-                                  weight="bold"
-                                  className="h-3 w-3 ml-1"
-                                />
-                              </a>
+                            <Button
+                              size="sm"
+                              variant="accent"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(
+                                  product.links.demo,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              }}
+                            >
+                              Demo
+                              <ArrowUpRight
+                                weight="bold"
+                                className="h-3 w-3 ml-1"
+                              />
                             </Button>
                           )}
                         </div>
@@ -467,11 +475,13 @@ export function Products({
 
         {/* View All Button */}
         <div className="text-center mt-10">
-          <Button asChild size="lg" variant="outline">
-            <Link href="/products">
-              View All Products
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Link>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => router.push("/products")}
+          >
+            View All Products
+            <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </div>

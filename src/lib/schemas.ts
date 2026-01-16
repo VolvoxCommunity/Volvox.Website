@@ -40,29 +40,34 @@ export const ProductSchema = z.object({
 });
 
 /**
- * Mentor schema matching the Mentor interface
+ * Team Member schema (discriminated union)
  */
-export const MentorSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  avatar: z.string(),
-  role: z.string(),
-  expertise: z.array(z.string()),
-  bio: z.string(),
-  githubUrl: z.string().optional(),
-});
+export const TeamMemberSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("mentor"),
+    id: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    role: z.string(),
+    bio: z.string(),
+    expertise: z.array(z.string()),
+    githubUrl: z.string().optional(),
+  }),
+  z.object({
+    type: z.literal("mentee"),
+    id: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    goals: z.string(),
+    progress: z.string(),
+    githubUrl: z.string().optional(),
+  }),
+]);
 
 /**
- * Mentee schema matching the Mentee interface
+ * Helper to validate and parse team members array
  */
-export const MenteeSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  avatar: z.string(),
-  goals: z.string(),
-  progress: z.string(),
-  githubUrl: z.string().optional(),
-});
+export const TeamMembersArraySchema = z.array(TeamMemberSchema);
 
 /**
  * Helper to validate and parse authors array
@@ -73,16 +78,6 @@ export const AuthorsArraySchema = z.array(AuthorSchema);
  * Helper to validate and parse products array
  */
 export const ProductsArraySchema = z.array(ProductSchema);
-
-/**
- * Helper to validate and parse mentors array
- */
-export const MentorsArraySchema = z.array(MentorSchema);
-
-/**
- * Helper to validate and parse mentees array
- */
-export const MenteesArraySchema = z.array(MenteeSchema);
 
 /**
  * Schema for product FAQ items.

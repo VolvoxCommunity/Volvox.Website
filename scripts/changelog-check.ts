@@ -222,21 +222,22 @@ function main(): void {
   const result = generateDraftFromCommitMessage();
 
   if (!result) {
-    console.warn("⚠️  Could not parse commit message for CHANGELOG.");
+    console.warn("⚠️  CHANGELOG.md needs to be updated.");
     console.warn(
-      "Please use conventional commit format: feat(scope): description"
+      "   User-facing changes were detected, but no CHANGELOG.md entry was found."
     );
     console.warn("");
-    console.warn("KaC categories → SemVer:");
-    console.warn("  Added     → MINOR (new features)");
-    console.warn("  Changed   → PATCH (backwards-compatible changes)");
-    console.warn("  Removed   → MAJOR (breaking changes)");
-    console.warn("  Fixed     → PATCH (bug fixes)");
-    console.warn("  Deprecated → MINOR");
-    console.warn("  Security  → PATCH");
-    console.warn("  feat!     → MAJOR (breaking flag)");
+    console.warn(
+      "   Also attempted to auto-generate a draft from the commit message, but"
+    );
+    console.warn("   could not read or parse the commit message.");
     console.warn("");
-    console.warn("Add CHANGELOG entry manually or update commit message.");
+    console.warn(
+      "   Please manually add an entry to CHANGELOG.md and stage it."
+    );
+    console.warn("   Format example:");
+    console.warn("     ### Added");
+    console.warn("     - **scope: Description of change**");
     process.exit(1);
   }
 

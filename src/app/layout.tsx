@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono } from "next/font/google";
+import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -8,6 +8,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { SkipLink } from "@/components/skip-link";
+import { SmoothScroll } from "@/components/providers/smooth-scroll";
 import { generateOrganizationSchema } from "@/lib/structured-data";
 import {
   safeJsonLdSerialize,
@@ -20,6 +21,20 @@ const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],
   weight: ["300", "400", "500", "600", "700", "800"],
   variable: "--font-jetbrains-mono",
+  display: "swap",
+});
+
+const manrope = Manrope({
+  subsets: ["latin"],
+  weight: ["300", "400", "600", "800"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
+const spaceGrotesk = Space_Grotesk({
+  subsets: ["latin"],
+  weight: ["300", "500", "700"],
+  variable: "--font-space-grotesk",
   display: "swap",
 });
 
@@ -88,16 +103,21 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${jetbrainsMono.variable} antialiased`}>
-        <SkipLink />
-        <CookieConsentProvider>
-          <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
-            {children}
-            <Toaster />
-            <CookieConsentBanner />
-          </ThemeProvider>
-          <ConditionalAnalytics />
-        </CookieConsentProvider>
+      <body
+        className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased font-sans`}
+      >
+        <div className="noise" />
+        <SmoothScroll>
+          <SkipLink />
+          <CookieConsentProvider>
+            <ThemeProvider defaultTheme="system" storageKey="volvox-theme">
+              {children}
+              <Toaster />
+              <CookieConsentBanner />
+            </ThemeProvider>
+            <ConditionalAnalytics />
+          </CookieConsentProvider>
+        </SmoothScroll>
       </body>
     </html>
   );

@@ -1,0 +1,88 @@
+[
+  {
+    "id": "m1",
+    "name": "Sarah Chen",
+    "role": "Senior Engineer",
+    "bio": "Full-stack architect. Love building scalable systems.",
+    "avatar": "https://i.pravatar.cc/150?u=1",
+    "expertise": ["React", "Node", "AWS"],
+    "type": "mentor",
+    "githubUrl": "#"
+  },
+  {
+    "id": "m2",
+    "name": "Alex Rivera",
+    "role": "UI Expert",
+    "bio": "Design systems fanatic. Making the web beautiful.",
+    "avatar": "https://i.pravatar.cc/150?u=2",
+    "expertise": ["Figma", "CSS", "Motion"],
+    "type": "mentor",
+    "githubUrl": "#"
+  },
+  {
+    "id": "m3",
+    "name": "Jordan Lee",
+    "role": "Open Source Lead",
+    "bio": "Maintainer of several popular libraries.",
+    "avatar": "https://i.pravatar.cc/150?u=3",
+    "expertise": ["Rust", "Go", "System Design"],
+    "type": "mentor",
+    "githubUrl": "#"
+  },
+  {
+    "id": "m4",
+    "name": "Elena Rodriguez",
+    "role": "DevOps Engineer",
+    "bio": "Automating everything I can touch.",
+    "avatar": "https://i.pravatar.cc/150?u=7",
+    "expertise": ["Docker", "K8s", "CI/CD"],
+    "type": "mentor",
+    "githubUrl": "#"
+  },
+  {
+    "id": "m5",
+    "name": "David Kim",
+    "role": "Product Manager",
+    "bio": "Bridging the gap between code and users.",
+    "avatar": "https://i.pravatar.cc/150?u=9",
+    "expertise": ["Product", "Agile", "Strategy"],
+    "type": "mentor",
+    "githubUrl": "#"
+  },
+  {
+    "id": "s1",
+    "name": "Casey Wu",
+    "goals": "Mastering Next.js",
+    "progress": "Building a portfolio",
+    "avatar": "https://i.pravatar.cc/150?u=4",
+    "type": "mentee",
+    "githubUrl": "#"
+  },
+  {
+    "id": "s2",
+    "name": "Jamie Taylor",
+    "goals": "Career Switch",
+    "progress": "Learning Algorithms",
+    "avatar": "https://i.pravatar.cc/150?u=5",
+    "type": "mentee",
+    "githubUrl": "#"
+  },
+  {
+    "id": "s3",
+    "name": "Pat Singh",
+    "goals": "Contributing to OSS",
+    "progress": "First PR Merged",
+    "avatar": "https://i.pravatar.cc/150?u=6",
+    "type": "mentee",
+    "githubUrl": "#"
+  },
+  {
+    "id": "s4",
+    "name": "Sam Wilson",
+    "goals": "Backend Deep Dive",
+    "progress": "Studying distributed systems",
+    "avatar": "https://i.pravatar.cc/150?u=8",
+    "type": "mentee",
+    "githubUrl": "#"
+  }
+]

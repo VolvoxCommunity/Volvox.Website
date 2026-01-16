@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **ui: Full UI overhaul**
 - **SEO: Add IndexNow GitHub Actions workflow for automatic search engine indexing** (`.github/workflows/indexnow.yml`)
 - **Changelog: Add CHANGELOG.md with Keep a Changelog and SemVer format** (changelog-check.ts, changelog-generate.ts)
 - **Changelog: Add pre-commit hook that auto-generates draft entries from commit messages** (.husky/pre-commit)

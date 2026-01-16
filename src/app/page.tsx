@@ -1,20 +1,16 @@
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
-import { getAllExtendedProducts } from "@/lib/content";
-import { getAllMentors, getAllMentees } from "@/lib/content";
+import { getAllTeamMembers } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 
 /**
  * Renders the homepage server component with resilient data fetching.
  */
 export default async function HomePage() {
-  const [blogPostsResult, productsResult, mentorsResult, menteesResult] =
-    await Promise.allSettled([
-      getAllPosts(),
-      Promise.resolve(getAllExtendedProducts()),
-      Promise.resolve(getAllMentors()),
-      Promise.resolve(getAllMentees()),
-    ]);
+  const [blogPostsResult, teamResult] = await Promise.allSettled([
+    getAllPosts(),
+    Promise.resolve(getAllTeamMembers()),
+  ]);
 
   const blogPosts =
     blogPostsResult.status === "fulfilled" ? blogPostsResult.value : [];
@@ -25,30 +21,10 @@ export default async function HomePage() {
     );
   }
 
-  const products =
-    productsResult.status === "fulfilled" ? productsResult.value : [];
-  if (productsResult.status === "rejected") {
-    reportError("Failed to load products for HomePage", productsResult.reason);
+  const teamMembers = teamResult.status === "fulfilled" ? teamResult.value : [];
+  if (teamResult.status === "rejected") {
+    reportError("Failed to load team members for HomePage", teamResult.reason);
   }
 
-  const mentors =
-    mentorsResult.status === "fulfilled" ? mentorsResult.value : [];
-  if (mentorsResult.status === "rejected") {
-    reportError("Failed to load mentors for HomePage", mentorsResult.reason);
-  }
-
-  const mentees =
-    menteesResult.status === "fulfilled" ? menteesResult.value : [];
-  if (menteesResult.status === "rejected") {
-    reportError("Failed to load mentees for HomePage", menteesResult.reason);
-  }
-
-  return (
-    <HomepageClient
-      blogPosts={blogPosts}
-      products={products}
-      mentors={mentors}
-      mentees={mentees}
-    />
-  );
+  return <HomepageClient blogPosts={blogPosts} teamMembers={teamMembers} />;
 }

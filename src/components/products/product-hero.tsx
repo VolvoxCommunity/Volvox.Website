@@ -89,29 +89,34 @@ export function ProductHero({ product }: ProductHeroProps) {
                 <Button
                   variant="accent"
                   size="lg"
-                  asChild
                   className="gap-2 shadow-lg shadow-accent/20"
+                  onClick={() =>
+                    window.open(
+                      product.links.demo,
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
                 >
-                  <a
-                    href={product.links.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit
-                    <ArrowUpRight weight="bold" className="h-5 w-5" />
-                  </a>
+                  Visit
+                  <ArrowUpRight weight="bold" className="h-5 w-5" />
                 </Button>
               )}
               {product.links.github && (
-                <Button variant="outline" size="lg" asChild className="gap-2">
-                  <a
-                    href={product.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <GithubLogo weight="fill" className="h-5 w-5" />
-                    View Source
-                  </a>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="gap-2"
+                  onClick={() =>
+                    window.open(
+                      product.links.github,
+                      "_blank",
+                      "noopener,noreferrer"
+                    )
+                  }
+                >
+                  <GithubLogo weight="fill" className="h-5 w-5" />
+                  View Source
                 </Button>
               )}
             </div>

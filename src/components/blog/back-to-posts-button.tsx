@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
  * @returns A floating button that fades in after scrolling 300px
  */
 export function BackToPostsButton() {
+  const router = useRouter();
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
@@ -39,15 +40,13 @@ export function BackToPostsButton() {
         >
           <Button
             variant="outline"
-            asChild
-            className="shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background border-border/50"
+            className="shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background border-border/50 flex items-center gap-2"
             data-testid="back-to-posts"
+            onClick={() => router.push("/#blog")}
           >
-            <Link href="/#blog" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              <span className="hidden sm:inline">Back to All Posts</span>
-              <span className="sm:hidden">Back</span>
-            </Link>
+            <ArrowLeft className="h-4 w-4" />
+            <span className="hidden sm:inline">Back to All Posts</span>
+            <span className="sm:hidden">Back</span>
           </Button>
         </motion.div>
       )}

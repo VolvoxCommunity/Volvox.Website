@@ -1,7 +1,6 @@
 "use client";
 
-import { AnimatedBackground } from "@/components/animated-background";
-import { BlogNavigation } from "@/components/blog/blog-navigation";
+import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { Footer } from "@/components/footer";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductToc } from "@/components/products/product-toc";
@@ -11,7 +10,6 @@ import { ProductTestimonials } from "@/components/products/product-testimonials"
 import { ProductChangelog } from "@/components/products/product-changelog";
 import { ProductScreenshots } from "@/components/products/product-screenshots";
 import type { ExtendedProduct } from "@/lib/types";
-import { NAV_HEIGHT } from "@/lib/constants";
 
 interface ProductDetailClientProps {
   product: ExtendedProduct;
@@ -41,21 +39,13 @@ export function ProductDetailClient({
   ];
 
   return (
-    <div className="min-h-screen relative flex flex-col">
-      {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <AnimatedBackground />
-      </div>
+    <div className="min-h-screen relative flex flex-col bg-background">
+      {/* Navbar */}
+      <ProductPostNavbar />
 
       {/* Content Layer */}
       <div className="relative z-10 flex-1">
-        {/* Navigation */}
-        <BlogNavigation />
-
-        {/* Spacer for fixed navigation */}
-        <div style={{ height: NAV_HEIGHT }} />
-
-        {/* Combined Back Navigation + Table of Contents */}
+        {/* Table of Contents */}
         <ProductToc sections={tocSections} />
 
         <main id="main-content">
@@ -113,9 +103,7 @@ export function ProductDetailClient({
       </div>
 
       {/* Footer */}
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

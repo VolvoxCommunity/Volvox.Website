@@ -51,27 +51,7 @@ export type {
   ProductLinks,
 } from "./schemas";
 
-/**
- * Captures mentor profile information.
- */
-export interface Mentor {
-  id: string;
-  name: string;
-  avatar: string;
-  role: string;
-  expertise: string[];
-  bio: string;
-  githubUrl?: string;
-}
+import { z } from "zod";
+import { TeamMemberSchema } from "./schemas";
 
-/**
- * Captures mentee profile information.
- */
-export interface Mentee {
-  id: string;
-  name: string;
-  avatar: string;
-  goals: string;
-  progress: string;
-  githubUrl?: string;
-}
+export type TeamMember = z.infer<typeof TeamMemberSchema>;

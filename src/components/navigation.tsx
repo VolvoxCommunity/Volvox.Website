@@ -1,43 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import {
-  Moon,
-  Sun,
-  List,
-  GithubLogo,
-  DiscordLogo,
-} from "@phosphor-icons/react";
+import { Moon, Sun, List, DiscordLogo, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { useTheme } from "@/components/providers/theme-provider";
-import { motion } from "framer-motion";
 import confettiLib from "canvas-confetti";
 import Image from "next/image";
-import { NAV_HEIGHT, GITHUB_URL, DISCORD_URL } from "@/lib/constants";
+import { DISCORD_URL } from "@/lib/constants";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface NavigationProps {
-  /** Callback invoked with section id when navigating (for homepage scroll mode) */
   onNavigate?: (section: string) => void;
-  /** Currently active section id (for homepage scroll mode) */
   currentSection?: string;
-  /** When true, uses Link components instead of scroll navigation */
   linkMode?: boolean;
 }
 
-/**
- * Top navigation bar with logo, section links, theme toggle, and external links.
- *
- * Supports two modes:
- * - Scroll mode (default on homepage): Uses callbacks to scroll to sections
- * - Link mode: Uses Next.js Links to navigate to homepage sections
- *
- * @param onNavigate - Callback invoked with a section id when a navigation item is selected.
- * @param currentSection - The id of the currently active section used to apply active styling.
- * @param linkMode - When true, navigation items link to homepage sections instead of scrolling.
- * @returns The navigation bar element (JSX) ready to be rendered at the top of the page.
- */
 export function Navigation({
   onNavigate,
   currentSection,
@@ -45,253 +23,301 @@ export function Navigation({
 }: NavigationProps) {
   const { theme, setTheme } = useTheme();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [isIsland, setIsIsland] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
+  const lastScrollY = useRef(0);
+  const navRef = useRef<HTMLDivElement>(null);
 
-  const toggleTheme = () => {
-    if (theme === "light") {
-      setTheme("dark");
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Island logic (desktop)
+      setIsIsland(currentScrollY > 100);
+
+      // Smart hide logic (desktop only)
+      // Only active after threshold (e.g. 800px or hero section is scrolled past)
+      if (currentScrollY > 800) {
+        if (currentScrollY > lastScrollY.current) {
+          // Scrolling down
+          setIsVisible(false);
+        } else {
+          // Scrolling up
+          setIsVisible(true);
+        }
+      } else {
+        // Always visible at the top
+        setIsVisible(true);
+      }
+
+      lastScrollY.current = currentScrollY;
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  // Lock body scroll when mobile menu is open
+  useEffect(() => {
+    if (mobileOpen) {
+      document.body.style.overflow = "hidden";
     } else {
-      setTheme("light");
+      document.body.style.overflow = "";
     }
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLElement>) => {
+    if (!navRef.current) return;
+    const rect = navRef.current.getBoundingClientRect();
+    navRef.current.style.setProperty("--mouse-x", `${e.clientX - rect.left}px`);
+    navRef.current.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   };
 
-  const handleDiscordClick = (e: React.MouseEvent) => {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
 
+  const handleDiscordClick = (e: React.MouseEvent) => {
     void confettiLib({
       particleCount: 100,
       spread: 70,
-      origin: { x, y },
+      origin: {
+        x: e.clientX / window.innerWidth,
+        y: e.clientY / window.innerHeight,
+      },
     });
   };
 
   const navItems = [
     { id: "home", label: "Home", href: "/" },
-    { id: "products", label: "Products", href: "/#products" },
     { id: "blog", label: "Blog", href: "/#blog" },
     { id: "mentorship", label: "Mentorship", href: "/#mentorship" },
     { id: "about", label: "About", href: "/#about" },
   ];
 
   const handleNavigate = (section: string) => {
-    if (onNavigate) {
-      onNavigate(section);
-    }
+    if (onNavigate) onNavigate(section);
     setMobileOpen(false);
   };
 
   return (
-    <nav
-      className="fixed top-0 left-0 right-0 z-50 border-b border-border/50 bg-background/70 backdrop-blur-xl"
-      style={{ height: NAV_HEIGHT }}
-    >
-      <div className="container mx-auto px-4 py-2 max-w-7xl">
-        <div className="flex items-center justify-between h-16">
-          {linkMode ? (
-            <Link
-              href="/"
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity"
-            >
-              <div className="w-8 h-8 flex-shrink-0">
-                <Image
-                  src="/logo.png"
-                  alt="Volvox Logo"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-xl font-bold text-primary">VOLVOX</span>
-            </Link>
-          ) : (
-            <motion.button
-              onClick={() => handleNavigate("home")}
-              className="flex items-center gap-3 hover:opacity-80 transition-opacity cursor-pointer"
-              whileHover={{ scale: 1.02 }}
-              whileTap={{ scale: 0.98 }}
-            >
-              <div className="w-8 h-8 flex-shrink-0">
-                <Image
-                  src="/logo.png"
-                  alt="Volvox Logo"
-                  width={32}
-                  height={32}
-                  className="w-full h-full object-contain"
-                />
-              </div>
-              <span className="text-xl font-bold text-primary">VOLVOX</span>
-            </motion.button>
-          )}
-
-          <div
-            className="hidden md:flex items-center gap-1"
-            data-testid="desktop-nav"
-          >
-            {navItems.map((item) =>
-              linkMode ? (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className="text-sm font-medium transition-colors px-4 py-2 rounded-lg text-foreground hover:text-secondary hover:bg-muted"
-                >
-                  {item.label}
-                </Link>
-              ) : (
-                <button
-                  key={item.id}
-                  type="button"
-                  onClick={() => handleNavigate(item.id)}
-                  className={`text-sm font-medium transition-colors px-4 py-2 rounded-lg relative cursor-pointer ${
-                    currentSection === item.id
-                      ? "text-primary bg-primary/10"
-                      : "text-foreground hover:text-secondary hover:bg-muted"
-                  }`}
-                >
-                  {item.label}
-                </button>
-              )
-            )}
+    <>
+      {/* Fixed Wrapper */}
+      <div
+        className={`fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out ${
+          isVisible ? "translate-y-0" : "md:-translate-y-full translate-y-0"
+        }`}
+      >
+        {/* Nav Container */}
+        <nav
+          ref={navRef}
+          onMouseMove={handleMouseMove}
+          className={`pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
+            w-full py-2 px-3 bg-transparent
+            ${
+              isIsland
+                ? "md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+                : "md:w-full md:max-w-full md:py-6 md:px-10 md:border-b md:border-border/5"
+            }
+          `}
+        >
+          {/* Mobile Progressive Blur Background */}
+          <div className="absolute inset-0 md:hidden z-[-1] pointer-events-none">
+            {/* Layer 1 - Base blur that fades completely */}
+            <div className="absolute inset-0 backdrop-blur-[4px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_100%)]" />
+            {/* Layer 2 - Medium blur fading at 60% */}
+            <div className="absolute inset-0 backdrop-blur-[8px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_60%)]" />
+            {/* Layer 3 - Strong blur fading at 30% */}
+            <div className="absolute inset-0 backdrop-blur-[12px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_30%)]" />
+            {/* Background tint overlay */}
+            <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/30 to-transparent" />
           </div>
 
-          <div className="flex items-center gap-2">
-            <motion.div
-              whileHover={{ rotate: 180 }}
-              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            >
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleTheme}
-                className="rounded-full hover:bg-muted"
-                aria-label="Toggle theme"
-                data-testid="theme-toggle"
-              >
-                {theme === "light" ? (
-                  <Moon weight="fill" className="h-5 w-5" />
+          {/* Spotlight Effect (Desktop Only) */}
+          <div
+            className={`absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden md:block ${
+              isIsland ? "group-hover:opacity-100 hover:opacity-100" : ""
+            }`}
+            style={{
+              background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), oklch(from var(--primary) l c h / 0.15), transparent 40%)`,
+            }}
+          />
+
+          {/* Brand */}
+          <Link href="/" className="flex items-center gap-3 z-[2] no-underline">
+            <Image
+              src="/logo.png"
+              alt="Volvox Logo"
+              width={32}
+              height={32}
+              className="w-8 h-8 object-contain rounded-md"
+              priority
+            />
+            {/* Logo Text Hidden on Mobile */}
+            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground hidden md:block">
+              Volvox
+            </span>
+          </Link>
+
+          {/* Desktop Links */}
+          <ul
+            className={`hidden md:flex z-[2] list-none ${
+              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8"
+            }`}
+          >
+            {navItems.map((item) => (
+              <li key={item.id}>
+                {linkMode ? (
+                  <Link
+                    href={item.href}
+                    className={`inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 ${
+                      currentSection === item.id
+                        ? "opacity-100 bg-foreground/5 text-foreground"
+                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
                 ) : (
-                  <Sun weight="fill" className="h-5 w-5" />
+                  <button
+                    onClick={() => handleNavigate(item.id)}
+                    className={`inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none ${
+                      currentSection === item.id
+                        ? "opacity-100 bg-foreground/5 text-foreground"
+                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                    }`}
+                  >
+                    {item.label}
+                  </button>
                 )}
-              </Button>
-            </motion.div>
+              </li>
+            ))}
+          </ul>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+          {/* Actions */}
+          <div className="flex items-center gap-2 z-[2]">
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={toggleTheme}
+              className="rounded-full"
+              aria-label="Toggle theme"
+            >
+              {theme === "light" ? (
+                <Moon weight="fill" className="h-5 w-5" />
+              ) : (
+                <Sun weight="fill" className="h-5 w-5" />
+              )}
+            </Button>
+
+            <Button
+              className={`hidden md:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none`}
+              onClick={(e) => {
+                handleDiscordClick(e);
+                window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
+              }}
+            >
+              <DiscordLogo weight="fill" className="h-5 w-5" />
+              Join
+            </Button>
+
+            {/* Mobile Menu Toggle */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="md:hidden rounded-full"
+              onClick={() => setMobileOpen(true)}
+              aria-label="Open menu"
+            >
+              <List className="h-6 w-6" />
+            </Button>
+          </div>
+        </nav>
+      </div>
+
+      {/* Custom Animated Mobile Menu Overlay */}
+      <AnimatePresence>
+        {mobileOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: "-100%" }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: "-100%" }}
+            transition={{ type: "spring", bounce: 0, duration: 0.4 }}
+            className="fixed inset-0 z-[2000] bg-background flex flex-col pointer-events-auto"
+          >
+            {/* Header */}
+            <div className="flex items-center justify-between p-5 border-b border-border/5">
+              <div className="flex items-center gap-3">
+                <Image
+                  src="/logo.png"
+                  alt="Volvox Logo"
+                  width={32}
+                  height={32}
+                  className="w-8 h-8 object-contain rounded-md"
+                />
+                <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground">
+                  Volvox
+                </span>
+              </div>
               <Button
                 variant="ghost"
                 size="icon"
-                asChild
-                className="rounded-full hidden md:inline-flex hover:bg-muted"
+                onClick={() => setMobileOpen(false)}
+                className="rounded-full"
               >
-                <a
-                  href={GITHUB_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label="GitHub"
-                >
-                  <GithubLogo weight="fill" className="h-5 w-5" />
-                </a>
+                <X weight="bold" className="w-6 h-6" />
               </Button>
-            </motion.div>
+            </div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
-              <Button
-                variant="ghost"
-                size="icon"
-                asChild
-                className="rounded-full hidden md:inline-flex hover:bg-muted"
+            {/* Menu Items */}
+            <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+              {navItems.map((item, i) => (
+                <motion.div
+                  key={item.id}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.1 + i * 0.05 }}
+                >
+                  {linkMode ? (
+                    <Link
+                      href={item.href}
+                      onClick={() => setMobileOpen(false)}
+                      className="text-3xl font-bold tracking-tight block py-2"
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      onClick={() => handleNavigate(item.id)}
+                      className="text-left text-3xl font-bold tracking-tight block py-2 bg-transparent border-none cursor-pointer w-full"
+                    >
+                      {item.label}
+                    </button>
+                  )}
+                </motion.div>
+              ))}
+
+              <motion.div
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.4 }}
+                className="mt-4 pt-6 border-t border-border/10"
               >
                 <a
                   href={DISCORD_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  onClick={handleDiscordClick}
-                  aria-label="Discord"
+                  className="flex items-center gap-3 text-xl font-semibold text-[#5865F2]"
                 >
-                  <DiscordLogo weight="fill" className="h-5 w-5" />
+                  <DiscordLogo weight="fill" className="w-8 h-8" />
+                  Join Community
                 </a>
-              </Button>
-            </motion.div>
-
-            <Sheet open={mobileOpen} onOpenChange={setMobileOpen}>
-              <SheetTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="md:hidden rounded-full hover:bg-muted"
-                  aria-label="Open menu"
-                  data-testid="mobile-menu-button"
-                >
-                  <List className="h-6 w-6" />
-                </Button>
-              </SheetTrigger>
-              <SheetContent
-                side="right"
-                className="w-64"
-                data-testid="mobile-menu"
-              >
-                <div className="flex flex-col gap-4 mt-8">
-                  {navItems.map((item) =>
-                    linkMode ? (
-                      <Link
-                        key={item.id}
-                        href={item.href}
-                        onClick={() => setMobileOpen(false)}
-                        className="text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg text-foreground hover:text-secondary hover:bg-muted"
-                      >
-                        {item.label}
-                      </Link>
-                    ) : (
-                      <button
-                        key={item.id}
-                        onClick={() => handleNavigate(item.id)}
-                        className={`text-left text-lg font-medium transition-colors px-4 py-2 rounded-lg cursor-pointer ${
-                          currentSection === item.id
-                            ? "text-primary bg-primary/10"
-                            : "text-foreground hover:text-secondary hover:bg-muted"
-                        }`}
-                      >
-                        {item.label}
-                      </button>
-                    )
-                  )}
-                  <div className="border-t border-border pt-6 flex gap-2">
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
-                      className="rounded-full"
-                    >
-                      <a
-                        href={GITHUB_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        aria-label="GitHub"
-                      >
-                        <GithubLogo weight="fill" className="h-5 w-5" />
-                      </a>
-                    </Button>
-                    <Button
-                      variant="outline"
-                      size="icon"
-                      asChild
-                      className="rounded-full"
-                    >
-                      <a
-                        href={DISCORD_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        onClick={handleDiscordClick}
-                        aria-label="Discord"
-                      >
-                        <DiscordLogo weight="fill" className="h-5 w-5" />
-                      </a>
-                    </Button>
-                  </div>
-                </div>
-              </SheetContent>
-            </Sheet>
-          </div>
-        </div>
-      </div>
-    </nav>
+              </motion.div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }

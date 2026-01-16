@@ -1,97 +1,387 @@
 "use client";
 
-import { ComponentProps, useRef, MouseEvent } from "react";
+import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
-
 import { cn } from "@/lib/utils";
 
+// --- 1. MATERIAL DESIGN TOKENS ---
+const MATERIAL_THEME = {
+  "--ease-standard": "cubic-bezier(0.2, 0, 0, 1)",
+  "--shadow-elevation-1":
+    "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
+  "--shadow-elevation-2":
+    "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
+  "--ripple-hover-opacity": "0.16",
+  "--ripple-pressed-opacity": "0.32",
+} as React.CSSProperties;
+
+// --- 2. RIPPLE & PHYSICS LOGIC ---
+const PRESS_GROW_MS = 50;
+
+// CRITICAL FIX: Increased Minimum Press Time
+// We hold the 'pressed' state for at least 450ms.
+// This gives the CSS transition (300ms) enough time to fully morph
+// the shape before reverting, even on quick taps.
+const MINIMUM_PRESS_MS = 450;
+
+const INITIAL_ORIGIN_SCALE = 0.2;
+const PADDING = 10;
+const SOFT_EDGE_MINIMUM_SIZE = 75;
+const SOFT_EDGE_CONTAINER_RATIO = 0.35;
+const TOUCH_DELAY_MS = 150;
+
+enum RippleState {
+  INACTIVE,
+  TOUCH_DELAY,
+  HOLDING,
+  WAITING_FOR_CLICK,
+}
+
+const useMaterialRipple = (disabled = false) => {
+  const [hovered, setHovered] = React.useState(false);
+  const [pressed, setPressed] = React.useState(false);
+  const rippleRef = React.useRef<HTMLDivElement>(null);
+  const stateRef = React.useRef(RippleState.INACTIVE);
+  const rippleStartEventRef = React.useRef<React.PointerEvent | null>(null);
+  const growAnimationRef = React.useRef<Animation | null>(null);
+  const initialSizeRef = React.useRef(0);
+  const rippleScaleRef = React.useRef("");
+  const rippleSizeRef = React.useRef("");
+
+  const determineRippleSize = () => {
+    if (!rippleRef.current) return;
+    const { height, width } = rippleRef.current.getBoundingClientRect();
+    const maxDim = Math.max(height, width);
+    const softEdgeSize = Math.max(
+      SOFT_EDGE_CONTAINER_RATIO * maxDim,
+      SOFT_EDGE_MINIMUM_SIZE
+    );
+
+    const initialSize = Math.floor(maxDim * INITIAL_ORIGIN_SCALE);
+    const hypotenuse = Math.sqrt(width ** 2 + height ** 2);
+    const maxRadius = hypotenuse + PADDING;
+
+    initialSizeRef.current = initialSize;
+    const rippleScale = (maxRadius + softEdgeSize) / initialSize;
+    rippleScaleRef.current = `${rippleScale}`;
+    rippleSizeRef.current = `${initialSize}px`;
+  };
+
+  const getTranslationCoordinates = (event?: React.PointerEvent) => {
+    if (!rippleRef.current)
+      return { startPoint: { x: 0, y: 0 }, endPoint: { x: 0, y: 0 } };
+    const { height, width, left, top } =
+      rippleRef.current.getBoundingClientRect();
+    const endPoint = {
+      x: (width - initialSizeRef.current) / 2,
+      y: (height - initialSizeRef.current) / 2,
+    };
+
+    let startPoint;
+    if (event) {
+      startPoint = {
+        x: event.clientX - left,
+        y: event.clientY - top,
+      };
+    } else {
+      startPoint = {
+        x: width / 2,
+        y: height / 2,
+      };
+    }
+
+    startPoint = {
+      x: startPoint.x - initialSizeRef.current / 2,
+      y: startPoint.y - initialSizeRef.current / 2,
+    };
+
+    return { startPoint, endPoint };
+  };
+
+  const startPressAnimation = (event?: React.PointerEvent) => {
+    if (!rippleRef.current) return;
+
+    setPressed(true);
+    growAnimationRef.current?.cancel();
+
+    determineRippleSize();
+    const { startPoint, endPoint } = getTranslationCoordinates(event);
+
+    const rippleEffect = rippleRef.current.querySelector(".ripple-effect");
+    if (!rippleEffect) return;
+
+    growAnimationRef.current = rippleEffect.animate(
+      {
+        top: [0, 0],
+        left: [0, 0],
+        height: [rippleSizeRef.current, rippleSizeRef.current],
+        width: [rippleSizeRef.current, rippleSizeRef.current],
+        transform: [
+          `translate(${startPoint.x}px, ${startPoint.y}px) scale(1)`,
+          `translate(${endPoint.x}px, ${endPoint.y}px) scale(${rippleScaleRef.current})`,
+        ],
+      },
+      {
+        duration: PRESS_GROW_MS,
+        easing: "cubic-bezier(0.2, 0, 0, 1)",
+        fill: "forwards",
+      }
+    );
+  };
+
+  const endPressAnimation = async () => {
+    rippleStartEventRef.current = null;
+    stateRef.current = RippleState.INACTIVE;
+
+    const animation = growAnimationRef.current;
+    let pressAnimationPlayState = Infinity;
+
+    if (animation && typeof animation.currentTime === "number") {
+      pressAnimationPlayState = animation.currentTime;
+    }
+
+    // Logic: If the animation hasn't run for at least MINIMUM_PRESS_MS,
+    // we wait the remaining time before setting pressed = false.
+    if (pressAnimationPlayState < MINIMUM_PRESS_MS) {
+      await new Promise((resolve) => {
+        setTimeout(resolve, MINIMUM_PRESS_MS - pressAnimationPlayState);
+      });
+    }
+
+    if (growAnimationRef.current !== animation) {
+      return;
+    }
+
+    setPressed(false);
+  };
+
+  const handlePointerDown = async (event: React.PointerEvent) => {
+    if (disabled) return;
+    rippleStartEventRef.current = event;
+
+    if (event.pointerType !== "touch") {
+      stateRef.current = RippleState.WAITING_FOR_CLICK;
+      startPressAnimation(event);
+      return;
+    }
+
+    stateRef.current = RippleState.TOUCH_DELAY;
+    await new Promise((resolve) => setTimeout(resolve, TOUCH_DELAY_MS));
+
+    if (stateRef.current === RippleState.TOUCH_DELAY) {
+      stateRef.current = RippleState.HOLDING;
+      startPressAnimation(event);
+    }
+  };
+
+  const handlePointerUp = () => {
+    if (disabled) return;
+    if (stateRef.current === RippleState.HOLDING) {
+      stateRef.current = RippleState.WAITING_FOR_CLICK;
+      return;
+    }
+    if (stateRef.current === RippleState.TOUCH_DELAY) {
+      stateRef.current = RippleState.WAITING_FOR_CLICK;
+      startPressAnimation(rippleStartEventRef.current || undefined);
+    }
+  };
+
+  const handlePointerLeave = () => {
+    setHovered(false);
+    if (stateRef.current !== RippleState.INACTIVE) {
+      void endPressAnimation();
+    }
+  };
+
+  const handlePointerEnter = (e: React.PointerEvent) => {
+    if (disabled || e.pointerType === "touch") return;
+    setHovered(true);
+  };
+
+  const handleClick = () => {
+    if (disabled) return;
+    if (stateRef.current === RippleState.WAITING_FOR_CLICK) {
+      void endPressAnimation();
+    } else if (stateRef.current === RippleState.INACTIVE) {
+      startPressAnimation();
+      void endPressAnimation();
+    }
+  };
+
+  return {
+    rippleRef,
+    hovered,
+    pressed,
+    events: {
+      onPointerDown: handlePointerDown,
+      onPointerUp: handlePointerUp,
+      onPointerEnter: handlePointerEnter,
+      onPointerLeave: handlePointerLeave,
+      onClick: handleClick,
+      onKeyDown: (e: React.KeyboardEvent) => {
+        if (e.key === "Enter" || e.key === " ") {
+          handleClick();
+        }
+      },
+    },
+  };
+};
+
+const Ripple = React.forwardRef<
+  HTMLDivElement,
+  { hovered: boolean; pressed: boolean }
+>(({ hovered, pressed }, ref) => {
+  return (
+    <div
+      ref={ref}
+      className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0"
+      aria-hidden="true"
+    >
+      <div
+        className={cn(
+          "absolute inset-0 bg-current transition-opacity duration-200",
+          hovered ? "opacity-[var(--ripple-hover-opacity)]" : "opacity-0"
+        )}
+      />
+      <span
+        className={cn(
+          "ripple-effect absolute rounded-full opacity-0",
+          "bg-[radial-gradient(circle,currentColor_45%,transparent_100%)]"
+        )}
+        style={{
+          transition: "opacity 375ms linear",
+          opacity: pressed ? "var(--ripple-pressed-opacity)" : "0",
+        }}
+      />
+    </div>
+  );
+});
+Ripple.displayName = "Ripple";
+
+// --- 3. CVA CONFIGURATION ---
 const buttonVariants = cva(
-  "inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-[colors,opacity,box-shadow] disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 outline-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive relative overflow-hidden",
+  // CRITICAL FIX: Increased duration to 300ms to allow shape morphing to be visible
+  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] transition-all duration-300 ease-[var(--ease-standard)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-38 disabled:shadow-none",
   {
     variants: {
       variant: {
+        // MATERIAL VARIANTS
+        filled:
+          "bg-primary text-primary-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        elevated:
+          "bg-card text-primary shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        tonal: "bg-secondary text-secondary-foreground hover:shadow-none",
+        outlined:
+          "border border-outline bg-transparent text-primary shadow-none",
+        text: "bg-transparent text-primary shadow-none",
+
+        // LEGACY MAPPINGS
         default:
-          "bg-primary text-primary-foreground shadow-xs hover:bg-primary/90 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
+          "bg-primary text-primary-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
         destructive:
-          "bg-destructive text-white shadow-xs hover:bg-destructive/90 focus-visible:ring-destructive/20 dark:focus-visible:ring-destructive/40 dark:bg-destructive/60 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
-        outline:
-          "border bg-background shadow-xs hover:bg-secondary hover:text-secondary-foreground dark:bg-input/30 dark:border-input before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.08),transparent)] dark:before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.12),transparent)]",
-        secondary:
-          "bg-secondary text-secondary-foreground shadow-xs hover:bg-secondary/80 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
+          "bg-destructive text-destructive-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        outline: "border border-border bg-transparent text-primary shadow-none",
+        secondary: "bg-secondary text-secondary-foreground hover:shadow-none",
+        ghost: "bg-transparent text-primary shadow-none",
+        link: "bg-transparent text-primary shadow-none underline-offset-4 hover:underline",
         accent:
-          "bg-accent text-accent-foreground shadow-xs hover:bg-accent/90 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_150px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(255,255,255,0.15),transparent)]",
-        ghost:
-          "hover:bg-secondary hover:text-secondary-foreground dark:hover:bg-secondary/50 before:absolute before:inset-0 before:rounded-md before:opacity-0 hover:before:opacity-100 before:transition-opacity before:duration-300 before:pointer-events-none before:bg-[radial-gradient(circle_120px_at_var(--mouse-x,50%)_var(--mouse-y,50%),rgba(var(--secondary-rgb,139,92,246),0.08),transparent)]",
-        link: "text-secondary underline-offset-4 hover:underline overflow-visible before:hidden",
+          "bg-accent text-accent-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
       },
       size: {
-        default: "h-9 px-4 py-2 has-[>svg]:px-3",
-        sm: "h-8 rounded-md gap-1.5 px-3 has-[>svg]:px-2.5",
-        lg: "h-10 rounded-md px-6 has-[>svg]:px-4",
-        icon: "size-9",
+        default: "h-10 px-6",
+        sm: "h-8 px-4 text-xs",
+        lg: "h-12 px-8 text-base",
+        icon: "h-10 w-10",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "filled",
       size: "default",
     },
   }
 );
 
-/**
- * Interactive button component with various variants and sizes.
- * Supports rendering as a child component via `asChild` prop.
- *
- * @param props - Button properties including variant, size, and asChild
- * @returns Button element or the child element enhanced with button styles
- *
- * @example
- * ```tsx
- * <Button variant="default" size="lg" onClick={handleClick}>
- *   Click Me
- * </Button>
- * ```
- */
-function Button({
-  className,
-  variant,
-  size,
-  asChild = false,
-  onMouseMove,
-  ...props
-}: ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean;
-  }) {
-  const buttonRef = useRef<HTMLButtonElement>(null);
-
-  const handleMouseMove = (e: MouseEvent<HTMLButtonElement>) => {
-    if (!buttonRef.current) return;
-
-    const rect = buttonRef.current.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    buttonRef.current.style.setProperty("--mouse-x", `${x}px`);
-    buttonRef.current.style.setProperty("--mouse-y", `${y}px`);
-
-    if (onMouseMove) {
-      onMouseMove(e);
-    }
-  };
-
-  const Comp = asChild ? Slot : "button";
-
-  return (
-    <Comp
-      ref={buttonRef}
-      data-slot="button"
-      className={cn(buttonVariants({ variant, size, className }))}
-      onMouseMove={handleMouseMove}
-      {...props}
-    />
-  );
+export interface ButtonProps
+  extends
+    React.ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  noRipple?: boolean;
 }
+
+const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      noRipple = false,
+      onClick,
+      style,
+      children,
+      ...props
+    },
+    ref
+  ) => {
+    const Comp = asChild ? Slot : "button";
+    const { rippleRef, hovered, pressed, events } = useMaterialRipple(
+      props.disabled || noRipple
+    );
+
+    if (asChild) {
+      return (
+        <Comp
+          className={cn(
+            buttonVariants({ variant, size, className }),
+            // Expressive Shape Morphing:
+            // Since MINIMUM_PRESS_MS is now 450ms and transition duration is 300ms,
+            // even a short click will trigger the full morph to rounded-md before reverting.
+            pressed ? "rounded-lg" : "rounded-full"
+          )}
+          ref={ref}
+          style={{ ...MATERIAL_THEME, ...style }}
+          {...events}
+          onClick={(e) => {
+            events.onClick();
+            onClick?.(e as React.MouseEvent<HTMLButtonElement>);
+          }}
+          {...props}
+        >
+          {children}
+        </Comp>
+      );
+    }
+
+    return (
+      <button
+        className={cn(
+          buttonVariants({ variant, size, className }),
+          // Expressive Shape Morphing:
+          // Since MINIMUM_PRESS_MS is now 450ms and transition duration is 300ms,
+          // even a short click will trigger the full morph to rounded-2xl before reverting.
+          pressed ? "rounded-lg" : "rounded-full"
+        )}
+        ref={ref}
+        style={{ ...MATERIAL_THEME, ...style }}
+        {...events}
+        onClick={(e) => {
+          events.onClick();
+          onClick?.(e as React.MouseEvent<HTMLButtonElement>);
+        }}
+        {...props}
+      >
+        {!noRipple && (
+          <Ripple ref={rippleRef} hovered={hovered} pressed={pressed} />
+        )}
+        <span className="relative z-10 flex items-center gap-2 pointer-events-none">
+          {children}
+        </span>
+      </button>
+    );
+  }
+);
+Button.displayName = "Button";
 
 export { Button, buttonVariants };
