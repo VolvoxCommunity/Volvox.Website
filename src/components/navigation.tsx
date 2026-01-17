@@ -80,7 +80,7 @@ export function Navigation({
   const navItems = [
     { id: "home", label: "Home", href: "/" },
     { id: "blog", label: "Blog", href: "/#blog" },
-    { id: "mentorship", label: "Mentorship", href: "/#mentorship" },
+    { id: "mentorship", label: "Community", href: "/#mentorship" },
     { id: "about", label: "About", href: "/#about" },
   ];
 

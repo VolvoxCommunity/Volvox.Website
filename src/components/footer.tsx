@@ -17,7 +17,7 @@ import { DISCORD_URL } from "@/lib/constants";
 const footerLinks = {
   product: [
     { label: "Blog", href: "/blog" },
-    { label: "Mentorship", href: "/#mentorship" },
+    { label: "Community", href: "/#mentorship" },
     { label: "About", href: "/#about" },
   ],
   resources: [
