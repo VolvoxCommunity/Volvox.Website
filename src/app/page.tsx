@@ -1,7 +1,14 @@
+import { Metadata } from "next";
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
 import { getAllTeamMembers } from "@/lib/content";
 import { reportError } from "@/lib/logger";
+
+export const metadata: Metadata = {
+  alternates: {
+    canonical: "/",
+  },
+};
 
 /**
  * Renders the homepage server component with resilient data fetching.

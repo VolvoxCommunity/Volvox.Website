@@ -31,4 +31,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **SEO: Add missing canonical tags to all pages** (`/`, `/blog`, `/blog/[slug]`, `/products`, `/products/[slug]`)
+- **SEO: Add missing `/blog` listing page to sitemap** (`sitemap.ts`)
+
 ### Security
