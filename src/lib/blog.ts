@@ -12,6 +12,15 @@ import {
 } from "./views";
 import type { BlogPost } from "./types";
 
+/**
+ * Calculates estimated reading time based on word count.
+ */
+function calculateReadingTime(content: string): number {
+  const wordsPerMinute = 200;
+  const words = content.trim().split(/\s+/).length;
+  return Math.ceil(words / wordsPerMinute);
+}
+
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 /**
@@ -69,6 +78,7 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         tags: frontmatter.tags,
         slug: frontmatter.slug,
         views: viewsMap.get(frontmatter.slug) ?? 0,
+        readingTime: calculateReadingTime(content),
         published: frontmatter.published,
         banner: frontmatter.banner,
       })
@@ -134,6 +144,7 @@ export async function getPostBySlug(slug: string) {
       content,
       slug: frontmatter.slug,
       views,
+      readingTime: calculateReadingTime(content),
     };
   } catch (error) {
     reportError(`Failed to fetch post: ${slug}`, error);

@@ -22,6 +22,7 @@ export interface BlogPost {
   tags: string[];
   slug: string;
   views: number;
+  readingTime: number;
   published: boolean;
   banner?: string;
 }

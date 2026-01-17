@@ -4,7 +4,13 @@ import Link from "next/link";
 import Image from "next/image";
 import { version } from "../../package.json";
 import { CookieSettingsButton } from "@/components/cookie-consent-banner";
-import { DiscordLogo, GithubLogo, ArrowUpRight } from "@phosphor-icons/react";
+import {
+  DiscordLogo,
+  GithubLogo,
+  ArrowUpRight,
+  TwitterLogo,
+  LinkedinLogo,
+} from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { DISCORD_URL } from "@/lib/constants";
 
@@ -15,8 +21,9 @@ const footerLinks = {
     { label: "About", href: "/#about" },
   ],
   resources: [
-    { label: "Documentation", href: "https://github.com/VolvoxCommunity" },
     { label: "GitHub", href: "https://github.com/VolvoxCommunity" },
+    { label: "Twitter", href: "https://x.com/volvox_llc" },
+    { label: "LinkedIn", href: "https://www.linkedin.com/company/volvoxllc" },
     { label: "Discord", href: DISCORD_URL },
   ],
   legal: [
@@ -31,6 +38,16 @@ const socialLinks = [
     icon: GithubLogo,
     href: "https://github.com/VolvoxCommunity",
     label: "GitHub",
+  },
+  {
+    icon: TwitterLogo,
+    href: "https://x.com/volvox_llc",
+    label: "Twitter",
+  },
+  {
+    icon: LinkedinLogo,
+    href: "https://www.linkedin.com/company/volvoxllc",
+    label: "LinkedIn",
   },
 ];
 
@@ -248,7 +265,7 @@ export function Footer() {
         >
           <div className="flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-sm text-muted-foreground">
-              © {new Date().getFullYear()} Volvox. All rights reserved.
+              © 2020-{new Date().getFullYear()} Volvox LLC. All rights reserved.
             </p>
 
             <div className="flex items-center gap-4 text-xs text-muted-foreground/60">

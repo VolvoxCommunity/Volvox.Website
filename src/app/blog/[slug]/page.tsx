@@ -4,7 +4,7 @@ import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import { Calendar, Eye } from "lucide-react";
+import { Calendar, Eye, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
@@ -82,12 +82,14 @@ export default async function BlogPostPage({
   let frontmatter;
   let content;
   let views: number;
+  let readingTime: number;
 
   try {
     const post = await getPostBySlug(slug);
     frontmatter = post.frontmatter;
     content = post.content;
     views = post.views;
+    readingTime = post.readingTime;
   } catch {
     notFound();
   }
@@ -191,6 +193,11 @@ export default async function BlogPostPage({
                         {views.toLocaleString()}{" "}
                         {views === 1 ? "view" : "views"}
                       </span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{readingTime} min read</span>
                     </div>
                   </div>
 

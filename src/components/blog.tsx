@@ -1,7 +1,7 @@
 "use client";
 
-import Link from "next/link";
 import { useMemo, useRef } from "react";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { CaretRight } from "@phosphor-icons/react";
 import {
@@ -43,6 +43,7 @@ export function Blog({
   onViewModeChange,
   enableFilters = false,
 }: BlogProps) {
+  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -155,17 +156,15 @@ export function Blog({
               viewport={{ once: true }}
             >
               <Button
-                asChild
                 variant="ghost"
-                className="rounded-full hover:bg-muted transition-colors"
+                onClick={() => router.push("/blog")}
+                className="rounded-full hover:bg-muted transition-colors flex items-center gap-2 group"
               >
-                <Link href="/blog" className="flex items-center gap-2 group">
-                  View Archive
-                  <CaretRight
-                    weight="bold"
-                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
-                  />
-                </Link>
+                View Archive
+                <CaretRight
+                  weight="bold"
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                />
               </Button>
             </motion.div>
           )}

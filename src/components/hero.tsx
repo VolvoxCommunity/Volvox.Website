@@ -230,14 +230,16 @@ export function Hero({ onNavigate }: HeroProps) {
         />
 
         {/* Hero Content */}
-        <div className="hero-content text-center max-w-[900px] px-4 z-[2]">
+        <div className="hero-content text-center max-w-[1100px] px-4 z-[2]">
           <div className="hero-badge inline-flex items-center py-1.5 px-3 md:py-2 md:px-4 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-semibold mb-6 border border-primary/20">
             Building the future of software development
           </div>
 
-          <h1 className="hero-headline font-[family-name:var(--font-jetbrains-mono)] text-[clamp(2rem,6vw,5rem)] leading-[1.1] font-extrabold tracking-[-0.03em] mb-6 text-foreground">
+          <h1 className="hero-headline font-[family-name:var(--font-jetbrains-mono)] text-[clamp(2rem,6vw,5rem)] leading-[1.1] font-extrabold tracking-tighter mb-6 text-foreground">
             Building products. <br />
-            <span className="text-aurora">Empowering builders.</span>
+            <span className="text-aurora tracking-tighter whitespace-nowrap">
+              Empowering builders.
+            </span>
           </h1>
 
           <p className="hero-subheadline text-[clamp(0.95rem,2vw,1.25rem)] text-foreground/70 leading-relaxed mb-10 max-w-[700px] mx-auto">
@@ -311,7 +313,7 @@ export function Hero({ onNavigate }: HeroProps) {
             className="relative w-full max-w-[350px] mx-auto lg:mr-auto perspective-[1000px] will-change-transform"
           >
             {/* Added h-[650px] to fix height collapse issue */}
-            <div className="relative rounded-[30px] md:rounded-[40px] border-[6px] md:border-[8px] border-zinc-800 shadow-2xl overflow-hidden bg-black h-[450px] md:h-[650px] w-full">
+            <div className="relative rounded-[30px] md:rounded-[40px] border-[6px] md:border-[8px] border-zinc-800 shadow-2xl overflow-hidden bg-black h-[450px] md:h-[710px] w-full">
               {/* Phone Screen */}
               <div
                 className="w-full h-full bg-cover bg-center"

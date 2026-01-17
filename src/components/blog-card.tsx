@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowUpRight } from "@phosphor-icons/react";
+import { ArrowUpRight, Eye } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 import { ViewMode } from "@/components/ui/filter-controls";
@@ -108,7 +108,12 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
                   {post.author?.name || "Editor"}
                 </span>
                 <span className="text-[10px] opacity-40">•</span>
-                <span>5 min read</span>
+                <span>{post.readingTime} min read</span>
+                <span className="text-[10px] opacity-40">•</span>
+                <span className="flex items-center gap-1">
+                  <Eye className="w-3 h-3" />
+                  {post.views.toLocaleString()}
+                </span>
               </div>
             </div>
 

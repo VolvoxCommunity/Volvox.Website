@@ -35,20 +35,8 @@ export function Navigation({
       // Island logic (desktop)
       setIsIsland(currentScrollY > 100);
 
-      // Smart hide logic (desktop only)
-      // Only active after threshold (e.g. 800px or hero section is scrolled past)
-      if (currentScrollY > 800) {
-        if (currentScrollY > lastScrollY.current) {
-          // Scrolling down
-          setIsVisible(false);
-        } else {
-          // Scrolling up
-          setIsVisible(true);
-        }
-      } else {
-        // Always visible at the top
-        setIsVisible(true);
-      }
+      // Always visible
+      setIsVisible(true);
 
       lastScrollY.current = currentScrollY;
     };
