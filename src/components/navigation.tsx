@@ -181,6 +181,7 @@ export function Navigation({
                   </Link>
                 ) : (
                   <button
+                    type="button"
                     onClick={() => handleNavigate(item.id)}
                     className={`inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none ${
                       currentSection === item.id
@@ -289,6 +290,7 @@ export function Navigation({
                     </Link>
                   ) : (
                     <button
+                      type="button"
                       onClick={() => handleNavigate(item.id)}
                       className="text-left text-3xl font-bold tracking-tight block py-2 bg-transparent border-none cursor-pointer w-full"
                     >

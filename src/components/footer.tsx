@@ -15,8 +15,8 @@ const footerLinks = {
     { label: "About", href: "/#about" },
   ],
   resources: [
-    { label: "Documentation", href: "https://github.com/volvoxcomunity" },
-    { label: "GitHub", href: "https://github.com/volvoxcomunity" },
+    { label: "Documentation", href: "https://github.com/VolvoxCommunity" },
+    { label: "GitHub", href: "https://github.com/VolvoxCommunity" },
     { label: "Discord", href: DISCORD_URL },
   ],
   legal: [
@@ -29,7 +29,7 @@ const socialLinks = [
   { icon: DiscordLogo, href: DISCORD_URL, label: "Discord" },
   {
     icon: GithubLogo,
-    href: "https://github.com/volvoxcomunity",
+    href: "https://github.com/VolvoxCommunity",
     label: "GitHub",
   },
 ];
@@ -50,7 +50,10 @@ export function Footer() {
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
           preserveAspectRatio="none"
+          aria-hidden="true"
+          focusable="false"
         >
+          <title>Decorative wave background</title>
           {/* Wave 1: Tight curve */}
           <motion.path
             d="M720 0 C900 50, 1000 200, 1440 400"

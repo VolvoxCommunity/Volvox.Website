@@ -135,6 +135,7 @@ export function CookieConsentBanner() {
               data-testid="cookie-consent-banner"
             >
               <button
+                type="button"
                 onClick={declineAll}
                 className="absolute top-2 right-2 p-1 text-muted-foreground hover:text-foreground rounded-sm opacity-70 hover:opacity-100 transition-opacity"
                 aria-label="Decline"
@@ -254,6 +255,7 @@ export function CookieSettingsButton() {
 
   return (
     <button
+      type="button"
       onClick={openSettings}
       className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
     >

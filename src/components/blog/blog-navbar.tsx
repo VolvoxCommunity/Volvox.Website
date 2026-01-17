@@ -105,6 +105,7 @@ export function BlogNavbar({
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => onSearchChange("")}
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors transition-opacity"
               >
@@ -145,6 +146,7 @@ export function BlogNavbar({
                   <h4 className="font-medium text-sm">Filter by Tags</h4>
                   {selectedTags.length > 0 && (
                     <button
+                      type="button"
                       onClick={onClearTags}
                       className="text-xs text-muted-foreground hover:text-primary transition-colors"
                     >
@@ -157,6 +159,7 @@ export function BlogNavbar({
                     const isSelected = selectedTags.includes(tag);
                     return (
                       <button
+                        type="button"
                         key={tag}
                         onClick={() => onTagToggle(tag)}
                         className={cn(
@@ -186,6 +189,7 @@ export function BlogNavbar({
               { value: "views", label: "Views" },
             ].map((opt) => (
               <button
+                type="button"
                 key={opt.value}
                 onClick={() => onSortChange(opt.value as BlogSortOption)}
                 className={cn(
@@ -203,6 +207,7 @@ export function BlogNavbar({
           {/* View Toggle */}
           <div className="flex bg-muted/30 p-1 rounded-full border border-border/30">
             <button
+              type="button"
               onClick={() => onViewModeChange("grid")}
               className={cn(
                 "p-2 rounded-full transition-all",
@@ -214,6 +219,7 @@ export function BlogNavbar({
               <SquaresFour className="h-4 w-4" />
             </button>
             <button
+              type="button"
               onClick={() => onViewModeChange("list")}
               className={cn(
                 "p-2 rounded-full transition-all",
@@ -266,6 +272,7 @@ export function BlogNavbar({
                       { value: "views", label: "Most Viewed" },
                     ].map((opt) => (
                       <button
+                        type="button"
                         key={opt.value}
                         onClick={() =>
                           onSortChange(opt.value as BlogSortOption)
@@ -295,6 +302,7 @@ export function BlogNavbar({
                     </span>
                     {selectedTags.length > 0 && (
                       <button
+                        type="button"
                         onClick={onClearTags}
                         className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
                       >
@@ -307,6 +315,7 @@ export function BlogNavbar({
                       const isSelected = selectedTags.includes(tag);
                       return (
                         <button
+                          type="button"
                           key={tag}
                           onClick={() => onTagToggle(tag)}
                           className={cn(

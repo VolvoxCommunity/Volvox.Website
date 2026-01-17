@@ -2,6 +2,7 @@
 
 import { motion, useMotionValue, useSpring } from "framer-motion";
 import { useRef, ReactNode } from "react";
+import { cn } from "@/lib/utils";
 
 interface MagneticButtonProps {
   children: ReactNode;
@@ -26,8 +27,9 @@ export function MagneticButton({
   const mouseY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!ref.current) return;
     const { clientX, clientY } = e;
-    const { height, width, left, top } = ref.current!.getBoundingClientRect();
+    const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
     const middleY = clientY - (top + height / 2);
 
@@ -47,7 +49,7 @@ export function MagneticButton({
       onMouseLeave={handleMouseLeave}
       onClick={onClick}
       style={{ x: mouseX, y: mouseY }}
-      className={`relative inline-block ${className}`}
+      className={cn("relative inline-block", className)}
       whileTap={{ scale: 0.95 }}
     >
       {children}
