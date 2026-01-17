@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowLeft } from "lucide-react";
@@ -15,6 +16,7 @@ import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
  * @returns The header JSX element containing navigation controls, logo/title, theme toggle button, and social icons.
  */
 export function BlogPostHeader() {
+  const router = useRouter();
   const { theme, setTheme } = useTheme();
 
   const toggleTheme = () => {
@@ -28,11 +30,13 @@ export function BlogPostHeader() {
     >
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-16">
-          <Button variant="ghost" asChild>
-            <Link href="/" className="flex items-center gap-2">
-              <ArrowLeft className="h-4 w-4" />
-              Back to Home
-            </Link>
+          <Button
+            variant="ghost"
+            className="flex items-center gap-2"
+            onClick={() => router.push("/")}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Home
           </Button>
           <Link
             href="/"
@@ -73,29 +77,29 @@ export function BlogPostHeader() {
               </Button>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileTap={{ scale: 0.95 }}>
               <Button
                 variant="ghost"
                 size="icon"
-                asChild
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
+                onClick={() =>
+                  window.open(GITHUB_URL, "_blank", "noopener,noreferrer")
+                }
               >
-                <a href={GITHUB_URL} target="_blank" rel="noopener noreferrer">
-                  <GithubLogo weight="fill" className="h-5 w-5" />
-                </a>
+                <GithubLogo weight="fill" className="h-5 w-5" />
               </Button>
             </motion.div>
 
-            <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <motion.div whileTap={{ scale: 0.95 }}>
               <Button
                 variant="ghost"
                 size="icon"
-                asChild
                 className="rounded-full hidden md:inline-flex hover:bg-muted"
+                onClick={() =>
+                  window.open(DISCORD_URL, "_blank", "noopener,noreferrer")
+                }
               >
-                <a href={DISCORD_URL} target="_blank" rel="noopener noreferrer">
-                  <DiscordLogo weight="fill" className="h-5 w-5" />
-                </a>
+                <DiscordLogo weight="fill" className="h-5 w-5" />
               </Button>
             </motion.div>
           </div>

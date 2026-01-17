@@ -4,11 +4,10 @@ import { reportError } from "./logger";
 import {
   AuthorsArraySchema,
   ProductsArraySchema,
-  MentorsArraySchema,
-  MenteesArraySchema,
+  TeamMembersArraySchema,
   extendedProductSchema,
 } from "./schemas";
-import type { Author, Product, Mentor, Mentee, ExtendedProduct } from "./types";
+import type { Author, Product, TeamMember, ExtendedProduct } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
@@ -78,41 +77,21 @@ export function getAllProducts(): Product[] {
 }
 
 /**
- * Reads and validates mentors from JSON file.
+ * Reads and validates team members from JSON file.
  *
- * @returns Array of validated Mentor objects
+ * @returns Array of validated TeamMember objects
  */
-export function getAllMentors(): Mentor[] {
+export function getAllTeamMembers(): TeamMember[] {
   try {
-    const filePath = path.join(CONTENT_DIR, "mentors.json");
+    const filePath = path.join(CONTENT_DIR, "team.json");
     const fileContents = fs.readFileSync(filePath, "utf8");
     const json: unknown = JSON.parse(fileContents);
 
     // Validate with Zod
-    const mentors = MentorsArraySchema.parse(json);
-    return mentors;
+    const team = TeamMembersArraySchema.parse(json);
+    return team;
   } catch (error) {
-    reportError("Failed to read mentors.json", error);
-    return [];
-  }
-}
-
-/**
- * Reads and validates mentees from JSON file.
- *
- * @returns Array of validated Mentee objects
- */
-export function getAllMentees(): Mentee[] {
-  try {
-    const filePath = path.join(CONTENT_DIR, "mentees.json");
-    const fileContents = fs.readFileSync(filePath, "utf8");
-    const json: unknown = JSON.parse(fileContents);
-
-    // Validate with Zod
-    const mentees = MenteesArraySchema.parse(json);
-    return mentees;
-  } catch (error) {
-    reportError("Failed to read mentees.json", error);
+    reportError("Failed to read team.json", error);
     return [];
   }
 }

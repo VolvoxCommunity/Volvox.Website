@@ -1,8 +1,4 @@
-import {
-  getAllProducts as getProducts,
-  getAllMentors as getMentors,
-  getAllMentees as getMentees,
-} from "./content";
+import { getAllProducts as getProducts, getAllTeamMembers } from "./content";
 
 /**
  * Fetches all products.
@@ -24,7 +20,8 @@ export async function getAllProducts(_limit = 50, _offset = 0) {
  */
 export async function getAllMentors() {
   await Promise.resolve();
-  const mentors = getMentors();
+  const allMembers = getAllTeamMembers();
+  const mentors = allMembers.filter((m) => m.type === "mentor");
   return {
     items: mentors,
     total: mentors.length,
@@ -41,7 +38,8 @@ export async function getAllMentors() {
  */
 export async function getAllMentees() {
   await Promise.resolve();
-  const mentees = getMentees();
+  const allMembers = getAllTeamMembers();
+  const mentees = allMembers.filter((m) => m.type === "mentee");
   return {
     items: mentees,
     total: mentees.length,

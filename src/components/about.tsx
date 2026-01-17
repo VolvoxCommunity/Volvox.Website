@@ -1,205 +1,211 @@
 "use client";
 
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Code, Lightbulb, Heart, Target } from "@phosphor-icons/react";
+  Code,
+  Lightbulb,
+  Heart,
+  Target,
+  GithubLogo,
+  ArrowRight,
+  Sparkle,
+} from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import confettiLib from "canvas-confetti";
-import { CONFETTI_COLORS, GITHUB_URL } from "@/lib/constants";
+import { Spotlight } from "@/components/ui/spotlight";
+import { cn } from "@/lib/utils";
+import { GITHUB_URL } from "@/lib/constants";
 
 /**
- * Renders the "About Volvox" section with informational cards, animated highlights, and a GitHub CTA that spawns confetti on hover.
- *
- * The component includes company story, mission, values, animated service cards, and an external link to the Volvox GitHub which triggers a localized confetti effect when hovered.
- *
- * @returns The JSX element for the About section.
+ * Renders the "About Volvox" section as a modern Bento Grid.
  */
 export function About() {
-  const handleConfetti = (e: React.MouseEvent) => {
-    const rect = (e.currentTarget as HTMLElement).getBoundingClientRect();
-    const x = (rect.left + rect.width / 2) / window.innerWidth;
-    const y = (rect.top + rect.height / 2) / window.innerHeight;
-
-    // Get theme colors from CSS variables to ensure consistency
-    const style = getComputedStyle(document.documentElement);
-    const colors = [
-      style.getPropertyValue("--primary").trim(),
-      style.getPropertyValue("--secondary").trim(),
-      style.getPropertyValue("--accent").trim(),
-    ].filter(Boolean);
-
-    // Fallback to brand colors if CSS variables aren't available
-    const confettiColors = colors.length > 0 ? colors : CONFETTI_COLORS;
-
-    const promise = confettiLib({
-      particleCount: 50,
-      spread: 60,
-      origin: { x, y },
-      colors: confettiColors,
-    });
-
-    if (promise) {
-      promise.catch((err) => {
-        // Log confetti animation errors for debugging; effect is non-critical
-        console.error("Confetti animation failed:", err);
-      });
-    }
-  };
-
   return (
     <section
       id="about"
-      className="py-16 md:py-24 px-4"
-      data-testid="about-section"
+      className="py-24 px-4 bg-background relative overflow-hidden"
     >
-      <div className="container mx-auto max-w-7xl">
-        <div className="text-center mb-12 md:mb-16">
-          <h2 className="text-3xl md:text-5xl font-bold mb-4">About Volvox</h2>
-          <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
+      {/* Background Decor */}
+      <div className="absolute top-0 left-0 w-full h-full overflow-hidden pointer-events-none">
+        <div className="absolute top-[-10%] right-[-5%] w-[500px] h-[500px] bg-primary/5 rounded-full blur-[100px]" />
+        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[100px]" />
+      </div>
+
+      <div className="container mx-auto max-w-6xl relative z-10">
+        <div className="text-center mb-16">
+          <motion.h2
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-4xl md:text-5xl font-bold mb-4 tracking-tight"
+          >
+            About Volvox
+          </motion.h2>
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ delay: 0.1 }}
+            className="text-lg text-muted-foreground max-w-2xl mx-auto"
+          >
             A community-driven company building the future of software
-            development.
-          </p>
+            development through mentorship and open source.
+          </motion.p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-12">
-          <Card className="border-primary/20">
-            <CardHeader>
-              <CardTitle className="text-2xl">Our Story</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-muted-foreground leading-relaxed">
-              <p>
-                Founded on{" "}
-                <span className="text-foreground font-medium">
-                  January 2, 2020
-                </span>{" "}
-                by{" "}
-                <span className="text-foreground font-medium">
-                  Bill Chirico
-                </span>
-                , Volvox began with a simple mission: build exceptional software
-                while empowering the next generation of developers.
-              </p>
-              <p>
-                What started as a small software development company has evolved
-                into a thriving community where experienced developers mentor
-                aspiring programmers through real-world open-source projects.
-              </p>
-              <p>
-                Today, Volvox stands at the intersection of professional
-                software development and education, proving that building great
-                products and fostering learning are not mutually
-                exclusive—they&apos;re complementary forces that drive
-                innovation.
-              </p>
-            </CardContent>
-          </Card>
-
-          <div className="space-y-6">
-            <Card className="border-secondary/20">
-              <CardHeader>
-                <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-2">
-                  <Target className="h-5 w-5 text-primary" weight="fill" />
-                </div>
-                <CardTitle>Our Mission</CardTitle>
-                <CardDescription>
-                  To create world-class software solutions while cultivating a
-                  new generation of talented developers through hands-on,
-                  mentorship-driven learning.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-
-            <Card className="border-accent/20">
-              <CardHeader>
-                <div className="w-10 h-10 rounded-lg bg-secondary/10 flex items-center justify-center mb-2">
-                  <Heart className="h-5 w-5 text-secondary" weight="fill" />
-                </div>
-                <CardTitle>Our Values</CardTitle>
-                <CardDescription>
-                  Excellence in craft, generosity in teaching, and commitment to
-                  open source. We believe in building in public and sharing
-                  knowledge freely.
-                </CardDescription>
-              </CardHeader>
-            </Card>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <motion.div
-            whileHover={{ scale: 1.02, rotate: 1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card className="text-center hover:shadow-lg transition-shadow h-full">
-              <CardHeader>
-                <motion.div
-                  className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Code className="h-8 w-8 text-primary" weight="fill" />
-                </motion.div>
-                <CardTitle className="text-xl">Software Development</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  We build innovative products that solve real problems, from
-                  web applications to developer tools, always with a focus on
-                  quality and user experience.
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(180px,auto)]">
+          {/* Item 1: Our Story (Large) */}
+          <BentoCard
+            className="md:col-span-2 md:row-span-2"
+            title="Our Story"
+            icon={<Sparkle weight="fill" />}
+            description={
+              <>
+                <p className="mb-4">
+                  Founded in 2020 by{" "}
+                  <span className="text-foreground font-semibold">
+                    Bill Chirico
+                  </span>
+                  , Volvox began with a simple mission: build exceptional
+                  software while empowering the next generation.
                 </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-
-          <motion.div
-            whileHover={{ scale: 1.02, rotate: -1 }}
-            transition={{ duration: 0.3 }}
-          >
-            <Card className="text-center hover:shadow-lg transition-shadow h-full">
-              <CardHeader>
-                <motion.div
-                  className="w-16 h-16 rounded-full bg-secondary/10 flex items-center justify-center mx-auto mb-4"
-                  whileHover={{ rotate: 360 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Lightbulb className="h-8 w-8 text-secondary" weight="fill" />
-                </motion.div>
-                <CardTitle className="text-xl">Learning Community</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground">
-                  Our mentorship program pairs aspiring developers with
-                  experienced engineers, providing real-world experience through
-                  open-source contributions.
+                <p>
+                  Today, we stand at the intersection of professional
+                  development and education, proving that building great
+                  products and fostering learning are complementary forces that
+                  drive innovation.
                 </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+              </>
+            }
+            illustration={
+              <div className="absolute right-0 bottom-0 opacity-10 animate-pulse">
+                <Sparkle size={200} weight="fill" />
+              </div>
+            }
+          />
 
-        <div className="mt-12 text-center">
-          <a
+          {/* Item 2: Mission */}
+          <BentoCard
+            className="md:col-span-1"
+            title="Our Mission"
+            icon={<Target weight="fill" />}
+            description="To create world-class software solutions while cultivating a new generation of talented developers."
+            gradient="from-primary/20 to-transparent"
+          />
+
+          {/* Item 3: Values */}
+          <BentoCard
+            className="md:col-span-1"
+            title="Our Values"
+            icon={<Heart weight="fill" />}
+            description="Excellence in craft, generosity in teaching, and a commitment to open source."
+            gradient="from-secondary/20 to-transparent"
+          />
+
+          {/* Item 4: Dev */}
+          <BentoCard
+            className="md:col-span-1"
+            title="Development"
+            icon={<Code weight="fill" />}
+            description="Building innovative products from web apps to developer tools."
+          />
+
+          {/* Item 5: Community */}
+          <BentoCard
+            className="md:col-span-1"
+            title="Community"
+            icon={<Lightbulb weight="fill" />}
+            description="Pairing aspiring developers with experienced engineers."
+          />
+
+          {/* Item 6: CTA */}
+          <BentoCard
+            className="md:col-span-1 bg-primary/5 border-primary/20"
+            title="Join Us"
+            icon={<GithubLogo weight="fill" />}
+            description="Check out our open source projects on GitHub."
             href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onMouseEnter={handleConfetti}
-            className="inline-flex items-center gap-3 px-6 py-3 rounded-full bg-primary/10 border border-primary/20 transition-colors duration-300 hover:bg-secondary/10 hover:border-secondary/20 hover:text-secondary group cursor-pointer"
-          >
-            <span className="relative flex h-3 w-3">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary transition-colors duration-300"></span>
-              <span className="relative inline-flex rounded-full h-3 w-3 bg-primary group-hover:bg-secondary transition-colors duration-300"></span>
-            </span>
-            <span className="text-base font-medium text-primary group-hover:text-secondary transition-colors duration-300">
-              From Volvox with ❤️
-            </span>
-          </a>
+            cta="View GitHub"
+          />
         </div>
       </div>
     </section>
+  );
+}
+
+function BentoCard({
+  className,
+  title,
+  description,
+  icon,
+  illustration,
+  gradient,
+  href,
+  cta,
+}: {
+  className?: string;
+  title: string;
+  description: React.ReactNode;
+  icon?: React.ReactNode;
+  illustration?: React.ReactNode;
+  gradient?: string;
+  href?: string;
+  cta?: string;
+}) {
+  const Content = (
+    <div className="relative z-10 h-full flex flex-col">
+      <div className="flex items-center gap-3 mb-3">
+        {icon && (
+          <div className="p-2 rounded-lg bg-background/50 backdrop-blur-sm border border-border/50 text-foreground">
+            {icon}
+          </div>
+        )}
+        <h3 className="text-xl font-bold text-foreground">{title}</h3>
+      </div>
+
+      <div className="text-muted-foreground text-sm leading-relaxed flex-1">
+        {description}
+      </div>
+
+      {cta && (
+        <div className="mt-4 flex items-center gap-2 text-primary font-medium text-sm group-hover:gap-3 transition-all">
+          {cta} <ArrowRight />
+        </div>
+      )}
+    </div>
+  );
+
+  const Container = href ? motion.a : motion.div;
+  const props = href
+    ? { href, target: "_blank", rel: "noopener noreferrer" }
+    : {};
+
+  return (
+    <Container {...props} className={cn(className, "block h-full")}>
+      <Spotlight
+        className={cn(
+          "group relative h-full flex flex-col justify-between rounded-3xl border border-border/40 bg-card p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl"
+        )}
+        fill="oklch(from var(--primary) l c h / 0.15)"
+      >
+        {/* Background Gradient */}
+        {gradient && (
+          <div
+            className={cn(
+              "absolute inset-0 bg-gradient-to-br opacity-30",
+              gradient
+            )}
+          />
+        )}
+
+        {/* Illustration */}
+        {illustration && (
+          <div className="absolute inset-0 pointer-events-none">
+            {illustration}
+          </div>
+        )}
+
+        {/* Content */}
+        {Content}
+      </Spotlight>
+    </Container>
   );
 }

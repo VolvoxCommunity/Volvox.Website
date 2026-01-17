@@ -1,188 +1,295 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useRef, useEffect } from "react";
 
-interface Particle {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  size: number;
-  color: string;
-  opacity: number;
-  pulseSpeed: number;
-  pulsePhase: number;
+// Noise component integrated into the background
+interface NoiseProps {
+  patternSize?: number;
+  patternScaleX?: number;
+  patternScaleY?: number;
+  patternRefreshInterval?: number;
+  patternAlpha?: number;
+  intensity?: number;
 }
 
-export function AnimatedBackground() {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const mouseRef = useRef({ x: 0, y: 0 });
+function Noise({
+  patternSize = 100,
+  patternScaleX = 1,
+  patternScaleY = 1,
+  patternRefreshInterval = 1,
+  patternAlpha = 50,
+  intensity = 1,
+}: NoiseProps) {
+  const grainRef = useRef<HTMLCanvasElement>(null);
+  const canvasCssSizeRef = useRef({ width: 0, height: 0 });
 
   useEffect(() => {
-    const canvas = canvasRef.current;
+    const canvas = grainRef.current;
     if (!canvas) return;
 
     const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let time = 0;
-    const particles: Particle[] = [];
-
-    const resizeCanvas = () => {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-    };
-
-    resizeCanvas();
-    window.addEventListener("resize", resizeCanvas);
-
-    const handleMouseMove = (e: MouseEvent) => {
-      mouseRef.current = { x: e.clientX, y: e.clientY };
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-
-    const colors = [
-      "rgba(100, 70, 255, 0.6)",
-      "rgba(200, 100, 255, 0.6)",
-      "rgba(120, 180, 255, 0.6)",
-      "rgba(150, 120, 255, 0.6)",
-      "rgba(180, 100, 255, 0.6)",
-    ];
-
-    for (let i = 0; i < 60; i++) {
-      particles.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        vx: (Math.random() - 0.5) * 0.5,
-        vy: (Math.random() - 0.5) * 0.5,
-        size: Math.random() * 4 + 2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-        opacity: Math.random() * 0.5 + 0.3,
-        pulseSpeed: Math.random() * 0.02 + 0.01,
-        pulsePhase: Math.random() * Math.PI * 2,
-      });
+    if (!ctx) {
+      console.error("Failed to get 2D context for noise canvas.");
+      return;
     }
 
-    const gradients = [
-      {
-        x: 0.2,
-        y: 0.3,
-        color1: "rgba(100, 70, 255, 0.15)",
-        color2: "rgba(100, 70, 255, 0)",
-      },
-      {
-        x: 0.8,
-        y: 0.4,
-        color1: "rgba(200, 100, 255, 0.12)",
-        color2: "rgba(200, 100, 255, 0)",
-      },
-      {
-        x: 0.5,
-        y: 0.7,
-        color1: "rgba(120, 180, 255, 0.1)",
-        color2: "rgba(120, 180, 255, 0)",
-      },
-      {
-        x: 0.6,
-        y: 0.2,
-        color1: "rgba(150, 120, 255, 0.11)",
-        color2: "rgba(150, 120, 255, 0)",
-      },
-      {
-        x: 0.3,
-        y: 0.8,
-        color1: "rgba(180, 100, 255, 0.09)",
-        color2: "rgba(180, 100, 255, 0)",
-      },
-    ];
+    let frame = 0;
+    const patternCanvas = document.createElement("canvas");
+    patternCanvas.width = patternSize;
+    patternCanvas.height = patternSize;
 
-    const animate = () => {
-      if (!ctx) return;
+    const patternCtx = patternCanvas.getContext("2d");
+    if (!patternCtx) {
+      console.error("Failed to get 2D context for pattern sub-canvas.");
+      return;
+    }
+    const patternData = patternCtx.createImageData(patternSize, patternSize);
+    const patternPixelDataLength = patternSize * patternSize * 4; // 4 for R, G, B, A
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const resize = () => {
+      const dpr = window.devicePixelRatio || 1;
+      let newCssWidth = window.innerWidth; // Fallback
+      let newCssHeight = window.innerHeight; // Fallback
 
-      time += 0.0008;
+      if (canvas.parentElement) {
+        const parentRect = canvas.parentElement.getBoundingClientRect();
+        newCssWidth = parentRect.width;
+        newCssHeight = parentRect.height;
+      }
 
-      gradients.forEach((grad, index) => {
-        const offsetX = Math.sin(time + index * 2.5) * 150;
-        const offsetY = Math.cos(time * 0.7 + index * 2.5) * 150;
+      canvasCssSizeRef.current = { width: newCssWidth, height: newCssHeight };
 
-        const x = canvas.width * grad.x + offsetX;
-        const y = canvas.height * grad.y + offsetY;
-        const radius = Math.min(canvas.width, canvas.height) * 0.5;
+      canvas.width = newCssWidth * dpr;
+      canvas.height = newCssHeight * dpr;
 
-        const gradient = ctx.createRadialGradient(x, y, 0, x, y, radius);
-        gradient.addColorStop(0, grad.color1);
-        gradient.addColorStop(1, grad.color2);
-
-        ctx.fillStyle = gradient;
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
-      });
-
-      particles.forEach((particle, index) => {
-        particle.x += particle.vx;
-        particle.y += particle.vy;
-
-        if (particle.x < 0 || particle.x > canvas.width) particle.vx *= -1;
-        if (particle.y < 0 || particle.y > canvas.height) particle.vy *= -1;
-
-        const dx = mouseRef.current.x - particle.x;
-        const dy = mouseRef.current.y - particle.y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
-
-        if (dist < 150) {
-          const force = (150 - dist) / 150;
-          particle.x -= (dx / dist) * force * 2;
-          particle.y -= (dy / dist) * force * 2;
-        }
-
-        const pulse = Math.sin(time * 5 + particle.pulsePhase) * 0.3 + 0.7;
-        const finalSize = particle.size * pulse;
-
-        ctx.beginPath();
-        ctx.arc(particle.x, particle.y, finalSize, 0, Math.PI * 2);
-        ctx.fillStyle = particle.color;
-        ctx.fill();
-
-        particles.forEach((otherParticle, otherIndex) => {
-          if (index === otherIndex) return;
-
-          const dx = otherParticle.x - particle.x;
-          const dy = otherParticle.y - particle.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
-
-          if (distance < 120) {
-            const opacity = (1 - distance / 120) * 0.2;
-            ctx.beginPath();
-            ctx.moveTo(particle.x, particle.y);
-            ctx.lineTo(otherParticle.x, otherParticle.y);
-            ctx.strokeStyle = `rgba(150, 120, 255, ${opacity})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        });
-      });
-
-      animationFrameId = requestAnimationFrame(animate);
+      // Set the transformation matrix to account for DPR.
+      // This allows drawing commands to use CSS pixel units.
+      // Subsequent ctx.scale for pattern will be relative to this.
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
-    animate();
+    const updatePattern = () => {
+      for (let i = 0; i < patternPixelDataLength; i += 4) {
+        const value = Math.random() * 255 * intensity;
+        patternData.data[i] = value;
+        patternData.data[i + 1] = value;
+        patternData.data[i + 2] = value;
+        patternData.data[i + 3] = patternAlpha;
+      }
+      patternCtx.putImageData(patternData, 0, 0);
+    };
+
+    const drawGrain = () => {
+      const { width: cssWidth, height: cssHeight } = canvasCssSizeRef.current;
+      if (cssWidth === 0 || cssHeight === 0) return; // Don't draw if canvas has no dimensions
+
+      // Clear using CSS pixel dimensions (context is already scaled by DPR)
+      ctx.clearRect(0, 0, cssWidth, cssHeight);
+
+      ctx.save();
+
+      // Scale the context for tiling the pattern.
+      // This affects how the pattern is repeated.
+      // Using Math.max to prevent division by zero if scale is 0.
+      const safePatternScaleX = Math.max(0.001, patternScaleX);
+      const safePatternScaleY = Math.max(0.001, patternScaleY);
+      ctx.scale(safePatternScaleX, safePatternScaleY);
+
+      const fillPattern = ctx.createPattern(patternCanvas, "repeat");
+      if (fillPattern) {
+        ctx.fillStyle = fillPattern;
+        // Fill a rectangle that, in the *scaled* coordinate system,
+        // corresponds to the original cssWidth/cssHeight.
+        ctx.fillRect(
+          0,
+          0,
+          cssWidth / safePatternScaleX,
+          cssHeight / safePatternScaleY
+        );
+      }
+
+      ctx.restore();
+    };
+
+    let animationFrameId: number;
+    const loop = () => {
+      // Only update and draw if dimensions are valid
+      if (
+        canvasCssSizeRef.current.width > 0 &&
+        canvasCssSizeRef.current.height > 0
+      ) {
+        if (frame % patternRefreshInterval === 0) {
+          updatePattern();
+          drawGrain();
+        }
+      }
+      frame++;
+      animationFrameId = window.requestAnimationFrame(loop);
+    };
+
+    window.addEventListener("resize", resize);
+    resize(); // Initial setup: size canvas and draw first frame if needed
+    if (patternRefreshInterval > 0) {
+      // Start loop only if refresh is meaningful
+      loop();
+    } else {
+      // if refresh interval is 0 or less, draw once
+      updatePattern();
+      drawGrain();
+    }
 
     return () => {
-      window.removeEventListener("resize", resizeCanvas);
-      window.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", resize);
+      if (animationFrameId) {
+        window.cancelAnimationFrame(animationFrameId);
+      }
     };
-  }, []);
+  }, [
+    patternSize,
+    patternScaleX,
+    patternScaleY,
+    patternRefreshInterval,
+    patternAlpha,
+    intensity,
+  ]);
 
   return (
     <canvas
-      ref={canvasRef}
-      className="absolute inset-0 w-full h-full"
-      style={{ opacity: 0.6 }}
-      aria-hidden="true"
-      role="presentation"
+      className="absolute inset-0 w-full h-full pointer-events-none"
+      ref={grainRef}
     />
+  );
+}
+
+// Main gradient background component
+interface GradientBackgroundProps {
+  gradientType?: string;
+  gradientSize?: string;
+  gradientOrigin?: string;
+  colors?: { color: string; stop: string }[];
+  enableNoise?: boolean;
+  noisePatternSize?: number;
+  noisePatternScaleX?: number;
+  noisePatternScaleY?: number;
+  noisePatternRefreshInterval?: number;
+  noisePatternAlpha?: number;
+  noiseIntensity?: number;
+  className?: string;
+  style?: React.CSSProperties;
+  children?: React.ReactNode;
+  customGradient?: string | null;
+}
+
+export function AnimatedBackground({
+  // Gradient customization
+  gradientType = "radial-gradient",
+  gradientSize = "125% 125%",
+  gradientOrigin = "bottom-middle",
+  colors = [
+    { color: "var(--primary)", stop: "0%" },
+    {
+      color: "color-mix(in oklch, var(--primary), var(--background) 60%)",
+      stop: "12%",
+    },
+    {
+      color: "color-mix(in oklch, var(--primary), var(--background) 80%)",
+      stop: "25%",
+    },
+    {
+      color: "color-mix(in oklch, var(--primary), var(--background) 100%)",
+      stop: "40%",
+    },
+    { color: "var(--background)", stop: "100%" },
+  ],
+
+  // Noise customization
+  enableNoise = true,
+  noisePatternSize = 100,
+  noisePatternScaleX = 1,
+  noisePatternScaleY = 1,
+  noisePatternRefreshInterval = 2,
+  noisePatternAlpha = 20,
+  noiseIntensity = 1.1,
+
+  // Additional styling
+  className = "",
+  style = {},
+  children,
+
+  // Custom gradient string (overrides other gradient props if provided)
+  customGradient = null,
+}: GradientBackgroundProps) {
+  // Generate gradient string from colors array
+  const generateGradient = () => {
+    if (customGradient) return customGradient;
+
+    const getGradientPosition = (origin: string) => {
+      const positions: Record<string, string> = {
+        "bottom-middle": "50% 101%",
+        "bottom-left": "0% 101%",
+        "bottom-right": "100% 101%",
+        "top-middle": "50% -1%",
+        "top-left": "0% -1%",
+        "top-right": "100% -1%",
+        "left-middle": "-1% 50%",
+        "right-middle": "101% 50%",
+        center: "50% 50%",
+      };
+      return positions[origin] || positions["bottom-middle"];
+    };
+
+    const position = getGradientPosition(gradientOrigin);
+    const colorStops = colors
+      .map(({ color, stop }) => `${color} ${stop}`)
+      .join(",");
+
+    if (gradientType === "radial-gradient") {
+      return `radial-gradient(${gradientSize} at ${position},${colorStops})`;
+    } else if (gradientType === "linear-gradient") {
+      const angleMap: Record<string, string> = {
+        "bottom-middle": "0deg", // to top
+        "bottom-left": "45deg", // to top-right
+        "bottom-right": "315deg", // to top-left
+        "top-middle": "180deg", // to bottom
+        "top-left": "135deg", // to bottom-right
+        "top-right": "225deg", // to bottom-left
+        "left-middle": "90deg", // to right
+        "right-middle": "270deg", // to left
+        center: "0deg", // Default for center, though linear usually implies direction
+      };
+      const angle = angleMap[gradientOrigin] || angleMap["bottom-middle"];
+      return `linear-gradient(${angle},${colorStops})`;
+    } else if (gradientType === "conic-gradient") {
+      // Conic gradients usually need a 'from <angle>' and 'at <position>'
+      // For simplicity, we'll use the position and a default 'from' angle.
+      return `conic-gradient(from 0deg at ${position},${colorStops})`;
+    }
+
+    // Fallback for unknown gradient types or simple color stop list
+    return `${gradientType}(${colorStops})`;
+  };
+
+  const gradientStyle = {
+    background: generateGradient(),
+    ...style,
+  };
+
+  return (
+    <div
+      className={`absolute inset-0 h-full w-[300vw] -left-[100vw] md:w-full md:left-0 scale-x-[0.9] md:scale-x-[1] hidden md:block ${className}`}
+      style={gradientStyle}
+    >
+      {enableNoise && (
+        <Noise
+          patternSize={noisePatternSize}
+          patternScaleX={noisePatternScaleX}
+          patternScaleY={noisePatternScaleY}
+          patternRefreshInterval={noisePatternRefreshInterval}
+          patternAlpha={noisePatternAlpha}
+          intensity={noiseIntensity}
+        />
+      )}
+      {children}
+    </div>
   );
 }

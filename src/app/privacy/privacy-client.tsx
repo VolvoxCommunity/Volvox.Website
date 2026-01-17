@@ -1,7 +1,6 @@
 "use client";
 
 import { Navigation } from "@/components/navigation";
-import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 import { useRouter } from "next/navigation";
 
@@ -26,11 +25,7 @@ export function PrivacyClient() {
   };
 
   return (
-    <div className="min-h-screen relative">
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <AnimatedBackground />
-      </div>
-
+    <div className="min-h-screen relative bg-background">
       <div className="relative z-10">
         <Navigation onNavigate={handleNavigate} currentSection="privacy" />
 
