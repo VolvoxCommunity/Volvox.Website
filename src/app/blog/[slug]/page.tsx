@@ -44,6 +44,9 @@ export async function generateMetadata({
       title: frontmatter.title,
       description: frontmatter.excerpt,
       authors: [{ name: frontmatter.author?.name || SITE_NAME }],
+      alternates: {
+        canonical: `/blog/${slug}`,
+      },
       openGraph: {
         title: frontmatter.title,
         description: frontmatter.excerpt,

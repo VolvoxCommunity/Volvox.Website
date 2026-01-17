@@ -7,6 +7,9 @@ import { SITE_NAME } from "@/lib/constants";
 export const metadata: Metadata = {
   title: "Products",
   description: `Open-source applications built by the ${SITE_NAME} team.`,
+  alternates: {
+    canonical: "/products",
+  },
 };
 
 /**
