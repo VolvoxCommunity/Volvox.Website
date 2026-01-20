@@ -21,7 +21,7 @@ test.describe("Semantic Landmarks Verification", () => {
     await expect(mainNav).toBeVisible();
 
     // Verify main content area
-    const main = page.locator('[role="main"]');
+    const main = page.locator("main");
     await expect(main).toBeVisible();
 
     // Verify contentinfo role (footer)
@@ -60,7 +60,7 @@ test.describe("Semantic Landmarks Verification", () => {
     await expect(mainNav).toBeVisible();
 
     // Verify main content area
-    const main = page.locator('[role="main"]');
+    const main = page.locator("main");
     await expect(main).toBeVisible();
 
     // Verify blog posts section with aria-label
@@ -87,7 +87,7 @@ test.describe("Semantic Landmarks Verification", () => {
     await expect(mainNav).toBeVisible();
 
     // Verify main content area
-    const main = page.locator('[role="main"]');
+    const main = page.locator("main");
     await expect(main).toBeVisible();
 
     // Verify products list section with aria-label
@@ -114,7 +114,7 @@ test.describe("Semantic Landmarks Verification", () => {
     await expect(mainNav).toBeVisible();
 
     // Verify main content area
-    const main = page.locator('[role="main"]');
+    const main = page.locator("main");
     await expect(main).toBeVisible();
 
     // Verify team members section with aria-labelledby (region for screen reader navigation)
@@ -134,9 +134,9 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Get all landmarks by role
+    // Get all landmarks by role and semantic elements
     const landmarks = await page.evaluate(() => {
-      const roles = ["banner", "navigation", "main", "contentinfo"];
+      const roles = ["banner", "navigation", "contentinfo"];
       const results: { role: string; count: number; labels: string[] }[] = [];
 
       roles.forEach((role) => {
@@ -166,6 +166,14 @@ test.describe("Semantic Landmarks Verification", () => {
           count: elements.length + navElements.length,
           labels: [...new Set(labels)],
         });
+      });
+
+      // Check for <main> elements (implicit main role)
+      const mainElements = document.querySelectorAll("main");
+      results.push({
+        role: "main",
+        count: mainElements.length,
+        labels: [],
       });
 
       // Also check for labeled sections (region role implied by section with aria-label)

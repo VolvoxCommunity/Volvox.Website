@@ -217,7 +217,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
         <main
           id="main-content"
-          role="main"
           className="container mx-auto px-4 max-w-7xl pt-16 pb-8 isolate"
           aria-labelledby="blog-page-heading"
         >

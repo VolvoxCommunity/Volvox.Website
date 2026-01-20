@@ -256,6 +256,7 @@ export function Navigation({
                 size="icon"
                 onClick={() => setMobileOpen(false)}
                 className="rounded-full"
+                aria-label="Close menu"
               >
                 <X weight="bold" className="w-6 h-6" />
               </Button>
