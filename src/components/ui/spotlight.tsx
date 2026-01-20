@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useRef, useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface SpotlightProps {
   children: React.ReactNode;
@@ -40,7 +41,8 @@ export function Spotlight({
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
-      className={`relative overflow-hidden ${className}`}
+      className={cn("relative overflow-hidden", className)}
+      role="presentation"
     >
       <div
         className="pointer-events-none absolute -inset-px transition-opacity duration-300"

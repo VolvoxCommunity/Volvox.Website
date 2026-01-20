@@ -195,6 +195,7 @@ export function Navigation({
               onClick={toggleTheme}
               className="rounded-full"
               aria-label="Toggle theme"
+              data-testid="nav-theme-toggle"
             >
               {theme === "light" ? (
                 <Moon weight="fill" className="h-5 w-5" />
@@ -209,6 +210,7 @@ export function Navigation({
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
               }}
+              data-testid="nav-discord-cta"
             >
               <DiscordLogo weight="fill" className="h-5 w-5" />
               Join
@@ -221,6 +223,7 @@ export function Navigation({
               className="md:hidden rounded-full"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
+              data-testid="nav-mobile-open"
             >
               <List className="h-6 w-6" />
             </Button>

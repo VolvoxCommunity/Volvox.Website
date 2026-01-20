@@ -23,14 +23,15 @@ export function TextReveal({
   const ref = useRef(null);
   const isInView = useInView(ref, { amount: 0.5, once });
 
-  const items = variant === "word" ? text.split(" ") : text.split("");
+  const items =
+    variant === "word" ? text.split(" ").filter(Boolean) : text.split("");
 
   const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
       transition: {
-        staggerChildren: duration / items.length,
+        staggerChildren: items.length > 0 ? duration / items.length : 0,
         delayChildren: delay * i,
       },
     }),

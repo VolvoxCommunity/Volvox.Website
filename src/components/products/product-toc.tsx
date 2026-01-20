@@ -14,7 +14,9 @@ interface ProductTocProps {
 
 /**
  * Sticky sidebar table of contents with scroll tracking.
- * Hidden on mobile, visible on large screens.
+ * Hidden on mobile devices (xs/sm/md), visible on large screens (lg+).
+ *
+ * @param sections - Array of sections with id and label to display in the TOC
  */
 export function ProductToc({ sections }: ProductTocProps) {
   // Default to first section (overview) on initial load

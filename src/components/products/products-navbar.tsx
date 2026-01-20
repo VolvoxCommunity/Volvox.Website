@@ -98,6 +98,7 @@ export function ProductsNavbar({
             />
             <input
               type="text"
+              data-testid="products-search-input"
               placeholder="Search products..."
               value={searchQuery}
               onChange={(e) => onSearchChange(e.target.value)}

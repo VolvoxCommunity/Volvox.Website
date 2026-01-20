@@ -15,19 +15,19 @@ interface BlogCardProps {
   viewMode: ViewMode;
 }
 
-export function BlogCard({ post, viewMode }: BlogCardProps) {
-  const itemVariants = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        duration: 0.5,
-        ease: "easeOut" as const,
-      },
+const itemVariants = {
+  hidden: { opacity: 0, y: 20 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      duration: 0.5,
+      ease: "easeOut" as const,
     },
-  };
+  },
+};
 
+export function BlogCard({ post, viewMode }: BlogCardProps) {
   return (
     <motion.div
       layout

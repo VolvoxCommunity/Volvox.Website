@@ -103,6 +103,7 @@ export function BlogNavbar({
               onChange={(e) => onSearchChange(e.target.value)}
               onFocus={() => setIsSearchFocused(true)}
               onBlur={() => setIsSearchFocused(false)}
+              data-testid="blog-search-input"
               className={cn(
                 "w-full h-10 sm:h-11 pl-11 sm:pl-12 pr-10 bg-muted/30 border border-transparent rounded-full text-sm",
                 "focus:outline-none focus:bg-background focus:border-border transition-all",

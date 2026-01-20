@@ -1,6 +1,7 @@
 "use client";
 
 import { useRef, useEffect } from "react";
+import { cn } from "@/lib/utils";
 
 // Noise component integrated into the background
 interface NoiseProps {
@@ -276,7 +277,11 @@ export function AnimatedBackground({
 
   return (
     <div
-      className={`absolute inset-0 h-full w-[300vw] -left-[100vw] md:w-full md:left-0 scale-x-[0.9] md:scale-x-[1] hidden md:block ${className}`}
+      data-testid="animated-background"
+      className={cn(
+        "absolute inset-0 h-full w-[300vw] -left-[100vw] md:w-full md:left-0 scale-x-[0.9] md:scale-x-[1] hidden md:block",
+        className
+      )}
       style={gradientStyle}
     >
       {enableNoise && (

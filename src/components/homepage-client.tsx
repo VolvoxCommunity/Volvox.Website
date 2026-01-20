@@ -4,7 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { Navigation } from "@/components/navigation";
-import { Hero } from "./hero";
+import { Hero } from "@/components/hero";
 import { Blog } from "@/components/blog";
 import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";

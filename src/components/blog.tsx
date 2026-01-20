@@ -50,6 +50,7 @@ export function Blog({
   });
 
   const backgroundY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
+  const secondaryBlobY = useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]);
   const backgroundOpacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.8, 1],
@@ -119,7 +120,7 @@ export function Blog({
           className="absolute top-1/4 -right-64 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"
         />
         <motion.div
-          style={{ y: useTransform(scrollYProgress, [0, 1], ["0%", "-20%"]) }}
+          style={{ y: secondaryBlobY }}
           className="absolute bottom-1/4 -left-64 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[140px]"
         />
       </motion.div>
@@ -213,7 +214,7 @@ export function Blog({
                   variant="link"
                   onClick={() => {
                     onSearchChange?.("");
-                    onSortChange?.("newest" as BlogSortOption);
+                    onSortChange?.("newest");
                   }}
                   className="text-primary"
                 >

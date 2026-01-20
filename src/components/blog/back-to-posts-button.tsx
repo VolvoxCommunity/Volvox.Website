@@ -42,7 +42,7 @@ export function BackToPostsButton() {
             variant="outline"
             className="shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background border-border/50 flex items-center gap-2"
             data-testid="back-to-posts"
-            onClick={() => router.push("/#blog")}
+            onClick={() => router.push("/#blog", { scroll: false })}
           >
             <ArrowLeft className="h-4 w-4" />
             <span className="hidden sm:inline">Back to All Posts</span>
