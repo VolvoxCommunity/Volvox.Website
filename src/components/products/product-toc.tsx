@@ -13,7 +13,8 @@ interface ProductTocProps {
 }
 
 /**
- * Sticky table of contents with scroll tracking and optional back navigation.
+ * Sticky sidebar table of contents with scroll tracking.
+ * Hidden on mobile, visible on large screens.
  */
 export function ProductToc({ sections }: ProductTocProps) {
   // Default to first section (overview) on initial load
@@ -56,29 +57,26 @@ export function ProductToc({ sections }: ProductTocProps) {
   };
 
   return (
-    <nav className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3 top-[57px]">
-      <div className="container mx-auto max-w-6xl px-4">
-        <div className="flex items-center justify-center gap-4">
-          {/* TOC Links */}
-          <ul className="flex flex-wrap gap-1 md:gap-2 justify-center">
-            {sections.map(({ id, label }) => (
-              <li key={id}>
-                <button
-                  type="button"
-                  onClick={() => handleClick(id)}
-                  className={cn(
-                    "px-3 py-1 text-sm rounded-full transition-colors",
-                    activeSection === id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
-                >
-                  {label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+    <nav className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-30">
+      <div className="bg-background/60 backdrop-blur-md border border-border/50 rounded-2xl p-4">
+        <ul className="flex flex-col gap-1">
+          {sections.map(({ id, label }) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => handleClick(id)}
+                className={cn(
+                  "w-full text-left px-4 py-2 text-sm rounded-xl transition-colors",
+                  activeSection === id
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                {label}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );

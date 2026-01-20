@@ -168,7 +168,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
   return (
     <div
       className={cn(
-        "shrink-0 w-[280px] md:w-[320px] rounded-[24px] border bg-card/80 backdrop-blur-sm p-5 transition-all duration-300",
+        "shrink-0 w-[320px] md:w-[400px] rounded-[24px] border bg-card/80 backdrop-blur-sm p-6 transition-all duration-300",
         "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
       )}
     >
@@ -207,7 +207,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
               </Badge>
             )}
             {(profile.type === "mentor" || profile.type === "builder") && (
-              <span className="text-[10px] text-muted-foreground truncate max-w-[100px]">
+              <span className="text-[10px] text-muted-foreground truncate max-w-[120px]">
                 {profile.role}
               </span>
             )}
@@ -217,7 +217,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
 
       <div className="space-y-3">
         {/* Bio / Goal Snippet */}
-        <p className="text-xs text-muted-foreground line-clamp-2 min-h-[2.5em] leading-relaxed">
+        <p className="text-sm text-muted-foreground line-clamp-4 min-h-[4em] leading-relaxed">
           {profile.type === "mentee" ? profile.goals : profile.bio}
         </p>
 

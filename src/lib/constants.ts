@@ -23,7 +23,10 @@ export const GITHUB_URL = "https://github.com/VolvoxCommunity";
 export const DISCORD_URL = "https://discord.gg/8ahXACdamN";
 
 /** Twitter/X profile URL */
-export const TWITTER_URL = "https://twitter.com/VolvoxLLC";
+export const TWITTER_URL = "https://x.com/volvox_llc";
+
+/** LinkedIn company page URL */
+export const LINKEDIN_URL = "https://www.linkedin.com/company/volvoxllc";
 
 /** Brand colors for OG images and other static uses */
 export const BRAND_COLORS = {

@@ -12,7 +12,12 @@ import {
   LinkedinLogo,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { DISCORD_URL } from "@/lib/constants";
+import {
+  DISCORD_URL,
+  GITHUB_URL,
+  TWITTER_URL,
+  LINKEDIN_URL,
+} from "@/lib/constants";
 
 const footerLinks = {
   product: [
@@ -21,10 +26,10 @@ const footerLinks = {
     { label: "About", href: "/#about" },
   ],
   resources: [
-    { label: "GitHub", href: "https://github.com/VolvoxCommunity" },
-    { label: "Twitter", href: "https://x.com/volvox_llc" },
-    { label: "LinkedIn", href: "https://www.linkedin.com/company/volvoxllc" },
     { label: "Discord", href: DISCORD_URL },
+    { label: "GitHub", href: GITHUB_URL },
+    { label: "Twitter", href: TWITTER_URL },
+    { label: "LinkedIn", href: LINKEDIN_URL },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
@@ -34,21 +39,9 @@ const footerLinks = {
 
 const socialLinks = [
   { icon: DiscordLogo, href: DISCORD_URL, label: "Discord" },
-  {
-    icon: GithubLogo,
-    href: "https://github.com/VolvoxCommunity",
-    label: "GitHub",
-  },
-  {
-    icon: TwitterLogo,
-    href: "https://x.com/volvox_llc",
-    label: "Twitter",
-  },
-  {
-    icon: LinkedinLogo,
-    href: "https://www.linkedin.com/company/volvoxllc",
-    label: "LinkedIn",
-  },
+  { icon: GithubLogo, href: GITHUB_URL, label: "GitHub" },
+  { icon: TwitterLogo, href: TWITTER_URL, label: "Twitter" },
+  { icon: LinkedinLogo, href: LINKEDIN_URL, label: "LinkedIn" },
 ];
 
 export function Footer() {
@@ -147,8 +140,8 @@ export function Footer() {
             </Link>
 
             <p className="text-muted-foreground max-w-sm leading-relaxed">
-              Building exceptional software and empowering the next generation
-              of developers through open-source and mentorship.
+              We build software that actually ships and help developers who
+              actually want to learn. No gatekeeping. No ego. Just code.
             </p>
 
             {/* Social Links */}

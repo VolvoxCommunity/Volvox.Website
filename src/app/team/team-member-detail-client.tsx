@@ -11,12 +11,12 @@ import {
   Briefcase,
   ArrowSquareOut,
   FolderOpen,
-  CalendarBlank,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { AnimatedBackground } from "@/components/animated-background";
+import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { TeamMember } from "@/lib/types";
 
@@ -41,18 +41,6 @@ export function TeamMemberDetailClient({
     }
   };
 
-  /**
-   * Formats an ISO date string into a human-readable format.
-   */
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
-  };
-
   return (
     <div
       className="min-h-screen relative flex flex-col"
@@ -63,8 +51,11 @@ export function TeamMemberDetailClient({
         <AnimatedBackground />
       </div>
 
-      {/* Navbar */}
-      <div className="sticky top-0 z-40 w-full bg-background/80 backdrop-blur-lg border-b border-border/40">
+      {/* Site Navigation Header */}
+      <Navigation linkMode={true} />
+
+      {/* Back Navbar */}
+      <div className="sticky top-16 md:top-24 z-40 w-full bg-background/80 backdrop-blur-lg border-b border-border/40 mt-16 md:mt-24">
         <div className="container mx-auto px-4 max-w-7xl py-3 flex items-center gap-4">
           <Button
             variant="ghost"
@@ -246,30 +237,32 @@ export function TeamMemberDetailClient({
                 {member.projects.map((project) => (
                   <div
                     key={project.name}
-                    className="group bg-white/5 border border-border/30 rounded-[24px] p-6 hover:bg-white/10 transition-colors"
+                    className="group bg-white/5 border border-border/30 rounded-[24px] p-6 hover:bg-white/10 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 hover:-translate-y-1 cursor-pointer"
                     data-testid="project-card"
                   >
                     <div className="flex items-start justify-between gap-4 mb-3">
-                      <h3 className="text-lg font-bold">{project.name}</h3>
+                      <h3 className="text-lg font-bold group-hover:text-primary transition-colors duration-300">
+                        {project.name}
+                      </h3>
                       {project.url && (
                         <Link
                           href={project.url}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-primary hover:text-primary/80 transition-colors shrink-0"
+                          className="text-primary hover:text-primary/80 transition-all duration-300 shrink-0 group-hover:translate-x-1 group-hover:-translate-y-1"
                           aria-label={`Visit ${project.name}`}
                         >
                           <ArrowSquareOut weight="bold" className="h-5 w-5" />
                         </Link>
                       )}
                     </div>
-                    <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-3 group-hover:text-foreground/90 transition-colors duration-300">
                       {project.description}
                     </p>
                     {project.role && (
                       <Badge
                         variant="secondary"
-                        className="text-xs bg-primary/10 text-primary border-none rounded-full"
+                        className="text-xs bg-primary/10 text-primary border-none rounded-full group-hover:bg-primary/20 transition-colors duration-300"
                       >
                         {project.role}
                       </Badge>
@@ -292,16 +285,6 @@ export function TeamMemberDetailClient({
               <p className="text-muted-foreground text-sm">
                 Follow their journey and stay updated with their latest work.
               </p>
-              {/* Last Updated Timestamp */}
-              {member.updatedAt && (
-                <div
-                  className="flex items-center gap-2 mt-4 text-xs text-muted-foreground/70"
-                  data-testid="last-updated"
-                >
-                  <CalendarBlank weight="fill" className="h-4 w-4" />
-                  <span>Profile updated {formatDate(member.updatedAt)}</span>
-                </div>
-              )}
             </div>
             <div className="flex gap-4" data-testid="social-buttons">
               {member.githubUrl && (

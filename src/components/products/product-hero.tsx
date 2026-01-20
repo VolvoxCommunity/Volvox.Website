@@ -37,6 +37,7 @@ export function ProductHero({ product }: ProductHeroProps) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
+            className="text-center md:text-left"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               {product.name}
@@ -46,10 +47,10 @@ export function ProductHero({ product }: ProductHeroProps) {
             </p>
 
             {/* Buttons Container */}
-            <div className="flex flex-col gap-4 max-w-md">
+            <div className="flex flex-col gap-6 items-center md:items-start">
               {/* App Store Badges */}
               {(product.links.appStore || product.links.playStore) && (
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
                   {product.links.appStore && (
                     <a
                       href={product.links.appStore}
@@ -98,7 +99,7 @@ export function ProductHero({ product }: ProductHeroProps) {
 
               {/* Action Buttons */}
               {(product.links.demo || product.links.github) && (
-                <div className="flex flex-wrap gap-3">
+                <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
                   {product.links.demo && (
                     <Button
                       variant="accent"

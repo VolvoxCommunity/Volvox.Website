@@ -10,8 +10,8 @@
     "expertise": [
       ".NET - C#",
       "React / React Native",
-      "Node.js",
-      "AWS",
+      "Leadership",
+      "Azure / AWS",
       "System Design",
       "TypeScript / JavaScript",
       "AI / OpenAI, Claude, Gemini",
@@ -19,8 +19,7 @@
       "CI/CD",
       "DevOps",
       "Agile",
-      "Scrum",
-      "Leadership"
+      "Scrum"
     ],
     "projects": [
       {
@@ -48,11 +47,33 @@
         "url": "https://decisionjar.app"
       }
     ],
-    "updatedAt": "2025-01-19",
     "type": "mentor",
     "githubUrl": "https://github.com/BillChirico",
     "linkedinUrl": "https://linkedin.com/in/BillChirico",
     "email": "bill@volvox.dev",
+    "isHireable": false
+  },
+  {
+    "id": "eleftheria",
+    "slug": "eleftheria-batsou",
+    "name": "Eleftheria Batsou",
+    "role": "Developer Advocate",
+    "tagline": "A Developer Advocate who loves to code, teach and write.",
+    "bio": "Eleftheria is a Developer Advocate at Volvox, a public speaker for tech conferences, and a meetup co-organizer. She has a passion for coding, teaching, and writing about technology. With over 5 years of experience in community building, she enjoys helping developers learn and grow in their careers.",
+    "avatar": "https://github.com/EleftheriaBatsou.png",
+    "expertise": [
+      "Community Building",
+      "Developer advocacy",
+      "Social Media Strategy",
+      "Technical Writing",
+      "Video content creation",
+      "Public Speaking",
+      "Web Development"
+    ],
+    "type": "mentor",
+    "githubUrl": "https://github.com/EleftheriaBatsou",
+    "linkedinUrl": "https://www.linkedin.com/in/eleftheriabatsou/",
+    "email": "eleftheria@volvox.dev",
     "isHireable": false
   },
   {
@@ -130,7 +151,6 @@
         "url": "https://21st.dev/easemize"
       }
     ],
-    "updatedAt": "2026-01-20",
     "type": "builder",
     "githubUrl": "https://github.com/rabden",
     "linkedinUrl": "",

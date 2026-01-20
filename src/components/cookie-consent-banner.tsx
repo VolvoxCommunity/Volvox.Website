@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import { X, Cookie } from "@phosphor-icons/react";
+import { X, Cookie, ArrowUpRight } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -257,9 +257,10 @@ export function CookieSettingsButton() {
     <button
       type="button"
       onClick={openSettings}
-      className="hover:text-foreground transition-colors underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
+      className="text-muted-foreground hover:text-foreground transition-colors duration-200 text-sm inline-flex items-center gap-1 group cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 rounded-sm"
     >
       Cookie Settings
+      <ArrowUpRight className="w-3 h-3 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-200" />
     </button>
   );
 }

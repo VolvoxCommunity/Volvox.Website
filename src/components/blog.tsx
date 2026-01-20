@@ -159,7 +159,7 @@ export function Blog({
                 className="rounded-full hover:bg-muted transition-colors flex items-center gap-2 group"
               >
                 <Link href="/blog">
-                  View Archive
+                  View Blogs
                   <CaretRight
                     weight="bold"
                     className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"

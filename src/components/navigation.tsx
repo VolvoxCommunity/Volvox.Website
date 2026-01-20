@@ -81,6 +81,7 @@ export function Navigation({
     { id: "home", label: "Home", href: "/" },
     { id: "blog", label: "Blog", href: "/#blog" },
     { id: "mentorship", label: "Community", href: "/#mentorship" },
+    { id: "team", label: "Team", href: "/team" },
     { id: "about", label: "About", href: "/#about" },
   ];
 
@@ -158,7 +159,7 @@ export function Navigation({
           >
             {navItems.map((item) => (
               <li key={item.id}>
-                {linkMode ? (
+                {linkMode || item.id === "team" ? (
                   <Link
                     href={item.href}
                     className={`inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 ${
@@ -271,7 +272,7 @@ export function Navigation({
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.05 }}
                 >
-                  {linkMode ? (
+                  {linkMode || item.id === "team" ? (
                     <Link
                       href={item.href}
                       onClick={() => setMobileOpen(false)}

@@ -337,8 +337,18 @@ export function Hero({ onNavigate }: HeroProps) {
         >
           <div
             ref={productCardRef}
-            className="product-card w-[90%] mx-auto h-full rounded-3xl bg-gradient-to-b from-card/80 to-background/90 border border-border/50 shadow-[0_20px_50px_-10px_hsla(0,0%,0%,0.3)] overflow-hidden relative opacity-0"
+            className="product-card w-[90%] mx-auto h-full rounded-3xl bg-gradient-to-b from-card/80 to-background/90 border border-border/50 shadow-[0_20px_50px_-10px_hsla(0,0%,0%,0.3)] overflow-hidden relative opacity-0 cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
             style={{ transformStyle: "preserve-3d" }}
+            onClick={() => router.push("/products/sobers")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                router.push("/products/sobers");
+              }
+            }}
+            aria-label="View Sobers product details"
           >
             <div
               className="app-interface w-full h-full bg-cover bg-center relative"
@@ -370,10 +380,20 @@ export function Hero({ onNavigate }: HeroProps) {
           {/* LEFT: Phone Mockup */}
           <div
             ref={phoneMockupRef}
-            className="relative w-full max-w-[350px] mx-auto lg:mr-auto perspective-[1000px] will-change-transform"
+            className="relative w-full max-w-[350px] mx-auto lg:mr-auto perspective-[1000px] will-change-transform cursor-pointer"
+            onClick={() => router.push("/products/sobers")}
+            role="button"
+            tabIndex={0}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" || e.key === " ") {
+                e.preventDefault();
+                router.push("/products/sobers");
+              }
+            }}
+            aria-label="View Sobers product details"
           >
             {/* Added h-[650px] to fix height collapse issue */}
-            <div className="relative rounded-[30px] md:rounded-[40px] border-[6px] md:border-[8px] border-zinc-800 shadow-2xl overflow-hidden bg-black h-[450px] md:h-[710px] w-full">
+            <div className="relative rounded-[30px] md:rounded-[40px] border-[6px] md:border-[8px] border-zinc-800 shadow-2xl overflow-hidden bg-black h-[450px] md:h-[710px] w-full transition-transform duration-300 hover:scale-[1.05]">
               {/* Phone Screen */}
               <div
                 className="w-full h-full bg-cover bg-center"
@@ -403,7 +423,19 @@ export function Hero({ onNavigate }: HeroProps) {
               ))}
             </div>
 
-            <h2 className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-6 text-foreground">
+            <h2
+              className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-6 text-foreground cursor-pointer transition-colors duration-300 hover:text-primary"
+              onClick={() => router.push("/products/sobers")}
+              role="button"
+              tabIndex={0}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" || e.key === " ") {
+                  e.preventDefault();
+                  router.push("/products/sobers");
+                }
+              }}
+              aria-label="View Sobers product details"
+            >
               Sobriety. <span className="text-primary italic">Reimagined.</span>
             </h2>
             <p className="text-lg text-foreground/70 mb-10 leading-relaxed">
@@ -429,72 +461,80 @@ export function Hero({ onNavigate }: HeroProps) {
             </div>
 
             {/* App Store Buttons */}
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="https://apps.apple.com/app/id6755614815"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Download Sobers on the App Store (opens in new tab)"
-                className="transition-opacity hover:opacity-80"
-              >
-                {/* Light mode: black badge */}
-                <img
-                  src="/images/stores/app-store-black.svg"
-                  alt="Download on the App Store"
-                  width={120}
-                  height={40}
-                  className="block dark:hidden h-[40px] w-auto"
-                />
-                {/* Dark mode: white badge */}
-                <img
-                  src="/images/stores/app-store-white.svg"
-                  alt="Download on the App Store"
-                  width={120}
-                  height={40}
-                  className="hidden dark:block h-[40px] w-auto"
-                />
-              </a>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.volvox.sobers"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Get Sobers on Google Play (opens in new tab)"
-                className="transition-opacity hover:opacity-80"
-              >
-                <img
-                  src="/images/stores/play-store.svg"
-                  alt="Get it on Google Play"
-                  width={135}
-                  height={40}
-                  className="h-[40px] w-auto"
-                />
-              </a>
-              <Button
-                className="h-[40px] px-4 rounded-lg gap-2 text-sm"
-                variant="outline"
-                aria-label="Visit Sobers website (opens in new tab)"
-                onClick={() =>
-                  window.open(
-                    "https://sobers.app",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                }
-              >
-                <ArrowSquareOut
-                  weight="bold"
-                  className="w-5 h-5"
-                  aria-hidden="true"
-                />
-                <span className="font-semibold">Visit Website</span>
-              </Button>
-              <Button
-                className="h-14 px-6 rounded-xl gap-3 text-base"
-                variant="secondary"
-                onClick={() => router.push("/products/sobers")}
-              >
-                <span className="font-bold">View Details</span>
-              </Button>
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap gap-4 items-center">
+                <a
+                  href="https://apps.apple.com/app/id6755614815"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Download Sobers on the App Store (opens in new tab)"
+                  className="transition-opacity hover:opacity-80"
+                >
+                  {/* Light mode: black badge */}
+                  <img
+                    src="/images/stores/app-store-black.svg"
+                    alt="Download on the App Store"
+                    width={120}
+                    height={40}
+                    className="block dark:hidden h-[40px] w-auto"
+                  />
+                  {/* Dark mode: white badge */}
+                  <img
+                    src="/images/stores/app-store-white.svg"
+                    alt="Download on the App Store"
+                    width={120}
+                    height={40}
+                    className="hidden dark:block h-[40px] w-auto"
+                  />
+                </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.volvox.sobers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Get Sobers on Google Play (opens in new tab)"
+                  className="transition-opacity hover:opacity-80"
+                >
+                  <img
+                    src="/images/stores/play-store.svg"
+                    alt="Get it on Google Play"
+                    width={135}
+                    height={40}
+                    className="h-[40px] w-auto"
+                  />
+                </a>
+              </div>
+              <div className="flex flex-wrap gap-3 items-center">
+                <MagneticButton>
+                  <Button
+                    className="h-12 px-6 rounded-full gap-2 text-sm font-bold"
+                    variant="secondary"
+                    onClick={() => router.push("/products/sobers")}
+                  >
+                    View Details
+                  </Button>
+                </MagneticButton>
+                <MagneticButton>
+                  <Button
+                    className="h-12 px-5 rounded-full gap-2 text-sm"
+                    variant="outline"
+                    aria-label="Visit Sobers website (opens in new tab)"
+                    onClick={() =>
+                      window.open(
+                        "https://sobers.app",
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
+                  >
+                    <ArrowSquareOut
+                      weight="bold"
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold">Visit Website</span>
+                  </Button>
+                </MagneticButton>
+              </div>
             </div>
           </div>
         </div>
