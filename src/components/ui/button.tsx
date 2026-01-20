@@ -23,7 +23,7 @@ const PRESS_GROW_MS = 50;
 // We hold the 'pressed' state for at least 450ms.
 // This gives the CSS transition (300ms) enough time to fully morph
 // the shape before reverting, even on quick taps.
-const MINIMUM_PRESS_MS = 450;
+const MINIMUM_PRESS_MS = 280;
 
 const INITIAL_ORIGIN_SCALE = 0.2;
 const PADDING = 10;
