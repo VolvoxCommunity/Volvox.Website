@@ -54,5 +54,87 @@
     "linkedinUrl": "https://linkedin.com/in/BillChirico",
     "email": "bill@volvox.dev",
     "isHireable": false
+  },
+  {
+    "id": "rabden",
+    "slug": "rabden",
+    "name": "Hossain Jahed",
+    "role": "Frontend Developer",
+    "tagline": "Frontend Developer and builder.",
+    "bio": "I am a frontend developer excelling at modern web design and web motion. I am also a member of the Volvox community.",
+    "avatar": "https://github.com/rabden.png",
+    "expertise": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Web Design",
+      "Web Motion",
+      "UI/UX",
+      "SQL",
+      "JavaScript",
+      "Node.js",
+      "Gemini/Claude",
+      "GSAP",
+      "React Native",
+      "Expo"
+    ],
+    "projects": [
+      {
+        "name": "Volvox Website",
+        "description": "Company website built with Next.js 15, React 19, and Tailwind CSS v4, framer motion and gsap",
+        "role": "Frontend Developer",
+        "url": "https://volvox.dev"
+      },
+      {
+        "name": "img2m3",
+        "description": "AI-powered shadcn/ui theme generator and Material Design 3 color palette extractor.",
+        "role": "Frontend Developer",
+        "url": "https://img2m3.vercel.app"
+      },
+      {
+        "name": "AVE Engineers",
+        "description": "Professional engineering services for MEP, HVAC, and civil engineering benchmarks.",
+        "role": "Frontend Developer",
+        "url": "https://ave-engineers.vercel.app/"
+      },
+      {
+        "name": "ChintaPoradh",
+        "description": "Offline-capable platform for thought-provoking articles and literature.",
+        "role": "Frontend Developer",
+        "url": "https://chintaporadh-delta.vercel.app/"
+      },
+      {
+        "name": "Elegant Signature",
+        "description": "Web utility for creating beautiful animated digital signatures.",
+        "role": "Frontend Developer",
+        "url": "https://signtature.vercel.app/"
+      },
+      {
+        "name": "webcodeir",
+        "description": "Modern Web development platform for Static HTML/CSS/Javascript Site development.",
+        "role": "Frontend Developer",
+        "url": "https://webcodeir.vercel.app/"
+      },
+      {
+        "name": "grochatt",
+        "description": "Dark-themed AI chat interface and prompt box UI component.",
+        "role": "Frontend Developer",
+        "url": "https://grochatt.vercel.app/"
+      },
+      {
+        "name": "EaseMize UI",
+        "description": "A collection of modern reusable UI components hosted on 21st.dev.",
+        "role": "Frontend Developer",
+        "url": "https://21st.dev/easemize"
+      }
+    ],
+    "updatedAt": "2026-01-20",
+    "type": "builder",
+    "githubUrl": "https://github.com/rabden",
+    "linkedinUrl": "",
+    "email": "easemize@gmail.com",
+    "isHireable": true
   }
 ]

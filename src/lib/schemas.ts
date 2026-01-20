@@ -86,6 +86,23 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
     email: z.string().optional(),
     isHireable: z.boolean().optional(),
   }),
+  z.object({
+    type: z.literal("builder"),
+    id: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    role: z.string(),
+    tagline: z.string(),
+    bio: z.string(),
+    expertise: z.array(z.string()),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
+    githubUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    email: z.string().optional(),
+    isHireable: z.boolean().optional(),
+  }),
 ]);
 
 /**

@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useRef, useEffect, useState } from "react";
+import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
@@ -21,13 +21,12 @@ interface MentorshipProps {
 export function Mentorship({ teamMembers }: MentorshipProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-  const [baseOffset, setBaseOffset] = useState(0);
 
-  // Duplicate data for seamless infinite scroll
-  const marqueeData = useMemo(() => {
+  // Duplicate data/logic for seamless infinite scroll
+  const marqueeData = useMemo<TeamMember[]>(() => {
     if (!teamMembers || teamMembers.length === 0) return [];
-    // Duplicate 4x for smooth infinite scroll
-    return [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
+    // Duplicate 10x for smooth infinite scroll with low data count
+    return Array.from({ length: 10 }, () => teamMembers).flat();
   }, [teamMembers]);
 
   // Track scroll progress within the section
@@ -43,22 +42,6 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
     damping: 30,
     mass: 0.5,
   });
-
-  // Base auto-scroll animation
-  useEffect(() => {
-    let animationId: number;
-    const animate = () => {
-      setBaseOffset((prev) => {
-        const newOffset = prev - 0.5; // Base speed
-        // Reset when scrolled too far (based on content width)
-        if (newOffset < -2000) return 0;
-        return newOffset;
-      });
-      animationId = requestAnimationFrame(animate);
-    };
-    animationId = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animationId);
-  }, []);
 
   const handleDiscordClick = (e: React.MouseEvent) => {
     const x = e.clientX / window.innerWidth;
@@ -158,8 +141,12 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
         >
           <motion.div
             className="flex gap-4 md:gap-6"
-            animate={{ x: baseOffset }}
-            transition={{ duration: 0, ease: "linear" }}
+            animate={{ x: ["0%", "-25%"] }}
+            transition={{
+              duration: 20,
+              ease: "linear",
+              repeat: Infinity,
+            }}
           >
             {marqueeData.map((profile, i) => (
               <CommunityCard key={`${profile.id}-${i}`} profile={profile} />
@@ -204,15 +191,22 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
               >
                 MENTOR
               </Badge>
-            ) : (
+            ) : profile.type === "builder" ? (
               <Badge
                 variant="secondary"
                 className="bg-secondary/20 text-secondary border-secondary/20 text-[10px] px-2 h-5"
               >
                 BUILDER
               </Badge>
+            ) : (
+              <Badge
+                variant="outline"
+                className="bg-accent/20 text-accent border-accent/20 text-[10px] px-2 h-5"
+              >
+                MENTEE
+              </Badge>
             )}
-            {profile.type === "mentor" && (
+            {(profile.type === "mentor" || profile.type === "builder") && (
               <span className="text-[10px] text-muted-foreground truncate max-w-[100px]">
                 {profile.role}
               </span>
@@ -224,11 +218,18 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
       <div className="space-y-3">
         {/* Bio / Goal Snippet */}
         <p className="text-xs text-muted-foreground line-clamp-2 min-h-[2.5em] leading-relaxed">
-          {profile.type === "mentor" ? profile.bio : profile.goals}
+          {profile.type === "mentee" ? profile.goals : profile.bio}
         </p>
 
         {/* Tech Stack / Progress Mini-bar */}
-        {profile.type === "mentor" ? (
+        {profile.type === "mentee" ? (
+          <div className="w-full h-1 bg-muted rounded-full mt-2 overflow-hidden">
+            <div
+              className="h-full bg-gradient-to-r from-secondary to-purple-500"
+              style={{ width: profile.progress }}
+            />
+          </div>
+        ) : (
           <div className="flex flex-wrap gap-1">
             {profile.expertise?.slice(0, 3).map((tech) => (
               <span
@@ -238,10 +239,6 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
                 {tech}
               </span>
             ))}
-          </div>
-        ) : (
-          <div className="w-full h-1 bg-muted rounded-full mt-2 overflow-hidden">
-            <div className="h-full bg-gradient-to-r from-secondary to-purple-500 w-[60%]" />
           </div>
         )}
       </div>

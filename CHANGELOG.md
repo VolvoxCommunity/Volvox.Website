@@ -14,6 +14,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - **ui: Add keyboard shortcuts hook for navigation** (`src/hooks/use-keyboard-shortcuts.ts`)
 - **ui: Add App Store and Google Play badge SVGs** (`public/images/stores/`)
 - **config: Add Playwright configuration** (`playwright.config.ts`)
+- **Community: Add Hossain Jahed (Rabden) to team profiles with detailed project portfolio** (`content/team.json`)
+- **Schema: Add support for 'builder' team member type** (`src/lib/schemas.ts`, `src/components/mentorship.tsx`, `src/app/team/team-member-detail-client.tsx`)
 - **ui: Redesign neural stream section with improved visual effects**
 - **ui: Add team member list and detail pages** (`/team`, `/team/[slug]`)
 - **ui: Full UI overhaul**
@@ -44,6 +46,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **Hero: Fix typewriter effect hydration mismatch and dependency stability** (`src/components/hero.tsx`, `src/hooks/use-typewriter-effect.ts`)
+- **Mentorship: Refactor infinite marquee for better performance and seamless looping** (`src/components/mentorship.tsx`, `src/app/globals.css`)
+- **Team: Fix missing bio and expertise on team member detail pages for builders** (`src/app/team/team-member-detail-client.tsx`)
 - **SEO: Add missing canonical tags to all pages** (`/`, `/blog`, `/blog/[slug]`, `/products`, `/products/[slug]`)
 - **SEO: Add missing `/blog` listing page to sitemap** (`sitemap.ts`)
 

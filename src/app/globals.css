@@ -168,7 +168,7 @@
   }
 }
 
-@keyframes infinite-scroll {
+@keyframes infinite-scroll-y {
   from {
     transform: translateY(0);
   }
@@ -178,8 +178,22 @@
   }
 }
 
-.animate-infinite-scroll {
-  animation: infinite-scroll 20s linear infinite;
+@keyframes infinite-scroll-x {
+  from {
+    transform: translateX(0);
+  }
+
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-infinite-scroll-y {
+  animation: infinite-scroll-y 20s linear infinite;
+}
+
+.animate-infinite-scroll-x {
+  animation: infinite-scroll-x 20s linear infinite;
 }
 
 @layer base {
