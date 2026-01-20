@@ -257,7 +257,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
           style={{
             fontSize: 80,
             fontWeight: 700,
-            color: "#007AFF",
+            color: BRAND_COLORS.primary,
           }}
         >
           VOLVOX
@@ -414,7 +414,7 @@ export async function generateSocialImage(
             style={{
               fontSize: 28,
               fontWeight: 700,
-              color: "#007AFF",
+              color: BRAND_COLORS.primary,
             }}
           >
             VOLVOX

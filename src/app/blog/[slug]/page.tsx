@@ -92,7 +92,8 @@ export default async function BlogPostPage({
     frontmatter = post.frontmatter;
     content = post.content;
     views = post.views;
-    readingTime = post.readingTime;
+    // Normalize to whole minutes, minimum 1
+    readingTime = Math.max(1, Math.round(post.readingTime));
   } catch {
     notFound();
   }

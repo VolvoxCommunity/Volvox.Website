@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useRef } from "react";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { CaretRight } from "@phosphor-icons/react";
 import {
@@ -43,7 +43,6 @@ export function Blog({
   onViewModeChange,
   enableFilters = false,
 }: BlogProps) {
-  const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -89,8 +88,6 @@ export function Blog({
 
     return result;
   }, [allPosts, searchQuery, sortOption, enableFilters]);
-
-  const displayPosts = filteredPosts;
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -158,14 +155,16 @@ export function Blog({
             >
               <Button
                 variant="ghost"
-                onClick={() => router.push("/blog")}
+                asChild
                 className="rounded-full hover:bg-muted transition-colors flex items-center gap-2 group"
               >
-                View Archive
-                <CaretRight
-                  weight="bold"
-                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
-                />
+                <Link href="/blog">
+                  View Archive
+                  <CaretRight
+                    weight="bold"
+                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                  />
+                </Link>
               </Button>
             </motion.div>
           )}
@@ -192,7 +191,7 @@ export function Blog({
                   viewMode={viewMode}
                   onViewModeChange={onViewModeChange}
                   searchPlaceholder="Search articles..."
-                  resultCount={displayPosts.length}
+                  resultCount={filteredPosts.length}
                   totalCount={allPosts.length}
                 />
               </motion.div>
@@ -201,7 +200,7 @@ export function Blog({
 
         {/* Empty state */}
         <AnimatePresence>
-          {enableFilters && displayPosts.length === 0 && (
+          {enableFilters && filteredPosts.length === 0 && (
             <motion.div
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
@@ -229,7 +228,7 @@ export function Blog({
           layout
           variants={containerVariants}
           initial="hidden"
-          animate="visible"
+          whileInView="visible"
           viewport={{ once: true }}
           className={cn(
             "grid gap-6",
@@ -239,7 +238,7 @@ export function Blog({
           )}
         >
           <AnimatePresence mode="popLayout">
-            {displayPosts.map((post) => (
+            {filteredPosts.map((post) => (
               <BlogCard key={post.id} post={post} viewMode={viewMode} />
             ))}
           </AnimatePresence>
