@@ -47,12 +47,12 @@ export function Hero({ onNavigate }: HeroProps) {
   const isAnimating = isType || isDelete;
   const displayedText = `Join as a ${role}`;
 
-  const productCardRef = useRef<HTMLDivElement>(null);
+  const productCardRef = useRef<HTMLButtonElement>(null);
   const nameLineRef = useRef<HTMLSpanElement>(null);
 
   // Detail Section Refs
   const detailsSectionRef = useRef<HTMLDivElement>(null);
-  const phoneMockupRef = useRef<HTMLDivElement>(null);
+  const phoneMockupRef = useRef<HTMLButtonElement>(null);
   const featureListRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -318,15 +318,14 @@ export function Hero({ onNavigate }: HeroProps) {
               </Button>
             </MagneticButton>
             {/* ARIA live region for screen reader announcements of dynamic button text */}
-            <span
+            <output
               id="join-button-live"
-              role="status"
               aria-live="polite"
               aria-atomic="true"
               className="sr-only"
             >
               {displayedText}
-            </span>
+            </output>
           </div>
         </div>
 
@@ -335,19 +334,12 @@ export function Hero({ onNavigate }: HeroProps) {
           className="product-stage relative w-full max-w-[1200px] h-[400px] md:h-[600px] -mt-8 z-[1]"
           style={{ perspective: "1000px" }}
         >
-          <div
+          <button
+            type="button"
             ref={productCardRef}
             className="product-card w-[90%] mx-auto h-full rounded-3xl bg-gradient-to-b from-card/80 to-background/90 border border-border/50 shadow-[0_20px_50px_-10px_hsla(0,0%,0%,0.3)] overflow-hidden relative opacity-0 cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
             style={{ transformStyle: "preserve-3d" }}
             onClick={() => router.push("/products/sobers")}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                router.push("/products/sobers");
-              }
-            }}
             aria-label="View Sobers product details"
           >
             <div
@@ -367,7 +359,7 @@ export function Hero({ onNavigate }: HeroProps) {
                 </span>
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </section>
 
@@ -378,18 +370,11 @@ export function Hero({ onNavigate }: HeroProps) {
       >
         <div className="container max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
           {/* LEFT: Phone Mockup */}
-          <div
+          <button
+            type="button"
             ref={phoneMockupRef}
             className="relative w-full max-w-[350px] mx-auto lg:mr-auto perspective-[1000px] will-change-transform cursor-pointer"
             onClick={() => router.push("/products/sobers")}
-            role="button"
-            tabIndex={0}
-            onKeyDown={(e) => {
-              if (e.key === "Enter" || e.key === " ") {
-                e.preventDefault();
-                router.push("/products/sobers");
-              }
-            }}
             aria-label="View Sobers product details"
           >
             {/* Added h-[650px] to fix height collapse issue */}
@@ -407,7 +392,7 @@ export function Hero({ onNavigate }: HeroProps) {
             </div>
             {/* Glow behind phone */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[80%] bg-primary/20 blur-[100px] -z-10 rounded-full" />
-          </div>
+          </button>
 
           {/* RIGHT: Product Details */}
           <div ref={featureListRef} className="flex flex-col justify-center">
@@ -423,21 +408,14 @@ export function Hero({ onNavigate }: HeroProps) {
               ))}
             </div>
 
-            <h2
-              className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-6 text-foreground cursor-pointer transition-colors duration-300 hover:text-primary"
+            <button
+              type="button"
+              className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-6 text-foreground cursor-pointer transition-colors duration-300 hover:text-primary text-left bg-transparent border-none p-0"
               onClick={() => router.push("/products/sobers")}
-              role="button"
-              tabIndex={0}
-              onKeyDown={(e) => {
-                if (e.key === "Enter" || e.key === " ") {
-                  e.preventDefault();
-                  router.push("/products/sobers");
-                }
-              }}
               aria-label="View Sobers product details"
             >
               Sobriety. <span className="text-primary italic">Reimagined.</span>
-            </h2>
+            </button>
             <p className="text-lg text-foreground/70 mb-10 leading-relaxed">
               A comprehensive toolkit for recovery, built with modern technology
               to provide support when you need it most.

@@ -18,14 +18,13 @@ export function TeamCard({ member }: TeamCardProps) {
     router.push(`/team/${member.slug}`);
   };
 
-  const bioText =
-    member.type === "mentee" ? member.goals : member.bio || member.tagline;
+  const displayText = member.type === "mentee" ? member.goals : member.tagline;
 
   return (
     <div
       className={cn(
         "group relative rounded-[32px] bg-card overflow-hidden",
-        "h-[560px] md:h-[620px] p-2 transition-all duration-300",
+        "h-[440px] md:h-[500px] p-2 transition-all duration-300",
         "hover:shadow-lg cursor-pointer"
       )}
       onClick={handleCardClick}
@@ -40,7 +39,7 @@ export function TeamCard({ member }: TeamCardProps) {
       aria-label={`View ${member.name}'s profile`}
     >
       {/* Full-bleed Image */}
-      <div className="absolute top-2 left-2 right-2 bottom-2 md:bottom-[45%] group-hover:bottom-2 transition-all duration-300 rounded-[24px] overflow-hidden">
+      <div className="absolute top-2 left-2 right-2 bottom-2 md:bottom-[160px] group-hover:bottom-2 transition-all duration-300 rounded-[24px] overflow-hidden">
         <Image
           src={member.avatar}
           alt={member.name}
@@ -50,8 +49,8 @@ export function TeamCard({ member }: TeamCardProps) {
         />
       </div>
 
-      {/* Progressive Blur + Gradient Overlay (Bottom 45%) */}
-      <div className="absolute bottom-0 right-0 left-0 rounded-[24px] overflow-hidden pointer-events-none z-[5] h-[45%]">
+      {/* Progressive Blur + Gradient Overlay (Bottom ~35%) */}
+      <div className="absolute bottom-0 right-0 left-0 rounded-[24px] overflow-hidden pointer-events-none z-[5] h-[160px]">
         {/* Layer 1 - Base blur that fades */}
         <div className="absolute inset-0 backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_0%,transparent_100%)]" />
         {/* Layer 2 - Medium blur fading at 60% */}
@@ -63,29 +62,31 @@ export function TeamCard({ member }: TeamCardProps) {
       </div>
 
       {/* Content at Bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 z-10 flex flex-col gap-2">
+      <div className="absolute bottom-0 left-0 right-0 p-4 z-10 flex flex-col h-[160px]">
         {/* Name & Mentor Tag */}
-        <div className="flex items-center gap-2 mb-1">
-          <h3 className="text-xl md:text-2xl font-bold text-foreground truncate max-w-[70%]">
+        <div className="relative h-[28px] mb-2 pr-[70px] flex items-center">
+          <h3 className="text-lg md:text-xl font-bold text-foreground truncate leading-tight">
             {member.name.split(" ").slice(0, 2).join(" ")}
           </h3>
           {member.type === "mentor" && (
             <Badge
               variant="default"
-              className="bg-primary text-primary-foreground border-none text-[10px] px-2 h-5 font-bold"
+              className="absolute top-0 right-0 bg-primary text-primary-foreground border-none text-[10px] px-2 h-5 font-bold"
             >
               MENTOR
             </Badge>
           )}
         </div>
 
-        {/* Bio - Show more lines with larger text */}
-        <p className="text-base md:text-[15px] text-foreground/80 line-clamp-4 md:line-clamp-5 leading-relaxed mb-2">
-          {bioText}
-        </p>
+        {/* Tagline */}
+        <div className="h-[52px] mb-4 flex items-start">
+          <p className="text-sm text-foreground/80 line-clamp-2 leading-relaxed">
+            {displayText}
+          </p>
+        </div>
 
         {/* Bottom Actions: Member Tag & View Details Button */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-3 h-8 mt-auto">
           <Button
             variant="secondary"
             size="sm"
