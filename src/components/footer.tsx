@@ -47,7 +47,6 @@ const socialLinks = [
 export function Footer() {
   return (
     <footer
-      role="contentinfo"
       className="relative overflow-hidden bg-background m-2 rounded-[25px]"
       data-testid="footer"
     >

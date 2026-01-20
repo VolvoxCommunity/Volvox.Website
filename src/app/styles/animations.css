@@ -53,3 +53,14 @@
 .animate-infinite-scroll {
   animation: infinite-scroll 30s linear infinite;
 }
+
+/**
+ * Accessibility: Respect users who prefer reduced motion
+ * Disables non-essential animations for better accessibility
+ */
+@media (prefers-reduced-motion: reduce) {
+  .animate-marquee,
+  .animate-infinite-scroll {
+    animation: none;
+  }
+}

@@ -24,8 +24,8 @@ test.describe("Semantic Landmarks Verification", () => {
     const main = page.locator("main");
     await expect(main).toBeVisible();
 
-    // Verify contentinfo role (footer)
-    const footer = page.locator('[role="contentinfo"]');
+    // Verify contentinfo role (footer) - uses semantic <footer> element with implicit contentinfo role
+    const footer = page.locator("footer");
     await expect(footer).toBeVisible();
 
     // Verify hero section with aria-label
@@ -67,8 +67,8 @@ test.describe("Semantic Landmarks Verification", () => {
     const blogPostsSection = page.locator('section[aria-label="Blog posts"]');
     await expect(blogPostsSection).toBeVisible();
 
-    // Verify footer
-    const footer = page.locator('[role="contentinfo"]');
+    // Verify footer - uses semantic <footer> element with implicit contentinfo role
+    const footer = page.locator("footer");
     await expect(footer).toBeVisible();
   });
 
@@ -94,8 +94,8 @@ test.describe("Semantic Landmarks Verification", () => {
     const productsSection = page.locator('section[aria-label="Products list"]');
     await expect(productsSection).toBeVisible();
 
-    // Verify footer
-    const footer = page.locator('[role="contentinfo"]');
+    // Verify footer - uses semantic <footer> element with implicit contentinfo role
+    const footer = page.locator("footer");
     await expect(footer).toBeVisible();
   });
 
@@ -123,8 +123,8 @@ test.describe("Semantic Landmarks Verification", () => {
     );
     await expect(teamSection).toBeVisible();
 
-    // Verify footer
-    const footer = page.locator('[role="contentinfo"]');
+    // Verify footer - uses semantic <footer> element with implicit contentinfo role
+    const footer = page.locator("footer");
     await expect(footer).toBeVisible();
   });
 
@@ -141,9 +141,12 @@ test.describe("Semantic Landmarks Verification", () => {
 
       roles.forEach((role) => {
         const elements = document.querySelectorAll(`[role="${role}"]`);
-        // For navigation, also count <nav> elements
+        // For navigation, also count <nav> elements (implicit navigation role)
         const navElements =
           role === "navigation" ? document.querySelectorAll("nav") : [];
+        // For contentinfo, also count <footer> elements (implicit contentinfo role)
+        const footerElements =
+          role === "contentinfo" ? document.querySelectorAll("footer") : [];
 
         const labels: string[] = [];
         elements.forEach((el) => {
@@ -160,10 +163,17 @@ test.describe("Semantic Landmarks Verification", () => {
             "";
           if (label) labels.push(label);
         });
+        footerElements.forEach((el) => {
+          const label =
+            el.getAttribute("aria-label") ||
+            el.getAttribute("aria-labelledby") ||
+            "";
+          if (label) labels.push(label);
+        });
 
         results.push({
           role,
-          count: elements.length + navElements.length,
+          count: elements.length + navElements.length + footerElements.length,
           labels: [...new Set(labels)],
         });
       });

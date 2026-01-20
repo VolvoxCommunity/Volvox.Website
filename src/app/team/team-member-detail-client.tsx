@@ -294,6 +294,7 @@ export function TeamMemberDetailClient({
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
                     data-testid="github-button"
+                    aria-label={`Visit ${member.name}'s GitHub profile`}
                     onClick={() =>
                       window.open(
                         member.githubUrl,
@@ -313,6 +314,7 @@ export function TeamMemberDetailClient({
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
                     data-testid="linkedin-button"
+                    aria-label={`Visit ${member.name}'s LinkedIn profile`}
                     onClick={() =>
                       window.open(
                         member.linkedinUrl,
@@ -332,6 +334,7 @@ export function TeamMemberDetailClient({
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
                     data-testid="email-button"
+                    aria-label={`Send email to ${member.name}`}
                     onClick={() =>
                       (window.location.href = `mailto:${member.email}`)
                     }
