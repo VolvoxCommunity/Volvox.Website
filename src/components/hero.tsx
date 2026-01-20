@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTypewriter } from "react-simple-typewriter";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Button } from "@/components/ui/button";
-import { useTypewriterEffect } from "@/hooks/use-typewriter-effect";
 import {
-  ShieldCheck,
   ChartLineUp,
+  ShieldCheck,
   CheckCircle,
-  AppleLogo,
-  GooglePlayLogo,
+  PiggyBank,
   ArrowSquareOut,
 } from "@phosphor-icons/react";
 
@@ -22,50 +21,31 @@ interface HeroProps {
 
 gsap.registerPlugin(ScrollTrigger);
 
-/** Role variants for the join button - cycles every few seconds */
-const JOIN_ROLE_VARIANTS = [
-  "Join as a Mentee",
-  "Join as a Mentor",
-  "Join as a Teacher",
-  "Join as a Member",
-  "Join as a Learner",
-] as const;
-
-/** Interval duration in milliseconds for cycling button text */
-const TEXT_CYCLE_INTERVAL_MS = 4000;
-
-/** Character animation speed in milliseconds */
-const TYPEWRITER_CHAR_DELAY_MS = 40;
-
-/** Pause between backspace and type phases */
-const TYPEWRITER_PAUSE_MS = 200;
+/** Role variants for the join button - cycles infinitely */
+const ROLE_VARIANTS = [
+  "Mentee",
+  "Mentor",
+  "Teacher",
+  "Member",
+  "Learner",
+  "Sponsor",
+  "Sponsee",
+];
 
 export function Hero({ onNavigate }: HeroProps) {
   const router = useRouter();
 
-  // Current index for cycling through role variants
-  const [roleIndex, setRoleIndex] = useState(() =>
-    Math.floor(Math.random() * JOIN_ROLE_VARIANTS.length)
-  );
-
-  // Get the current target text
-  const targetText = JOIN_ROLE_VARIANTS[roleIndex];
-
-  // Use typewriter effect for character-by-character animation
-  const { displayedText, isAnimating } = useTypewriterEffect(targetText, {
-    characterDelay: TYPEWRITER_CHAR_DELAY_MS,
-    pauseDuration: TYPEWRITER_PAUSE_MS,
-    startWithText: true,
+  // Typewriter effect with automatic cycling (only the role changes)
+  const [role, { isType, isDelete }] = useTypewriter({
+    words: ROLE_VARIANTS,
+    loop: 0, // Infinite loop
+    typeSpeed: 40,
+    deleteSpeed: 30,
+    delaySpeed: 3000,
   });
 
-  // Cycle through role variants every few seconds
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setRoleIndex((prev) => (prev + 1) % JOIN_ROLE_VARIANTS.length);
-    }, TEXT_CYCLE_INTERVAL_MS);
-
-    return () => clearInterval(intervalId);
-  }, []);
+  const isAnimating = isType || isDelete;
+  const displayedText = `Join as a ${role}`;
 
   const productCardRef = useRef<HTMLDivElement>(null);
   const nameLineRef = useRef<HTMLSpanElement>(null);
@@ -237,18 +217,27 @@ export function Hero({ onNavigate }: HeroProps) {
   const features = [
     {
       icon: <ChartLineUp weight="fill" className="w-6 h-6 text-primary" />,
-      title: "Sobriety Timeline",
-      description: "Visual history of your journey with relapse tracking.",
+      title: "Journey Timeline",
+      description:
+        "Visualize milestones, track setbacks, celebrate progress and milestones. Your counter resets; your history doesn't.",
     },
     {
       icon: <ShieldCheck weight="fill" className="w-6 h-6 text-primary" />,
-      title: "Secure Pairing",
-      description: "Encrypted sponsor-sponsee connection with invite codes.",
+      title: "Accountability Partnerships",
+      description:
+        "Connect via secure invite codes. Message privately. No friend requests, no follower counts—just support.",
     },
     {
       icon: <CheckCircle weight="fill" className="w-6 h-6 text-primary" />,
-      title: "Task Management",
-      description: "Structured step assignments and accountability feedback.",
+      title: "Task & Step Work",
+      description:
+        "Assign tasks, track completion, add reflections. Optional 12-step progress for AA, NA, and beyond.",
+    },
+    {
+      icon: <PiggyBank weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Savings Tracker",
+      description:
+        "See what you're not spending—daily, weekly, monthly. Your wallet's in recovery too.",
     },
   ];
 
@@ -263,7 +252,10 @@ export function Hero({ onNavigate }: HeroProps) {
   return (
     <div className="flex flex-col w-full">
       {/* ================= HERO SECTION ================= */}
-      <header className="hero-section relative min-h-screen md:min-h-[120vh] pt-32 md:pt-[180px] flex flex-col items-center overflow-hidden">
+      <section
+        aria-label="Hero"
+        className="hero-section relative min-h-screen md:min-h-[120vh] pt-32 md:pt-[180px] flex flex-col items-center overflow-hidden"
+      >
         {/* Background Glow */}
         <div
           className="hero-bg-glow absolute -top-[20%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] -z-[1] pointer-events-none"
@@ -303,18 +295,19 @@ export function Hero({ onNavigate }: HeroProps) {
             </MagneticButton>
             <MagneticButton>
               <Button
-                variant="tonal"
+                variant="accent"
                 onClick={() => onNavigate("mentorship")}
                 className="py-6 px-8 text-base font-semibold min-w-[200px]"
                 data-testid="join-button"
-                aria-label={targetText}
+                aria-labelledby="join-button-live"
               >
                 <span
                   className="inline-flex items-center"
                   aria-hidden="true"
                   data-testid="typewriter-text"
                 >
-                  {displayedText}
+                  <span>Join as a&nbsp;</span>
+                  <span>{role}</span>
                   <span
                     className={`ml-0.5 w-[2px] h-[1.1em] bg-current inline-block ${
                       isAnimating ? "animate-pulse" : "opacity-0"
@@ -324,6 +317,16 @@ export function Hero({ onNavigate }: HeroProps) {
                 </span>
               </Button>
             </MagneticButton>
+            {/* ARIA live region for screen reader announcements of dynamic button text */}
+            <span
+              id="join-button-live"
+              role="status"
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+            >
+              {displayedText}
+            </span>
           </div>
         </div>
 
@@ -356,7 +359,7 @@ export function Hero({ onNavigate }: HeroProps) {
             </div>
           </div>
         </div>
-      </header>
+      </section>
 
       {/* ================= DETAILS SECTION ================= */}
       <section
@@ -427,47 +430,49 @@ export function Hero({ onNavigate }: HeroProps) {
 
             {/* App Store Buttons */}
             <div className="flex flex-wrap gap-4">
-              <Button
-                className="h-14 px-6 rounded-xl gap-3 text-base"
-                variant="default"
-                onClick={() =>
-                  window.open(
-                    "https://apps.apple.com/app/id6755614815",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                }
+              <a
+                href="https://apps.apple.com/app/id6755614815"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download Sobers on the App Store (opens in new tab)"
+                className="transition-opacity hover:opacity-80"
               >
-                <AppleLogo weight="fill" className="w-6 h-6" />
-                <div className="flex flex-col items-start leading-none">
-                  <span className="text-[10px] opacity-80 uppercase tracking-wider">
-                    Download on the
-                  </span>
-                  <span className="font-bold">App Store</span>
-                </div>
-              </Button>
-              <Button
-                className="h-14 px-6 rounded-xl gap-3 text-base bg-foreground text-background hover:bg-foreground/90"
-                variant="secondary"
-                onClick={() =>
-                  window.open(
-                    "https://play.google.com/store/apps/details?id=com.volvox.sobers",
-                    "_blank",
-                    "noopener,noreferrer"
-                  )
-                }
+                {/* Light mode: black badge */}
+                <img
+                  src="/images/stores/app-store-black.svg"
+                  alt="Download on the App Store"
+                  width={120}
+                  height={40}
+                  className="block dark:hidden h-[40px] w-auto"
+                />
+                {/* Dark mode: white badge */}
+                <img
+                  src="/images/stores/app-store-white.svg"
+                  alt="Download on the App Store"
+                  width={120}
+                  height={40}
+                  className="hidden dark:block h-[40px] w-auto"
+                />
+              </a>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.volvox.sobers"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Get Sobers on Google Play (opens in new tab)"
+                className="transition-opacity hover:opacity-80"
               >
-                <GooglePlayLogo weight="fill" className="w-6 h-6" />
-                <div className="flex flex-col items-start leading-none">
-                  <span className="text-[10px] opacity-80 uppercase tracking-wider">
-                    Get it on
-                  </span>
-                  <span className="font-bold">Google Play</span>
-                </div>
-              </Button>
+                <img
+                  src="/images/stores/play-store.svg"
+                  alt="Get it on Google Play"
+                  width={135}
+                  height={40}
+                  className="h-[40px] w-auto"
+                />
+              </a>
               <Button
-                className="h-14 px-6 rounded-xl gap-3 text-base"
+                className="h-[40px] px-4 rounded-lg gap-2 text-sm"
                 variant="outline"
+                aria-label="Visit Sobers website (opens in new tab)"
                 onClick={() =>
                   window.open(
                     "https://sobers.app",
@@ -476,8 +481,12 @@ export function Hero({ onNavigate }: HeroProps) {
                   )
                 }
               >
-                <ArrowSquareOut weight="bold" className="w-6 h-6" />
-                <span className="font-bold">Visit Website</span>
+                <ArrowSquareOut
+                  weight="bold"
+                  className="w-5 h-5"
+                  aria-hidden="true"
+                />
+                <span className="font-semibold">Visit Website</span>
               </Button>
               <Button
                 className="h-14 px-6 rounded-xl gap-3 text-base"

@@ -82,6 +82,8 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
     <section
       id="mentorship"
       ref={containerRef}
+      aria-label="Community"
+      data-testid="mentorship-section"
       className="relative min-h-[600px] w-full overflow-hidden bg-background flex flex-col items-center justify-center py-16 md:py-24"
     >
       {/* Background layer */}
@@ -113,11 +115,17 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <MagneticButton strength={0.3}>
             <Button
+              variant="accent"
               size="lg"
-              className="h-14 px-8 text-base gap-3 shadow-[0_0_40px_-10px_var(--primary)] border border-primary/50"
+              className="h-14 px-8 text-base gap-3"
               onClick={handleDiscordClick}
+              aria-label="Join our Discord community (opens in new tab)"
             >
-              <DiscordLogo weight="fill" className="h-6 w-6" />
+              <DiscordLogo
+                weight="fill"
+                className="h-6 w-6"
+                aria-hidden="true"
+              />
               Join Us
             </Button>
           </MagneticButton>
@@ -128,8 +136,9 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
               variant="ghost"
               className="h-14 px-8 text-base gap-3 bg-white/5 hover:bg-white/10 hover:text-white border border-white/10 backdrop-blur-md"
               onClick={handleTeamClick}
+              aria-label="View team members page"
             >
-              <Users weight="fill" className="h-6 w-6" />
+              <Users weight="fill" className="h-6 w-6" aria-hidden="true" />
               Meet the Team
             </Button>
           </MagneticButton>

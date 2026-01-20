@@ -14,7 +14,9 @@ import type {
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { ProductsNavbar } from "@/components/products/products-navbar";
+import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
@@ -193,9 +195,17 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     searchQuery || selectedTech.length > 0 || sortOption !== "a-z";
 
   return (
-    <div className="min-h-screen relative flex flex-col bg-background">
+    <div className="min-h-screen relative flex flex-col">
+      {/* Animated Background */}
+      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
+        <AnimatedBackground />
+      </div>
+
+      {/* Main Navigation */}
+      <Navigation linkMode />
+
       {/* Content Layer */}
-      <div className="relative z-10 flex-1">
+      <div className="relative z-10 flex-1 pt-20">
         {/* Navbar with Search & Filters */}
         <ProductsNavbar
           searchQuery={searchQuery}
@@ -213,19 +223,24 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl py-8"
+          role="main"
+          className="container mx-auto px-4 max-w-7xl pt-16 pb-8"
           data-testid="products-section"
+          aria-labelledby="products-page-heading"
         >
           {/* Page Header */}
-          <div className="text-left mb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-            <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-              Products
+          <header className="text-center mb-12">
+            <h1
+              id="products-page-heading"
+              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+            >
+              Our Products
             </h1>
-            <p className="text-lg text-muted-foreground max-w-2xl leading-relaxed">
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Open-source applications built with care, designed to make a real
               difference.
             </p>
-          </div>
+          </header>
 
           {/* Results Count & Clear (Only show if navbar is collapsed or for extra visibility) */}
           {hasActiveFilters && (
@@ -244,44 +259,46 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           )}
 
           {/* Products Grid/List */}
-          {filteredProducts.length > 0 ? (
-            viewMode === "grid" ? (
-              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCardGrid
-                    key={product.id}
-                    product={product}
-                    index={idx}
-                  />
-                ))}
-              </div>
+          <section aria-label="Products list">
+            {filteredProducts.length > 0 ? (
+              viewMode === "grid" ? (
+                <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+                  {filteredProducts.map((product, idx) => (
+                    <ProductCardGrid
+                      key={product.id}
+                      product={product}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="relative z-0 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+                  {filteredProducts.map((product, idx) => (
+                    <ProductCardList
+                      key={product.id}
+                      product={product}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="relative z-0 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCardList
-                    key={product.id}
-                    product={product}
-                    index={idx}
-                  />
-                ))}
+              <div className="text-center py-24 bg-muted/20 rounded-[2rem] border border-dashed border-border animate-in zoom-in-95 duration-300">
+                <p className="text-lg font-medium mb-2">No products found</p>
+                <p className="text-muted-foreground mb-6 text-sm">
+                  Try adjusting your search or filters to find what you&apos;re
+                  looking for.
+                </p>
+                <Button
+                  onClick={handleClearAll}
+                  variant="outline"
+                  className="rounded-full"
+                >
+                  Clear all filters
+                </Button>
               </div>
-            )
-          ) : (
-            <div className="text-center py-24 bg-muted/20 rounded-[2rem] border border-dashed border-border animate-in zoom-in-95 duration-300">
-              <p className="text-lg font-medium mb-2">No products found</p>
-              <p className="text-muted-foreground mb-6 text-sm">
-                Try adjusting your search or filters to find what you&apos;re
-                looking for.
-              </p>
-              <Button
-                onClick={handleClearAll}
-                variant="outline"
-                className="rounded-full"
-              >
-                Clear all filters
-              </Button>
-            </div>
-          )}
+            )}
+          </section>
         </main>
       </div>
 

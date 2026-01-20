@@ -73,12 +73,19 @@ export function BlogNavbar({
           <ArrowLeft className="h-4 w-4" />
         </Button>
 
-        {/* Center: Search Bar */}
+        {/* Center: Result Count */}
+        <div className="flex-1 text-center">
+          <span className="text-sm font-medium text-muted-foreground">
+            {resultCount} {resultCount === 1 ? "Post" : "Posts"}
+          </span>
+        </div>
+
+        {/* Search Bar */}
         <div
           className={cn(
-            "flex-1 max-w-md relative transition-all duration-300",
+            "hidden md:block w-64 relative transition-all duration-300",
             isSearchFocused
-              ? "max-w-xl shadow-lg ring-2 ring-primary/10 rounded-full"
+              ? "w-80 shadow-lg ring-2 ring-primary/10 rounded-full"
               : ""
           )}
         >
@@ -107,16 +114,17 @@ export function BlogNavbar({
               <button
                 type="button"
                 onClick={() => onSearchChange("")}
+                aria-label="Clear search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors transition-opacity"
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
           </div>
         </div>
 
         {/* Right: Desktop Controls */}
-        <div className="hidden md:flex items-center gap-3 ml-auto">
+        <div className="hidden md:flex items-center gap-3">
           {/* Tags Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
@@ -162,6 +170,8 @@ export function BlogNavbar({
                         type="button"
                         key={tag}
                         onClick={() => onTagToggle(tag)}
+                        aria-label={`${isSelected ? "Remove" : "Add"} ${tag} filter`}
+                        aria-pressed={isSelected}
                         className={cn(
                           "px-3 py-1.5 rounded-full text-xs transition-all border",
                           isSelected
@@ -182,7 +192,11 @@ export function BlogNavbar({
           <div className="w-px h-6 bg-border/50" />
 
           {/* Sort Buttons */}
-          <div className="flex bg-muted/30 p-1 rounded-full border border-border/30">
+          <div
+            className="flex bg-muted/30 p-1 rounded-full border border-border/30"
+            role="group"
+            aria-label="Sort options"
+          >
             {[
               { value: "newest", label: "Newest" },
               { value: "oldest", label: "Oldest" },
@@ -192,6 +206,8 @@ export function BlogNavbar({
                 type="button"
                 key={opt.value}
                 onClick={() => onSortChange(opt.value as BlogSortOption)}
+                aria-label={`Sort by ${opt.label}`}
+                aria-pressed={sortOption === opt.value}
                 className={cn(
                   "px-3 py-1.5 text-xs font-medium rounded-full transition-all",
                   sortOption === opt.value
@@ -205,10 +221,16 @@ export function BlogNavbar({
           </div>
 
           {/* View Toggle */}
-          <div className="flex bg-muted/30 p-1 rounded-full border border-border/30">
+          <div
+            className="flex bg-muted/30 p-1 rounded-full border border-border/30"
+            role="group"
+            aria-label="View mode"
+          >
             <button
               type="button"
               onClick={() => onViewModeChange("grid")}
+              aria-label="Grid view"
+              aria-pressed={viewMode === "grid"}
               className={cn(
                 "p-2 rounded-full transition-all",
                 viewMode === "grid"
@@ -216,11 +238,13 @@ export function BlogNavbar({
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <SquaresFour className="h-4 w-4" />
+              <SquaresFour className="h-4 w-4" aria-hidden="true" />
             </button>
             <button
               type="button"
               onClick={() => onViewModeChange("list")}
+              aria-label="List view"
+              aria-pressed={viewMode === "list"}
               className={cn(
                 "p-2 rounded-full transition-all",
                 viewMode === "list"
@@ -228,19 +252,20 @@ export function BlogNavbar({
                   : "text-muted-foreground hover:text-foreground"
               )}
             >
-              <List className="h-4 w-4" />
+              <List className="h-4 w-4" aria-hidden="true" />
             </button>
           </div>
         </div>
 
         {/* Right: Mobile Menu */}
-        <div className="md:hidden ml-auto">
+        <div className="md:hidden">
           <Dialog open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <DialogTrigger asChild>
               <Button
                 variant="ghost"
                 size="sm"
                 className="rounded-full w-9 h-9 p-0"
+                aria-label={`Open filters and sort options${selectedTags.length > 0 ? ` (${selectedTags.length} tags selected)` : ""}`}
               >
                 <Funnel
                   className={cn(
@@ -249,6 +274,7 @@ export function BlogNavbar({
                       "text-primary"
                   )}
                   weight={selectedTags.length > 0 ? "fill" : "regular"}
+                  aria-hidden="true"
                 />
               </Button>
             </DialogTrigger>
@@ -277,6 +303,8 @@ export function BlogNavbar({
                         onClick={() =>
                           onSortChange(opt.value as BlogSortOption)
                         }
+                        aria-label={`Sort by ${opt.label}`}
+                        aria-pressed={sortOption === opt.value}
                         className={cn(
                           "flex-1 px-3 py-2.5 text-[11px] font-semibold rounded-[2rem] transition-all duration-300",
                           sortOption === opt.value
@@ -318,6 +346,8 @@ export function BlogNavbar({
                           type="button"
                           key={tag}
                           onClick={() => onTagToggle(tag)}
+                          aria-label={`${isSelected ? "Remove" : "Add"} ${tag} filter`}
+                          aria-pressed={isSelected}
                           className={cn(
                             "px-3.5 py-2 rounded-[2rem] text-xs font-medium border transition-all duration-200 active:scale-95",
                             isSelected

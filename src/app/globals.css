@@ -590,6 +590,97 @@
   .dark .hljs-built_in {
     color: oklch(0.75 0.15 180);
   }
+
+  /* =========================================
+     WCAG AAA Focus Ring System
+     =========================================
+     Ensures all interactive elements have visible, high-contrast focus
+     indicators meeting WCAG 2.2 Level AAA Success Criterion 2.4.13.
+
+     Requirements:
+     - Minimum 3px focus ring width
+     - High contrast colors (#0066cc light, #5eb3ff dark)
+     - Never hidden by outline:none without replacement
+     ========================================= */
+
+  /* Focus Ring CSS Custom Properties */
+  :root {
+    --focus-ring-color: #0066cc;
+    --focus-ring-color-dark: #5eb3ff;
+    --focus-ring-offset: 3px;
+    --focus-ring-width: 3px;
+    --focus-ring-style: solid;
+  }
+
+  .dark {
+    --focus-ring-color: #5eb3ff;
+  }
+
+  /* Global focus-visible styles for all interactive elements */
+  *:focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style)
+      var(--focus-ring-color) !important;
+    outline-offset: var(--focus-ring-offset) !important;
+  }
+
+  /* Ensure focus rings are never completely hidden */
+  *:focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  /* High contrast mode: even stronger focus indicators */
+  @media (prefers-contrast: more) {
+    :root {
+      --focus-ring-width: 4px;
+      --focus-ring-color: #000000;
+    }
+
+    .dark {
+      --focus-ring-color: #ffffff;
+    }
+  }
+
+  /* Reduced motion: instant focus without animation */
+  @media (prefers-reduced-motion: reduce) {
+    *:focus-visible {
+      transition: none !important;
+    }
+  }
+
+  /* Skip Links - positioned off-screen, visible on focus */
+  .skip-links-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 9999;
+    pointer-events: none;
+  }
+
+  .skip-link {
+    position: absolute;
+    top: -100px;
+    left: var(--skip-link-left, 1rem);
+    z-index: 9999;
+    padding: 1rem 1.5rem;
+    background: var(--primary);
+    color: var(--primary-foreground);
+    font-weight: 600;
+    font-size: 0.875rem;
+    border-radius: 0.5rem;
+    text-decoration: none;
+    pointer-events: auto;
+    transition: top 0.2s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+
+  .skip-link:focus,
+  .skip-link:focus-visible {
+    top: var(--skip-link-top, 1rem);
+    outline: var(--focus-ring-width) var(--focus-ring-style)
+      var(--focus-ring-color) !important;
+    outline-offset: var(--focus-ring-offset) !important;
+  }
 }
 
 /* =========================================

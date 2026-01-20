@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **a11y: Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
+- **a11y: Add ARIA landmark roles for screen reader navigation** (banner, main, contentinfo, section aria-labels)
+- **ui: Add keyboard shortcuts hook for navigation** (`src/hooks/use-keyboard-shortcuts.ts`)
+- **ui: Add App Store and Google Play badge SVGs** (`public/images/stores/`)
+- **config: Add Playwright configuration** (`playwright.config.ts`)
 - **ui: Redesign neural stream section with improved visual effects**
 - **ui: Add team member list and detail pages** (`/team`, `/team/[slug]`)
 - **ui: Full UI overhaul**
@@ -20,6 +25,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **ui: Replace custom typewriter hook with react-simple-typewriter** (`hero.tsx`)
+- **ui: Update hero section to use semantic section element with aria-label** (`hero.tsx`)
+- **ui: Improve skip link component styling and behavior** (`skip-link.tsx`)
+- **ui: Update blog and products navbar styling** (`blog-navbar.tsx`, `products-navbar.tsx`)
+- **ui: Update filter controls and code block components** (`filter-controls.tsx`, `code-block.tsx`)
+- **ui: Add new CSS utilities and styles** (`globals.css`)
+- **config: Update ESLint and TypeScript configurations** (`eslint.config.mjs`, `tsconfig.json`)
 - **Docs: Redesign README with centered logo, badges (build, codecov, E2E, last-commit, Discord, Zread), Quick Links navigation, and improved documentation structure** (README.md)
 - **Visual: Update footer visual baseline for current implementation** (e2e/visual.spec.ts-snapshots)
 
@@ -27,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Removed
 
+- **ui: Remove custom typewriter effect hook** in favor of react-simple-typewriter (`src/hooks/use-typewriter-effect.ts`)
 - **SEO: Remove redundant IndexNow API route** (GitHub workflow calls IndexNow directly per best practices)
 
 ### Fixed

@@ -105,14 +105,25 @@ export function CodeBlock({
           className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 focus-visible:opacity-100 transition-opacity duration-200
                      bg-muted hover:bg-muted/80 text-foreground/80 hover:text-foreground
                      rounded-md p-2 border border-border shadow-sm"
-          aria-label={copied ? "Copied!" : "Copy code"}
+          aria-label="Copy code to clipboard"
+          aria-describedby="code-copy-status"
         >
           {copied ? (
-            <Check className="h-4 w-4 text-green-500" />
+            <Check className="h-4 w-4 text-green-500" aria-hidden="true" />
           ) : (
-            <Copy className="h-4 w-4" />
+            <Copy className="h-4 w-4" aria-hidden="true" />
           )}
         </button>
+        {/* ARIA live region for copy status announcements */}
+        <span
+          id="code-copy-status"
+          role="status"
+          aria-live="polite"
+          aria-atomic="true"
+          className="sr-only"
+        >
+          {copied ? "Code copied to clipboard" : ""}
+        </span>
       </div>
     </div>
   );

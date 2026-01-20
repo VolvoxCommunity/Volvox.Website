@@ -73,12 +73,19 @@ export function ProductsNavbar({
           <ArrowLeft className="h-4 w-4" />
         </Button>
 
-        {/* Center: Search Bar */}
+        {/* Center: Result Count */}
+        <div className="flex-1 text-center">
+          <span className="text-sm font-medium text-muted-foreground">
+            {resultCount} {resultCount === 1 ? "Product" : "Products"}
+          </span>
+        </div>
+
+        {/* Search Bar */}
         <div
           className={cn(
-            "flex-1 max-w-md relative transition-all duration-300",
+            "hidden md:block w-64 relative transition-all duration-300",
             isSearchFocused
-              ? "max-w-xl shadow-lg ring-2 ring-primary/10 rounded-full"
+              ? "w-80 shadow-lg ring-2 ring-primary/10 rounded-full"
               : ""
           )}
         >
@@ -115,7 +122,7 @@ export function ProductsNavbar({
         </div>
 
         {/* Right: Desktop Controls */}
-        <div className="hidden md:flex items-center gap-3 ml-auto">
+        <div className="hidden md:flex items-center gap-3">
           {/* Tech Dropdown */}
           <Popover>
             <PopoverTrigger asChild>
@@ -227,7 +234,7 @@ export function ProductsNavbar({
         </div>
 
         {/* Right: Mobile Menu */}
-        <div className="md:hidden ml-auto">
+        <div className="md:hidden">
           <Dialog open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
             <DialogTrigger asChild>
               <Button

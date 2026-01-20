@@ -11,12 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  CheckCircle,
-  AppleLogo,
-  GooglePlayLogo,
-  ArrowUpRight,
-} from "@phosphor-icons/react";
+import { CheckCircle, ArrowUpRight } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
@@ -167,15 +162,24 @@ function ProductCard({ product, index }: ProductCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Download ${product.name} on the App Store`}
-                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                      className="transition-opacity hover:opacity-80"
                     >
-                      <AppleLogo weight="fill" className="h-6 w-6" />
-                      <div className="text-left">
-                        <div className="text-xs leading-none">
-                          Download on the
-                        </div>
-                        <div className="text-sm font-semibold">App Store</div>
-                      </div>
+                      {/* Light mode: black badge */}
+                      <img
+                        src="/images/stores/app-store-black.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="block dark:hidden h-[40px] w-auto"
+                      />
+                      {/* Dark mode: white badge */}
+                      <img
+                        src="/images/stores/app-store-white.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="hidden dark:block h-[40px] w-auto"
+                      />
                     </a>
                   )}
                   {product.links.playStore && (
@@ -184,13 +188,15 @@ function ProductCard({ product, index }: ProductCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Get ${product.name} on Google Play`}
-                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                      className="transition-opacity hover:opacity-80"
                     >
-                      <GooglePlayLogo weight="fill" className="h-6 w-6" />
-                      <div className="text-left">
-                        <div className="text-xs leading-none">Get it on</div>
-                        <div className="text-sm font-semibold">Google Play</div>
-                      </div>
+                      <img
+                        src="/images/stores/play-store.svg"
+                        alt="Get it on Google Play"
+                        width={135}
+                        height={40}
+                        className="h-[40px] w-auto"
+                      />
                     </a>
                   )}
                 </div>

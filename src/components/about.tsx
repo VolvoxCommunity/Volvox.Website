@@ -21,6 +21,7 @@ export function About() {
   return (
     <section
       id="about"
+      aria-label="About Volvox"
       className="py-24 px-4 bg-background relative overflow-hidden"
     >
       {/* Background Decor */}

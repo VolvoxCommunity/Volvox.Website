@@ -106,6 +106,7 @@ export function Blog({
     <section
       id="blog"
       ref={containerRef}
+      aria-label="Blog posts"
       className="py-24 md:py-32 px-4 relative overflow-hidden bg-background"
       data-testid="blog-section"
     >

@@ -91,8 +91,9 @@ export function Navigation({
 
   return (
     <>
-      {/* Fixed Wrapper */}
-      <div
+      {/* Fixed Wrapper - acts as page banner */}
+      <header
+        role="banner"
         className={`fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out ${
           isVisible ? "translate-y-0" : "md:-translate-y-full translate-y-0"
         }`}
@@ -101,6 +102,7 @@ export function Navigation({
         <nav
           ref={navRef}
           onMouseMove={handleMouseMove}
+          aria-label="Main navigation"
           className={`pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
             w-full py-2 px-3 bg-transparent
             ${
@@ -223,7 +225,7 @@ export function Navigation({
             </Button>
           </div>
         </nav>
-      </div>
+      </header>
 
       {/* Custom Animated Mobile Menu Overlay */}
       <AnimatePresence>

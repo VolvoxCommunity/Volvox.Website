@@ -43,6 +43,8 @@ const eslintConfig = defineConfig([
     ".worktrees/**",
     // Test coverage reports:
     "coverage/**",
+    // E2E tests (have separate Playwright config):
+    "e2e/**",
   ]),
 ]);
 

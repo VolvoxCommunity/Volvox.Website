@@ -12,6 +12,7 @@ import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogCard } from "@/components/blog-card";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 import { SITE_NAME } from "@/lib/constants";
 
 interface BlogListClientProps {
@@ -191,12 +192,15 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   return (
     <div className="min-h-screen relative flex flex-col">
       {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
+      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
         <AnimatedBackground />
       </div>
 
+      {/* Main Navigation */}
+      <Navigation linkMode />
+
       {/* Content Layer */}
-      <div className="relative z-10 flex-1">
+      <div className="relative z-10 flex-1 pt-20">
         <BlogNavbar
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}
@@ -213,15 +217,22 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl py-8 isolate"
+          role="main"
+          className="container mx-auto px-4 max-w-7xl pt-16 pb-8 isolate"
+          aria-labelledby="blog-page-heading"
         >
           {/* Page Header */}
-          <div className="text-left mb-8">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Blog</h1>
-            <p className="text-lg text-muted-foreground max-w-2xl">
+          <header className="text-center mb-12">
+            <h1
+              id="blog-page-heading"
+              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+            >
+              Our Blog
+            </h1>
+            <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Insights, tutorials, and stories from the {SITE_NAME} team.
             </p>
-          </div>
+          </header>
 
           {/* Results Count & Clear (Only show clear all here if filters active, count passed to navbar for mobile) */}
           {hasActiveFilters && (
@@ -236,25 +247,27 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           )}
 
           {/* Posts Grid/List */}
-          {filteredPosts.length > 0 ? (
-            <div
-              className={
-                viewMode === "grid"
-                  ? "relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                  : "relative z-0 flex flex-col gap-4"
-              }
-            >
-              {filteredPosts.map((post) => (
-                <BlogCard key={post.id} post={post} viewMode={viewMode} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground">
-                No posts found. Try adjusting your search or filters.
-              </p>
-            </div>
-          )}
+          <section aria-label="Blog posts">
+            {filteredPosts.length > 0 ? (
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+                    : "relative z-0 flex flex-col gap-4"
+                }
+              >
+                {filteredPosts.map((post) => (
+                  <BlogCard key={post.id} post={post} viewMode={viewMode} />
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-16">
+                <p className="text-muted-foreground">
+                  No posts found. Try adjusting your search or filters.
+                </p>
+              </div>
+            )}
+          </section>
         </main>
       </div>
 

@@ -134,7 +134,7 @@ export function HomepageClient({
           currentSection={currentSection}
         />
 
-        <main id="main-content">
+        <main id="main-content" role="main">
           <Hero onNavigate={handleNavigate} />
           <Blog posts={blogPosts || []} />
           <Mentorship teamMembers={teamMembers || []} />
