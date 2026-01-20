@@ -1,11 +1,11 @@
 [
   {
-    "id": "m1",
+    "id": "bill",
     "slug": "bill-chirico",
     "name": "Bill Chirico",
     "role": "CEO & Founder",
     "tagline": "Full-stack architect building scalable systems and mentoring the next generation.",
-    "bio": "Bill is the CEO and Founder of Volvox. He is a seasoned full-stack engineer with 10+ years of experience building high-traffic web applications. He specializes in React, Node.js, and cloud architecture. Previously at Google and Stripe.",
+    "bio": "Founder and CEO of Volvox LLC. 15+ years building apps, websites, and the occasional mass of spaghetti code he's not proud of. Runs a dev mentorship community since 2018 because he remembers what it's like to be lost. Believes software should help people help each other.",
     "avatar": "https://github.com/BillChirico.png",
     "expertise": [
       ".NET - C#",
