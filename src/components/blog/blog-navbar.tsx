@@ -193,11 +193,8 @@ export function BlogNavbar({
           <div className="w-px h-6 bg-border/50" />
 
           {/* Sort Buttons */}
-          <div
-            className="flex bg-muted/30 p-1 rounded-full border border-border/30"
-            role="group"
-            aria-label="Sort options"
-          >
+          <fieldset className="flex bg-muted/30 p-1 rounded-full border border-border/30 m-0">
+            <legend className="sr-only">Sort options</legend>
             {[
               { value: "newest", label: "Newest" },
               { value: "oldest", label: "Oldest" },
@@ -219,14 +216,11 @@ export function BlogNavbar({
                 {opt.label}
               </button>
             ))}
-          </div>
+          </fieldset>
 
           {/* View Toggle */}
-          <div
-            className="flex bg-muted/30 p-1 rounded-full border border-border/30"
-            role="group"
-            aria-label="View mode"
-          >
+          <fieldset className="flex bg-muted/30 p-1 rounded-full border border-border/30 m-0">
+            <legend className="sr-only">View mode</legend>
             <button
               type="button"
               onClick={() => onViewModeChange("grid")}
@@ -255,7 +249,7 @@ export function BlogNavbar({
             >
               <List className="h-4 w-4" aria-hidden="true" />
             </button>
-          </div>
+          </fieldset>
         </div>
 
         {/* Right: Mobile Menu */}

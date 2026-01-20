@@ -59,7 +59,11 @@ export function ProductToc({ sections }: ProductTocProps) {
   };
 
   return (
-    <nav className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-30">
+    <nav
+      aria-label="Table of contents"
+      data-testid="product-toc"
+      className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-30"
+    >
       <div className="bg-background/60 backdrop-blur-md border border-border/50 rounded-2xl p-4">
         <ul className="flex flex-col gap-1">
           {sections.map(({ id, label }) => (
@@ -67,6 +71,7 @@ export function ProductToc({ sections }: ProductTocProps) {
               <button
                 type="button"
                 onClick={() => handleClick(id)}
+                data-testid={`product-toc-item-${id}`}
                 className={cn(
                   "w-full text-left px-4 py-2 text-sm rounded-xl transition-colors",
                   activeSection === id
