@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Button } from "@/components/ui/button";
+import { useTypewriterEffect } from "@/hooks/use-typewriter-effect";
 import {
   ShieldCheck,
   ChartLineUp,
@@ -21,8 +22,51 @@ interface HeroProps {
 
 gsap.registerPlugin(ScrollTrigger);
 
+/** Role variants for the join button - cycles every few seconds */
+const JOIN_ROLE_VARIANTS = [
+  "Join as a Mentee",
+  "Join as a Mentor",
+  "Join as a Teacher",
+  "Join as a Member",
+  "Join as a Learner",
+] as const;
+
+/** Interval duration in milliseconds for cycling button text */
+const TEXT_CYCLE_INTERVAL_MS = 4000;
+
+/** Character animation speed in milliseconds */
+const TYPEWRITER_CHAR_DELAY_MS = 40;
+
+/** Pause between backspace and type phases */
+const TYPEWRITER_PAUSE_MS = 200;
+
 export function Hero({ onNavigate }: HeroProps) {
   const router = useRouter();
+
+  // Current index for cycling through role variants
+  const [roleIndex, setRoleIndex] = useState(() =>
+    Math.floor(Math.random() * JOIN_ROLE_VARIANTS.length)
+  );
+
+  // Get the current target text
+  const targetText = JOIN_ROLE_VARIANTS[roleIndex];
+
+  // Use typewriter effect for character-by-character animation
+  const { displayedText, isAnimating } = useTypewriterEffect(targetText, {
+    characterDelay: TYPEWRITER_CHAR_DELAY_MS,
+    pauseDuration: TYPEWRITER_PAUSE_MS,
+    startWithText: true,
+  });
+
+  // Cycle through role variants every few seconds
+  useEffect(() => {
+    const intervalId = setInterval(() => {
+      setRoleIndex((prev) => (prev + 1) % JOIN_ROLE_VARIANTS.length);
+    }, TEXT_CYCLE_INTERVAL_MS);
+
+    return () => clearInterval(intervalId);
+  }, []);
+
   const productCardRef = useRef<HTMLDivElement>(null);
   const nameLineRef = useRef<HTMLSpanElement>(null);
 
@@ -192,14 +236,14 @@ export function Hero({ onNavigate }: HeroProps) {
 
   const features = [
     {
-      icon: <ShieldCheck weight="fill" className="w-6 h-6 text-primary" />,
-      title: "Secure Pairing",
-      description: "Encrypted sponsor-sponsee connection with invite codes.",
-    },
-    {
       icon: <ChartLineUp weight="fill" className="w-6 h-6 text-primary" />,
       title: "Sobriety Timeline",
       description: "Visual history of your journey with relapse tracking.",
+    },
+    {
+      icon: <ShieldCheck weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Secure Pairing",
+      description: "Encrypted sponsor-sponsee connection with invite codes.",
     },
     {
       icon: <CheckCircle weight="fill" className="w-6 h-6 text-primary" />,
@@ -225,7 +269,7 @@ export function Hero({ onNavigate }: HeroProps) {
           className="hero-bg-glow absolute -top-[20%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] -z-[1] pointer-events-none"
           style={{
             background:
-              "radial-gradient(circle, hsl(var(--primary) / 0.15) 0%, transparent 70%)",
+              "radial-gradient(circle, oklch(from var(--primary) l c h / 0.15) 0%, transparent 70%)",
           }}
         />
 
@@ -261,9 +305,23 @@ export function Hero({ onNavigate }: HeroProps) {
               <Button
                 variant="tonal"
                 onClick={() => onNavigate("mentorship")}
-                className="py-6 px-8 text-base font-semibold"
+                className="py-6 px-8 text-base font-semibold min-w-[200px]"
+                data-testid="join-button"
+                aria-label={targetText}
               >
-                Join as Mentee
+                <span
+                  className="inline-flex items-center"
+                  aria-hidden="true"
+                  data-testid="typewriter-text"
+                >
+                  {displayedText}
+                  <span
+                    className={`ml-0.5 w-[2px] h-[1.1em] bg-current inline-block ${
+                      isAnimating ? "animate-pulse" : "opacity-0"
+                    }`}
+                    aria-hidden="true"
+                  />
+                </span>
               </Button>
             </MagneticButton>
           </div>
@@ -282,8 +340,7 @@ export function Hero({ onNavigate }: HeroProps) {
             <div
               className="app-interface w-full h-full bg-cover bg-center relative"
               style={{
-                backgroundImage:
-                  "url('https://i.ibb.co.com/jv1C1GDZ/image.png')",
+                backgroundImage: "url('/images/product/sobers/hero.png')",
               }}
             >
               <div className="app-overlay absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-background to-transparent pointer-events-none" />

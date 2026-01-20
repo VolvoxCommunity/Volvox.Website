@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   ArrowLeft,
@@ -8,6 +9,9 @@ import {
   GithubLogo,
   LinkedinLogo,
   Briefcase,
+  ArrowSquareOut,
+  FolderOpen,
+  CalendarBlank,
 } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -37,8 +41,23 @@ export function TeamMemberDetailClient({
     }
   };
 
+  /**
+   * Formats an ISO date string into a human-readable format.
+   */
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
+  };
+
   return (
-    <div className="min-h-screen relative flex flex-col">
+    <div
+      className="min-h-screen relative flex flex-col"
+      data-testid="team-member-profile"
+    >
       {/* Animated Background */}
       <div className="fixed inset-0 pointer-events-none z-0">
         <AnimatedBackground />
@@ -52,6 +71,7 @@ export function TeamMemberDetailClient({
             size="sm"
             onClick={() => router.push("/team")}
             aria-label="Back to Team"
+            data-testid="back-to-team-button"
             className="shrink-0 rounded-full hover:bg-muted/50 w-9 h-9 p-0"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -64,11 +84,17 @@ export function TeamMemberDetailClient({
 
       {/* Content */}
       <main className="relative z-10 flex-1 container mx-auto px-4 max-w-4xl py-12">
-        <div className="bg-card/40 backdrop-blur-md border border-border/50 rounded-[48px] p-8 md:p-12 shadow-2xl shadow-primary/5">
+        <div
+          className="bg-card/40 backdrop-blur-md border border-border/50 rounded-[48px] p-8 md:p-12 shadow-2xl shadow-primary/5"
+          data-testid="profile-card"
+        >
           {/* Header */}
           <div className="flex flex-col md:flex-row gap-10 items-center md:items-start mb-12">
             {/* Avatar */}
-            <div className="relative w-40 h-40 md:w-56 md:h-56 rounded-[32px] overflow-hidden border border-border/50 shadow-2xl shrink-0">
+            <div
+              className="relative w-40 h-40 md:w-56 md:h-56 rounded-[32px] overflow-hidden border border-border/50 shadow-2xl shrink-0"
+              data-testid="member-avatar"
+            >
               <Image
                 src={member.avatar}
                 alt={member.name}
@@ -81,11 +107,17 @@ export function TeamMemberDetailClient({
 
             {/* Info */}
             <div className="flex-1 text-center md:text-left pt-2">
-              <h1 className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-3 tracking-tight">
+              <h1
+                className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-3 tracking-tight"
+                data-testid="member-name"
+              >
                 {member.name}
               </h1>
               {member.type === "mentor" && (
-                <div className="flex items-center gap-2 justify-center md:justify-start mb-4">
+                <div
+                  className="flex items-center gap-2 justify-center md:justify-start mb-4"
+                  data-testid="member-role"
+                >
                   <span className="text-xl text-primary font-semibold tracking-wide uppercase text-sm">
                     {member.role}
                   </span>
@@ -97,7 +129,10 @@ export function TeamMemberDetailClient({
                   </Badge>
                 </div>
               )}
-              <p className="text-xl text-muted-foreground leading-relaxed mb-6 font-medium">
+              <p
+                className="text-xl text-muted-foreground leading-relaxed mb-6 font-medium"
+                data-testid="member-tagline"
+              >
                 {member.tagline}
               </p>
 
@@ -174,7 +209,7 @@ export function TeamMemberDetailClient({
 
             {/* Expertise (for mentors) */}
             {member.type === "mentor" && member.expertise && (
-              <div className="space-y-6">
+              <div className="space-y-6" data-testid="expertise-section">
                 <h2 className="text-2xl font-bold font-[family-name:var(--font-jetbrains-mono)]">
                   Expertise
                 </h2>
@@ -184,6 +219,7 @@ export function TeamMemberDetailClient({
                       key={skill}
                       variant="outline"
                       className="px-5 py-2 text-sm rounded-full border-border/60 font-medium bg-muted/30"
+                      data-testid="expertise-badge"
                     >
                       {skill}
                     </Badge>
@@ -193,8 +229,61 @@ export function TeamMemberDetailClient({
             )}
           </div>
 
+          {/* Projects Section */}
+          {member.projects && member.projects.length > 0 && (
+            <div
+              className="border-t border-border/30 pt-12 mb-12"
+              data-testid="projects-section"
+            >
+              <div className="flex items-center gap-3 mb-8">
+                <FolderOpen weight="bold" className="h-6 w-6 text-primary" />
+                <h2 className="text-2xl font-bold font-[family-name:var(--font-jetbrains-mono)]">
+                  Projects & Contributions
+                </h2>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {member.projects.map((project) => (
+                  <div
+                    key={project.name}
+                    className="group bg-white/5 border border-border/30 rounded-[24px] p-6 hover:bg-white/10 transition-colors"
+                    data-testid="project-card"
+                  >
+                    <div className="flex items-start justify-between gap-4 mb-3">
+                      <h3 className="text-lg font-bold">{project.name}</h3>
+                      {project.url && (
+                        <Link
+                          href={project.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-primary hover:text-primary/80 transition-colors shrink-0"
+                          aria-label={`Visit ${project.name}`}
+                        >
+                          <ArrowSquareOut weight="bold" className="h-5 w-5" />
+                        </Link>
+                      )}
+                    </div>
+                    <p className="text-muted-foreground text-sm leading-relaxed mb-3">
+                      {project.description}
+                    </p>
+                    {project.role && (
+                      <Badge
+                        variant="secondary"
+                        className="text-xs bg-primary/10 text-primary border-none rounded-full"
+                      >
+                        {project.role}
+                      </Badge>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Social Links */}
-          <div className="border-t border-border/30 pt-12 flex flex-col md:flex-row md:items-center justify-between gap-6">
+          <div
+            className="border-t border-border/30 pt-12 flex flex-col md:flex-row md:items-center justify-between gap-6"
+            data-testid="social-links-section"
+          >
             <div>
               <h2 className="text-xl font-bold mb-2">
                 Connect with {member.name.split(" ")[0]}
@@ -202,14 +291,25 @@ export function TeamMemberDetailClient({
               <p className="text-muted-foreground text-sm">
                 Follow their journey and stay updated with their latest work.
               </p>
+              {/* Last Updated Timestamp */}
+              {member.updatedAt && (
+                <div
+                  className="flex items-center gap-2 mt-4 text-xs text-muted-foreground/70"
+                  data-testid="last-updated"
+                >
+                  <CalendarBlank weight="fill" className="h-4 w-4" />
+                  <span>Profile updated {formatDate(member.updatedAt)}</span>
+                </div>
+              )}
             </div>
-            <div className="flex gap-4">
+            <div className="flex gap-4" data-testid="social-buttons">
               {member.githubUrl && (
                 <MagneticButton strength={0.4}>
                   <Button
                     variant="outline"
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
+                    data-testid="github-button"
                     onClick={() =>
                       window.open(
                         member.githubUrl,
@@ -228,6 +328,7 @@ export function TeamMemberDetailClient({
                     variant="outline"
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
+                    data-testid="linkedin-button"
                     onClick={() =>
                       window.open(
                         member.linkedinUrl,
@@ -246,6 +347,7 @@ export function TeamMemberDetailClient({
                     variant="outline"
                     size="icon"
                     className="rounded-full w-12 h-12 border-border/60"
+                    data-testid="email-button"
                     onClick={() =>
                       (window.location.href = `mailto:${member.email}`)
                     }

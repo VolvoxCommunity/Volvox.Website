@@ -27,22 +27,22 @@ export const TWITTER_URL = "https://twitter.com/VolvoxLLC";
 
 /** Brand colors for OG images and other static uses */
 export const BRAND_COLORS = {
-  primary: "#007aff",
-  secondary: "#af58da",
-  accent: "#ff9500",
+  primary: "#007AFF",
+  secondary: "#AF58DA",
+  accent: "#FF9500",
   background: "#0a0a0a",
   backgroundLight: "#1a1a2e",
   text: "#ffffff",
   textMuted: "#a1a1aa",
 };
 
-/** Vibrant colors for confetti effects - uses brand colors plus complementary purples */
+/** Vibrant colors for confetti effects - uses brand colors */
 export const CONFETTI_COLORS = [
-  BRAND_COLORS.primary, // Blue
-  BRAND_COLORS.secondary, // Purple
-  BRAND_COLORS.accent, // Orange
-  "#6446ff", // Indigo
-  "#c864ff", // Violet
+  BRAND_COLORS.primary, // Blue #007AFF
+  BRAND_COLORS.secondary, // Purple #AF58DA
+  BRAND_COLORS.accent, // Orange #FF9500
+  "#34C759", // Green (iOS)
+  "#FF2D55", // Pink (iOS)
 ];
 
 /**

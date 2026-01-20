@@ -50,6 +50,7 @@ export type {
   FaqItem,
   Testimonial,
   ProductLinks,
+  TeamMemberProject,
 } from "./schemas";
 
 import { z } from "zod";

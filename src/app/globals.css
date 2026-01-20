@@ -3,7 +3,7 @@
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
-  /* Colors - reference existing CSS variables */
+  /* Colors - direct values for Tailwind v4 */
   --color-*: initial;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -11,19 +11,19 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: var(--primary);
+  --color-primary: #007aff;
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
+  --color-secondary: #af58da;
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: var(--accent);
+  --color-accent: #ff9500;
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-ring: var(--ring);
+  --color-ring: #007aff;
 
   /* Fonts */
   --font-sans: var(--font-jetbrains-mono), ui-sans-serif, system-ui, sans-serif;
@@ -73,28 +73,24 @@
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.2 0.03 260);
 
-    --primary: oklch(0.48 0.1 260);
-    /* 214 35% 39.8% -> slightly adjusted for OKLCH vivacity */
-    --primary-foreground: oklch(0.98 0 0);
+    --primary: #007aff;
+    --primary-foreground: #ffffff;
 
-    --secondary: oklch(0.96 0.01 240);
-    /* Using card/off-white as secondary approx */
-    --secondary-foreground: oklch(0.2 0.03 260);
+    --secondary: #af58da;
+    --secondary-foreground: #ffffff;
 
     --muted: oklch(0.96 0.01 240);
     --muted-foreground: oklch(0.55 0.03 260);
 
-    --accent: oklch(0.9 0.1 280);
-    /* 257 100% 90.2% - Lavender */
-    --accent-foreground: oklch(0.2 0.03 260);
+    --accent: #ff9500;
+    --accent-foreground: #000000;
 
-    --destructive: oklch(0.577 0.245 27.325);
-    --destructive-foreground: oklch(0.98 0 0);
+    --destructive: #ff3b30;
+    --destructive-foreground: #ffffff;
 
     --border: oklch(0.85 0.02 260);
-    /* 222 8.7% 70.8% */
     --input: oklch(0.85 0.02 260);
-    --ring: oklch(0.48 0.1 260);
+    --ring: #007aff;
 
     --discord: #5865f2;
     /* Discord Brand Color */
@@ -121,27 +117,24 @@
     --popover: oklch(0.16 0.02 260);
     --popover-foreground: oklch(0.92 0.01 260);
 
-    --primary: oklch(0.82 0.1 250);
-    /* 217 60.8% 81% */
-    --primary-foreground: oklch(0.2 0.03 260);
+    --primary: #0a84ff;
+    --primary-foreground: #ffffff;
 
-    --secondary: oklch(0.2 0.02 260);
-    --secondary-foreground: oklch(0.92 0.01 260);
+    --secondary: #bf5af2;
+    --secondary-foreground: #ffffff;
 
     --muted: oklch(0.2 0.02 260);
     --muted-foreground: oklch(0.6 0.01 260);
 
-    --accent: oklch(0.9 0.1 280);
-    /* 257 100% 90.2% */
-    --accent-foreground: oklch(0.2 0.03 260);
+    --accent: #ff9f0a;
+    --accent-foreground: #000000;
 
-    --destructive: oklch(0.7 0.19 22);
-    --destructive-foreground: oklch(0.98 0 0);
+    --destructive: #ff453a;
+    --destructive-foreground: #ffffff;
 
     --border: oklch(0.3 0.02 260);
-    /* 220 8.1% 29% */
     --input: oklch(0.3 0.02 260);
-    --ring: oklch(0.6 0.1 260);
+    --ring: #0a84ff;
 
     --discord: #5865f2;
 
@@ -206,7 +199,7 @@
     background: linear-gradient(
       110deg,
       var(--primary) 30%,
-      var(--accent) 50%,
+      var(--secondary) 50%,
       var(--primary) 70%
     );
     background-size: 200% auto;
@@ -881,7 +874,7 @@
 .app-interface {
   width: 100%;
   height: 100%;
-  background-image: url("https://i.ibb.co.com/jv1C1GDZ/image.png");
+  background-image: url("/images/product/sobers/hero.png");
   background-size: cover;
   background-position: center;
   position: relative;

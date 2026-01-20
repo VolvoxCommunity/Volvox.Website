@@ -136,7 +136,7 @@ export function Blog({
               transition={{ duration: 0.5 }}
               className="text-3xl md:text-5xl font-bold tracking-tight text-foreground"
             >
-              Engineering & Design
+              Blog Posts
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, x: -10 }}
@@ -144,8 +144,8 @@ export function Blog({
               transition={{ duration: 0.5, delay: 0.1 }}
               className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed"
             >
-              Deep dives into modern web development, design systems, and open
-              source culture.
+              Where we share what we&apos;ve learned (so you don&apos;t have to
+              learn it the hard way).
             </motion.p>
           </div>
 

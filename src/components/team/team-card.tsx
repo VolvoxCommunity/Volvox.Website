@@ -69,17 +69,12 @@ export function TeamCard({ member }: TeamCardProps) {
 
         {/* Bottom Actions: Member Tag & View Details Button */}
         <div className="flex items-center gap-3">
-          <Badge
-            variant="secondary"
-            className="bg-background text-foreground border-none text-[10px] px-2.5 py-1 rounded-full font-semibold shrink-0"
-          >
-            MEMBER
-          </Badge>
           <Button
             variant="secondary"
             size="sm"
             className="flex-1 rounded-full h-8 text-xs font-bold"
             onClick={() => router.push(`/team/${member.slug}`)}
+            data-testid={`profile-button-${member.slug}`}
           >
             Profile
           </Button>

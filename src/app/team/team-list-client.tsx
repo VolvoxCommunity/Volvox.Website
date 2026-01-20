@@ -40,7 +40,7 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl py-8"
+          className="container mx-auto px-4 max-w-7xl pt-16 pb-8"
         >
           {/* Page Header */}
           <div className="text-center mb-12">

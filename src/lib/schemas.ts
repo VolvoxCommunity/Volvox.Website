@@ -40,6 +40,16 @@ export const ProductSchema = z.object({
 });
 
 /**
+ * Schema for team member project/contribution entries.
+ */
+export const TeamMemberProjectSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  role: z.string().optional(),
+  url: z.string().url().optional(),
+});
+
+/**
  * Team Member schema (discriminated union)
  */
 export const TeamMemberSchema = z.discriminatedUnion("type", [
@@ -53,6 +63,8 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
     tagline: z.string(),
     bio: z.string(),
     expertise: z.array(z.string()),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
     githubUrl: z.string().optional(),
     linkedinUrl: z.string().optional(),
     email: z.string().optional(),
@@ -67,6 +79,8 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
     tagline: z.string(),
     goals: z.string(),
     progress: z.string(),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
     githubUrl: z.string().optional(),
     linkedinUrl: z.string().optional(),
     email: z.string().optional(),
@@ -143,3 +157,4 @@ export type ExtendedProduct = z.infer<typeof extendedProductSchema>;
 export type FaqItem = z.infer<typeof faqItemSchema>;
 export type Testimonial = z.infer<typeof testimonialSchema>;
 export type ProductLinks = z.infer<typeof productLinksSchema>;
+export type TeamMemberProject = z.infer<typeof TeamMemberProjectSchema>;

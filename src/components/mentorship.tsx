@@ -68,7 +68,7 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
       particleCount: 150,
       spread: 70,
       origin: { x, y },
-      colors: ["#5865F2", "#00FFF0", "#FF00AA"],
+      colors: ["#007AFF", "#AF58DA", "#FF9500"],
       shapes: ["circle", "square"],
     });
     window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
