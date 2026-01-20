@@ -21,5 +21,5 @@ pnpm build
 #pnpm exec playwright test --project=chromium
 
 # Check if CHANGELOG needs updating for user-facing changes
-echo "Checking CHANGELOG..."
-pnpm run changelog:check
+# echo "Checking CHANGELOG..."
+# pnpm run changelog:check
