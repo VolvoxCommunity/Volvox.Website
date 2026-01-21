@@ -5,35 +5,18 @@ import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  CheckCircle,
-  AppleLogo,
-  GooglePlayLogo,
-  ArrowUpRight,
-  ArrowLeft,
-} from "@phosphor-icons/react";
-import { ArrowRight } from "lucide-react";
-import {
-  FilterControls,
-  type BlogSortOption,
-  type ProductSortOption,
-  type ViewMode,
+import { ArrowUpRight } from "@phosphor-icons/react";
+import type {
+  ProductSortOption,
+  ViewMode,
 } from "@/components/ui/filter-controls";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
-import { BlogNavigation } from "@/components/blog/blog-navigation";
+import { ProductsNavbar } from "@/components/products/products-navbar";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
-import { NAV_HEIGHT } from "@/lib/constants";
+import { Navigation } from "@/components/navigation";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
@@ -185,9 +168,9 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   }, [updateUrl]);
 
   const handleSortChange = useCallback(
-    (value: BlogSortOption | ProductSortOption) => {
-      setSortOption(value as ProductSortOption);
-      updateUrl({ sort: value as ProductSortOption });
+    (value: ProductSortOption) => {
+      setSortOption(value);
+      updateUrl({ sort: value });
     },
     [updateUrl]
   );
@@ -214,75 +197,60 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   return (
     <div className="min-h-screen relative flex flex-col">
       {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
+      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
         <AnimatedBackground />
       </div>
 
+      {/* Main Navigation */}
+      <Navigation linkMode />
+
       {/* Content Layer */}
-      <div className="relative z-10 flex-1">
-        {/* Header Navigation */}
-        <BlogNavigation />
-
-        {/* Spacer for fixed navigation */}
-        <div style={{ height: NAV_HEIGHT }} />
-
-        {/* Back Navigation */}
-        <div
-          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3"
-          style={{ top: NAV_HEIGHT }}
-        >
-          <div className="container mx-auto px-4 max-w-7xl">
-            <Link
-              href="/#products"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to Home
-            </Link>
-          </div>
-        </div>
+      <div className="relative z-10 flex-1 pt-20">
+        {/* Navbar with Search & Filters */}
+        <ProductsNavbar
+          searchQuery={searchQuery}
+          onSearchChange={handleSearchInput}
+          selectedTech={selectedTech}
+          allTech={allTechStack}
+          onTechToggle={handleTechToggle}
+          onClearTech={handleClearTech}
+          sortOption={sortOption}
+          onSortChange={handleSortChange}
+          viewMode={viewMode}
+          onViewModeChange={handleViewModeChange}
+          resultCount={filteredProducts.length}
+        />
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl py-8"
+          className="container mx-auto px-4 max-w-7xl pt-16 pb-8"
           data-testid="products-section"
+          aria-labelledby="products-page-heading"
         >
           {/* Page Header */}
-          <div className="text-center mb-8">
-            <h1 className="text-3xl md:text-5xl font-bold mb-4">Products</h1>
+          <header className="text-center mb-12">
+            <h1
+              id="products-page-heading"
+              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+            >
+              Our Products
+            </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Open-source applications built with care, designed to make a real
               difference.
             </p>
-          </div>
+          </header>
 
-          {/* Controls */}
-          <FilterControls
-            variant="product"
-            searchQuery={searchQuery}
-            onSearchChange={handleSearchInput}
-            searchPlaceholder="Search products..."
-            showResultsCount={false}
-            allTags={allTechStack}
-            selectedTags={selectedTech}
-            onTagToggle={handleTechToggle}
-            onClearTags={handleClearTech}
-            sortOption={sortOption}
-            onSortChange={handleSortChange}
-            viewMode={viewMode}
-            onViewModeChange={handleViewModeChange}
-          />
-
-          {/* Results Count & Clear */}
+          {/* Results Count & Clear (Only show if navbar is collapsed or for extra visibility) */}
           {hasActiveFilters && (
-            <div className="relative z-50 flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-6 animate-in fade-in duration-300">
               <p className="text-sm text-muted-foreground">
-                {filteredProducts.length}{" "}
-                {filteredProducts.length === 1 ? "product" : "products"} found
+                Showing {filteredProducts.length}{" "}
+                {filteredProducts.length === 1 ? "product" : "products"}
               </p>
               <button
                 onClick={handleClearAll}
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+                className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
               >
                 Clear all filters
               </button>
@@ -290,41 +258,46 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           )}
 
           {/* Products Grid/List */}
-          {filteredProducts.length > 0 ? (
-            viewMode === "grid" ? (
-              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCardGrid
-                    key={product.id}
-                    product={product}
-                    index={idx}
-                  />
-                ))}
-              </div>
+          <section aria-label="Products list">
+            {filteredProducts.length > 0 ? (
+              viewMode === "grid" ? (
+                <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+                  {filteredProducts.map((product, idx) => (
+                    <ProductCardGrid
+                      key={product.id}
+                      product={product}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <div className="relative z-0 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+                  {filteredProducts.map((product, idx) => (
+                    <ProductCardList
+                      key={product.id}
+                      product={product}
+                      index={idx}
+                    />
+                  ))}
+                </div>
+              )
             ) : (
-              <div className="relative z-0 flex flex-col gap-6">
-                {filteredProducts.map((product, idx) => (
-                  <ProductCardList
-                    key={product.id}
-                    product={product}
-                    index={idx}
-                  />
-                ))}
+              <div className="text-center py-24 bg-muted/20 rounded-[2rem] border border-dashed border-border animate-in zoom-in-95 duration-300">
+                <p className="text-lg font-medium mb-2">No products found</p>
+                <p className="text-muted-foreground mb-6 text-sm">
+                  Try adjusting your search or filters to find what you&apos;re
+                  looking for.
+                </p>
+                <Button
+                  onClick={handleClearAll}
+                  variant="outline"
+                  className="rounded-full"
+                >
+                  Clear all filters
+                </Button>
               </div>
-            )
-          ) : (
-            <div className="text-center py-16">
-              <p className="text-muted-foreground mb-4">
-                No products found. Try adjusting your search or filters.
-              </p>
-              <button
-                onClick={handleClearAll}
-                className="text-secondary hover:underline"
-              >
-                Clear all filters
-              </button>
-            </div>
-          )}
+            )}
+          </section>
         </main>
       </div>
 
@@ -354,85 +327,80 @@ function ProductCardGrid({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
+      whileHover="hover"
+      className="group h-full"
     >
-      <Link href={`/products/${product.slug}`} className="block h-full">
-        <Card
-          className="group cursor-pointer hover:shadow-xl transition-shadow duration-300 overflow-hidden h-full flex flex-col"
-          data-testid="product-card"
-        >
-          <motion.div className="aspect-video bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b border-border">
-            {imagePath ? (
-              <Image
-                src={imagePath}
-                alt={product.name}
-                fill
-                sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                className="object-cover"
-              />
-            ) : (
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="text-5xl font-bold text-foreground/5">
-                  {product.name.charAt(0)}
+      <Link
+        href={`/products/${product.slug}`}
+        className="block h-full outline-none"
+      >
+        <div className="h-full bg-card backdrop-blur-sm rounded-[2rem] p-4 transition-all duration-300 border border-border/40 hover:border-border/80 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col">
+          {/* Image Container */}
+          <div className="relative overflow-hidden bg-muted/50 mb-4 aspect-[4/3] w-full rounded-lg md:rounded-[2rem] group-hover:rounded-lg transition-[border-radius] duration-500">
+            <div className="w-full h-full relative overflow-hidden">
+              {imagePath ? (
+                <motion.div
+                  className="w-full h-full"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.6 }}
+                >
+                  <Image
+                    src={imagePath}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    className="object-cover"
+                  />
+                </motion.div>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/5">
+                  <span className="text-6xl font-bold text-muted-foreground/10 select-none">
+                    {product.name.charAt(0)}
+                  </span>
                 </div>
+              )}
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="px-1 flex flex-col flex-1">
+            {/* Title with Arrow */}
+            <div className="flex justify-between items-start gap-4 mb-2">
+              <div>
+                <h3 className="text-xl font-bold leading-tight text-foreground group-hover:text-primary transition-colors line-clamp-1">
+                  {product.name}
+                </h3>
+                <p className="text-xs font-medium text-muted-foreground mt-1 line-clamp-1">
+                  {product.tagline}
+                </p>
               </div>
-            )}
-          </motion.div>
+              <div className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 flex-shrink-0 mt-1">
+                <ArrowUpRight weight="bold" className="w-5 h-5" />
+              </div>
+            </div>
 
-          <CardHeader>
-            <CardTitle className="text-lg line-clamp-1 group-hover:text-secondary transition-colors">
-              {product.name}
-            </CardTitle>
-            <CardDescription className="text-sm line-clamp-1">
-              {product.tagline}
-            </CardDescription>
-          </CardHeader>
-
-          <CardContent className="flex-1 flex flex-col">
-            <p className="text-sm text-muted-foreground mb-4 line-clamp-2">
+            <p className="text-muted-foreground/80 text-sm line-clamp-2 leading-relaxed mb-4 flex-1">
               {product.description}
             </p>
 
-            {/* Features Preview */}
-            <ul className="space-y-1 mb-4">
-              {product.features.slice(0, 2).map((feature, idx) => (
-                <li
-                  key={`${product.slug}:${feature}:${idx}`}
-                  className="flex items-start gap-2 text-xs text-muted-foreground"
+            {/* Tech Stack Pills */}
+            <div className="flex flex-wrap gap-1.5 mt-auto">
+              {product.techStack.slice(0, 3).map((tech) => (
+                <span
+                  key={`${product.slug}:tech:${tech}`}
+                  className="inline-flex items-center px-2 py-0.5 rounded-lg bg-secondary/10 text-secondary-foreground text-[10px] font-medium border border-transparent group-hover:border-secondary/20 transition-colors"
                 >
-                  <CheckCircle
-                    weight="fill"
-                    className="h-3 w-3 text-primary mt-0.5 flex-shrink-0"
-                  />
-                  <span className="line-clamp-1">{feature}</span>
-                </li>
+                  {tech}
+                </span>
               ))}
-              {product.features.length > 2 && (
-                <li className="text-xs text-muted-foreground pl-5">
-                  +{product.features.length - 2} more
-                </li>
+              {product.techStack.length > 3 && (
+                <span className="text-[10px] text-muted-foreground py-0.5 px-1">
+                  +{product.techStack.length - 3}
+                </span>
               )}
-            </ul>
-
-            {/* Tech Stack */}
-            {product.techStack.length > 0 && (
-              <div className="flex flex-wrap gap-1 mt-auto">
-                {product.techStack.slice(0, 3).map((tech) => (
-                  <span
-                    key={`${product.slug}:tech:${tech}`}
-                    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs bg-secondary/20 text-foreground border border-secondary/30"
-                  >
-                    {tech}
-                  </span>
-                ))}
-                {product.techStack.length > 3 && (
-                  <span className="text-xs text-muted-foreground">
-                    +{product.techStack.length - 3}
-                  </span>
-                )}
-              </div>
-            )}
-          </CardContent>
-        </Card>
+            </div>
+          </div>
+        </div>
       </Link>
     </motion.div>
   );
@@ -456,137 +424,74 @@ function ProductCardList({
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: index * 0.05 }}
+      whileHover="hover"
+      className="group"
     >
-      <Card
-        className="group hover:shadow-xl transition-shadow duration-300 overflow-hidden"
-        data-testid="product-card"
-      >
-        <div className="grid md:grid-cols-3 gap-0">
-          <Link
-            href={`/products/${product.slug}`}
-            className="block md:col-span-1"
-          >
-            <motion.div className="aspect-video md:aspect-auto md:h-full bg-gradient-to-br from-primary/10 via-background to-secondary/10 relative overflow-hidden border-b md:border-b-0 md:border-r border-border">
+      <Link href={`/products/${product.slug}`} className="block outline-none">
+        <div className="bg-card backdrop-blur-sm rounded-[2rem] p-4 transition-all duration-300 border border-border/40 hover:border-border/80 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col md:flex-row gap-6 items-center">
+          {/* Image Container */}
+          <div className="relative overflow-hidden bg-muted/50 w-full md:w-72 aspect-video md:aspect-[4/3] flex-shrink-0 rounded-lg md:rounded-[2rem] group-hover:rounded-lg transition-[border-radius] duration-500">
+            <div className="w-full h-full relative overflow-hidden">
               {imagePath ? (
-                <Image
-                  src={imagePath}
-                  alt={product.name}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 33vw"
-                  className="object-cover"
-                />
-              ) : (
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="text-6xl font-bold text-foreground/5">
-                    {product.name.charAt(0)}
-                  </div>
-                </div>
-              )}
-            </motion.div>
-          </Link>
-
-          <div className="md:col-span-2 flex flex-col">
-            <CardHeader>
-              <Link href={`/products/${product.slug}`}>
-                <CardTitle className="text-xl group-hover:text-secondary transition-colors">
-                  {product.name}
-                </CardTitle>
-              </Link>
-              <CardDescription>{product.tagline}</CardDescription>
-            </CardHeader>
-
-            <CardContent className="flex-1">
-              <p className="text-sm text-muted-foreground mb-4">
-                {product.description}
-              </p>
-
-              {/* Features */}
-              <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 mb-4">
-                {product.features.slice(0, 4).map((feature, idx) => (
-                  <li
-                    key={`${product.slug}:${feature}:${idx}`}
-                    className="flex items-start gap-2 text-sm"
-                  >
-                    <CheckCircle
-                      weight="fill"
-                      className="h-4 w-4 text-primary mt-0.5 flex-shrink-0"
-                    />
-                    <span className="line-clamp-1">{feature}</span>
-                  </li>
-                ))}
-              </ul>
-
-              {/* Tech Stack */}
-              {product.techStack.length > 0 && (
-                <div className="flex flex-wrap gap-2">
-                  {product.techStack.map((tech) => (
-                    <span
-                      key={`${product.slug}:tech:${tech}`}
-                      className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-secondary/20 text-foreground border border-secondary/30"
-                    >
-                      {tech}
-                    </span>
-                  ))}
-                </div>
-              )}
-            </CardContent>
-
-            <CardFooter className="flex flex-wrap gap-3 pt-0">
-              <Button asChild className="gap-2 group/btn">
-                <Link href={`/products/${product.slug}`}>
-                  View Details
-                  <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
-              </Button>
-              {(product.links?.appStore || product.links?.playStore) && (
-                <div className="flex gap-2">
-                  {product.links.appStore && (
-                    <a
-                      href={product.links.appStore}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Download ${product.name} on the App Store`}
-                      className="inline-flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg hover:bg-black/80 transition-colors text-xs"
-                    >
-                      <AppleLogo weight="fill" className="h-4 w-4" />
-                      <span>App Store</span>
-                    </a>
-                  )}
-                  {product.links.playStore && (
-                    <a
-                      href={product.links.playStore}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={`Get ${product.name} on Google Play`}
-                      className="inline-flex items-center gap-1 bg-black text-white px-3 py-1.5 rounded-lg hover:bg-black/80 transition-colors text-xs"
-                    >
-                      <GooglePlayLogo weight="fill" className="h-4 w-4" />
-                      <span>Play Store</span>
-                    </a>
-                  )}
-                </div>
-              )}
-              {product.links?.demo && (
-                <Button
-                  variant="accent"
-                  asChild
-                  size="sm"
-                  className="gap-2 shadow-lg shadow-accent/20"
+                <motion.div
+                  className="w-full h-full"
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.6 }}
                 >
-                  <a
-                    href={product.links.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit
-                    <ArrowUpRight weight="bold" className="h-3 w-3" />
-                  </a>
-                </Button>
+                  <Image
+                    src={imagePath}
+                    alt={product.name}
+                    fill
+                    sizes="(max-width: 768px) 100vw, 300px"
+                    className="object-cover"
+                  />
+                </motion.div>
+              ) : (
+                <div className="w-full h-full flex items-center justify-center bg-secondary/5">
+                  <span className="text-6xl font-bold text-muted-foreground/10 select-none">
+                    {product.name.charAt(0)}
+                  </span>
+                </div>
               )}
-            </CardFooter>
+            </div>
+          </div>
+
+          {/* Content */}
+          <div className="flex flex-col flex-1 w-full text-left">
+            <div className="flex justify-between items-start gap-4 mb-2">
+              <div>
+                <h3 className="text-2xl font-bold leading-tight text-foreground group-hover:text-primary transition-colors">
+                  {product.name}
+                </h3>
+                <p className="text-sm font-medium text-muted-foreground mt-1">
+                  {product.tagline}
+                </p>
+              </div>
+              <div className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 flex-shrink-0 mt-1">
+                <ArrowUpRight weight="bold" className="w-6 h-6" />
+              </div>
+            </div>
+
+            <p className="text-muted-foreground/80 text-base line-clamp-2 leading-relaxed mb-6">
+              {product.description}
+            </p>
+
+            {/* Tech Stack & Features */}
+            <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
+              <div className="flex flex-wrap gap-2">
+                {product.techStack.map((tech) => (
+                  <span
+                    key={`${product.slug}:tech:${tech}`}
+                    className="inline-flex items-center px-2.5 py-1 rounded-lg bg-secondary/10 text-secondary-foreground text-xs font-medium"
+                  >
+                    {tech}
+                  </span>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-      </Card>
+      </Link>
     </motion.div>
   );
 }

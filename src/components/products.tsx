@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo } from "react";
+import { useRouter } from "next/navigation";
 import {
   Card,
   CardContent,
@@ -10,12 +11,7 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  CheckCircle,
-  AppleLogo,
-  GooglePlayLogo,
-  ArrowUpRight,
-} from "@phosphor-icons/react";
+import { CheckCircle, ArrowUpRight } from "@phosphor-icons/react";
 import { ArrowRight } from "lucide-react";
 import { motion } from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
@@ -47,6 +43,7 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product, index }: ProductCardProps) {
+  const router = useRouter();
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
 
@@ -165,15 +162,24 @@ function ProductCard({ product, index }: ProductCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Download ${product.name} on the App Store`}
-                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                      className="transition-opacity hover:opacity-80"
                     >
-                      <AppleLogo weight="fill" className="h-6 w-6" />
-                      <div className="text-left">
-                        <div className="text-xs leading-none">
-                          Download on the
-                        </div>
-                        <div className="text-sm font-semibold">App Store</div>
-                      </div>
+                      {/* Light mode: black badge */}
+                      <img
+                        src="/images/stores/app-store-black.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="block dark:hidden h-[40px] w-auto"
+                      />
+                      {/* Dark mode: white badge */}
+                      <img
+                        src="/images/stores/app-store-white.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="hidden dark:block h-[40px] w-auto"
+                      />
                     </a>
                   )}
                   {product.links.playStore && (
@@ -182,38 +188,41 @@ function ProductCard({ product, index }: ProductCardProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`Get ${product.name} on Google Play`}
-                      className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
+                      className="transition-opacity hover:opacity-80"
                     >
-                      <GooglePlayLogo weight="fill" className="h-6 w-6" />
-                      <div className="text-left">
-                        <div className="text-xs leading-none">Get it on</div>
-                        <div className="text-sm font-semibold">Google Play</div>
-                      </div>
+                      <img
+                        src="/images/stores/play-store.svg"
+                        alt="Get it on Google Play"
+                        width={135}
+                        height={40}
+                        className="h-[40px] w-auto"
+                      />
                     </a>
                   )}
                 </div>
               )}
               <div className="flex flex-wrap gap-3">
-                <Button asChild className="gap-2 group/btn">
-                  <Link href={`/products/${product.slug}`}>
-                    View Details
-                    <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </Link>
+                <Button
+                  className="gap-2 group/btn"
+                  onClick={() => router.push(`/products/${product.slug}`)}
+                >
+                  View Details
+                  <ArrowRight className="h-4 w-4 group-hover/btn:translate-x-1 transition-transform" />
                 </Button>
                 {product.links?.demo && (
                   <Button
                     variant="accent"
-                    asChild
                     className="gap-2 shadow-lg shadow-accent/20"
+                    onClick={() =>
+                      window.open(
+                        product.links.demo,
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
                   >
-                    <a
-                      href={product.links.demo}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      Visit
-                      <ArrowUpRight weight="bold" className="h-4 w-4" />
-                    </a>
+                    Visit
+                    <ArrowUpRight weight="bold" className="h-4 w-4" />
                   </Button>
                 )}
               </div>
@@ -248,6 +257,7 @@ export function Products({
   onViewModeChange,
   enableFilters = false,
 }: ProductsProps) {
+  const router = useRouter();
   // Filter and sort products
   const filteredProducts = useMemo(() => {
     let result = [...allProducts];
@@ -435,24 +445,28 @@ export function Products({
                             size="sm"
                             variant="outline"
                             className="flex-1"
-                            asChild
                           >
-                            <span>Details</span>
+                            Details
                           </Button>
                           {product.links?.demo && (
-                            <Button size="sm" variant="accent" asChild>
-                              <a
-                                href={product.links.demo}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                onClick={(e) => e.stopPropagation()}
-                              >
-                                Demo
-                                <ArrowUpRight
-                                  weight="bold"
-                                  className="h-3 w-3 ml-1"
-                                />
-                              </a>
+                            <Button
+                              size="sm"
+                              variant="accent"
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                window.open(
+                                  product.links.demo,
+                                  "_blank",
+                                  "noopener,noreferrer"
+                                );
+                              }}
+                            >
+                              Demo
+                              <ArrowUpRight
+                                weight="bold"
+                                className="h-3 w-3 ml-1"
+                              />
                             </Button>
                           )}
                         </div>
@@ -467,11 +481,13 @@ export function Products({
 
         {/* View All Button */}
         <div className="text-center mt-10">
-          <Button asChild size="lg" variant="outline">
-            <Link href="/products">
-              View All Products
-              <ArrowRight className="h-4 w-4 ml-2" />
-            </Link>
+          <Button
+            size="lg"
+            variant="outline"
+            onClick={() => router.push("/products")}
+          >
+            View All Products
+            <ArrowRight className="h-4 w-4 ml-2" />
           </Button>
         </div>
       </div>

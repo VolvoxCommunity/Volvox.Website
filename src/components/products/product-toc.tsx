@@ -1,10 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { NAV_HEIGHT } from "@/lib/constants";
 
 interface TocSection {
   id: string;
@@ -13,18 +10,15 @@ interface TocSection {
 
 interface ProductTocProps {
   sections: TocSection[];
-  backHref?: string;
-  backLabel?: string;
 }
 
 /**
- * Sticky table of contents with scroll tracking and optional back navigation.
+ * Sticky sidebar table of contents with scroll tracking.
+ * Hidden on mobile devices (xs/sm/md), visible on large screens (lg+).
+ *
+ * @param sections - Array of sections with id and label to display in the TOC
  */
-export function ProductToc({
-  sections,
-  backHref = "/#products",
-  backLabel = "Back to Products",
-}: ProductTocProps) {
+export function ProductToc({ sections }: ProductTocProps) {
   // Default to first section (overview) on initial load
   const [activeSection, setActiveSection] = useState<string>(
     sections[0]?.id ?? ""
@@ -66,40 +60,30 @@ export function ProductToc({
 
   return (
     <nav
-      className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3"
-      style={{ top: NAV_HEIGHT }}
+      aria-label="Table of contents"
+      data-testid="product-toc"
+      className="hidden lg:block fixed left-8 top-1/2 -translate-y-1/2 z-30"
     >
-      <div className="container mx-auto max-w-6xl px-4">
-        <div className="flex items-center justify-between gap-4">
-          {/* Back Link */}
-          <Link
-            href={backHref}
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group flex-shrink-0"
-          >
-            <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-            <span className="hidden sm:inline">{backLabel}</span>
-          </Link>
-
-          {/* TOC Links */}
-          <ul className="flex flex-wrap gap-1 md:gap-2 justify-end">
-            {sections.map(({ id, label }) => (
-              <li key={id}>
-                <button
-                  type="button"
-                  onClick={() => handleClick(id)}
-                  className={cn(
-                    "px-3 py-1 text-sm rounded-full transition-colors",
-                    activeSection === id
-                      ? "bg-primary text-primary-foreground"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted"
-                  )}
-                >
-                  {label}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+      <div className="bg-background/60 backdrop-blur-md border border-border/50 rounded-2xl p-4">
+        <ul className="flex flex-col gap-1">
+          {sections.map(({ id, label }) => (
+            <li key={id}>
+              <button
+                type="button"
+                onClick={() => handleClick(id)}
+                data-testid={`product-toc-item-${id}`}
+                className={cn(
+                  "w-full text-left px-4 py-2 text-sm rounded-xl transition-colors",
+                  activeSection === id
+                    ? "bg-primary text-primary-foreground"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                )}
+              >
+                {label}
+              </button>
+            </li>
+          ))}
+        </ul>
       </div>
     </nav>
   );

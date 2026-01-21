@@ -1,0 +1,160 @@
+[
+  {
+    "id": "bill",
+    "slug": "bill-chirico",
+    "name": "Bill Chirico",
+    "role": "CEO & Founder",
+    "tagline": "Full-stack architect building scalable systems and mentoring the next generation.",
+    "bio": "Founder and CEO of Volvox LLC. 15+ years building apps, websites, and the occasional mass of spaghetti code he's not proud of. Runs a dev mentorship community since 2018 because he remembers what it's like to be lost. Believes software should help people help each other.",
+    "avatar": "https://github.com/BillChirico.png",
+    "expertise": [
+      ".NET - C#",
+      "React / React Native",
+      "Leadership",
+      "Azure / AWS",
+      "System Design",
+      "TypeScript / JavaScript",
+      "AI / OpenAI, Claude, Gemini",
+      "SQL",
+      "CI/CD",
+      "DevOps",
+      "Agile",
+      "Scrum"
+    ],
+    "projects": [
+      {
+        "name": "Volvox",
+        "description": "Software development company and learning community.",
+        "role": "CEO & Founder",
+        "url": "https://volvox.dev"
+      },
+      {
+        "name": "Volvox Website",
+        "description": "Company website built with Next.js 16, React 19, and Tailwind CSS v4.",
+        "role": "Lead Developer",
+        "url": "https://volvox.dev"
+      },
+      {
+        "name": "Sobers",
+        "description": "Sobriety companion app for people in recovery.",
+        "role": "Creator & Lead Developer",
+        "url": "https://sobers.app"
+      },
+      {
+        "name": "Decision Jar",
+        "description": "Mobile app helping users make decisions through gamified jar-picking mechanics.",
+        "role": "Creator & Lead Developer",
+        "url": "https://decisionjar.app"
+      }
+    ],
+    "type": "mentor",
+    "githubUrl": "https://github.com/BillChirico",
+    "linkedinUrl": "https://linkedin.com/in/BillChirico",
+    "email": "bill@volvox.dev",
+    "isHireable": false
+  },
+  {
+    "id": "eleftheria",
+    "slug": "eleftheria-batsou",
+    "name": "Eleftheria Batsou",
+    "role": "Developer Advocate",
+    "tagline": "A Developer Advocate who loves to code, teach and write.",
+    "bio": "Eleftheria is a Developer Advocate at Volvox, a public speaker for tech conferences, and a meetup co-organizer. She has a passion for coding, teaching, and writing about technology. With over 5 years of experience in community building, she enjoys helping developers learn and grow in their careers.",
+    "avatar": "https://github.com/EleftheriaBatsou.png",
+    "expertise": [
+      "Community Building",
+      "Developer advocacy",
+      "Social Media Strategy",
+      "Technical Writing",
+      "Video content creation",
+      "Public Speaking",
+      "Web Development"
+    ],
+    "type": "mentor",
+    "githubUrl": "https://github.com/EleftheriaBatsou",
+    "linkedinUrl": "https://www.linkedin.com/in/eleftheriabatsou/",
+    "email": "eleftheria@volvox.dev",
+    "isHireable": false
+  },
+  {
+    "id": "rabden",
+    "slug": "rabden",
+    "name": "Hossain Jahed",
+    "role": "Frontend Developer",
+    "tagline": "Frontend Developer and builder.",
+    "bio": "I am a frontend developer excelling at modern web design and web motion. I am also a member of the Volvox community.",
+    "avatar": "https://github.com/rabden.png",
+    "expertise": [
+      "Next.js",
+      "React",
+      "TypeScript",
+      "Tailwind CSS",
+      "Framer Motion",
+      "Web Design",
+      "Web Motion",
+      "UI/UX",
+      "SQL",
+      "JavaScript",
+      "Node.js",
+      "Gemini/Claude",
+      "GSAP",
+      "React Native",
+      "Expo"
+    ],
+    "projects": [
+      {
+        "name": "Volvox Website",
+        "description": "Company website built with Next.js 15, React 19, and Tailwind CSS v4, framer motion and gsap",
+        "role": "Frontend Developer",
+        "url": "https://volvox.dev"
+      },
+      {
+        "name": "img2m3",
+        "description": "AI-powered shadcn/ui theme generator and Material Design 3 color palette extractor.",
+        "role": "Frontend Developer",
+        "url": "https://img2m3.vercel.app"
+      },
+      {
+        "name": "AVE Engineers",
+        "description": "Professional engineering services for MEP, HVAC, and civil engineering benchmarks.",
+        "role": "Frontend Developer",
+        "url": "https://ave-engineers.vercel.app/"
+      },
+      {
+        "name": "ChintaPoradh",
+        "description": "Offline-capable platform for thought-provoking articles and literature.",
+        "role": "Frontend Developer",
+        "url": "https://chintaporadh-delta.vercel.app/"
+      },
+      {
+        "name": "Elegant Signature",
+        "description": "Web utility for creating beautiful animated digital signatures.",
+        "role": "Frontend Developer",
+        "url": "https://signtature.vercel.app/"
+      },
+      {
+        "name": "webcodeir",
+        "description": "Modern Web development platform for Static HTML/CSS/Javascript Site development.",
+        "role": "Frontend Developer",
+        "url": "https://webcodeir.vercel.app/"
+      },
+      {
+        "name": "grochatt",
+        "description": "Dark-themed AI chat interface and prompt box UI component.",
+        "role": "Frontend Developer",
+        "url": "https://grochatt.vercel.app/"
+      },
+      {
+        "name": "EaseMize UI",
+        "description": "A collection of modern reusable UI components hosted on 21st.dev.",
+        "role": "Frontend Developer",
+        "url": "https://21st.dev/easemize"
+      }
+    ],
+    "type": "builder",
+    "githubUrl": "https://github.com/rabden",
+    "linkedinUrl": "",
+    "email": "easemize@gmail.com",
+    "isHireable": true
+  }
+]

@@ -13,7 +13,7 @@
     "Accountability loop supporting effective sponsorship",
     "Cross-platform support (iOS, Android, Web)"
   ],
-  "techStack": ["React Native", "Expo", "iOS", "Android", "Web"],
+  "techStack": ["iOS", "Android", "Web", "React Native", "Expo"],
   "links": {
     "github": "https://github.com/VolvoxCommunity/sobers",
     "demo": "https://sobers.app",
@@ -31,6 +31,10 @@
       "answer": "Your sponsor generates a unique 8-character invite code from their profile. Enter it in your app, and you're connected. It's like a friend code, but for accountability instead of Mario Kart."
     },
     {
+      "question": "Can I use Sobers without a sponsor?",
+      "answer": "Yes, you can use Sobers without a sponsor. You can still track your sobriety, complete tasks, and visualize your progress. You can also connect with a sponsor later."
+    },
+    {
       "question": "Is my data private?",
       "answer": "Your sobriety data and personal notes are only visible to you and your connected sponsor. We never share your information with third parties. What happens in your recovery stays in your recovery."
     },
@@ -44,7 +48,7 @@
     },
     {
       "question": "What 12-step programs does the app support?",
-      "answer": "All of them. AA, NA, CA, OA, GA—if it has 12 steps and accountability partners, we've got you covered. The features work universally because recovery principles are universal."
+      "answer": "All of them-or none at all. AA, NA, CA, OA, GA—if it has 12 steps and accountability partners, we've got you covered. The features work universally because recovery principles are universal."
     },
     {
       "question": "What platforms is Sobers available on?",

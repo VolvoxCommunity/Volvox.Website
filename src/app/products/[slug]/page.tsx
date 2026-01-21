@@ -3,7 +3,6 @@ import { notFound } from "next/navigation";
 import {
   getAllExtendedProducts,
   getExtendedProductBySlug,
-  getProductChangelog,
 } from "@/lib/content";
 import { ProductDetailClient } from "./product-detail-client";
 
@@ -78,7 +77,5 @@ export default async function ProductPage({
     notFound();
   }
 
-  const changelog = getProductChangelog(slug);
-
-  return <ProductDetailClient product={product} changelog={changelog} />;
+  return <ProductDetailClient product={product} />;
 }

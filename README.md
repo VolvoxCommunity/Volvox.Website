@@ -7,8 +7,6 @@
 _A modern web platform for software development, mentorship, and community learning._
 
 [![build](https://img.shields.io/github/actions/workflow/status/VolvoxCommunity/Volvox.Website/ci.yml?branch=main&style=flat-square)](https://github.com/VolvoxCommunity/Volvox.Website/actions)
-[![codecov](https://img.shields.io/codecov/c/github/VolvoxCommunity/Volvox.Website?style=flat-square)](https://codecov.io/github/VolvoxCommunity/Volvox.Website)
-[![E2E Tests](https://github.com/VolvoxCommunity/Volvox.Website/actions/workflows/e2e.yml/badge.svg)](https://github.com/VolvoxCommunity/Volvox.Website/actions/workflows/e2e.yml)
 [![last-commit](https://img.shields.io/github/last-commit/VolvoxCommunity/Volvox.Website?style=flat-square)](https://github.com/VolvoxCommunity/Volvox.Website/commits/main)
 [![Maintainability](https://qlty.sh/gh/VolvoxCommunity/projects/Volvox.Website/maintainability.svg)](https://qlty.sh/gh/VolvoxCommunity/projects/Volvox.Website)
 <a href="https://discord.gg/8ahXACdamN" target="_blank"><img src="https://img.shields.io/badge/Discord-Join-5865F2?style=flat-square&logo=discord&logoColor=white" alt="Discord"/></a>
@@ -74,20 +72,20 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ## **Tech Stack**
 
-| Category            | Technology                                                                         |
-| ------------------- | ---------------------------------------------------------------------------------- |
-| **Framework**       | [Next.js 16](https://nextjs.org/) (App Router)                                     |
-| **UI Library**      | [React 19](https://react.dev/)                                                     |
-| **Language**        | [TypeScript](https://www.typescriptlang.org/) (strict mode)                        |
-| **Styling**         | [Tailwind CSS v4](https://tailwindcss.com/) with Lightning CSS                     |
-| **Components**      | [Radix UI](https://www.radix-ui.com/) primitives                                   |
-| **Animations**      | [Framer Motion](https://www.framer.com/motion/)                                    |
-| **Content**         | MDX via `next-mdx-remote`, `rehype-highlight`                                      |
-| **Icons**           | [@phosphor-icons/react](https://phosphoricons.com/), [Lucide](https://lucide.dev/) |
-| **Monitoring**      | [Sentry](https://sentry.io/) (error tracking + replay)                             |
-| **Analytics**       | [Vercel Analytics](https://vercel.com/analytics) & Speed Insights                  |
-| **Testing**         | [Jest](https://jestjs.io/) (unit), [Playwright](https://playwright.dev/) (E2E)     |
-| **Package Manager** | [pnpm](https://pnpm.io/) v10+                                                      |
+| Category       | Technology                                                                         |
+| -------------- | ---------------------------------------------------------------------------------- |
+| **Framework**  | [Next.js 16](https://nextjs.org/) (App Router)                                     |
+| **UI Library** | [React 19](https://react.dev/)                                                     |
+| **Language**   | [TypeScript](https://www.typescriptlang.org/) (strict mode)                        |
+| **Styling**    | [Tailwind CSS v4](https://tailwindcss.com/) with Lightning CSS                     |
+| **Components** | [Radix UI](https://www.radix-ui.com/) primitives                                   |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/)                                    |
+| **Content**    | MDX via `next-mdx-remote`, `rehype-highlight`                                      |
+| **Icons**      | [@phosphor-icons/react](https://phosphoricons.com/), [Lucide](https://lucide.dev/) |
+| **Monitoring** | [Sentry](https://sentry.io/) (error tracking + replay)                             |
+| **Analytics**  | [Vercel Analytics](https://vercel.com/analytics) & Speed Insights                  |
+
+| **Package Manager** | [pnpm](https://pnpm.io/) v10+ |
 
 ---
 
@@ -100,11 +98,10 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 | `pnpm start`     | Start production server                    |
 | `pnpm typecheck` | Run TypeScript type checking               |
 | `pnpm lint`      | Run ESLint                                 |
-| `pnpm test`      | Run Jest unit tests                        |
-| `pnpm test:e2e`  | Run Playwright E2E tests (Chromium only)   |
+| `pnpm test`      | Run unit tests (stub)                      |
 | `pnpm format`    | Format code with Prettier                  |
 
-> **Note:** Pre-commit hooks automatically run: `lint-staged` → `typecheck` → `test` → `build` → `test:e2e`
+> **Note:** Pre-commit hooks automatically run: `lint-staged` → `typecheck` → `build`
 
 ---
 

@@ -1,31 +1,26 @@
 "use client";
 
+import { Navigation } from "@/components/navigation";
 import { AnimatedBackground } from "@/components/animated-background";
-import { BlogNavigation } from "@/components/blog/blog-navigation";
+import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { Footer } from "@/components/footer";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductToc } from "@/components/products/product-toc";
 import { ProductFeatures } from "@/components/products/product-features";
 import { ProductFaq } from "@/components/products/product-faq";
 import { ProductTestimonials } from "@/components/products/product-testimonials";
-import { ProductChangelog } from "@/components/products/product-changelog";
 import { ProductScreenshots } from "@/components/products/product-screenshots";
 import type { ExtendedProduct } from "@/lib/types";
-import { NAV_HEIGHT } from "@/lib/constants";
 
 interface ProductDetailClientProps {
   product: ExtendedProduct;
-  changelog: string | null;
 }
 
 /**
  * Client component for product detail page.
  * Renders all sections with scroll tracking.
  */
-export function ProductDetailClient({
-  product,
-  changelog,
-}: ProductDetailClientProps) {
+export function ProductDetailClient({ product }: ProductDetailClientProps) {
   // Build TOC sections based on available content
   const tocSections = [
     { id: "overview", label: "Overview" },
@@ -33,7 +28,6 @@ export function ProductDetailClient({
       ? [{ id: "screenshots", label: "Screenshots" }]
       : []),
     { id: "features", label: "Features" },
-    ...(changelog ? [{ id: "changelog", label: "Changelog" }] : []),
     ...(product.faq.length > 0 ? [{ id: "faq", label: "FAQ" }] : []),
     ...(product.testimonials.length > 0
       ? [{ id: "testimonials", label: "Testimonials" }]
@@ -47,17 +41,19 @@ export function ProductDetailClient({
         <AnimatedBackground />
       </div>
 
+      {/* Site Navigation Header */}
+      <Navigation linkMode={true} />
+
+      {/* Back Navbar */}
+      <div className="pt-16 md:pt-24">
+        <ProductPostNavbar />
+      </div>
+
+      {/* Sidebar Table of Contents */}
+      <ProductToc sections={tocSections} />
+
       {/* Content Layer */}
       <div className="relative z-10 flex-1">
-        {/* Navigation */}
-        <BlogNavigation />
-
-        {/* Spacer for fixed navigation */}
-        <div style={{ height: NAV_HEIGHT }} />
-
-        {/* Combined Back Navigation + Table of Contents */}
-        <ProductToc sections={tocSections} />
-
         <main id="main-content">
           {/* Hero Section */}
           <ProductHero product={product} />
@@ -101,9 +97,6 @@ export function ProductDetailClient({
           {/* Features */}
           <ProductFeatures features={product.features} />
 
-          {/* Changelog */}
-          <ProductChangelog content={changelog} />
-
           {/* FAQ */}
           <ProductFaq faq={product.faq} />
 
@@ -113,9 +106,7 @@ export function ProductDetailClient({
       </div>
 
       {/* Footer */}
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }

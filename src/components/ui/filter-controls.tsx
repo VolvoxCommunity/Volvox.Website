@@ -185,6 +185,8 @@ export function FilterControls({
                   ? "bg-secondary text-secondary-foreground border-secondary font-medium"
                   : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
               )}
+              aria-label="Show all items"
+              aria-pressed={selectedTags.length === 0}
             >
               All
             </button>
@@ -198,6 +200,8 @@ export function FilterControls({
                     ? "bg-secondary text-secondary-foreground border-secondary font-medium"
                     : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
                 )}
+                aria-label={`Filter by ${tag}`}
+                aria-pressed={selectedTags.includes(tag)}
               >
                 {tag}
               </button>
@@ -229,6 +233,17 @@ export function FilterControls({
                   total
                 </>
               )}
+              {/* ARIA live region for filter results announcement */}
+              <span
+                role="status"
+                aria-live="polite"
+                aria-atomic="true"
+                className="sr-only"
+              >
+                {hasActiveFilters
+                  ? `Showing ${resultCount} of ${totalCount} results`
+                  : `${totalCount} total results`}
+              </span>
             </div>
           )}
 
@@ -241,14 +256,16 @@ export function FilterControls({
                 className="flex items-center gap-2 px-4 py-2.5 text-sm border border-border rounded-xl hover:border-secondary/50 hover:bg-muted/50 transition-all bg-background"
                 aria-expanded={sortOpen}
                 aria-haspopup="listbox"
+                aria-label={`Sort by: ${currentSortLabel}`}
               >
-                <SortAscending className="h-4 w-4" />
+                <SortAscending className="h-4 w-4" aria-hidden="true" />
                 <span className="hidden sm:inline">{currentSortLabel}</span>
                 <CaretDown
                   className={cn(
                     "h-3 w-3 transition-transform",
                     sortOpen && "rotate-180"
                   )}
+                  aria-hidden="true"
                 />
               </button>
 
@@ -287,7 +304,7 @@ export function FilterControls({
                 aria-label="Grid view"
                 aria-pressed={viewMode === "grid"}
               >
-                <SquaresFour className="h-4 w-4" />
+                <SquaresFour className="h-4 w-4" aria-hidden="true" />
               </button>
               <button
                 onClick={() => onViewModeChange("list")}
@@ -300,7 +317,7 @@ export function FilterControls({
                 aria-label="List view"
                 aria-pressed={viewMode === "list"}
               >
-                <List className="h-4 w-4" />
+                <List className="h-4 w-4" aria-hidden="true" />
               </button>
             </div>
           </div>

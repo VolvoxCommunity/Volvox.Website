@@ -5,12 +5,7 @@ import { useState } from "react";
 import Image from "next/image";
 
 // Third-party
-import {
-  GithubLogo,
-  ArrowUpRight,
-  AppleLogo,
-  GooglePlayLogo,
-} from "@phosphor-icons/react";
+import { GithubLogo, ArrowUpRight } from "@phosphor-icons/react";
 import { X } from "lucide-react";
 import { motion } from "framer-motion";
 
@@ -42,6 +37,7 @@ export function ProductHero({ product }: ProductHeroProps) {
             initial={{ opacity: 0, x: -20 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
+            className="text-center md:text-left"
           >
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-4">
               {product.name}
@@ -51,68 +47,94 @@ export function ProductHero({ product }: ProductHeroProps) {
             </p>
 
             {/* Buttons Container */}
-            <div className="grid grid-cols-2 gap-3 max-w-md">
+            <div className="flex flex-col gap-6 items-center md:items-start">
               {/* App Store Badges */}
-              {product.links.appStore && (
-                <a
-                  href={product.links.appStore}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Download ${product.name} on the App Store`}
-                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
-                >
-                  <AppleLogo weight="fill" className="h-6 w-6" />
-                  <div className="text-left">
-                    <div className="text-xs leading-none">Download on the</div>
-                    <div className="text-sm font-semibold">App Store</div>
-                  </div>
-                </a>
-              )}
-              {product.links.playStore && (
-                <a
-                  href={product.links.playStore}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`Get ${product.name} on Google Play`}
-                  className="inline-flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg hover:bg-black/80 transition-colors"
-                >
-                  <GooglePlayLogo weight="fill" className="h-6 w-6" />
-                  <div className="text-left">
-                    <div className="text-xs leading-none">Get it on</div>
-                    <div className="text-sm font-semibold">Google Play</div>
-                  </div>
-                </a>
+              {(product.links.appStore || product.links.playStore) && (
+                <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
+                  {product.links.appStore && (
+                    <a
+                      href={product.links.appStore}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Download ${product.name} on the App Store`}
+                      className="transition-opacity hover:opacity-80"
+                    >
+                      {/* Light mode: black badge */}
+                      <img
+                        src="/images/stores/app-store-black.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="block dark:hidden h-[40px] w-auto"
+                      />
+                      {/* Dark mode: white badge */}
+                      <img
+                        src="/images/stores/app-store-white.svg"
+                        alt="Download on the App Store"
+                        width={120}
+                        height={40}
+                        className="hidden dark:block h-[40px] w-auto"
+                      />
+                    </a>
+                  )}
+                  {product.links.playStore && (
+                    <a
+                      href={product.links.playStore}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={`Get ${product.name} on Google Play`}
+                      className="transition-opacity hover:opacity-80"
+                    >
+                      <img
+                        src="/images/stores/play-store.svg"
+                        alt="Get it on Google Play"
+                        width={135}
+                        height={40}
+                        className="h-[40px] w-auto"
+                      />
+                    </a>
+                  )}
+                </div>
               )}
 
               {/* Action Buttons */}
-              {product.links.demo && (
-                <Button
-                  variant="accent"
-                  size="lg"
-                  asChild
-                  className="gap-2 shadow-lg shadow-accent/20"
-                >
-                  <a
-                    href={product.links.demo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    Visit
-                    <ArrowUpRight weight="bold" className="h-5 w-5" />
-                  </a>
-                </Button>
-              )}
-              {product.links.github && (
-                <Button variant="outline" size="lg" asChild className="gap-2">
-                  <a
-                    href={product.links.github}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    <GithubLogo weight="fill" className="h-5 w-5" />
-                    View Source
-                  </a>
-                </Button>
+              {(product.links.demo || product.links.github) && (
+                <div className="flex flex-wrap gap-3 items-center justify-center md:justify-start">
+                  {product.links.demo && (
+                    <Button
+                      variant="accent"
+                      size="lg"
+                      className="gap-2 shadow-lg shadow-accent/20"
+                      onClick={() =>
+                        window.open(
+                          product.links.demo,
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
+                    >
+                      Visit
+                      <ArrowUpRight weight="bold" className="h-5 w-5" />
+                    </Button>
+                  )}
+                  {product.links.github && (
+                    <Button
+                      variant="outline"
+                      size="lg"
+                      className="gap-2"
+                      onClick={() =>
+                        window.open(
+                          product.links.github,
+                          "_blank",
+                          "noopener,noreferrer"
+                        )
+                      }
+                    >
+                      <GithubLogo weight="fill" className="h-5 w-5" />
+                      View Source
+                    </Button>
+                  )}
+                </div>
               )}
             </div>
           </motion.div>

@@ -1,6 +1,6 @@
 import { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
-import { getAllExtendedProducts } from "@/lib/content";
+import { getAllExtendedProducts, getAllTeamMembers } from "@/lib/content";
 import { SITE_URL } from "@/lib/constants";
 
 // Force Node.js runtime since blog.ts uses fs/path APIs
@@ -12,9 +12,10 @@ export const runtime = "nodejs";
  *
  * Priority hierarchy:
  * - Homepage: 1.0 (most important)
- * - Products listing: 0.9
+ * - Products/Blog/Team listings: 0.9
  * - Individual products: 0.8
  * - Blog posts: 0.7
+ * - Team members: 0.6
  * - Legal pages: 0.3
  *
  * @returns Array of sitemap entries with URLs, modification dates, priorities, and images
@@ -43,6 +44,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       priority: 0.9,
     },
     {
+      url: `${SITE_URL}/team`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.9,
+    },
+    {
       url: `${SITE_URL}/privacy`,
       lastModified: now,
       changeFrequency: "yearly",
@@ -59,6 +66,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   try {
     const posts = await getAllPosts();
     const products = getAllExtendedProducts();
+    const teamMembers = getAllTeamMembers();
 
     // Blog posts with banner images for image sitemap
     const blogUrls: MetadataRoute.Sitemap = posts.map((post) => ({
@@ -87,7 +95,19 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       };
     });
 
-    return [...staticRoutes, ...productUrls, ...blogUrls];
+    // Team member pages with avatar images
+    const teamUrls: MetadataRoute.Sitemap = teamMembers.map((member) => ({
+      url: `${SITE_URL}/team/${member.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly",
+      priority: 0.6,
+      // Include avatar image for SEO
+      ...(member.avatar && {
+        images: [member.avatar],
+      }),
+    }));
+
+    return [...staticRoutes, ...productUrls, ...teamUrls, ...blogUrls];
   } catch (error) {
     console.error("Error generating sitemap:", error);
     // Return static routes on error to avoid complete failure

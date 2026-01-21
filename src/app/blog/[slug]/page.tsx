@@ -3,19 +3,18 @@ import Script from "next/script";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import { getPostBySlug, getAllPosts } from "@/lib/blog";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import Image from "next/image";
-import { ArrowLeft, Calendar, Eye } from "lucide-react";
+import { Calendar, Eye, Clock } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
-import { BlogNavigation } from "@/components/blog/blog-navigation";
-import { AnimatedBackground } from "@/components/animated-background";
+import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
+import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { generateArticleSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize, NAV_HEIGHT, SITE_NAME } from "@/lib/constants";
+import { safeJsonLdSerialize, SITE_NAME } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -87,18 +86,21 @@ export default async function BlogPostPage({
   let frontmatter;
   let content;
   let views: number;
+  let readingTime: number;
 
   try {
     const post = await getPostBySlug(slug);
     frontmatter = post.frontmatter;
     content = post.content;
     views = post.views;
+    // Normalize to whole minutes, minimum 1
+    readingTime = Math.max(1, Math.round(post.readingTime));
   } catch {
     notFound();
   }
 
   return (
-    <div className="min-h-screen relative flex flex-col">
+    <div className="min-h-screen relative flex flex-col bg-background">
       {/* View Tracker - fires on mount to increment view count */}
       <ViewTracker slug={slug} />
 
@@ -111,35 +113,14 @@ export default async function BlogPostPage({
           __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
         }}
       />
-      {/* Animated Background - Same as homepage */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <AnimatedBackground />
-      </div>
+
+      {/* Site Navigation Header */}
+      <Navigation linkMode={true} />
 
       {/* Content Layer */}
-      <div className="relative z-10 flex-1">
-        {/* Header Navigation - Same as homepage */}
-        <BlogNavigation />
-
-        {/* Spacer for fixed navigation */}
-        <div style={{ height: NAV_HEIGHT }} />
-
-        {/* Sticky Back Navigation */}
-        <div
-          className="sticky z-30 bg-background/80 backdrop-blur-sm border-b border-border/50 py-3 mb-4"
-          style={{ top: NAV_HEIGHT }}
-        >
-          <div className="container mx-auto px-4 max-w-7xl">
-            <Link
-              href="/#blog"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors group"
-              data-testid="back-to-posts"
-            >
-              <ArrowLeft className="h-4 w-4 transition-transform group-hover:-translate-x-1" />
-              Back to All Posts
-            </Link>
-          </div>
-        </div>
+      <div className="relative z-10 flex-1 pt-16 md:pt-24">
+        {/* Back Navigation */}
+        <BlogPostNavbar />
 
         {/* Blog Post Content with Reading Progress and TOC */}
         <main id="main-content">
@@ -220,6 +201,11 @@ export default async function BlogPostPage({
                         {views.toLocaleString()}{" "}
                         {views === 1 ? "view" : "views"}
                       </span>
+                    </div>
+
+                    <div className="flex items-center gap-1">
+                      <Clock className="h-4 w-4" />
+                      <span>{readingTime} min read</span>
                     </div>
                   </div>
 

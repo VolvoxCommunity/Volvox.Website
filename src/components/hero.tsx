@@ -1,179 +1,524 @@
 "use client";
 
+import { useEffect, useRef } from "react";
+import { useRouter } from "next/navigation";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useTypewriter } from "react-simple-typewriter";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, GithubLogo, DiscordLogo } from "@phosphor-icons/react";
-import { motion } from "framer-motion";
-import confettiLib from "canvas-confetti";
-import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
+import {
+  ChartLineUp,
+  ShieldCheck,
+  CheckCircle,
+  PiggyBank,
+  ArrowSquareOut,
+} from "@phosphor-icons/react";
 
 interface HeroProps {
   onNavigate: (section: string) => void;
 }
 
-/**
- * Render the hero section for the Volvox landing page.
- *
- * Clicking the main title or the Discord link emits a confetti animation at the click position.
- *
- * @param onNavigate - Callback invoked with a section identifier (e.g., `"products"`, `"mentorship"`) when an action requests navigation
- * @returns A React element representing the hero section
- */
+gsap.registerPlugin(ScrollTrigger);
+
+/** Role variants for the join button - cycles infinitely */
+const ROLE_VARIANTS = [
+  "Mentee",
+  "Mentor",
+  "Teacher",
+  "Member",
+  "Learner",
+  "Sponsor",
+  "Sponsee",
+];
+
 export function Hero({ onNavigate }: HeroProps) {
-  const handleTitleClick = (e: React.MouseEvent) => {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+  const router = useRouter();
 
-    const promise = confettiLib({
-      particleCount: 100,
-      spread: 70,
-      origin: { x, y },
+  // Typewriter effect with automatic cycling (only the role changes)
+  const [role, { isType, isDelete }] = useTypewriter({
+    words: ROLE_VARIANTS,
+    loop: 0, // Infinite loop
+    typeSpeed: 40,
+    deleteSpeed: 30,
+    delaySpeed: 3000,
+  });
+
+  const isAnimating = isType || isDelete;
+  const displayedText = `Join as a ${role}`;
+
+  const productCardRef = useRef<HTMLButtonElement>(null);
+  const nameLineRef = useRef<HTMLSpanElement>(null);
+
+  // Detail Section Refs
+  const detailsSectionRef = useRef<HTMLDivElement>(null);
+  const phoneMockupRef = useRef<HTMLButtonElement>(null);
+  const featureListRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      // ===========================================
+      // 1. HERO SECTION ANIMATIONS
+      // ===========================================
+      const tl = gsap.timeline({ defaults: { ease: "power3.out" } });
+
+      // Badge
+      tl.from(".hero-badge", { y: 20, opacity: 0, duration: 0.8 }, "-=0.5");
+
+      // Headline
+      tl.from(
+        ".hero-headline",
+        {
+          y: 100,
+          opacity: 0,
+          filter: "blur(20px)",
+          rotationX: -20,
+          duration: 1.2,
+          transformOrigin: "0% 50% -50",
+        },
+        "-=0.6"
+      );
+
+      // Subheadline
+      tl.from(".hero-subheadline", { y: 30, opacity: 0, duration: 1 }, "-=0.8");
+
+      // CTA buttons
+      tl.from(".hero-cta-group", { y: 20, opacity: 0, duration: 0.8 }, "-=0.8");
+
+      // Product Card Entrance
+      tl.fromTo(
+        productCardRef.current,
+        {
+          y: 200,
+          rotationX: 15,
+          scale: 0.9,
+          opacity: 0,
+          transformPerspective: 1000,
+        },
+        {
+          y: 100,
+          rotationX: 10,
+          scale: 0.95,
+          opacity: 1,
+          duration: 1.5,
+          ease: "power2.out",
+        },
+        "-=1.0"
+      );
+
+      // Scroll Parallax for Hero Card
+      gsap.to(productCardRef.current, {
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "bottom center",
+          scrub: 1,
+        },
+        y: -50,
+        rotationX: 0,
+        scale: 1,
+        boxShadow: "0 40px 80px -20px hsla(0, 0%, 0%, 0.5)",
+        ease: "none",
+      });
+
+      // "SOBERS" Text Reveal
+      const textRevealTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".product-stage",
+          start: "center center",
+          end: "bottom center",
+          toggleActions: "play none none reverse",
+        },
+      });
+      textRevealTl.to(nameLineRef.current, {
+        opacity: 1,
+        letterSpacing: "0px",
+        filter: "blur(0px)",
+        scale: 1,
+        duration: 0.8,
+        ease: "expo.out",
+      });
+
+      // Hero Content Fade Out
+      gsap.to(".hero-content", {
+        scrollTrigger: {
+          trigger: ".hero-section",
+          start: "top top",
+          end: "center top",
+          scrub: true,
+        },
+        y: 100,
+        opacity: 0,
+      });
+
+      // ===========================================
+      // 2. DETAILS SECTION ANIMATIONS
+      // ===========================================
+
+      // Phone Entrance (Slide from left)
+      gsap.fromTo(
+        phoneMockupRef.current,
+        { x: -100, opacity: 0, rotationY: -15 },
+        {
+          scrollTrigger: {
+            trigger: detailsSectionRef.current,
+            start: "top 60%",
+            end: "top 20%",
+            scrub: 1,
+          },
+          x: 0,
+          opacity: 1,
+          rotationY: 0,
+          ease: "power2.out",
+        }
+      );
+
+      // Features Entrance (Stagger from right)
+      gsap.fromTo(
+        ".feature-item",
+        { x: 50, opacity: 0 },
+        {
+          scrollTrigger: {
+            trigger: detailsSectionRef.current,
+            start: "top 60%",
+            end: "bottom 80%",
+            scrub: 1,
+          },
+          x: 0,
+          opacity: 1,
+          stagger: 0.2,
+          ease: "power2.out",
+        }
+      );
+
+      // Tech Pills Entrance
+      gsap.fromTo(
+        ".tech-pill",
+        { scale: 0.8, opacity: 0, y: 20 },
+        {
+          scrollTrigger: {
+            trigger: detailsSectionRef.current,
+            start: "top 70%",
+            end: "top 40%",
+            scrub: 1,
+          },
+          scale: 1,
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          ease: "back.out(1.7)",
+        }
+      );
     });
 
-    if (promise) {
-      promise.catch((err) => {
-        console.error("Confetti animation failed:", err);
-      });
-    }
-  };
+    return () => ctx.revert();
+  }, []);
 
-  const handleDiscordClick = (e: React.MouseEvent) => {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+  const features = [
+    {
+      icon: <ChartLineUp weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Journey Timeline",
+      description:
+        "Visualize milestones, track setbacks, celebrate progress and milestones. Your counter resets; your history doesn't.",
+    },
+    {
+      icon: <ShieldCheck weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Accountability Partnerships",
+      description:
+        "Connect via secure invite codes. Message privately. No friend requests, no follower counts—just support.",
+    },
+    {
+      icon: <CheckCircle weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Task & Step Work",
+      description:
+        "Assign tasks, track completion, add reflections. Optional 12-step progress for AA, NA, and beyond.",
+    },
+    {
+      icon: <PiggyBank weight="fill" className="w-6 h-6 text-primary" />,
+      title: "Savings Tracker",
+      description:
+        "See what you're not spending—daily, weekly, monthly. Your wallet's in recovery too.",
+    },
+  ];
 
-    const promise = confettiLib({
-      particleCount: 100,
-      spread: 70,
-      origin: { x, y },
-    });
-
-    if (promise) {
-      promise.catch((err) => {
-        console.error("Confetti animation failed:", err);
-      });
-    }
-  };
+  const techStack = [
+    "React Native",
+    "Expo",
+    "TypeScript",
+    "Node.js",
+    "Supabase",
+  ];
 
   return (
-    <section
-      className="relative min-h-screen flex items-center justify-center px-4"
-      data-testid="hero-section"
-    >
-      <div className="container mx-auto max-w-6xl text-center py-32">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-6"
-        >
-          <div className="group inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 hover:bg-secondary/10 hover:border-secondary/20 transition-colors duration-300">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75 group-hover:bg-secondary transition-colors duration-300"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-primary group-hover:bg-secondary transition-colors duration-300"></span>
-            </span>
-            <span className="text-sm font-medium text-primary group-hover:text-secondary transition-colors duration-300">
-              Building the future of software development
-            </span>
+    <div className="flex flex-col w-full">
+      {/* ================= HERO SECTION ================= */}
+      <section
+        aria-label="Hero"
+        className="hero-section relative min-h-screen md:min-h-[120vh] pt-32 md:pt-[180px] flex flex-col items-center overflow-hidden"
+      >
+        {/* Background Glow */}
+        <div
+          className="hero-bg-glow absolute -top-[20%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] -z-[1] pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(circle, oklch(from var(--primary) l c h / 0.15) 0%, transparent 70%)",
+          }}
+        />
+
+        {/* Hero Content */}
+        <div className="hero-content text-center max-w-[1100px] px-4 z-[2]">
+          <div className="hero-badge inline-flex items-center py-1.5 px-3 md:py-2 md:px-4 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-semibold mb-6 border border-primary/20">
+            Building the future of software development
           </div>
-        </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.1, ease: [0.16, 1, 0.3, 1] }}
-          className="mb-8"
-        >
-          <motion.h1
-            className="text-7xl md:text-8xl lg:text-9xl font-extrabold tracking-tight text-primary cursor-pointer"
-            whileHover={{
-              scale: 1.05,
-              textShadow: "0 0 30px oklch(0.32 0.14 264.5 / 0.5)",
-            }}
-            transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-            onClick={handleTitleClick}
-          >
-            Volvox
-          </motion.h1>
-        </motion.div>
-
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
-          className="text-xl md:text-2xl font-medium mb-8 text-muted-foreground max-w-3xl mx-auto leading-relaxed"
-        >
-          A software development company and open-source learning community. We
-          build exceptional products while mentoring the next generation of
-          developers.
-        </motion.p>
-
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.3, ease: [0.16, 1, 0.3, 1] }}
-          className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
-        >
-          <Button
-            size="lg"
-            onClick={() => onNavigate("products")}
-            className="group text-base px-8 py-6 h-auto font-semibold shadow-lg hover:shadow-xl transition-shadow duration-300"
-          >
-            <span className="relative z-10 flex items-center gap-2">
-              Explore Products
-              <ArrowRight
-                weight="bold"
-                className="h-5 w-5 transition-transform group-hover:translate-x-1"
-              />
+          <h1 className="hero-headline font-[family-name:var(--font-jetbrains-mono)] text-[clamp(2rem,6vw,5rem)] leading-[1.1] font-extrabold tracking-tighter mb-6 text-foreground">
+            Building products. <br />
+            <span className="text-aurora tracking-tighter whitespace-nowrap">
+              Empowering builders.
             </span>
-          </Button>
+          </h1>
 
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={() => onNavigate("mentorship")}
-            className="group text-base px-8 py-6 h-auto border-2 hover:bg-secondary hover:text-secondary-foreground hover:border-secondary transition-[colors,box-shadow] duration-300 font-semibold shadow-md hover:shadow-lg"
-          >
-            Join as Mentee
-            <ArrowRight
-              weight="bold"
-              className="h-5 w-5 ml-2 transition-transform group-hover:translate-x-1"
-            />
-          </Button>
-        </motion.div>
+          <p className="hero-subheadline text-[clamp(0.95rem,2vw,1.25rem)] text-foreground/70 leading-relaxed mb-10 max-w-[700px] mx-auto">
+            A software development company and open-source learning community.
+            We build exceptional products while mentoring the next generation of
+            developers.
+          </p>
 
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="flex gap-8 justify-center items-center"
+          <div className="hero-cta-group flex flex-col md:flex-row gap-4 justify-center mb-20 w-full md:w-auto">
+            <MagneticButton>
+              <Button
+                onClick={() => router.push("/products")}
+                className="py-6 px-8 text-base font-semibold"
+              >
+                Explore Products
+              </Button>
+            </MagneticButton>
+            <MagneticButton>
+              <Button
+                variant="accent"
+                onClick={() => onNavigate("mentorship")}
+                className="py-6 px-8 text-base font-semibold min-w-[200px]"
+                data-testid="join-button"
+                aria-labelledby="join-button-live"
+              >
+                <span
+                  className="inline-flex items-center"
+                  aria-hidden="true"
+                  data-testid="typewriter-text"
+                >
+                  <span>Join as a&nbsp;</span>
+                  <span>{role}</span>
+                  <span
+                    className={cn(
+                      "ml-0.5 w-[2px] h-[1.1em] bg-current inline-block",
+                      isAnimating ? "animate-pulse" : "opacity-0"
+                    )}
+                    aria-hidden="true"
+                  />
+                </span>
+              </Button>
+            </MagneticButton>
+            {/* ARIA live region for screen reader announcements of dynamic button text */}
+            <output
+              id="join-button-live"
+              aria-live="polite"
+              aria-atomic="true"
+              className="sr-only"
+            >
+              {displayedText}
+            </output>
+          </div>
+        </div>
+
+        {/* Product Stage */}
+        <div
+          className="product-stage relative w-full max-w-[1200px] h-[400px] md:h-[600px] -mt-8 z-[1]"
+          style={{ perspective: "1000px" }}
         >
-          <a
-            href={GITHUB_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
+          <button
+            type="button"
+            ref={productCardRef}
+            className="product-card w-[90%] mx-auto h-full rounded-3xl bg-gradient-to-b from-card/80 to-background/90 border border-border/50 shadow-[0_20px_50px_-10px_hsla(0,0%,0%,0.3)] overflow-hidden relative opacity-0 cursor-pointer transition-transform duration-300 hover:scale-[1.02]"
+            style={{ transformStyle: "preserve-3d" }}
+            onClick={() => router.push("/products/sobers")}
+            aria-label="View Sobers product details"
           >
-            <GithubLogo
-              weight="fill"
-              className="h-5 w-5 transition-transform group-hover:scale-110"
-            />
-            <span className="font-medium">GitHub</span>
-          </a>
-          <div className="h-4 w-px bg-border" />
-          <a
-            href={DISCORD_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={handleDiscordClick}
-            className="group flex items-center gap-2 text-sm text-muted-foreground hover:text-secondary transition-colors duration-300"
+            <div
+              className="app-interface w-full h-full bg-cover bg-center relative"
+              style={{
+                backgroundImage: "url('/images/product/sobers/hero.png')",
+              }}
+            >
+              <div className="app-overlay absolute bottom-0 left-0 w-full h-1/2 bg-gradient-to-t from-background to-transparent pointer-events-none" />
+              {/* Product Name Overlay */}
+              <div className="product-name-overlay absolute inset-0 flex items-center justify-center pointer-events-none mix-blend-hard-light z-[50]">
+                <span
+                  ref={nameLineRef}
+                  className="name-line block font-[family-name:var(--font-jetbrains-mono)] font-extrabold text-[clamp(5rem,12vw,9rem)] leading-[0.9] uppercase opacity-0 tracking-[20px] blur-[15px] scale-150 text-transparent [-webkit-text-stroke:2px_hsla(255,100%,100%,0.8)]"
+                >
+                  SOBERS
+                </span>
+              </div>
+            </div>
+          </button>
+        </div>
+      </section>
+
+      {/* ================= DETAILS SECTION ================= */}
+      <section
+        ref={detailsSectionRef}
+        className="details-section relative min-h-screen py-16 md:py-24 flex items-center justify-center overflow-hidden bg-background"
+      >
+        <div className="container max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
+          {/* LEFT: Phone Mockup */}
+          <button
+            type="button"
+            ref={phoneMockupRef}
+            className="relative w-full max-w-[350px] mx-auto lg:mr-auto perspective-[1000px] will-change-transform cursor-pointer"
+            onClick={() => router.push("/products/sobers")}
+            aria-label="View Sobers product details"
           >
-            <DiscordLogo
-              weight="fill"
-              className="h-5 w-5 transition-transform group-hover:scale-110"
-            />
-            <span className="font-medium">Discord</span>
-          </a>
-        </motion.div>
-      </div>
-    </section>
+            {/* Added h-[650px] to fix height collapse issue */}
+            <div className="relative rounded-[30px] md:rounded-[40px] border-[6px] md:border-[8px] border-zinc-800 shadow-2xl overflow-hidden bg-black h-[450px] md:h-[710px] w-full transition-transform duration-300 hover:scale-[1.05]">
+              {/* Phone Screen */}
+              <div
+                className="w-full h-full bg-cover bg-center"
+                style={{
+                  backgroundImage:
+                    "url('/images/product/sobers/android-screnshot.png')",
+                }}
+              />
+              {/* Reflection */}
+              <div className="absolute inset-0 bg-gradient-to-tr from-white/10 to-transparent pointer-events-none" />
+            </div>
+            {/* Glow behind phone */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[80%] bg-primary/20 blur-[100px] -z-10 rounded-full" />
+          </button>
+
+          {/* RIGHT: Product Details */}
+          <div ref={featureListRef} className="flex flex-col justify-center">
+            {/* Tech Stack Pills */}
+            <div className="flex flex-wrap gap-2 mb-8">
+              {techStack.map((tech) => (
+                <span
+                  key={tech}
+                  className="tech-pill px-3 py-1 rounded-full bg-primary/10 text-primary text-xs font-semibold border border-primary/20"
+                >
+                  {tech}
+                </span>
+              ))}
+            </div>
+
+            <button
+              type="button"
+              className="text-4xl md:text-5xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-6 text-foreground cursor-pointer transition-colors duration-300 hover:text-primary text-left bg-transparent border-none p-0"
+              onClick={() => router.push("/products/sobers")}
+              aria-label="View Sobers product details"
+            >
+              Sobriety. <span className="text-primary italic">Reimagined.</span>
+            </button>
+            <p className="text-lg text-foreground/70 mb-10 leading-relaxed">
+              A comprehensive toolkit for recovery, built with modern technology
+              to provide support when you need it most.
+            </p>
+
+            {/* Features List */}
+            <div className="space-y-8 mb-12">
+              {features.map((feature, idx) => (
+                <div key={idx} className="feature-item flex gap-4">
+                  <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-card border border-border flex items-center justify-center shadow-sm">
+                    {feature.icon}
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-bold font-[family-name:var(--font-jetbrains-mono)] mb-2">
+                      {feature.title}
+                    </h3>
+                    <p className="text-foreground/60">{feature.description}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* App Store Buttons */}
+            <div className="flex flex-col gap-4">
+              <div className="flex flex-wrap gap-4 items-center">
+                <a
+                  href="https://apps.apple.com/app/id6755614815"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Download Sobers on the App Store (opens in new tab)"
+                  className="transition-opacity hover:opacity-80"
+                >
+                  {/* Light mode: black badge */}
+                  <img
+                    src="/images/stores/app-store-black.svg"
+                    alt="Download on the App Store"
+                    width={120}
+                    height={40}
+                    className="block dark:hidden h-[40px] w-auto"
+                  />
+                  {/* Dark mode: white badge */}
+                  <img
+                    src="/images/stores/app-store-white.svg"
+                    alt="Download on the App Store"
+                    width={120}
+                    height={40}
+                    className="hidden dark:block h-[40px] w-auto"
+                  />
+                </a>
+                <a
+                  href="https://play.google.com/store/apps/details?id=com.volvox.sobers"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label="Get Sobers on Google Play (opens in new tab)"
+                  className="transition-opacity hover:opacity-80"
+                >
+                  <img
+                    src="/images/stores/play-store.svg"
+                    alt="Get it on Google Play"
+                    width={135}
+                    height={40}
+                    className="h-[40px] w-auto"
+                  />
+                </a>
+              </div>
+              <div className="flex flex-wrap gap-3 items-center">
+                <MagneticButton>
+                  <Button
+                    className="h-12 px-6 rounded-full gap-2 text-sm font-bold"
+                    variant="secondary"
+                    onClick={() => router.push("/products/sobers")}
+                  >
+                    View Details
+                  </Button>
+                </MagneticButton>
+                <MagneticButton>
+                  <Button
+                    className="h-12 px-5 rounded-full gap-2 text-sm"
+                    variant="outline"
+                    aria-label="Visit Sobers website (opens in new tab)"
+                    onClick={() =>
+                      window.open(
+                        "https://sobers.app",
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
+                    }
+                  >
+                    <ArrowSquareOut
+                      weight="bold"
+                      className="w-4 h-4"
+                      aria-hidden="true"
+                    />
+                    <span className="font-semibold">Visit Website</span>
+                  </Button>
+                </MagneticButton>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
   );
 }

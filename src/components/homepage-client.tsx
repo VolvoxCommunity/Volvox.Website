@@ -5,19 +5,16 @@ import { useRouter } from "next/navigation";
 import { Toaster } from "@/components/ui/sonner";
 import { Navigation } from "@/components/navigation";
 import { Hero } from "@/components/hero";
-import { Products } from "@/components/products";
 import { Blog } from "@/components/blog";
 import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
 import { AnimatedBackground } from "@/components/animated-background";
-import type { BlogPost, ExtendedProduct, Mentor, Mentee } from "@/lib/types";
+import type { BlogPost, TeamMember } from "@/lib/types";
 
 interface HomepageClientProps {
   blogPosts: BlogPost[];
-  products: ExtendedProduct[];
-  mentors: Mentor[];
-  mentees: Mentee[];
+  teamMembers: TeamMember[];
 }
 
 /**
@@ -29,55 +26,16 @@ interface HomepageClientProps {
  * optional filtering capabilities.
  *
  * @param blogPosts - Prefetched blog posts to display in the Blog section.
- * @param products - Prefetched products to display in the Products section.
- * @param mentors - Prefetched mentors to display in the Mentorship section.
- * @param mentees - Prefetched mentees to display in the Mentorship section.
+ * @param teamMembers - Prefetched team members to display in the Mentorship section.
  * @returns The rendered homepage JSX element.
  */
 export function HomepageClient({
   blogPosts,
-  products,
-  mentors,
-  mentees,
+  teamMembers,
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
 
-  // Blog filter state
-  const [blogSearchQuery, setBlogSearchQuery] = useState("");
-  const [blogSortOption, setBlogSortOption] = useState<
-    "newest" | "oldest" | "views"
-  >("newest");
-  const [blogViewMode, setBlogViewMode] = useState<"grid" | "list">("grid");
-
-  // Products filter state
-  const [productSearchQuery, setProductSearchQuery] = useState("");
-  const [productSortOption, setProductSortOption] = useState<"a-z" | "z-a">(
-    "a-z"
-  );
-  const [productViewMode, setProductViewMode] = useState<"grid" | "list">(
-    "grid"
-  );
-
   const router = useRouter();
-
-  // Sort change handlers with type filtering
-  const handleProductSortChange = useCallback(
-    (value: "a-z" | "z-a" | "newest" | "oldest" | "views") => {
-      if (value === "a-z" || value === "z-a") {
-        setProductSortOption(value);
-      }
-    },
-    []
-  );
-
-  const handleBlogSortChange = useCallback(
-    (value: "a-z" | "z-a" | "newest" | "oldest" | "views") => {
-      if (value === "newest" || value === "oldest" || value === "views") {
-        setBlogSortOption(value);
-      }
-    },
-    []
-  );
 
   const handleNavigate = useCallback(
     (section: string) => {
@@ -137,7 +95,7 @@ export function HomepageClient({
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["products", "blog", "mentorship", "about"];
+      const sections = ["blog", "mentorship", "about"];
       const scrollPosition = window.scrollY + 200;
 
       if (window.scrollY < 300) {
@@ -178,27 +136,8 @@ export function HomepageClient({
 
         <main id="main-content">
           <Hero onNavigate={handleNavigate} />
-          <Products
-            products={products || []}
-            searchQuery={productSearchQuery}
-            onSearchChange={setProductSearchQuery}
-            sortOption={productSortOption}
-            onSortChange={handleProductSortChange}
-            viewMode={productViewMode}
-            onViewModeChange={setProductViewMode}
-            enableFilters
-          />
-          <Blog
-            posts={blogPosts || []}
-            searchQuery={blogSearchQuery}
-            onSearchChange={setBlogSearchQuery}
-            sortOption={blogSortOption}
-            onSortChange={handleBlogSortChange}
-            viewMode={blogViewMode}
-            onViewModeChange={setBlogViewMode}
-            enableFilters
-          />
-          <Mentorship mentors={mentors || []} mentees={mentees || []} />
+          <Blog posts={blogPosts || []} />
+          <Mentorship teamMembers={teamMembers || []} />
           <About />
         </main>
 

@@ -40,29 +40,75 @@ export const ProductSchema = z.object({
 });
 
 /**
- * Mentor schema matching the Mentor interface
+ * Schema for team member project/contribution entries.
  */
-export const MentorSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  avatar: z.string(),
-  role: z.string(),
-  expertise: z.array(z.string()),
-  bio: z.string(),
-  githubUrl: z.string().optional(),
+export const TeamMemberProjectSchema = z.object({
+  name: z.string().min(1),
+  description: z.string().min(1),
+  role: z.string().optional(),
+  url: z.string().url().optional(),
 });
 
 /**
- * Mentee schema matching the Mentee interface
+ * Team Member schema (discriminated union)
  */
-export const MenteeSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  avatar: z.string(),
-  goals: z.string(),
-  progress: z.string(),
-  githubUrl: z.string().optional(),
-});
+export const TeamMemberSchema = z.discriminatedUnion("type", [
+  z.object({
+    type: z.literal("mentor"),
+    id: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    role: z.string(),
+    tagline: z.string(),
+    bio: z.string(),
+    expertise: z.array(z.string()),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
+    githubUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    email: z.string().optional(),
+    isHireable: z.boolean().optional(),
+  }),
+  z.object({
+    type: z.literal("mentee"),
+    id: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    tagline: z.string(),
+    goals: z.string(),
+    progress: z.string(),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
+    githubUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    email: z.string().optional(),
+    isHireable: z.boolean().optional(),
+  }),
+  z.object({
+    type: z.literal("builder"),
+    id: z.string(),
+    slug: z.string(),
+    name: z.string(),
+    avatar: z.string(),
+    role: z.string(),
+    tagline: z.string(),
+    bio: z.string(),
+    expertise: z.array(z.string()),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
+    githubUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    email: z.string().optional(),
+    isHireable: z.boolean().optional(),
+  }),
+]);
+
+/**
+ * Helper to validate and parse team members array
+ */
+export const TeamMembersArraySchema = z.array(TeamMemberSchema);
 
 /**
  * Helper to validate and parse authors array
@@ -73,16 +119,6 @@ export const AuthorsArraySchema = z.array(AuthorSchema);
  * Helper to validate and parse products array
  */
 export const ProductsArraySchema = z.array(ProductSchema);
-
-/**
- * Helper to validate and parse mentors array
- */
-export const MentorsArraySchema = z.array(MentorSchema);
-
-/**
- * Helper to validate and parse mentees array
- */
-export const MenteesArraySchema = z.array(MenteeSchema);
 
 /**
  * Schema for product FAQ items.
@@ -138,3 +174,4 @@ export type ExtendedProduct = z.infer<typeof extendedProductSchema>;
 export type FaqItem = z.infer<typeof faqItemSchema>;
 export type Testimonial = z.infer<typeof testimonialSchema>;
 export type ProductLinks = z.infer<typeof productLinksSchema>;
+export type TeamMemberProject = z.infer<typeof TeamMemberProjectSchema>;
