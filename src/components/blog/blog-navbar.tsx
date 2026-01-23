@@ -324,6 +324,10 @@ export function BlogNavbar({
                 <Button
                   variant="ghost"
                   size="sm"
+                 
+                  className="rounded-full w-8 h-8 sm:w-9 sm:h-9 p-0"
+                  variant="ghost"
+                  size="sm"
                   className="rounded-full w-8 h-8 sm:w-9 sm:h-9 p-0"
                 >
                   <Funnel
