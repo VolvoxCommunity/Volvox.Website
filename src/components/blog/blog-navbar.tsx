@@ -166,6 +166,9 @@ export function BlogNavbar({
               {searchQuery && (
                 <button
                   type="button"
+                 
+                  onClick={() => onSearchChange("")}
+                  type="button"
                   onClick={() => onSearchChange("")}
                   className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
                 >
