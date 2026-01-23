@@ -14,12 +14,7 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
-      use: {
-        ...devices["Desktop Chrome"],
-        launchOptions: {
-          executablePath: "/usr/bin/brave-browser",
-        },
-      },
+      use: { ...devices["Desktop Chrome"] },
     },
   ],
   webServer: {

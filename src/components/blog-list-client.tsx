@@ -233,6 +233,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           {hasActiveFilters && (
             <div className="flex justify-center mb-8">
               <button
+                type="button"
                 onClick={handleClearAll}
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors border-b border-transparent hover:border-muted-foreground"
               >
