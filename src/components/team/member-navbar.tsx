@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 
-export function BlogPostNavbar() {
+export function MemberNavbar() {
   const router = useRouter();
 
   const navItems = [
@@ -31,8 +31,8 @@ export function BlogPostNavbar() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/#blog")}
-              aria-label="Back to Blog"
+              onClick={() => router.push("/team")}
+              aria-label="Back to Team"
               className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
             >
               <ArrowLeft className="h-4 w-4" />
@@ -63,7 +63,7 @@ export function BlogPostNavbar() {
             className="hidden md:flex items-center gap-1"
           >
             {navItems.map((item) => {
-              const isActive = item.id === "blog";
+              const isActive = item.id === "team";
               return (
                 <Link
                   key={item.id}
@@ -82,16 +82,16 @@ export function BlogPostNavbar() {
           </nav>
         </div>
 
-        {/* Right Section */}
+        {/* Right Section (Optional - can add theme toggle or discord link if needed, keeping it minimal for now) */}
         <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push("/#blog")}
+            onClick={() => router.push("/team")}
             className="hidden md:flex rounded-full gap-2 border-border/60"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Back to Articles</span>
+            <span>Back to Team</span>
           </Button>
         </div>
       </div>

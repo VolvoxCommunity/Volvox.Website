@@ -50,15 +50,15 @@ export function TeamCard({ member }: TeamCardProps) {
       </div>
 
       {/* Progressive Blur + Gradient Overlay (Bottom ~35%) */}
-      <div className="absolute bottom-0 right-0 left-0 rounded-[24px] overflow-hidden pointer-events-none z-[5] h-[160px]">
+      <div className="absolute bottom-0 right-0 left-0 rounded-[24px] overflow-hidden pointer-events-none z-[5] h-[220px]">
         {/* Layer 1 - Base blur that fades */}
-        <div className="absolute inset-0 backdrop-blur-[6px] [mask-image:linear-gradient(to_top,black_0%,transparent_100%)]" />
+        <div className="absolute inset-0 backdrop-blur-[9px] [mask-image:linear-gradient(to_top,black_0%,transparent_100%)]" />
         {/* Layer 2 - Medium blur fading at 60% */}
-        <div className="absolute inset-0 backdrop-blur-[12px] [mask-image:linear-gradient(to_top,black_0%,transparent_60%)]" />
+        <div className="absolute inset-0 backdrop-blur-[18px] [mask-image:linear-gradient(to_top,black_0%,transparent_60%)]" />
         {/* Layer 3 - Strong blur fading at 30% */}
-        <div className="absolute inset-0 backdrop-blur-[16px] [mask-image:linear-gradient(to_top,black_0%,transparent_30%)]" />
+        <div className="absolute inset-0 backdrop-blur-[27px] [mask-image:linear-gradient(to_top,black_0%,transparent_30%)]" />
         {/* Gradient tint overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/40 via-background/15 to-transparent" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-background/35 to-transparent" />
       </div>
 
       {/* Content at Bottom */}
@@ -68,14 +68,18 @@ export function TeamCard({ member }: TeamCardProps) {
           <h3 className="text-lg md:text-xl font-bold text-foreground truncate leading-tight">
             {member.name.split(" ").slice(0, 2).join(" ")}
           </h3>
-          {member.type === "mentor" && (
-            <Badge
-              variant="default"
-              className="absolute top-0 right-0 bg-primary text-primary-foreground border-none text-[10px] px-2 h-5 font-bold"
-            >
-              MENTOR
-            </Badge>
-          )}
+          <Badge
+            variant="default"
+            className={cn(
+              "absolute top-0 right-0 border-none text-[10px] px-2 h-5 font-bold uppercase",
+              member.type === "mentor" && "bg-primary text-primary-foreground",
+              member.type === "builder" && "bg-accent text-accent-foreground",
+              member.type === "mentee" &&
+                "bg-secondary text-secondary-foreground"
+            )}
+          >
+            {member.type}
+          </Badge>
         </div>
 
         {/* Tagline */}

@@ -116,13 +116,13 @@ export function Navigation({
           {/* Mobile Progressive Blur Background */}
           <div className="absolute inset-0 md:hidden z-[-1] pointer-events-none">
             {/* Layer 1 - Base blur that fades completely */}
-            <div className="absolute inset-0 backdrop-blur-[4px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_100%)]" />
+            <div className="absolute inset-0 backdrop-blur-[18px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_100%)]" />
             {/* Layer 2 - Medium blur fading at 60% */}
-            <div className="absolute inset-0 backdrop-blur-[8px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_60%)]" />
+            <div className="absolute inset-0 backdrop-blur-[24px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_60%)]" />
             {/* Layer 3 - Strong blur fading at 30% */}
-            <div className="absolute inset-0 backdrop-blur-[12px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_30%)]" />
+            <div className="absolute inset-0 backdrop-blur-[30px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_30%)]" />
             {/* Background tint overlay */}
-            <div className="absolute inset-0 bg-gradient-to-b from-background/70 via-background/30 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-b from-background/85 via-background/35 to-transparent" />
           </div>
 
           {/* Spotlight Effect (Desktop Only) */}

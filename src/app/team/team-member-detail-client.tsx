@@ -2,9 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+
 import {
-  ArrowLeft,
   Envelope,
   GithubLogo,
   LinkedinLogo,
@@ -16,7 +15,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import { AnimatedBackground } from "@/components/animated-background";
-import { Navigation } from "@/components/navigation";
+import { MemberNavbar } from "@/components/team/member-navbar";
 import { Footer } from "@/components/footer";
 import { TeamMember } from "@/lib/types";
 
@@ -27,8 +26,6 @@ interface TeamMemberDetailClientProps {
 export function TeamMemberDetailClient({
   member,
 }: TeamMemberDetailClientProps) {
-  const router = useRouter();
-
   const handleContact = () => {
     if (member.email) {
       window.location.href = `mailto:${member.email}`;
@@ -51,27 +48,8 @@ export function TeamMemberDetailClient({
         <AnimatedBackground />
       </div>
 
-      {/* Site Navigation Header */}
-      <Navigation linkMode={true} />
-
-      {/* Back Navbar */}
-      <div className="sticky top-16 md:top-24 z-40 w-full bg-background/80 backdrop-blur-lg border-b border-border/40 mt-16 md:mt-24">
-        <div className="container mx-auto px-4 max-w-7xl py-3 flex items-center gap-4">
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => router.push("/team")}
-            aria-label="Back to Team"
-            data-testid="back-to-team-button"
-            className="shrink-0 rounded-full hover:bg-muted/50 w-9 h-9 p-0"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </Button>
-          <span className="text-sm font-medium text-muted-foreground">
-            Back to Team
-          </span>
-        </div>
-      </div>
+      {/* Site Navigation & Back Header */}
+      <MemberNavbar />
 
       {/* Content */}
       <main className="relative z-10 flex-1 container mx-auto px-4 max-w-4xl py-12">

@@ -12,7 +12,6 @@ import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogCard } from "@/components/blog-card";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
 import { SITE_NAME } from "@/lib/constants";
 
 interface BlogListClientProps {
@@ -196,11 +195,8 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         <AnimatedBackground />
       </div>
 
-      {/* Main Navigation */}
-      <Navigation linkMode />
-
       {/* Content Layer */}
-      <div className="relative z-10 flex-1 pt-20">
+      <div className="relative z-10 flex-1">
         <BlogNavbar
           searchQuery={searchQuery}
           onSearchChange={handleSearchChange}

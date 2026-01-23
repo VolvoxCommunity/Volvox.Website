@@ -10,7 +10,6 @@ import rehypeHighlight from "rehype-highlight";
 import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
-import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
 import { ViewTracker } from "@/components/blog/view-tracker";
 import { generateArticleSchema } from "@/lib/structured-data";
@@ -114,14 +113,11 @@ export default async function BlogPostPage({
         }}
       />
 
-      {/* Site Navigation Header */}
-      <Navigation linkMode={true} />
+      {/* Site Navigation & Back Header */}
+      <BlogPostNavbar />
 
       {/* Content Layer */}
-      <div className="relative z-10 flex-1 pt-16 md:pt-24">
-        {/* Back Navigation */}
-        <BlogPostNavbar />
-
+      <div className="relative z-10 flex-1">
         {/* Blog Post Content with Reading Progress and TOC */}
         <main id="main-content">
           <BlogContentWrapper>
