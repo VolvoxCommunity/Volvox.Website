@@ -86,3 +86,8 @@ test-results/
 worktrees/
 .worktrees/
 .automaker/
+
+# OpenMemory - IDE/Assistant specific rules
+.cursor/rules/openmemory.mdc
+CLAUDE.md
+AGENTS.md

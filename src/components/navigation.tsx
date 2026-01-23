@@ -108,7 +108,7 @@ export function Navigation({
             w-full py-2 px-3 bg-transparent
             ${
               isIsland
-                ? "md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+                ? "group md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
                 : "md:w-full md:max-w-full md:py-6 md:px-10 md:border-b md:border-border/5"
             }
           `}
