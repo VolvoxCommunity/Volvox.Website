@@ -16,14 +16,6 @@ interface TeamNavbarProps {
   mentorsCount: number;
 }
 
-export function TeamNavbar({
-  filterMode,
-  onFilterChange,
-  allCount,
-  mentorsCount,
-}: TeamNavbarProps) {
-  const router = useRouter();
-
 const navItems = [
   { id: "home", label: "Home", href: "/" },
   { id: "blog", label: "Blog", href: "/#blog" },
@@ -39,8 +31,6 @@ export function TeamNavbar({
   mentorsCount,
 }: TeamNavbarProps) {
   const router = useRouter();
-
-  return (
 
   return (
     <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">

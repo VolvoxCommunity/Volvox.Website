@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import {
   MagnifyingGlass,
@@ -12,6 +13,7 @@ import {
   X,
   Funnel,
 } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -28,8 +30,6 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 import { BlogSortOption, ViewMode } from "@/components/ui/filter-controls";
-import { motion } from "framer-motion";
-import Image from "next/image";
 
 interface BlogNavbarProps {
   searchQuery: string;
@@ -44,6 +44,14 @@ interface BlogNavbarProps {
   onViewModeChange: (value: ViewMode) => void;
   resultCount: number;
 }
+
+const navItems = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "blog", label: "Blog", href: "/#blog" },
+  { id: "mentorship", label: "Community", href: "/#mentorship" },
+  { id: "team", label: "Team", href: "/team" },
+  { id: "about", label: "About", href: "/#about" },
+] as const;
 
 export function BlogNavbar({
   searchQuery,
@@ -61,14 +69,6 @@ export function BlogNavbar({
   const router = useRouter();
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
-
-  const navItems = [
-    { id: "home", label: "Home", href: "/" },
-    { id: "blog", label: "Blog", href: "/#blog" },
-    { id: "mentorship", label: "Community", href: "/#mentorship" },
-    { id: "team", label: "Team", href: "/team" },
-    { id: "about", label: "About", href: "/#about" },
-  ];
 
   return (
     <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">

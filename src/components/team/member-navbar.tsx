@@ -1,22 +1,22 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import Image from "next/image";
+
+const navItems = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "blog", label: "Blog", href: "/#blog" },
+  { id: "mentorship", label: "Community", href: "/#mentorship" },
+  { id: "team", label: "Team", href: "/team" },
+  { id: "about", label: "About", href: "/#about" },
+] as const;
 
 export function MemberNavbar() {
   const router = useRouter();
-
-  const navItems = [
-    { id: "home", label: "Home", href: "/" },
-    { id: "blog", label: "Blog", href: "/#blog" },
-    { id: "mentorship", label: "Community", href: "/#mentorship" },
-    { id: "team", label: "Team", href: "/team" },
-    { id: "about", label: "About", href: "/#about" },
-  ];
 
   return (
     <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">
