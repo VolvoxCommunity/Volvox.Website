@@ -295,6 +295,10 @@ export function BlogNavbar({
               <legend className="sr-only">View mode</legend>
               <button
                 type="button"
+               
+                aria-pressed={viewMode === "grid"}
+                onClick={() => onViewModeChange("grid")}
+                type="button"
                 onClick={() => onViewModeChange("grid")}
                 className={cn(
                   "p-2 rounded-full transition-all",
