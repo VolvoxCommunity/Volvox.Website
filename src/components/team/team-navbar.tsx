@@ -103,6 +103,7 @@ export function TeamNavbar({
               { value: "mentors", label: "Mentors", count: mentorsCount },
             ].map((opt) => (
               <button
+                type="button"
                 key={opt.value}
                 onClick={() => onFilterChange(opt.value as FilterMode)}
                 className={cn(
