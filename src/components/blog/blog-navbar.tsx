@@ -29,6 +29,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
+import { NAV_ITEMS } from "@/lib/constants";
 import { BlogSortOption, ViewMode } from "@/components/ui/filter-controls";
 
 interface BlogNavbarProps {
@@ -44,14 +45,6 @@ interface BlogNavbarProps {
   onViewModeChange: (value: ViewMode) => void;
   resultCount: number;
 }
-
-const navItems = [
-  { id: "home", label: "Home", href: "/" },
-  { id: "blog", label: "Blog", href: "/#blog" },
-  { id: "mentorship", label: "Community", href: "/#mentorship" },
-  { id: "team", label: "Team", href: "/team" },
-  { id: "about", label: "About", href: "/#about" },
-] as const;
 
 export function BlogNavbar({
   searchQuery,
@@ -71,7 +64,10 @@ export function BlogNavbar({
   const [filterMenuOpen, setFilterMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">
+    <header
+      data-testid="blog-navbar"
+      className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
+    >
       <div className="container mx-auto px-2 sm:px-4 max-w-7xl py-2 md:py-3 flex items-center justify-between gap-1.5 sm:gap-4">
         {/* Left: Desktop Logo / Mobile Back Button & Desktop Links */}
         <div className="flex items-center gap-2 md:gap-8 grow-0 shrink-0">
@@ -110,7 +106,7 @@ export function BlogNavbar({
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
           >
-            {navItems.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = item.id === "blog";
               return (
                 <Link
@@ -166,9 +162,7 @@ export function BlogNavbar({
               {searchQuery && (
                 <button
                   type="button"
-                 
-                  onClick={() => onSearchChange("")}
-                  type="button"
+                  aria-label="Clear search"
                   onClick={() => onSearchChange("")}
                   className="absolute right-2 sm:right-3 top-1/2 -translate-y-1/2 p-1 text-muted-foreground hover:text-foreground rounded-full hover:bg-muted transition-colors"
                 >
@@ -295,10 +289,8 @@ export function BlogNavbar({
               <legend className="sr-only">View mode</legend>
               <button
                 type="button"
-               
+                aria-label="Grid view"
                 aria-pressed={viewMode === "grid"}
-                onClick={() => onViewModeChange("grid")}
-                type="button"
                 onClick={() => onViewModeChange("grid")}
                 className={cn(
                   "p-2 rounded-full transition-all",
@@ -311,6 +303,8 @@ export function BlogNavbar({
               </button>
               <button
                 type="button"
+                aria-label="List view"
+                aria-pressed={viewMode === "list"}
                 onClick={() => onViewModeChange("list")}
                 className={cn(
                   "p-2 rounded-full transition-all",
@@ -331,10 +325,7 @@ export function BlogNavbar({
                 <Button
                   variant="ghost"
                   size="sm"
-                 
-                  className="rounded-full w-8 h-8 sm:w-9 sm:h-9 p-0"
-                  variant="ghost"
-                  size="sm"
+                  aria-label="Open filters"
                   className="rounded-full w-8 h-8 sm:w-9 sm:h-9 p-0"
                 >
                   <Funnel

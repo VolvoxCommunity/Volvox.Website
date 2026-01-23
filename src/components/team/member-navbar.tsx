@@ -6,21 +6,14 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-
-const navItems = [
-  { id: "home", label: "Home", href: "/" },
-  { id: "blog", label: "Blog", href: "/#blog" },
-  { id: "mentorship", label: "Community", href: "/#mentorship" },
-  { id: "team", label: "Team", href: "/team" },
-  { id: "about", label: "About", href: "/#about" },
-] as const;
+import { NAV_ITEMS } from "@/lib/constants";
 
 export function MemberNavbar() {
   const router = useRouter();
 
   return (
     <header
-     
+      data-testid="member-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >
       <div className="container mx-auto px-4 max-w-7xl py-2 md:py-3 flex items-center justify-between gap-4">
@@ -62,7 +55,7 @@ export function MemberNavbar() {
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
           >
-            {navItems.map((item) => {
+            {NAV_ITEMS.map((item) => {
               const isActive = item.id === "team";
               return (
                 <Link
