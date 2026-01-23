@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useTypewriter } from "react-simple-typewriter";
@@ -451,7 +452,7 @@ export function Hero({ onNavigate }: HeroProps) {
                   className="transition-opacity hover:opacity-80"
                 >
                   {/* Light mode: black badge */}
-                  <img
+                  <Image
                     src="/images/stores/app-store-black.svg"
                     alt="Download on the App Store"
                     width={120}
@@ -459,7 +460,7 @@ export function Hero({ onNavigate }: HeroProps) {
                     className="block dark:hidden h-[40px] w-auto"
                   />
                   {/* Dark mode: white badge */}
-                  <img
+                  <Image
                     src="/images/stores/app-store-white.svg"
                     alt="Download on the App Store"
                     width={120}
@@ -474,7 +475,7 @@ export function Hero({ onNavigate }: HeroProps) {
                   aria-label="Get Sobers on Google Play (opens in new tab)"
                   className="transition-opacity hover:opacity-80"
                 >
-                  <img
+                  <Image
                     src="/images/stores/play-store.svg"
                     alt="Get it on Google Play"
                     width={135}

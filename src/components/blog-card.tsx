@@ -4,7 +4,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowUpRight, Eye } from "@phosphor-icons/react";
+import { ArrowUpRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
 import { BlogPost } from "@/lib/types";
 import { ViewMode } from "@/components/ui/filter-controls";
@@ -34,6 +34,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
       variants={itemVariants}
       whileHover="hover"
       className="group h-full"
+      data-testid={`blog-card-${post.slug}`}
     >
       <Link href={`/blog/${post.slug}`} className="block h-full outline-none">
         {/* Card Container */}
@@ -123,7 +124,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
                 {post.title}
               </h3>
               <div className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 flex-shrink-0 mt-1">
-                <ArrowUpRight weight="bold" className="w-5 h-5" />
+                <ArrowUpRight className="w-5 h-5" strokeWidth={2.5} />
               </div>
             </div>
 

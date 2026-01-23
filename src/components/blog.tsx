@@ -2,22 +2,23 @@
 
 import { useMemo, useRef } from "react";
 import Link from "next/link";
-import { Button } from "@/components/ui/button";
-import { CaretRight } from "@phosphor-icons/react";
+
+import { ChevronRight } from "lucide-react";
 import {
   motion,
   AnimatePresence,
   useScroll,
   useTransform,
 } from "framer-motion";
-import { BlogPost } from "@/lib/types";
-import { BlogCard } from "@/components/blog-card";
 
+import { Button } from "@/components/ui/button";
+import { BlogCard } from "@/components/blog-card";
 import {
   FilterControls,
   type BlogSortOption,
   type ViewMode,
 } from "@/components/ui/filter-controls";
+import { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface BlogProps {
@@ -161,9 +162,9 @@ export function Blog({
               >
                 <Link href="/blog">
                   View Blogs
-                  <CaretRight
-                    weight="bold"
+                  <ChevronRight
                     className="w-4 h-4 group-hover:translate-x-0.5 transition-transform"
+                    strokeWidth={2.5}
                   />
                 </Link>
               </Button>

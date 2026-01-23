@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 
 /**
- * Temporary verification test for semantic landmark roles.
- * This test verifies that proper ARIA landmark roles are implemented
- * for screen reader navigation.
+ * Verification tests for semantic landmark roles.
+ * Ensures proper ARIA landmark roles are implemented for screen reader navigation.
+ * Coverage: banner, navigation, main, contentinfo (footer), and labeled sections/regions.
  */
 test.describe("Semantic Landmarks Verification", () => {
   test("homepage has proper landmark roles", async ({ page }) => {
@@ -140,30 +140,30 @@ test.describe("Semantic Landmarks Verification", () => {
       const results: { role: string; count: number; labels: string[] }[] = [];
 
       roles.forEach((role) => {
-        const elements = document.querySelectorAll(`[role="${role}"]`);
-        // For navigation, also count <nav> elements (implicit navigation role)
-        const navElements =
-          role === "navigation" ? document.querySelectorAll("nav") : [];
-        // For contentinfo, also count <footer> elements (implicit contentinfo role)
-        const footerElements =
-          role === "contentinfo" ? document.querySelectorAll("footer") : [];
+        // Use Set to dedupe elements that match both explicit role and semantic element
+        const uniqueElements = new Set<Element>();
+
+        // Add elements with explicit role attribute
+        document
+          .querySelectorAll(`[role="${role}"]`)
+          .forEach((el) => uniqueElements.add(el));
+
+        // For navigation, also add <nav> elements (implicit navigation role)
+        if (role === "navigation") {
+          document
+            .querySelectorAll("nav")
+            .forEach((el) => uniqueElements.add(el));
+        }
+
+        // For contentinfo, also add <footer> elements (implicit contentinfo role)
+        if (role === "contentinfo") {
+          document
+            .querySelectorAll("footer")
+            .forEach((el) => uniqueElements.add(el));
+        }
 
         const labels: string[] = [];
-        elements.forEach((el) => {
-          const label =
-            el.getAttribute("aria-label") ||
-            el.getAttribute("aria-labelledby") ||
-            "";
-          if (label) labels.push(label);
-        });
-        navElements.forEach((el) => {
-          const label =
-            el.getAttribute("aria-label") ||
-            el.getAttribute("aria-labelledby") ||
-            "";
-          if (label) labels.push(label);
-        });
-        footerElements.forEach((el) => {
+        uniqueElements.forEach((el) => {
           const label =
             el.getAttribute("aria-label") ||
             el.getAttribute("aria-labelledby") ||
@@ -173,7 +173,7 @@ test.describe("Semantic Landmarks Verification", () => {
 
         results.push({
           role,
-          count: elements.length + navElements.length + footerElements.length,
+          count: uniqueElements.size,
           labels: [...new Set(labels)],
         });
       });

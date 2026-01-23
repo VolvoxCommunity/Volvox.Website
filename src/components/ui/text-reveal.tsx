@@ -3,6 +3,27 @@
 import { motion, useInView, Variants } from "framer-motion";
 import { useRef } from "react";
 
+const childVariants: Variants = {
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100,
+    },
+  },
+  hidden: {
+    opacity: 0,
+    y: 20,
+    transition: {
+      type: "spring",
+      damping: 12,
+      stiffness: 100,
+    },
+  },
+};
+
 interface TextRevealProps {
   text: string;
   className?: string;
@@ -37,27 +58,6 @@ export function TextReveal({
     }),
   };
 
-  const child: Variants = {
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-    hidden: {
-      opacity: 0,
-      y: 20,
-      transition: {
-        type: "spring",
-        damping: 12,
-        stiffness: 100,
-      },
-    },
-  };
-
   return (
     <motion.span
       ref={ref}
@@ -69,7 +69,7 @@ export function TextReveal({
     >
       {items.map((item, index) => (
         <motion.span
-          variants={child}
+          variants={childVariants}
           style={{
             display: "inline-block",
             marginRight: variant === "word" ? "0.25em" : "0",
