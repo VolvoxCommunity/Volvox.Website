@@ -5,5 +5,12 @@
     "role": "CEO & Founder",
     "avatar": "https://github.com/BillChirico.png",
     "website": "https://github.com/BillChirico"
+  },
+  {
+    "id": "a1b2c3d4-e5f6-7890-ab12-cd34ef56gh78",
+    "name": "Eleftheria Batsou",
+    "role": "Developer Advocate",
+    "avatar": "https://github.com/EleftheriaBatsou.png",
+    "website": "https://github.com/EleftheriaBatsou"
   }
 ]
