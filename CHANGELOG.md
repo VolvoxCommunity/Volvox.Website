@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **Marketing: Add ActiveCampaign form embed script site-wide** (`src/app/layout.tsx`)
 - **a11y: Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
 - **a11y: Add ARIA landmark roles for screen reader navigation** (banner, main, contentinfo, section aria-labels)
 - **ui: Add keyboard shortcuts hook for navigation** (`src/hooks/use-keyboard-shortcuts.ts`)
@@ -28,6 +29,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Changed
 
+- **perf: Replace `<img>` with Next.js `<Image>` for app store badges** (`src/components/products.tsx`, `src/components/products/product-hero.tsx`)
 - **ui: Replace custom typewriter hook with react-simple-typewriter** (`hero.tsx`)
 - **ui: Update hero section to use semantic section element with aria-label** (`hero.tsx`)
 - **ui: Improve skip link component styling and behavior** (`skip-link.tsx`)
@@ -49,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **SEO: Team member cards use proper `<Link>` elements for internal linking** (fixes orphan page detection) (`src/components/team/team-card.tsx`)
 - **Hero: Fix typewriter effect hydration mismatch and dependency stability** (`src/components/hero.tsx`, `src/hooks/use-typewriter-effect.ts`)
 - **Mentorship: Refactor infinite marquee for better performance and seamless looping** (`src/components/mentorship.tsx`, `src/app/globals.css`)
 - **Team: Fix missing bio and expertise on team member detail pages for builders** (`src/app/team/team-member-detail-client.tsx`)

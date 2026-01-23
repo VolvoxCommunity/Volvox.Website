@@ -1,9 +1,6 @@
-"use client";
-
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -12,30 +9,17 @@ interface TeamCardProps {
 }
 
 export function TeamCard({ member }: TeamCardProps) {
-  const router = useRouter();
-
-  const handleCardClick = () => {
-    router.push(`/team/${member.slug}`);
-  };
-
   const displayText = member.type === "mentee" ? member.goals : member.tagline;
+  const profileUrl = `/team/${member.slug}`;
 
   return (
-    <div
+    <Link
+      href={profileUrl}
       className={cn(
         "group relative rounded-[32px] bg-card overflow-hidden",
         "h-[440px] md:h-[500px] p-2 transition-all duration-300",
-        "hover:shadow-lg cursor-pointer"
+        "hover:shadow-lg block"
       )}
-      onClick={handleCardClick}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          e.preventDefault();
-          handleCardClick();
-        }
-      }}
       aria-label={`View ${member.name}'s profile`}
     >
       {/* Full-bleed Image */}
@@ -89,22 +73,16 @@ export function TeamCard({ member }: TeamCardProps) {
           </p>
         </div>
 
-        {/* Bottom Actions: Member Tag & View Details Button */}
+        {/* Bottom Actions: Profile Button */}
         <div className="flex items-center gap-3 h-8 mt-auto">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="flex-1 rounded-full h-8 text-xs font-bold"
-            onClick={(e) => {
-              e.stopPropagation();
-              router.push(`/team/${member.slug}`);
-            }}
+          <span
+            className="flex-1 rounded-full h-8 text-xs font-bold inline-flex items-center justify-center bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
             data-testid={`profile-button-${member.slug}`}
           >
             Profile
-          </Button>
+          </span>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

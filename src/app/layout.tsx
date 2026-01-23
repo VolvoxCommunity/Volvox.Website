@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Script from "next/script";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
@@ -118,6 +119,10 @@ export default function RootLayout({
             <ConditionalAnalytics />
           </CookieConsentProvider>
         </SmoothScroll>
+        <Script
+          src="https://volvox90566.activehosted.com/f/embed.php?id=1"
+          strategy="afterInteractive"
+        />
       </body>
     </html>
   );

@@ -165,7 +165,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                       className="transition-opacity hover:opacity-80"
                     >
                       {/* Light mode: black badge */}
-                      <img
+                      <Image
                         src="/images/stores/app-store-black.svg"
                         alt="Download on the App Store"
                         width={120}
@@ -173,7 +173,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                         className="block dark:hidden h-[40px] w-auto"
                       />
                       {/* Dark mode: white badge */}
-                      <img
+                      <Image
                         src="/images/stores/app-store-white.svg"
                         alt="Download on the App Store"
                         width={120}
@@ -190,7 +190,7 @@ function ProductCard({ product, index }: ProductCardProps) {
                       aria-label={`Get ${product.name} on Google Play`}
                       className="transition-opacity hover:opacity-80"
                     >
-                      <img
+                      <Image
                         src="/images/stores/play-store.svg"
                         alt="Get it on Google Play"
                         width={135}
