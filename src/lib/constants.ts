@@ -61,3 +61,14 @@ export function safeJsonLdSerialize(data: object): string {
     .replace(/>/g, "\\u003e")
     .replace(/&/g, "\\u0026");
 }
+
+/** Navigation items used across all navbar components */
+export const NAV_ITEMS = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "blog", label: "Blog", href: "/#blog" },
+  { id: "mentorship", label: "Community", href: "/#mentorship" },
+  { id: "team", label: "Team", href: "/team" },
+  { id: "about", label: "About", href: "/#about" },
+] as const;
+
+export type NavItem = (typeof NAV_ITEMS)[number];

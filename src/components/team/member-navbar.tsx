@@ -8,45 +8,31 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
 
-type FilterMode = "all" | "mentors";
-
-interface TeamNavbarProps {
-  filterMode: FilterMode;
-  onFilterChange: (mode: FilterMode) => void;
-  allCount: number;
-  mentorsCount: number;
-}
-
-export function TeamNavbar({
-  filterMode,
-  onFilterChange,
-  allCount,
-  mentorsCount,
-}: TeamNavbarProps) {
+export function MemberNavbar() {
   const router = useRouter();
 
   return (
     <header
-      data-testid="team-navbar"
+      data-testid="member-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >
       <div className="container mx-auto px-4 max-w-7xl py-2 md:py-3 flex items-center justify-between gap-4">
-        {/* Left: Desktop Logo / Mobile Back Button & Desktop Links */}
+        {/* Left Section */}
         <div className="flex items-center gap-2 md:gap-8 grow-0 shrink-0">
           {/* Mobile Back Button */}
           <div className="md:hidden">
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/")}
-              aria-label="Back to Home"
+              onClick={() => router.push("/team")}
+              aria-label="Back to Team"
               className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
           </div>
 
-          {/* Desktop Logo */}
+          {/* Desktop Logo & Name */}
           <Link
             href="/"
             className="hidden md:flex items-center gap-2 shrink-0 no-underline"
@@ -64,6 +50,7 @@ export function TeamNavbar({
             </span>
           </Link>
 
+          {/* Desktop Navigation Links */}
           <nav
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
@@ -88,38 +75,17 @@ export function TeamNavbar({
           </nav>
         </div>
 
-        {/* Right: Filter Controls & Mobile Burger */}
+        {/* Right Section (Optional - can add theme toggle or discord link if needed, keeping it minimal for now) */}
         <div className="flex items-center gap-2">
-          <div className="flex bg-muted/30 p-1 rounded-full border border-border/30">
-            {[
-              { value: "all", label: "All", count: allCount },
-              { value: "mentors", label: "Mentors", count: mentorsCount },
-            ].map((opt) => (
-              <button
-                type="button"
-                key={opt.value}
-                onClick={() => onFilterChange(opt.value as FilterMode)}
-                className={cn(
-                  "px-3 md:px-4 py-1.5 text-[10px] md:text-xs font-semibold rounded-full transition-all flex items-center gap-1.5",
-                  filterMode === opt.value
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <span>{opt.label}</span>
-                <span
-                  className={cn(
-                    "px-1.5 py-0.5 rounded-full text-[9px] md:text-[10px]",
-                    filterMode === opt.value
-                      ? "bg-primary/10 text-primary"
-                      : "bg-muted-foreground/10 text-muted-foreground"
-                  )}
-                >
-                  {opt.count}
-                </span>
-              </button>
-            ))}
-          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={() => router.push("/team")}
+            className="hidden md:flex rounded-full gap-2 border-border/60"
+          >
+            <ArrowLeft className="h-3.5 w-3.5" />
+            <span>Back to Team</span>
+          </Button>
         </div>
       </div>
     </header>

@@ -6,7 +6,6 @@ import { TeamNavbar } from "@/components/team/team-navbar";
 import { TeamCard } from "@/components/team/team-card";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
 
 interface TeamListClientProps {
   teamMembers: TeamMember[];
@@ -20,6 +19,9 @@ type FilterMode = "all" | "mentors";
  */
 export function TeamListClient({ teamMembers }: TeamListClientProps) {
   const [filterMode, setFilterMode] = useState<FilterMode>("all");
+
+  const allCount = teamMembers.length;
+  const mentorsCount = teamMembers.filter((m) => m.type === "mentor").length;
 
   const filteredMembers = useMemo(() => {
     if (filterMode === "mentors") {
@@ -35,20 +37,18 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
         <AnimatedBackground />
       </div>
 
-      {/* Main Navigation */}
-      <Navigation linkMode />
-
       {/* Content Layer */}
-      <div className="relative z-10 flex-1 pt-20">
+      <div className="relative z-10 flex-1">
         <TeamNavbar
           filterMode={filterMode}
           onFilterChange={setFilterMode}
-          resultCount={filteredMembers.length}
+          allCount={allCount}
+          mentorsCount={mentorsCount}
         />
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl pt-16 pb-8"
+          className="container mx-auto px-4 max-w-7xl pt-12 pb-8"
           aria-labelledby="team-page-heading"
         >
           {/* Page Header */}
