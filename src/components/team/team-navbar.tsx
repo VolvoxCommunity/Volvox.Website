@@ -24,13 +24,23 @@ export function TeamNavbar({
 }: TeamNavbarProps) {
   const router = useRouter();
 
-  const navItems = [
-    { id: "home", label: "Home", href: "/" },
-    { id: "blog", label: "Blog", href: "/#blog" },
-    { id: "mentorship", label: "Community", href: "/#mentorship" },
-    { id: "team", label: "Team", href: "/team" },
-    { id: "about", label: "About", href: "/#about" },
-  ];
+const navItems = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "blog", label: "Blog", href: "/#blog" },
+  { id: "mentorship", label: "Community", href: "/#mentorship" },
+  { id: "team", label: "Team", href: "/team" },
+  { id: "about", label: "About", href: "/#about" },
+] as const;
+
+export function TeamNavbar({
+  filterMode,
+  onFilterChange,
+  allCount,
+  mentorsCount,
+}: TeamNavbarProps) {
+  const router = useRouter();
+
+  return (
 
   return (
     <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">
