@@ -38,6 +38,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
   return (
     <section
       aria-label="Hero"
+      data-testid="hero-section"
       className="hero-section relative min-h-screen md:min-h-[120vh] pt-32 md:pt-[180px] flex flex-col items-center overflow-hidden"
     >
       {/* Background Glow */}
