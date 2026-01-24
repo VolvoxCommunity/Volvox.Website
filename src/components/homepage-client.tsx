@@ -140,7 +140,7 @@ export function HomepageClient({
 
         <main id="main-content">
           <Hero onNavigate={handleNavigate} />
-          <Products products={products} />
+          <Products products={products} limit={3} />
           <Blog posts={blogPosts || []} />
           <Mentorship teamMembers={teamMembers || []} />
           <About />

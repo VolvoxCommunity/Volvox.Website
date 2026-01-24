@@ -254,7 +254,7 @@ export function Products({
   viewMode = "grid",
   onViewModeChange,
   enableFilters = false,
-  limit = 3,
+  limit,
 }: ProductsProps & { limit?: number }) {
   const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
@@ -310,12 +310,7 @@ export function Products({
       return dateB - dateA;
     });
 
-    // Apply limit if provided (for homepage)
-    if (limit) {
-      result = result.slice(0, limit);
-    }
-
-    // Then apply search filter
+    // Apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -327,11 +322,16 @@ export function Products({
       );
     }
 
-    // Finally apply explicit sort option
+    // Apply explicit sort option
     if (sortOption === "z-a") {
       result.sort((a, b) => b.name.localeCompare(a.name));
     } else if (sortOption === "a-z") {
       result.sort((a, b) => a.name.localeCompare(b.name));
+    }
+
+    // Apply limit only when explicitly provided (e.g., homepage preview)
+    if (typeof limit === "number") {
+      result = result.slice(0, limit);
     }
 
     return result;
