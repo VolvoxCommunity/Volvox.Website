@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useEffect, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -11,9 +11,12 @@ import {
   Globe,
   Tag,
 } from "@phosphor-icons/react";
-import { motion, AnimatePresence } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+} from "framer-motion";
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import Image from "next/image";
@@ -23,8 +26,6 @@ import {
   type ProductSortOption,
   type ViewMode,
 } from "@/components/ui/filter-controls";
-
-gsap.registerPlugin(ScrollTrigger);
 
 interface ProductsProps {
   products: ExtendedProduct[];
@@ -46,51 +47,26 @@ interface ProductCardProps {
 function ProductCard({ product }: ProductCardProps) {
   const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
 
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
 
-  useEffect(() => {
-    // Scroll reveal for the card
-    gsap.fromTo(
-      cardRef.current,
-      {
-        y: 100,
-        opacity: 0,
-        scale: 0.95,
-        filter: "blur(10px)",
-      },
-      {
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: "top 90%",
-          end: "top 60%",
-          scrub: 1,
-        },
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px)",
-        ease: "power2.out",
-      }
-    );
-
-    // Parallax effect for the image
-    gsap.to(imageRef.current, {
-      scrollTrigger: {
-        trigger: cardRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-      y: -30,
-      ease: "none",
-    });
-  }, []);
+  // Scroll-linked parallax for the image
+  const { scrollYProgress } = useScroll({
+    target: cardRef,
+    offset: ["start end", "end start"],
+  });
+  const imageY = useTransform(scrollYProgress, [0, 1], [0, -30]);
 
   return (
-    <div ref={cardRef} className="group relative">
+    <motion.div
+      ref={cardRef}
+      initial={{ y: 100, opacity: 0, scale: 0.95, filter: "blur(10px)" }}
+      whileInView={{ y: 0, opacity: 1, scale: 1, filter: "blur(0px)" }}
+      viewport={{ once: true, margin: "-10%" }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+      className="group relative"
+    >
       <div className="relative h-full bg-card/60 backdrop-blur-xl rounded-[2.5rem] border border-border/40 p-3 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30">
         <div className="flex flex-col lg:flex-row h-full gap-6">
           {/* Image Sidebar */}
@@ -99,8 +75,8 @@ function ProductCard({ product }: ProductCardProps) {
               href={`/products/${product.slug}`}
               className="block h-full relative cursor-pointer group/image"
             >
-              <div
-                ref={imageRef}
+              <motion.div
+                style={{ y: imageY }}
                 className="absolute inset-0 w-full h-[120%] -top-[10%]"
               >
                 {imagePath ? (
@@ -117,7 +93,7 @@ function ProductCard({ product }: ProductCardProps) {
                     </span>
                   </div>
                 )}
-              </div>
+              </motion.div>
 
               {/* Overlays */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-500" />
@@ -241,7 +217,7 @@ function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 }
 
@@ -258,49 +234,6 @@ export function Products({
 }: ProductsProps & { limit?: number }) {
   const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
-  const glow1Ref = useRef<HTMLDivElement>(null);
-  const glow2Ref = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!sectionRef.current) return;
-
-    // Trance Background Animation
-    gsap.to(glow1Ref.current, {
-      x: "30%",
-      y: "20%",
-      duration: 15,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-    gsap.to(glow2Ref.current, {
-      x: "-20%",
-      y: "-30%",
-      duration: 20,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-
-    // Header reveal
-    gsap.fromTo(
-      headerRef.current,
-      { y: 50, opacity: 0, filter: "blur(20px)" },
-      {
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 90%",
-          end: "top 60%",
-          scrub: 1,
-        },
-        y: 0,
-        opacity: 1,
-        filter: "blur(0px)",
-        ease: "power3.out",
-      }
-    );
-  }, []);
 
   const filteredProducts = useMemo(() => {
     // First sort by updatedAt (latest first) to get "latest"
@@ -346,20 +279,25 @@ export function Products({
       className="py-32 md:py-48 px-4 relative overflow-hidden bg-background"
       data-testid="products-section"
     >
-      {/* Dynamic Trance Backgrounds */}
-      <div
-        ref={glow1Ref}
+      {/* Dynamic Trance Backgrounds - Framer Motion animated */}
+      <motion.div
+        animate={{ x: ["0%", "30%", "0%"], y: ["0%", "20%", "0%"] }}
+        transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
         className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10 mix-blend-soft-light"
       />
-      <div
-        ref={glow2Ref}
+      <motion.div
+        animate={{ x: ["0%", "-20%", "0%"], y: ["0%", "-30%", "0%"] }}
+        transition={{ duration: 20, repeat: Infinity, ease: "easeInOut" }}
         className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-secondary/10 blur-[180px] rounded-full -z-10 mix-blend-soft-light"
       />
       <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] pointer-events-none -z-10" />
 
       <div className="container mx-auto max-w-7xl">
-        <div
-          ref={headerRef}
+        <motion.div
+          initial={{ y: 50, opacity: 0, filter: "blur(20px)" }}
+          whileInView={{ y: 0, opacity: 1, filter: "blur(0px)" }}
+          viewport={{ once: true, margin: "-10%" }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
           className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-10"
         >
           <div className="max-w-3xl">
@@ -401,7 +339,7 @@ export function Products({
               <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </Button>
           </div>
-        </div>
+        </motion.div>
 
         {/* Filter Controls */}
         {enableFilters &&
