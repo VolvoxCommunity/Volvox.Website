@@ -13,7 +13,6 @@ export function ProductPostNavbar() {
 
   return (
     <header
-      role="banner"
       data-testid="product-post-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >
