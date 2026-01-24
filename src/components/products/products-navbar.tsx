@@ -109,6 +109,129 @@ function TechTagList({
   );
 }
 
+const SORT_OPTIONS = [
+  { value: "a-z" as const, label: "A-Z" },
+  { value: "z-a" as const, label: "Z-A" },
+];
+
+interface SortDropdownProps {
+  sortOption: ProductSortOption;
+  onSortChange: (value: ProductSortOption) => void;
+  variant?: "desktop" | "mobile";
+}
+
+/**
+ * Dropdown for selecting sort order.
+ * Desktop variant uses a popover, mobile variant uses inline buttons.
+ */
+function SortDropdown({
+  sortOption,
+  onSortChange,
+  variant = "desktop",
+}: SortDropdownProps) {
+  if (variant === "mobile") {
+    return (
+      <div className="flex bg-muted/30 p-1.5 rounded-[2rem] border border-border/30 w-full overflow-hidden">
+        {SORT_OPTIONS.map((opt) => (
+          <button
+            type="button"
+            key={opt.value}
+            onClick={() => onSortChange(opt.value)}
+            className={cn(
+              "flex-1 px-3 py-2.5 text-[11px] font-semibold rounded-[2rem] transition-all duration-300",
+              sortOption === opt.value
+                ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
+                : "text-muted-foreground hover:text-foreground"
+            )}
+          >
+            Name ({opt.label})
+          </button>
+        ))}
+      </div>
+    );
+  }
+
+  return (
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant="outline"
+          className="h-10 gap-2 rounded-full border-border/60"
+        >
+          <span className="text-muted-foreground">Sort:</span>
+          <span className="font-medium">
+            {sortOption === "a-z" ? "A-Z" : "Z-A"}
+          </span>
+          <CaretDown className="h-3.5 w-3.5 opacity-50" />
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className="w-[180px] p-1.5 rounded-2xl" align="end">
+        <div className="flex flex-col gap-1">
+          {SORT_OPTIONS.map((opt) => (
+            <button
+              type="button"
+              key={opt.value}
+              onClick={() => onSortChange(opt.value)}
+              className={cn(
+                "w-full px-3 py-2 text-sm text-left rounded-xl transition-all",
+                sortOption === opt.value
+                  ? "bg-primary/10 text-primary font-semibold"
+                  : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              )}
+            >
+              {opt.label}
+            </button>
+          ))}
+        </div>
+      </PopoverContent>
+    </Popover>
+  );
+}
+
+interface ViewModeToggleProps {
+  viewMode: ViewMode;
+  onViewModeChange: (value: ViewMode) => void;
+}
+
+/**
+ * Toggle between grid and list view modes.
+ */
+function ViewModeToggle({ viewMode, onViewModeChange }: ViewModeToggleProps) {
+  return (
+    <fieldset className="flex bg-muted/30 p-1 rounded-full border border-border/30 m-0">
+      <legend className="sr-only">View mode</legend>
+      <button
+        type="button"
+        aria-label="Grid view"
+        aria-pressed={viewMode === "grid"}
+        onClick={() => onViewModeChange("grid")}
+        className={cn(
+          "p-2 rounded-full transition-all",
+          viewMode === "grid"
+            ? "bg-background text-foreground shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        <SquaresFour className="h-4 w-4" />
+      </button>
+      <button
+        type="button"
+        aria-label="List view"
+        aria-pressed={viewMode === "list"}
+        onClick={() => onViewModeChange("list")}
+        className={cn(
+          "p-2 rounded-full transition-all",
+          viewMode === "list"
+            ? "bg-background text-foreground shadow-sm"
+            : "text-muted-foreground hover:text-foreground"
+        )}
+      >
+        <List className="h-4 w-4" />
+      </button>
+    </fieldset>
+  );
+}
+
 interface ProductsNavbarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
@@ -304,80 +427,17 @@ export function ProductsNavbar({
             <div className="w-px h-6 bg-border/50" />
 
             {/* Sort Dropdown (Desktop) */}
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="h-10 gap-2 rounded-full border-border/60"
-                >
-                  <span className="text-muted-foreground">Sort:</span>
-                  <span className="font-medium">
-                    {sortOption === "a-z" ? "A-Z" : "Z-A"}
-                  </span>
-                  <CaretDown className="h-3.5 w-3.5 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent
-                className="w-[180px] p-1.5 rounded-2xl"
-                align="end"
-              >
-                <div className="flex flex-col gap-1">
-                  {[
-                    { value: "a-z", label: "A-Z" },
-                    { value: "z-a", label: "Z-A" },
-                  ].map((opt) => (
-                    <button
-                      type="button"
-                      key={opt.value}
-                      onClick={() =>
-                        onSortChange(opt.value as ProductSortOption)
-                      }
-                      className={cn(
-                        "w-full px-3 py-2 text-sm text-left rounded-xl transition-all",
-                        sortOption === opt.value
-                          ? "bg-primary/10 text-primary font-semibold"
-                          : "text-muted-foreground hover:bg-muted hover:text-foreground"
-                      )}
-                    >
-                      {opt.label}
-                    </button>
-                  ))}
-                </div>
-              </PopoverContent>
-            </Popover>
+            <SortDropdown
+              sortOption={sortOption}
+              onSortChange={onSortChange}
+              variant="desktop"
+            />
 
             {/* View Mode Toggle */}
-            <fieldset className="flex bg-muted/30 p-1 rounded-full border border-border/30 m-0">
-              <legend className="sr-only">View mode</legend>
-              <button
-                type="button"
-                aria-label="Grid view"
-                aria-pressed={viewMode === "grid"}
-                onClick={() => onViewModeChange("grid")}
-                className={cn(
-                  "p-2 rounded-full transition-all",
-                  viewMode === "grid"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <SquaresFour className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                aria-label="List view"
-                aria-pressed={viewMode === "list"}
-                onClick={() => onViewModeChange("list")}
-                className={cn(
-                  "p-2 rounded-full transition-all",
-                  viewMode === "list"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
-                )}
-              >
-                <List className="h-4 w-4" />
-              </button>
-            </fieldset>
+            <ViewModeToggle
+              viewMode={viewMode}
+              onViewModeChange={onViewModeChange}
+            />
           </div>
 
           {/* Mobile Filter Trigger */}
@@ -413,28 +473,11 @@ export function ProductsNavbar({
                     <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wider pl-1">
                       Sort by
                     </span>
-                    <div className="flex bg-muted/30 p-1.5 rounded-[2rem] border border-border/30 w-full overflow-hidden">
-                      {[
-                        { value: "a-z", label: "Name (A-Z)" },
-                        { value: "z-a", label: "Name (Z-A)" },
-                      ].map((opt) => (
-                        <button
-                          type="button"
-                          key={opt.value}
-                          onClick={() =>
-                            onSortChange(opt.value as ProductSortOption)
-                          }
-                          className={cn(
-                            "flex-1 px-3 py-2.5 text-[11px] font-semibold rounded-[2rem] transition-all duration-300",
-                            sortOption === opt.value
-                              ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                              : "text-muted-foreground hover:text-foreground"
-                          )}
-                        >
-                          {opt.label}
-                        </button>
-                      ))}
-                    </div>
+                    <SortDropdown
+                      sortOption={sortOption}
+                      onSortChange={onSortChange}
+                      variant="mobile"
+                    />
                   </div>
 
                   {/* Tech Tags */}
