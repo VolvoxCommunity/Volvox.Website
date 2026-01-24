@@ -32,6 +32,83 @@ import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
 import { ProductSortOption, ViewMode } from "@/components/ui/filter-controls";
 
+interface TechTagButtonProps {
+  tech: string;
+  isSelected: boolean;
+  onClick: () => void;
+  variant?: "desktop" | "mobile";
+}
+
+/**
+ * Reusable tech tag button for filtering products by technology.
+ * Supports desktop (compact) and mobile (touch-friendly) variants.
+ */
+function TechTagButton({
+  tech,
+  isSelected,
+  onClick,
+  variant = "desktop",
+}: TechTagButtonProps) {
+  const baseStyles =
+    variant === "desktop"
+      ? "px-3 py-1.5 rounded-full text-xs transition-all border"
+      : "px-3.5 py-2 rounded-[2rem] text-xs font-medium border transition-all duration-200 active:scale-95";
+
+  const selectedStyles =
+    variant === "desktop"
+      ? "bg-primary text-primary-foreground border-primary"
+      : "bg-primary text-primary-foreground border-primary shadow-sm";
+
+  const unselectedStyles =
+    variant === "desktop"
+      ? "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground"
+      : "bg-background border-border/60 text-muted-foreground hover:border-border hover:bg-muted/20 hover:text-foreground";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(baseStyles, isSelected ? selectedStyles : unselectedStyles)}
+    >
+      {tech}
+    </button>
+  );
+}
+
+interface TechTagListProps {
+  allTech: string[];
+  selectedTech: string[];
+  onTechToggle: (tech: string) => void;
+  variant?: "desktop" | "mobile";
+  className?: string;
+}
+
+/**
+ * Renders a list of tech tag buttons for filtering.
+ * Used in both desktop popover and mobile dialog.
+ */
+function TechTagList({
+  allTech,
+  selectedTech,
+  onTechToggle,
+  variant = "desktop",
+  className,
+}: TechTagListProps) {
+  return (
+    <div className={cn("flex flex-wrap gap-2", className)}>
+      {allTech.map((tech) => (
+        <TechTagButton
+          key={tech}
+          tech={tech}
+          isSelected={selectedTech.includes(tech)}
+          onClick={() => onTechToggle(tech)}
+          variant={variant}
+        />
+      ))}
+    </div>
+  );
+}
+
 interface ProductsNavbarProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
@@ -212,26 +289,13 @@ export function ProductsNavbar({
                       </button>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto pr-1">
-                    {allTech.map((tech) => {
-                      const isSelected = selectedTech.includes(tech);
-                      return (
-                        <button
-                          type="button"
-                          key={tech}
-                          onClick={() => onTechToggle(tech)}
-                          className={cn(
-                            "px-3 py-1.5 rounded-full text-xs transition-all border",
-                            isSelected
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground"
-                          )}
-                        >
-                          {tech}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  <TechTagList
+                    allTech={allTech}
+                    selectedTech={selectedTech}
+                    onTechToggle={onTechToggle}
+                    variant="desktop"
+                    className="max-h-[200px] overflow-y-auto pr-1"
+                  />
                 </div>
               </PopoverContent>
             </Popover>
@@ -389,26 +453,13 @@ export function ProductsNavbar({
                         </button>
                       )}
                     </div>
-                    <div className="flex flex-wrap gap-2 max-h-[300px] overflow-y-auto pr-2 -mr-2">
-                      {allTech.map((tech) => {
-                        const isSelected = selectedTech.includes(tech);
-                        return (
-                          <button
-                            type="button"
-                            key={tech}
-                            onClick={() => onTechToggle(tech)}
-                            className={cn(
-                              "px-3.5 py-2 rounded-[2rem] text-xs font-medium border transition-all duration-200 active:scale-95",
-                              isSelected
-                                ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                                : "bg-background border-border/60 text-muted-foreground hover:border-border hover:bg-muted/20 hover:text-foreground"
-                            )}
-                          >
-                            {tech}
-                          </button>
-                        );
-                      })}
-                    </div>
+                    <TechTagList
+                      allTech={allTech}
+                      selectedTech={selectedTech}
+                      onTechToggle={onTechToggle}
+                      variant="mobile"
+                      className="max-h-[300px] overflow-y-auto pr-2 -mr-2"
+                    />
                   </div>
                 </div>
 
