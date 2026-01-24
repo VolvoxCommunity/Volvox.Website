@@ -1,6 +1,5 @@
 "use client";
 
-import { Navigation } from "@/components/navigation";
 import { AnimatedBackground } from "@/components/animated-background";
 import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { Footer } from "@/components/footer";
@@ -41,13 +40,8 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
         <AnimatedBackground />
       </div>
 
-      {/* Site Navigation Header */}
-      <Navigation linkMode={true} />
-
-      {/* Back Navbar */}
-      <div className="pt-16 md:pt-24">
-        <ProductPostNavbar />
-      </div>
+      {/* Unified Navbar */}
+      <ProductPostNavbar />
 
       {/* Sidebar Table of Contents */}
       <ProductToc sections={tocSections} />

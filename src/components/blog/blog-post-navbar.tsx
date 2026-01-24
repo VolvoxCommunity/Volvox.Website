@@ -21,6 +21,7 @@ export function BlogPostNavbar() {
   return (
     <header
       role="banner"
+      data-testid="blog-post-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >
       <div className="container mx-auto px-4 max-w-7xl py-2 md:py-3 flex items-center justify-between gap-4">

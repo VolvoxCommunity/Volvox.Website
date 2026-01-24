@@ -48,7 +48,7 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
 
         <main
           id="main-content"
-          className="container mx-auto px-4 max-w-7xl pt-12 pb-8"
+          className="container mx-auto px-4 max-w-7xl pt-16 pb-8"
           aria-labelledby="team-page-heading"
         >
           {/* Page Header */}

@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Added
 
+- **ui: Add "Innovation Pipeline" products section to homepage with GSAP and Framer Motion animations** (`src/components/products.tsx`, `src/components/homepage-client.tsx`)
+- **content: Add mock product data for Aurora AI, NexTask, and Lumina Docs** (`content/products.json`, `content/products/`)
 - **a11y: Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
 - **a11y: Add ARIA landmark roles for screen reader navigation** (banner, main, contentinfo, section aria-labels)
 - **ui: Add keyboard shortcuts hook for navigation** (`src/hooks/use-keyboard-shortcuts.ts`)
@@ -49,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **ui: Fix navigation structure and "Back to Products" logic in product detail pages** (`src/components/products/product-post-navbar.tsx`, `src/app/products/[slug]/product-detail-client.tsx`)
 - **Hero: Fix typewriter effect hydration mismatch and dependency stability** (`src/components/hero.tsx`, `src/hooks/use-typewriter-effect.ts`)
 - **Mentorship: Refactor infinite marquee for better performance and seamless looping** (`src/components/mentorship.tsx`, `src/app/globals.css`)
 - **Team: Fix missing bio and expertise on team member detail pages for builders** (`src/app/team/team-member-detail-client.tsx`)

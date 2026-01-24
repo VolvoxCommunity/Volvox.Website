@@ -1,6 +1,7 @@
 {
   "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
   "name": "Sobers",
+  "type": "Recovery Tool",
   "slug": "sobers",
   "tagline": "Track the journey, not just the days.",
   "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
@@ -14,6 +15,7 @@
     "Cross-platform support (iOS, Android, Web)"
   ],
   "techStack": ["iOS", "Android", "Web", "React Native", "Expo"],
+  "updatedAt": "2024-01-20T10:00:00Z",
   "links": {
     "github": "https://github.com/VolvoxCommunity/sobers",
     "demo": "https://sobers.app",
