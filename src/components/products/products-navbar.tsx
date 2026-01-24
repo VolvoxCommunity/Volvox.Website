@@ -64,10 +64,7 @@ export function ProductsNavbar({
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header
-      role="banner"
-      className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
-    >
+    <header className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40">
       <div className="container mx-auto px-2 sm:px-4 max-w-7xl py-2 md:py-3 flex items-center justify-between gap-1.5 sm:gap-4">
         {/* Left Section */}
         <div className="flex items-center gap-2 md:gap-8 grow-0 shrink-0">
