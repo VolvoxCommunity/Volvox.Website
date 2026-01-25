@@ -54,7 +54,7 @@ function ProductCard({ product }: ProductCardProps) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Scroll reveal for the card
-      gsap.fromTo(
+      const animCard = gsap.fromTo(
         cardRef.current,
         {
           y: 100,
@@ -78,7 +78,7 @@ function ProductCard({ product }: ProductCardProps) {
       );
 
       // Parallax effect for the image
-      gsap.to(imageRef.current, {
+      const animImage = gsap.to(imageRef.current, {
         scrollTrigger: {
           trigger: cardRef.current,
           start: "top bottom",
@@ -88,9 +88,17 @@ function ProductCard({ product }: ProductCardProps) {
         y: -30,
         ease: "none",
       });
+
+      return () => {
+        animCard.kill();
+        animImage.kill();
+      };
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
   }, []);
 
   return (
@@ -265,7 +273,7 @@ export function Products({
 
     const ctx = gsap.context(() => {
       // Trance Background Animation
-      gsap.to(glow1Ref.current, {
+      const animGlow1 = gsap.to(glow1Ref.current, {
         x: "30%",
         y: "20%",
         duration: 15,
@@ -273,7 +281,7 @@ export function Products({
         yoyo: true,
         ease: "sine.inOut",
       });
-      gsap.to(glow2Ref.current, {
+      const animGlow2 = gsap.to(glow2Ref.current, {
         x: "-20%",
         y: "-30%",
         duration: 20,
@@ -283,7 +291,7 @@ export function Products({
       });
 
       // Header reveal
-      gsap.fromTo(
+      const animHeader = gsap.fromTo(
         headerRef.current,
         { y: 50, opacity: 0, filter: "blur(20px)" },
         {
@@ -299,9 +307,18 @@ export function Products({
           ease: "power3.out",
         }
       );
+
+      return () => {
+        animGlow1.kill();
+        animGlow2.kill();
+        animHeader.kill();
+      };
     });
 
-    return () => ctx.revert();
+    return () => {
+      ctx.revert();
+      ScrollTrigger.getAll().forEach((st) => st.kill());
+    };
   }, []);
 
   const filteredProducts = useMemo(() => {
