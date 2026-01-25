@@ -25,6 +25,8 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
         id="aura-spline"
         title="Interactive 3D Data Model Interaction"
         className="pointer-events-auto"
+        loading="lazy"
+        aria-hidden="true"
       />
     </div>
   );

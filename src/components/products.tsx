@@ -52,41 +52,45 @@ function ProductCard({ product }: ProductCardProps) {
   const imagePath = resolveProductImagePath(heroImage, product.slug);
 
   useEffect(() => {
-    // Scroll reveal for the card
-    gsap.fromTo(
-      cardRef.current,
-      {
-        y: 100,
-        opacity: 0,
-        scale: 0.95,
-        filter: "blur(10px)",
-      },
-      {
+    const ctx = gsap.context(() => {
+      // Scroll reveal for the card
+      gsap.fromTo(
+        cardRef.current,
+        {
+          y: 100,
+          opacity: 0,
+          scale: 0.95,
+          filter: "blur(10px)",
+        },
+        {
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 90%",
+            end: "top 60%",
+            scrub: 1,
+          },
+          y: 0,
+          opacity: 1,
+          scale: 1,
+          filter: "blur(0px)",
+          ease: "power2.out",
+        }
+      );
+
+      // Parallax effect for the image
+      gsap.to(imageRef.current, {
         scrollTrigger: {
           trigger: cardRef.current,
-          start: "top 90%",
-          end: "top 60%",
-          scrub: 1,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
         },
-        y: 0,
-        opacity: 1,
-        scale: 1,
-        filter: "blur(0px)",
-        ease: "power2.out",
-      }
-    );
-
-    // Parallax effect for the image
-    gsap.to(imageRef.current, {
-      scrollTrigger: {
-        trigger: cardRef.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-      y: -30,
-      ease: "none",
+        y: -30,
+        ease: "none",
+      });
     });
+
+    return () => ctx.revert();
   }, []);
 
   return (
@@ -259,41 +263,45 @@ export function Products({
   useEffect(() => {
     if (!sectionRef.current) return;
 
-    // Trance Background Animation
-    gsap.to(glow1Ref.current, {
-      x: "30%",
-      y: "20%",
-      duration: 15,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
-    });
-    gsap.to(glow2Ref.current, {
-      x: "-20%",
-      y: "-30%",
-      duration: 20,
-      repeat: -1,
-      yoyo: true,
-      ease: "sine.inOut",
+    const ctx = gsap.context(() => {
+      // Trance Background Animation
+      gsap.to(glow1Ref.current, {
+        x: "30%",
+        y: "20%",
+        duration: 15,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+      gsap.to(glow2Ref.current, {
+        x: "-20%",
+        y: "-30%",
+        duration: 20,
+        repeat: -1,
+        yoyo: true,
+        ease: "sine.inOut",
+      });
+
+      // Header reveal
+      gsap.fromTo(
+        headerRef.current,
+        { y: 50, opacity: 0, filter: "blur(20px)" },
+        {
+          scrollTrigger: {
+            trigger: headerRef.current,
+            start: "top 90%",
+            end: "top 60%",
+            scrub: 1,
+          },
+          y: 0,
+          opacity: 1,
+          filter: "blur(0px)",
+          ease: "power3.out",
+        }
+      );
     });
 
-    // Header reveal
-    gsap.fromTo(
-      headerRef.current,
-      { y: 50, opacity: 0, filter: "blur(20px)" },
-      {
-        scrollTrigger: {
-          trigger: headerRef.current,
-          start: "top 90%",
-          end: "top 60%",
-          scrub: 1,
-        },
-        y: 0,
-        opacity: 1,
-        filter: "blur(0px)",
-        ease: "power3.out",
-      }
-    );
+    return () => ctx.revert();
   }, []);
 
   const filteredProducts = useMemo(() => {
