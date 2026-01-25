@@ -16,7 +16,6 @@ import { resolveProductImagePath } from "@/lib/image-utils";
 import { ProductsNavbar } from "@/components/products/products-navbar";
 import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
-import { Navigation } from "@/components/navigation";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
@@ -201,11 +200,8 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         <AnimatedBackground />
       </div>
 
-      {/* Main Navigation */}
-      <Navigation linkMode />
-
       {/* Content Layer */}
-      <div className="relative z-10 flex-1 pt-20">
+      <div className="relative z-10 flex-1">
         {/* Navbar with Search & Filters */}
         <ProductsNavbar
           searchQuery={searchQuery}

@@ -154,6 +154,7 @@ export const productLinksSchema = z.object({
 export const extendedProductSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1),
+  type: z.string().optional(),
   slug: z
     .string()
     .min(1)
@@ -164,6 +165,7 @@ export const extendedProductSchema = z.object({
   longDescription: z.string().min(1),
   features: z.array(z.string()).min(1),
   techStack: z.array(z.string()).default([]),
+  updatedAt: z.string().optional(),
   links: productLinksSchema.default({}),
   screenshots: z.array(z.string()).default([]),
   faq: z.array(faqItemSchema).default([]),

@@ -1,7 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
+import { cn } from "@/lib/utils";
 import { Moon, Sun, List, DiscordLogo, X } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
@@ -16,12 +19,48 @@ interface NavigationProps {
   linkMode?: boolean;
 }
 
-export function Navigation({
-  onNavigate,
-  currentSection,
-  linkMode = false,
-}: NavigationProps) {
+export function Navigation(props: NavigationProps) {
+  const { onNavigate, currentSection, linkMode = false } = props;
   const { theme, setTheme } = useTheme();
+  const router = useRouter();
+  // Initialize keyboard shortcuts
+  useKeyboardShortcuts({
+    shortcuts: [
+      {
+        key: "h",
+        description: "Go to Home",
+        action: () => (onNavigate ? onNavigate("home") : router.push("/")),
+      },
+      {
+        key: "p",
+        description: "Go to Products",
+        action: () =>
+          onNavigate ? onNavigate("products") : router.push("/#products"),
+      },
+      {
+        key: "b",
+        description: "Go to Blog",
+        action: () => (onNavigate ? onNavigate("blog") : router.push("/#blog")),
+      },
+      {
+        key: "c",
+        description: "Go to Community",
+        action: () =>
+          onNavigate ? onNavigate("mentorship") : router.push("/#mentorship"),
+      },
+      {
+        key: "t",
+        description: "Go to Team",
+        action: () => router.push("/team"),
+      },
+      {
+        key: "a",
+        description: "Go to About",
+        action: () =>
+          onNavigate ? onNavigate("about") : router.push("/#about"),
+      },
+    ],
+  });
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isIsland, setIsIsland] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
@@ -79,6 +118,7 @@ export function Navigation({
 
   const navItems = [
     { id: "home", label: "Home", href: "/" },
+    { id: "products", label: "Products", href: "/#products" },
     { id: "blog", label: "Blog", href: "/#blog" },
     { id: "mentorship", label: "Community", href: "/#mentorship" },
     { id: "team", label: "Team", href: "/team" },
@@ -95,23 +135,23 @@ export function Navigation({
       {/* Fixed Wrapper - acts as page banner */}
       <header
         role="banner"
-        className={`fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out ${
+        className={cn(
+          "fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out",
           isVisible ? "translate-y-0" : "md:-translate-y-full translate-y-0"
-        }`}
+        )}
       >
         {/* Nav Container */}
         <nav
           ref={navRef}
           onMouseMove={handleMouseMove}
           aria-label="Main navigation"
-          className={`pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]
-            w-full py-2 px-3 bg-transparent
-            ${
-              isIsland
-                ? "group md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
-                : "md:w-full md:max-w-full md:py-6 md:px-10 md:border-b md:border-border/5"
-            }
-          `}
+          className={cn(
+            "pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+            "w-full py-2 px-3 bg-transparent",
+            isIsland
+              ? "group md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+              : "md:w-full md:max-w-full md:py-6 md:px-10 md:border-b md:border-border/5"
+          )}
         >
           {/* Mobile Progressive Blur Background */}
           <div className="absolute inset-0 md:hidden z-[-1] pointer-events-none">
@@ -127,9 +167,10 @@ export function Navigation({
 
           {/* Spotlight Effect (Desktop Only) */}
           <div
-            className={`absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden md:block ${
+            className={cn(
+              "absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden md:block",
               isIsland ? "group-hover:opacity-100 hover:opacity-100" : ""
-            }`}
+            )}
             style={{
               background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), oklch(from var(--primary) l c h / 0.15), transparent 40%)`,
             }}
@@ -153,20 +194,22 @@ export function Navigation({
 
           {/* Desktop Links */}
           <ul
-            className={`hidden md:flex z-[2] list-none ${
+            className={cn(
+              "hidden md:flex z-[2] list-none",
               isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8"
-            }`}
+            )}
           >
             {navItems.map((item) => (
               <li key={item.id}>
                 {linkMode || item.id === "team" ? (
                   <Link
                     href={item.href}
-                    className={`inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 ${
+                    className={cn(
+                      "inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300",
                       currentSection === item.id
                         ? "opacity-100 bg-foreground/5 text-foreground"
                         : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
-                    }`}
+                    )}
                   >
                     {item.label}
                   </Link>
@@ -174,11 +217,12 @@ export function Navigation({
                   <button
                     type="button"
                     onClick={() => handleNavigate(item.id)}
-                    className={`inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none ${
+                    className={cn(
+                      "inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none",
                       currentSection === item.id
                         ? "opacity-100 bg-foreground/5 text-foreground"
                         : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
-                    }`}
+                    )}
                   >
                     {item.label}
                   </button>
@@ -205,7 +249,7 @@ export function Navigation({
             </Button>
 
             <Button
-              className={`hidden md:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none`}
+              className="hidden md:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none"
               onClick={(e) => {
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
