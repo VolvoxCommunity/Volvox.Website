@@ -19,11 +19,10 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     >
       <iframe
         src="https://my.spline.design/aidatamodelinteraction-mdTL3FktFVHgDvFr5TKtnYDV"
-        frameBorder="0"
         width="100%"
         height="100%"
         id="aura-spline"
-        className="pointer-events-auto"
+        className="border-0 pointer-events-auto"
         loading="lazy"
         aria-hidden="true"
       />

@@ -24,7 +24,7 @@ export function ProductPostNavbar() {
             <Button
               variant="ghost"
               size="sm"
-              onClick={() => router.push("/#products")}
+              onClick={() => router.push("/products")}
               aria-label="Back to Products"
               className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
             >
@@ -80,7 +80,7 @@ export function ProductPostNavbar() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => router.push("/#products")}
+            onClick={() => router.push("/products")}
             className="hidden md:flex rounded-full gap-2 border-border/60"
           >
             <ArrowLeft className="h-3.5 w-3.5" />

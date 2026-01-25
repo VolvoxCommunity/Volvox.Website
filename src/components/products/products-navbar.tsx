@@ -245,6 +245,7 @@ export function ProductsNavbar({
                 { value: "z-a", label: "Z-A" },
               ].map((opt) => (
                 <button
+                  type="button"
                   key={opt.value}
                   onClick={() => onSortChange(opt.value as ProductSortOption)}
                   className={cn(
@@ -331,6 +332,7 @@ export function ProductsNavbar({
                         { value: "z-a", label: "Name (Z-A)" },
                       ].map((opt) => (
                         <button
+                          type="button"
                           key={opt.value}
                           onClick={() =>
                             onSortChange(opt.value as ProductSortOption)
@@ -356,6 +358,7 @@ export function ProductsNavbar({
                       </span>
                       {selectedTech.length > 0 && (
                         <button
+                          type="button"
                           onClick={onClearTech}
                           className="text-xs font-medium text-primary hover:text-primary/80 transition-colors"
                         >
@@ -368,6 +371,7 @@ export function ProductsNavbar({
                         const isSelected = selectedTech.includes(tech);
                         return (
                           <button
+                            type="button"
                             key={tech}
                             onClick={() => onTechToggle(tech)}
                             className={cn(
