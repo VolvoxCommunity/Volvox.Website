@@ -112,6 +112,7 @@ export function ProductsNavbar({
                 <Link
                   key={item.id}
                   href={item.href}
+                  aria-current={isActive ? "page" : undefined}
                   className={cn(
                     "text-sm font-medium py-2 px-3 rounded-full transition-all duration-300",
                     isActive
