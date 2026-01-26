@@ -97,7 +97,6 @@ function ProductCard({ product }: ProductCardProps) {
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
     };
   }, []);
 
