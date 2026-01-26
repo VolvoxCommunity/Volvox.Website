@@ -204,7 +204,9 @@ export function Navigation(props: NavigationProps) {
                 {linkMode || item.id === "team" ? (
                   <Link
                     href={item.href}
-                    aria-current={currentSection === item.id ? "page" : undefined}
+                    aria-current={
+                      currentSection === item.id ? "page" : undefined
+                    }
                     className={cn(
                       "inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300",
                       currentSection === item.id
@@ -217,7 +219,9 @@ export function Navigation(props: NavigationProps) {
                 ) : (
                   <button
                     type="button"
-                    aria-current={currentSection === item.id ? "page" : undefined}
+                    aria-current={
+                      currentSection === item.id ? "page" : undefined
+                    }
                     onClick={() => handleNavigate(item.id)}
                     className={cn(
                       "inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none",
