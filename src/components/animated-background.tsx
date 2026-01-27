@@ -2,9 +2,7 @@
 
 import { useState } from "react";
 import { cn } from "@/lib/utils";
-
-const SPLINE_IFRAME_URL =
-  "https://my.spline.design/aidatamodelinteraction-mdTL3FktFVHgDvFr5TKtnYDV";
+import { SPLINE_IFRAME_URL } from "@/lib/constants";
 
 /**
  * Renders a full-screen, interactive Spline 3D background.

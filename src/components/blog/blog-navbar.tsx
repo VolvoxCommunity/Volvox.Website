@@ -65,6 +65,7 @@ export function BlogNavbar({
 
   return (
     <header
+      role="banner"
       data-testid="blog-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >

@@ -28,6 +28,10 @@ export const TWITTER_URL = "https://x.com/volvox_llc";
 /** LinkedIn company page URL */
 export const LINKEDIN_URL = "https://www.linkedin.com/company/volvoxllc";
 
+/** Spline 3D background scene URL */
+export const SPLINE_IFRAME_URL =
+  "https://my.spline.design/aidatamodelinteraction-mdTL3FktFVHgDvFr5TKtnYDV";
+
 /** Brand colors for OG images and other static uses */
 export const BRAND_COLORS = {
   primary: "#007AFF",

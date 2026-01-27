@@ -37,6 +37,8 @@ interface ProductsProps {
   viewMode?: ViewMode;
   onViewModeChange?: (value: ViewMode) => void;
   enableFilters?: boolean;
+  /** Maximum number of products to display (defaults to 3 on homepage) */
+  limit?: number;
 }
 
 interface ProductCardProps {
@@ -237,7 +239,11 @@ function ProductCard({ product }: ProductCardProps) {
                     variant="default"
                     className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest gap-2 shadow-[0_15px_30px_-5px_oklch(from_var(--primary)_l_c_h_/_0.3)] hover:scale-105 active:scale-95 transition-all"
                     onClick={() =>
-                      window.open(product.links.demo, "_blank", "noopener,noreferrer")
+                      window.open(
+                        product.links.demo,
+                        "_blank",
+                        "noopener,noreferrer"
+                      )
                     }
                   >
                     Launch <Globe weight="bold" className="w-4 h-4" />
@@ -262,7 +268,7 @@ export function Products({
   onViewModeChange,
   enableFilters = false,
   limit = 3,
-}: ProductsProps & { limit?: number }) {
+}: ProductsProps) {
   const router = useRouter();
   const sectionRef = useRef<HTMLElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
