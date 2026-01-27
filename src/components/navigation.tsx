@@ -120,7 +120,13 @@ export function Navigation(props: NavigationProps) {
   const navItems = NAV_ITEMS;
 
   const handleNavigate = (section: string) => {
-    if (onNavigate) onNavigate(section);
+    if (onNavigate) {
+      onNavigate(section);
+    } else {
+      // Fallback: navigate via router when onNavigate is not provided
+      const target = navItems.find((item) => item.id === section);
+      if (target) router.push(target.href);
+    }
     setMobileOpen(false);
   };
 

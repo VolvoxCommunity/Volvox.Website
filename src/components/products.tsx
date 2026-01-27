@@ -293,7 +293,7 @@ export function Products({
       });
 
       // Header reveal
-      const animHeader = gsap.fromTo(
+      gsap.fromTo(
         headerRef.current,
         { y: 50, opacity: 0, filter: "blur(20px)" },
         {
@@ -309,13 +309,7 @@ export function Products({
           ease: "power3.out",
         }
       );
-
-      return () => {
-        animGlow1.kill();
-        animGlow2.kill();
-        animHeader.kill();
-      };
-    });
+    }, sectionRef);
 
     return () => {
       ctx.revert();

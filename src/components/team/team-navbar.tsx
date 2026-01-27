@@ -27,7 +27,6 @@ export function TeamNavbar({
 
   return (
     <header
-      role="banner"
       data-testid="team-navbar"
       className="sticky top-0 z-[1001] w-full bg-background/80 backdrop-blur-md border-b border-border/40"
     >
