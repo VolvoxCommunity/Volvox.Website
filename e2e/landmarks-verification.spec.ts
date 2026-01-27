@@ -12,8 +12,8 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Verify banner role (header with navigation)
-    const banner = page.locator('[role="banner"]');
+    // Verify banner role (semantic <header> has implicit banner role)
+    const banner = page.getByRole("banner");
     await expect(banner).toBeVisible();
 
     // Verify navigation with aria-label
