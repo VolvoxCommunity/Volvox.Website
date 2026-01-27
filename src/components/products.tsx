@@ -236,7 +236,9 @@ function ProductCard({ product }: ProductCardProps) {
                   <Button
                     variant="default"
                     className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest gap-2 shadow-[0_15px_30px_-5px_oklch(from_var(--primary)_l_c_h_/_0.3)] hover:scale-105 active:scale-95 transition-all"
-                    onClick={() => window.open(product.links.demo, "_blank")}
+                    onClick={() =>
+                      window.open(product.links.demo, "_blank", "noopener,noreferrer")
+                    }
                   >
                     Launch <Globe weight="bold" className="w-4 h-4" />
                   </Button>
