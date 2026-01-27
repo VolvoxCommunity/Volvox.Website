@@ -147,9 +147,7 @@ export function ProductsNavbar({
               />
               <input
                 type="text"
-                products. Currently showing ${resultCount} results.`}
-                ${resultCount}...`}
-                type="text"
+                aria-label={`Search products. Currently showing ${resultCount} results.`}
                 placeholder={`Search ${resultCount}...`}
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}

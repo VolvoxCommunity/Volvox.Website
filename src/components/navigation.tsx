@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
 import confettiLib from "canvas-confetti";
 import Image from "next/image";
-import { DISCORD_URL } from "@/lib/constants";
+import { DISCORD_URL, NAV_ITEMS } from "@/lib/constants";
 import { motion, AnimatePresence } from "framer-motion";
 
 interface NavigationProps {
@@ -35,7 +35,7 @@ export function Navigation(props: NavigationProps) {
         key: "p",
         description: "Go to Products",
         action: () =>
-          onNavigate ? onNavigate("products") : router.push("/#products"),
+          onNavigate ? onNavigate("products") : router.push("/products"),
       },
       {
         key: "b",
@@ -116,14 +116,8 @@ export function Navigation(props: NavigationProps) {
     });
   };
 
-  const navItems = [
-    { id: "home", label: "Home", href: "/" },
-    { id: "products", label: "Products", href: "/#products" },
-    { id: "blog", label: "Blog", href: "/#blog" },
-    { id: "mentorship", label: "Community", href: "/#mentorship" },
-    { id: "team", label: "Team", href: "/team" },
-    { id: "about", label: "About", href: "/#about" },
-  ];
+  // Use centralized NAV_ITEMS from constants to ensure consistency across the site
+  const navItems = NAV_ITEMS;
 
   const handleNavigate = (section: string) => {
     if (onNavigate) onNavigate(section);

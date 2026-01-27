@@ -318,9 +318,6 @@ export function Products({
 
     return () => {
       ctx.revert();
-    return () => {
-      ctx.revert();
-    };
     };
   }, []);
 
