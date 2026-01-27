@@ -149,10 +149,13 @@ test.describe("Semantic Landmarks Verification", () => {
           .forEach((el) => uniqueElements.add(el));
 
         // For banner, also add <header> elements (implicit banner role)
+        // Only top-level headers have implicit banner role - exclude those nested in sectioning content
         if (role === "banner") {
-          document
-            .querySelectorAll("header")
-            .forEach((el) => uniqueElements.add(el));
+          document.querySelectorAll("header").forEach((el) => {
+            if (!el.closest("article, aside, nav, section, main")) {
+              uniqueElements.add(el);
+            }
+          });
         }
 
         // For navigation, also add <nav> elements (implicit navigation role)
