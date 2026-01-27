@@ -147,6 +147,9 @@ export function ProductsNavbar({
               />
               <input
                 type="text"
+                products. Currently showing ${resultCount} results.`}
+                ${resultCount}...`}
+                type="text"
                 placeholder={`Search ${resultCount}...`}
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
