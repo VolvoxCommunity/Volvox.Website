@@ -12,8 +12,8 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Verify banner role (header with navigation)
-    const banner = page.locator('[role="banner"]');
+    // Verify banner role (semantic <header> has implicit banner role)
+    const banner = page.getByRole("banner");
     await expect(banner).toBeVisible();
 
     // Verify navigation with aria-label
@@ -51,8 +51,8 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Verify banner role
-    const banner = page.locator('[role="banner"]');
+    // Verify banner role (semantic <header> has implicit banner role)
+    const banner = page.getByRole("banner");
     await expect(banner).toBeVisible();
 
     // Verify navigation
@@ -78,8 +78,8 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Verify banner role
-    const banner = page.locator('[role="banner"]');
+    // Verify banner role (semantic <header> has implicit banner role)
+    const banner = page.getByRole("banner");
     await expect(banner).toBeVisible();
 
     // Verify navigation
@@ -105,8 +105,8 @@ test.describe("Semantic Landmarks Verification", () => {
     // Wait for page to be fully loaded
     await page.waitForLoadState("networkidle");
 
-    // Verify banner role
-    const banner = page.locator('[role="banner"]');
+    // Verify banner role (semantic <header> has implicit banner role)
+    const banner = page.getByRole("banner");
     await expect(banner).toBeVisible();
 
     // Verify navigation
@@ -147,6 +147,16 @@ test.describe("Semantic Landmarks Verification", () => {
         document
           .querySelectorAll(`[role="${role}"]`)
           .forEach((el) => uniqueElements.add(el));
+
+        // For banner, also add <header> elements (implicit banner role)
+        // Only top-level headers have implicit banner role - exclude those nested in sectioning content
+        if (role === "banner") {
+          document.querySelectorAll("header").forEach((el) => {
+            if (!el.closest("article, aside, nav, section, main")) {
+              uniqueElements.add(el);
+            }
+          });
+        }
 
         // For navigation, also add <nav> elements (implicit navigation role)
         if (role === "navigation") {

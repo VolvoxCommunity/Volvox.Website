@@ -70,19 +70,7 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
       className="relative min-h-[600px] w-full overflow-hidden bg-background flex flex-col items-center justify-center py-16 md:py-24"
     >
       {/* Background layer */}
-      <AnimatedBackground
-        className="absolute inset-0 z-0"
-        colors={[
-          { color: "var(--background)", stop: "0%" },
-          {
-            color: "color-mix(in oklch, var(--primary), transparent 90%)",
-            stop: "50%",
-          },
-          { color: "var(--background)", stop: "100%" },
-        ]}
-        enableNoise={true}
-        noiseIntensity={0.5}
-      />
+      <AnimatedBackground />
 
       {/* Header Content */}
       <div className="relative z-10 container mx-auto px-6 text-center mb-12 md:mb-16">

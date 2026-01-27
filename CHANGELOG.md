@@ -10,7 +10,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - **Marketing: Add ActiveCampaign form embed script site-wide** (`src/app/layout.tsx`)
-- **a11y: Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
+- **feat(ui): Add "Innovation Pipeline" products section to homepage with GSAP and Framer Motion animations** (`src/components/products.tsx`, `src/components/homepage-client.tsx`)
+- **feat(content): Add mock product data for Aurora AI, NexTask, and Lumina Docs** (`content/products.json`, `content/products/`)
+- **test(a11y): Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
 - **a11y: Add ARIA landmark roles for screen reader navigation** (banner, main, contentinfo, section aria-labels)
 - **ui: Add keyboard shortcuts hook for navigation** (`src/hooks/use-keyboard-shortcuts.ts`)
 - **ui: Add App Store and Google Play badge SVGs** (`public/images/stores/`)
@@ -51,6 +53,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 ### Fixed
 
+- **ui: Fix navigation structure and "Back to Products" logic in product detail pages** (`src/components/products/product-post-navbar.tsx`, `src/app/products/[slug]/product-detail-client.tsx`)
 - **SEO: Team member cards use proper `<Link>` elements for internal linking** (fixes orphan page detection) (`src/components/team/team-card.tsx`)
 - **Hero: Fix typewriter effect hydration mismatch and dependency stability** (`src/components/hero.tsx`, `src/hooks/use-typewriter-effect.ts`)
 - **Mentorship: Refactor infinite marquee for better performance and seamless looping** (`src/components/mentorship.tsx`, `src/app/globals.css`)

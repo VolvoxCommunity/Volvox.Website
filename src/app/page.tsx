@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
-import { getAllTeamMembers } from "@/lib/content";
+import { getAllTeamMembers, getAllExtendedProducts } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 
 export const metadata: Metadata = {
@@ -14,10 +14,12 @@ export const metadata: Metadata = {
  * Renders the homepage server component with resilient data fetching.
  */
 export default async function HomePage() {
-  const [blogPostsResult, teamResult] = await Promise.allSettled([
-    getAllPosts(),
-    Promise.resolve(getAllTeamMembers()),
-  ]);
+  const [blogPostsResult, teamResult, productsResult] =
+    await Promise.allSettled([
+      getAllPosts(),
+      Promise.resolve(getAllTeamMembers()),
+      Promise.resolve(getAllExtendedProducts()),
+    ]);
 
   const blogPosts =
     blogPostsResult.status === "fulfilled" ? blogPostsResult.value : [];
@@ -33,5 +35,17 @@ export default async function HomePage() {
     reportError("Failed to load team members for HomePage", teamResult.reason);
   }
 
-  return <HomepageClient blogPosts={blogPosts} teamMembers={teamMembers} />;
+  const products =
+    productsResult.status === "fulfilled" ? productsResult.value : [];
+  if (productsResult.status === "rejected") {
+    reportError("Failed to load products for HomePage", productsResult.reason);
+  }
+
+  return (
+    <HomepageClient
+      blogPosts={blogPosts}
+      teamMembers={teamMembers}
+      products={products}
+    />
+  );
 }
