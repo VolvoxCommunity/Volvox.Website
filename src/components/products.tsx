@@ -116,6 +116,7 @@ function ProductCard({ product }: ProductCardProps) {
                     src={imagePath}
                     alt={product.name}
                     fill
+                    sizes="(max-width: 1024px) 100vw, 45vw"
                     className="object-cover transition-transform duration-1000 group-hover/image:scale-110"
                   />
                 ) : (
@@ -275,7 +276,7 @@ export function Products({
 
     const ctx = gsap.context(() => {
       // Trance Background Animation
-      const animGlow1 = gsap.to(glow1Ref.current, {
+      gsap.to(glow1Ref.current, {
         x: "30%",
         y: "20%",
         duration: 15,
@@ -283,7 +284,7 @@ export function Products({
         yoyo: true,
         ease: "sine.inOut",
       });
-      const animGlow2 = gsap.to(glow2Ref.current, {
+      gsap.to(glow2Ref.current, {
         x: "-20%",
         y: "-30%",
         duration: 20,

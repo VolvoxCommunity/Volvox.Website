@@ -134,7 +134,6 @@ export function Navigation(props: NavigationProps) {
     <>
       {/* Fixed Wrapper - acts as page banner */}
       <header
-        role="banner"
         className={cn(
           "fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out",
           isVisible ? "translate-y-0" : "md:-translate-y-full translate-y-0"
