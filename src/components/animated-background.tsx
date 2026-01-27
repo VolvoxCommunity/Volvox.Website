@@ -35,7 +35,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
           loading="lazy"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
-          style={{ border: 0, opacity: hasLoaded ? 1 : 0 }}
+          style={{ border: 0 }}
           className={cn(
             "pointer-events-auto transition-opacity duration-1000",
             hasLoaded ? "opacity-100" : "opacity-0"

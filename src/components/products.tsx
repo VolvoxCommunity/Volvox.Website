@@ -56,7 +56,7 @@ function ProductCard({ product }: ProductCardProps) {
   useEffect(() => {
     const ctx = gsap.context(() => {
       // Scroll reveal for the card
-      const animCard = gsap.fromTo(
+      gsap.fromTo(
         cardRef.current,
         {
           y: 100,
@@ -80,7 +80,7 @@ function ProductCard({ product }: ProductCardProps) {
       );
 
       // Parallax effect for the image
-      const animImage = gsap.to(imageRef.current, {
+      gsap.to(imageRef.current, {
         scrollTrigger: {
           trigger: cardRef.current,
           start: "top bottom",
@@ -90,11 +90,6 @@ function ProductCard({ product }: ProductCardProps) {
         y: -30,
         ease: "none",
       });
-
-      return () => {
-        animCard.kill();
-        animImage.kill();
-      };
     });
 
     return () => {
@@ -352,11 +347,14 @@ export function Products({
       );
     }
 
-    // Finally apply explicit sort option
-    if (sortOption === "z-a") {
-      result.sort((a, b) => b.name.localeCompare(a.name));
-    } else if (sortOption === "a-z") {
-      result.sort((a, b) => a.name.localeCompare(b.name));
+    // Apply explicit sort option only when filters are enabled (products page)
+    // Homepage keeps updatedAt order (latest first)
+    if (enableFilters) {
+      if (sortOption === "z-a") {
+        result.sort((a, b) => b.name.localeCompare(a.name));
+      } else if (sortOption === "a-z") {
+        result.sort((a, b) => a.name.localeCompare(b.name));
+      }
     }
 
     return result;
