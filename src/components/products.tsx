@@ -316,7 +316,9 @@ export function Products({
 
     return () => {
       ctx.revert();
-      ScrollTrigger.getAll().forEach((st) => st.kill());
+    return () => {
+      ctx.revert();
+    };
     };
   }, []);
 
