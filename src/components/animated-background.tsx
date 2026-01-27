@@ -33,6 +33,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
           id="aura-spline"
           title="Interactive 3D Data Model Interaction"
           loading="lazy"
+          sandbox="allow-scripts allow-same-origin allow-pointer-lock"
           onLoad={() => setHasLoaded(true)}
           onError={() => setHasError(true)}
           style={{ border: 0 }}
