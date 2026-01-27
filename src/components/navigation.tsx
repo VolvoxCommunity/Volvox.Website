@@ -328,6 +328,9 @@ export function Navigation(props: NavigationProps) {
                     <Link
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
+                      aria-current={
+                        currentSection === item.id ? "page" : undefined
+                      }
                       className="text-3xl font-bold tracking-tight block py-2"
                     >
                       {item.label}
@@ -336,6 +339,9 @@ export function Navigation(props: NavigationProps) {
                     <button
                       type="button"
                       onClick={() => handleNavigate(item.id)}
+                      aria-current={
+                        currentSection === item.id ? "page" : undefined
+                      }
                       className="text-left text-3xl font-bold tracking-tight block py-2 bg-transparent border-none cursor-pointer w-full"
                     >
                       {item.label}
