@@ -372,6 +372,19 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     // RENDER LOGIC:
     if (asChild) {
+      // IMPORTANT: When using asChild, the child component MUST:
+      // 1. Accept a `children` prop and render it in its output
+      // 2. Forward all props (className, style, event handlers, etc.) to its root element
+      //
+      // This is because React.cloneElement replaces the child's children prop with our
+      // wrapped content (Ripple + original children). Icon-only components or components
+      // that don't forward/render their children prop will NOT work correctly.
+      //
+      // Example of a compatible component:
+      //   const MyLink = ({ children, ...props }) => <a {...props}>{children}</a>
+      //
+      // Example of an INCOMPATIBLE component (won't render ripple or content):
+      //   const IconButton = () => <svg>...</svg>  // No children prop
       const child = React.Children.only(children) as React.ReactElement<{
         children: React.ReactNode;
       }>;
