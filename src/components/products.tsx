@@ -143,7 +143,7 @@ function ProductCard({ product }: ProductCardProps) {
 
               {/* View Indicator */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-all duration-500 transform translate-y-4 group-hover/image:translate-y-0">
-                <div className="bg-background border-2 border-border rounded-full px-6 py-2 text-white font-bold text-sm tracking-wide">
+                <div className="bg-background border-2 border-border rounded-full px-6 py-2 text-foreground font-bold text-sm tracking-wide">
                   Explore Project
                 </div>
               </div>
