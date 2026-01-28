@@ -168,6 +168,17 @@
   }
 }
 
+/* Animated background bar pulse animation */
+@keyframes pulseBar {
+  0% {
+    transform: scaleY(var(--initial-scale));
+  }
+
+  100% {
+    transform: scaleY(calc(var(--initial-scale) * 0.7));
+  }
+}
+
 @keyframes infinite-scroll-y {
   from {
     transform: translateY(0);
