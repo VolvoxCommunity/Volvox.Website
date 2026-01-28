@@ -1,5 +1,7 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const braveExecutablePath = process.env.PLAYWRIGHT_BRAVE_EXECUTABLE_PATH;
+
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
@@ -28,15 +30,19 @@ export default defineConfig({
       name: "webkit",
       use: { ...devices["Desktop Safari"] },
     },
-    {
-      name: "brave",
-      use: {
-        ...devices["Desktop Chrome"],
-        launchOptions: {
-          executablePath: process.env.PLAYWRIGHT_BRAVE_EXECUTABLE_PATH,
-        },
-      },
-    },
+    ...(braveExecutablePath
+      ? [
+          {
+            name: "brave",
+            use: {
+              ...devices["Desktop Chrome"],
+              launchOptions: {
+                executablePath: braveExecutablePath,
+              },
+            },
+          },
+        ]
+      : []),
   ],
   webServer: {
     command: "pnpm dev",

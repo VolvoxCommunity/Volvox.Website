@@ -209,7 +209,7 @@ function ProductCard({ product }: ProductCardProps) {
                   <Badge
                     key={tech}
                     variant="outline"
-                    className="rounded-xl px-3 py-1.5 rounded-full text-[11px] font-bold bg-secondary border-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
+                    className="rounded-full px-3 py-1.5 text-[11px] font-bold bg-secondary border-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
                   >
                     {tech}
                   </Badge>

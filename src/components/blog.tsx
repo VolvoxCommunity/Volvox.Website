@@ -52,6 +52,7 @@ export function Blog({
 }: BlogProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const animationInitializedRef = useRef(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -99,16 +100,21 @@ export function Blog({
     return result;
   }, [allPosts, searchQuery, sortOption, enableFilters]);
 
-  // GSAP Animation Effect
+  // GSAP Animation Effect - only run on initial mount
   useEffect(() => {
+    // Only initialize animation once to prevent re-triggering on filter changes
+    if (animationInitializedRef.current) {
+      return;
+    }
+
     const ctx = gsap.context(() => {
       // Animate cards when they come into view
-      // We use a small timeout to ensure DOM is ready if re-rendering
-
       const cards =
         cardsContainerRef.current?.querySelectorAll(".blog-card-item");
 
       if (cards && cards.length > 0) {
+        animationInitializedRef.current = true;
+
         gsap.fromTo(
           cards,
           {
@@ -134,7 +140,7 @@ export function Blog({
     }, containerRef); // Scope to container
 
     return () => ctx.revert(); // Cleanup
-  }, [filteredPosts, viewMode]); // Re-run if posts change
+  }, [filteredPosts, viewMode]); // Dependencies kept for initial render timing
 
   return (
     <section

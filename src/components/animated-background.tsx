@@ -19,6 +19,9 @@ const GradientBars: React.FC<GradientBarsProps> = ({
   className = "",
 }) => {
   const calculateHeight = (index: number, total: number) => {
+    // Guard against division by zero when total <= 1
+    if (total <= 1) return 65;
+
     const position = index / (total - 1);
     const maxHeight = 100;
     const minHeight = 30;

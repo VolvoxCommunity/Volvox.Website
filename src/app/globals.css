@@ -637,7 +637,20 @@
     outline-offset: var(--focus-ring-offset) !important;
   }
 
-  /* Focus ring bypass utility */
+  /*
+   * Focus ring bypass utility
+   *
+   * WARNING: WCAG 2.4.7 Compliance
+   * Only use .no-ring on elements that provide ALTERNATIVE focus indicators
+   * (e.g., custom border styles, background changes, or other visual cues).
+   *
+   * Removing focus rings without a replacement violates WCAG 2.4.7:
+   * "Any keyboard operable user interface has a mode of operation where
+   * the keyboard focus indicator is visible."
+   *
+   * This utility is intended for custom-styled inputs and interactive elements
+   * that implement visual focus feedback through other means (border, shadow, etc.).
+   */
   .no-ring,
   .no-ring:focus,
   .no-ring:focus-visible {
