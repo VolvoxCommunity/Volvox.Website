@@ -16,7 +16,7 @@
       "TypeScript / JavaScript",
       "AI / OpenAI, Claude, Gemini",
       "SQL",
-      "CI/CD",
+      "CI / CD",
       "DevOps",
       "Agile",
       "Scrum"
@@ -156,5 +156,48 @@
     "linkedinUrl": "",
     "email": "easemize@gmail.com",
     "isHireable": true
+  },
+  {
+    "id": "mohsin",
+    "slug": "mohsin",
+    "name": "Mohsin Mukhtar",
+    "role": "Developer",
+    "tagline": "Software Developer working towards a BASc in Computer Science",
+    "bio": "Passionate computer science student and software developer with a keen interest in technology and innovation. He is dedicated to learning new skills and contributing to impactful projects in the tech industry.",
+    "avatar": "https://github.com/MohsinCoding.png",
+    "expertise": [
+      "NodeJS",
+      "React / React Native",
+      "System Design",
+      "TypeScript / JavaScript",
+      "AI",
+      "SQL / NoSQL",
+      "CI / CD"
+    ],
+    "projects": [
+      {
+        "name": "Vital Scrims",
+        "description": "Gaming community platform connecting players for competitive matches and tournaments.",
+        "role": "Lead Developer",
+        "url": "https://vitalscrims.com"
+      },
+      {
+        "name": "Decision Jar",
+        "description": "Mobile app helping users make decisions through gamified jar-picking mechanics.",
+        "role": "Developer",
+        "url": "https://decisionjar.app"
+      },
+      {
+        "name": "NBRS",
+        "description": "Discord community management bot & dashboard",
+        "role": "Developer",
+        "url": "https://nbrs.app"
+      }
+    ],
+    "type": "builder",
+    "githubUrl": "https://github.com/MohsinCoding",
+    "linkedinUrl": "",
+    "email": "mohsin@volvox.dev",
+    "isHireable": false
   }
 ]
