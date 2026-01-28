@@ -1,16 +1,10 @@
 "use client";
 
+// Framework imports
 import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import { DiscordLogo, Users } from "@phosphor-icons/react";
-import { TeamMember } from "@/lib/types";
-import confettiLib from "canvas-confetti";
-import { DISCORD_URL } from "@/lib/constants";
-import { cn } from "@/lib/utils";
+
+// Third-party imports
 import {
   useScroll,
   useSpring,
@@ -20,6 +14,17 @@ import {
   useMotionValue,
   useVelocity,
 } from "framer-motion";
+import { DiscordLogo, Users } from "@phosphor-icons/react";
+import confettiLib from "canvas-confetti";
+
+// Local imports
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/magnetic-button";
+import { TeamMember } from "@/lib/types";
+import { DISCORD_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 // Custom wrap function to replace @motionone/utils dependency
 const wrap = (min: number, max: number, v: number) => {
   const rangeSize = max - min;
