@@ -1065,3 +1065,14 @@
     font-size: clamp(3rem, 15vw, 5rem);
   }
 }
+
+/* =========================================
+   GSAP Animation Fallback
+   =========================================
+   Provides visibility fallback for elements that rely on GSAP animations.
+   If JavaScript fails to load or GSAP doesn't initialize, elements remain
+   visible with opacity: 1. GSAP will override via inline styles when active.
+   ========================================= */
+.gsap-will-animate {
+  opacity: 1;
+}

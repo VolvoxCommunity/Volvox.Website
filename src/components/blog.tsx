@@ -277,7 +277,7 @@ export function Blog({
           )}
         >
           {filteredPosts.map((post) => (
-            <div key={post.id} className="blog-card-item opacity-0">
+            <div key={post.id} className="blog-card-item gsap-will-animate">
               <BlogCard post={post} viewMode={viewMode} />
             </div>
           ))}

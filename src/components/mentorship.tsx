@@ -26,6 +26,13 @@ const wrap = (min: number, max: number, v: number) => {
   return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 };
 
+/**
+ * Converts pixel drag distance to percentage movement in the marquee coordinate space.
+ * The marquee uses percentage-based positioning (0-25% range for seamless looping),
+ * so this factor maps raw pixel deltas to that coordinate system.
+ */
+const DRAG_PIXEL_TO_PERCENT = 0.015;
+
 interface MentorshipProps {
   teamMembers: TeamMember[];
 }
@@ -129,7 +136,7 @@ interface ParallaxTextProps {
   teamMembers: TeamMember[];
 }
 
-function ParallaxText({ baseVelocity = -1, teamMembers }: ParallaxTextProps) {
+function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
   const baseX = useMotionValue(0);
   const { scrollY } = useScroll();
   const scrollVelocity = useVelocity(scrollY);
@@ -206,8 +213,7 @@ function ParallaxText({ baseVelocity = -1, teamMembers }: ParallaxTextProps) {
       onDragEnd={handleDragEnd}
       onDrag={(_, info) => {
         // Update baseX directly based on drag delta
-        // We divide by a factor to convert pixels to the baseX coordinate space (percentage)
-        baseX.set(baseX.get() + info.delta.x * 0.015);
+        baseX.set(baseX.get() + info.delta.x * DRAG_PIXEL_TO_PERCENT);
       }}
       dragElastic={0}
       dragMomentum={false}
