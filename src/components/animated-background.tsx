@@ -87,7 +87,9 @@ export function AnimatedBackground({
   animationDuration?: number;
   backgroundColor?: string;
 }) {
-  const [isMobile, setIsMobile] = useState(false);
+  // Initialize to null to indicate "not yet determined" state
+  // This avoids hydration mismatch since both server and initial client render use null
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
 
   useEffect(() => {
     const checkMobile = () => setIsMobile(window.innerWidth < 768);
@@ -97,7 +99,8 @@ export function AnimatedBackground({
   }, []);
 
   // Use explicit numBars if provided, otherwise responsive default
-  const effectiveNumBars = numBars ?? (isMobile ? 8 : 18);
+  // Use desktop default (18) until client determines actual viewport
+  const effectiveNumBars = numBars ?? (isMobile === true ? 8 : 18);
 
   return (
     <div
