@@ -153,10 +153,9 @@ export function ProductsNavbar({
                 onBlur={() => setIsSearchFocused(false)}
                 className={cn(
                   "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-[10px] sm:text-xs md:text-sm no-ring",
-                  "focus:outline-none focus:bg-background focus:border-border transition-all",
-                  "placeholder:text-muted-foreground/50 focus:ring-0 focus:ring-offset-0 ring-0 outline-none",
-                  !isSearchFocused &&
-                    "hover:bg-muted/60 hover:border-border/30 ring-0 focus:ring-0 focus:ring-offset-0 ring-offset-0"
+                  "focus:bg-background focus:border-border transition-all",
+                  "placeholder:text-muted-foreground/50",
+                  !isSearchFocused && "hover:bg-muted/60 hover:border-border/30"
                 )}
               />
               {searchQuery && (
