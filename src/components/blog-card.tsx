@@ -139,7 +139,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
                   <Badge
                     key={index}
                     variant="secondary"
-                    className="rounded-lg bg-secondary/10 hover:bg-secondary/20 text-secondary-foreground font-medium border-none px-2.5 py-0.5 text-[10px] whitespace-nowrap"
+                    className="rounded-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium border-none px-2.5 py-0.5 text-[10px] whitespace-nowrap"
                   >
                     {tag}
                   </Badge>

@@ -14,7 +14,6 @@ import {
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { AnimatedBackground } from "@/components/animated-background";
 import { MemberNavbar } from "@/components/team/member-navbar";
 import { Footer } from "@/components/footer";
 import { TeamMember } from "@/lib/types";
@@ -43,11 +42,6 @@ export function TeamMemberDetailClient({
       className="min-h-screen relative flex flex-col"
       data-testid="team-member-profile"
     >
-      {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <AnimatedBackground />
-      </div>
-
       {/* Site Navigation & Back Header */}
       <MemberNavbar />
 

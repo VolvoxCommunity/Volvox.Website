@@ -22,11 +22,19 @@ export const GITHUB_URL = "https://github.com/VolvoxCommunity";
 /** Discord community invite URL */
 export const DISCORD_URL = "https://discord.gg/8ahXACdamN";
 
-/** Twitter/X profile URL */
 export const TWITTER_URL = "https://x.com/volvox_llc";
 
 /** LinkedIn company page URL */
 export const LINKEDIN_URL = "https://www.linkedin.com/company/volvoxllc";
+
+/** YouTube channel URL */
+export const YOUTUBE_URL = "https://www.youtube.com/@volvox_llc";
+
+/** Instagram profile URL */
+export const INSTAGRAM_URL = "https://www.instagram.com/volvox_llc";
+
+/** TikTok profile URL */
+export const TIKTOK_URL = "https://www.tiktok.com/@volvox_llc";
 
 /** Spline 3D background scene URL */
 export const SPLINE_IFRAME_URL =

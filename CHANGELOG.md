@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 ### Added
 
 - **Marketing: Add ActiveCampaign form embed script site-wide** (`src/app/layout.tsx`)
+- **Social Media Links**: Added YouTube, Instagram, and TikTok links to the footer (`src/lib/constants.ts`, `src/components/footer.tsx`)
 - **feat(ui): Add "Innovation Pipeline" products section to homepage with GSAP and Framer Motion animations** (`src/components/products.tsx`, `src/components/homepage-client.tsx`)
 - **feat(content): Add mock product data for Aurora AI, NexTask, and Lumina Docs** (`content/products.json`, `content/products/`)
 - **test(a11y): Add E2E tests for ARIA landmark roles** (`e2e/landmarks-verification.spec.ts`)
@@ -42,6 +43,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - **ui: Add new CSS utilities and styles** (`globals.css`)
 - **config: Update ESLint and TypeScript configurations** (`eslint.config.mjs`, `tsconfig.json`)
 - **Docs: Redesign README with centered logo, badges (build, codecov, E2E, last-commit, Discord, Zread), Quick Links navigation, and improved documentation structure** (README.md)
+- **Animated Background**: Optimized background by reducing bar count on mobile for better performance and restoring original 2s pulse motion (`src/components/animated-background.tsx`)
+- **Material Button Upgrade**: Overhauled `Button` component with physics-based ripple effect and shape-morphing physics (`src/components/ui/button.tsx`)
+- **Product UI Refinement**: Improved product card aesthetics with solid tech badges and centered project indicators (`src/components/products.tsx`, `src/components/products-list-client.tsx`)
+- **Cleanup**: Removed `AnimatedBackground` from product, blog, and team listing/detail pages for reduced visual noise (`src/app/products/[slug]/product-detail-client.tsx`, `src/app/team/team-list-client.tsx`, etc.)
+- **Aesthetics**: Updated footer styling to remove rounded margin for a cleaner full-width look (`src/components/footer.tsx`)
 - **Visual: Update footer visual baseline for current implementation** (e2e/visual.spec.ts-snapshots)
 
 ### Deprecated
@@ -60,5 +66,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - **Team: Fix missing bio and expertise on team member detail pages for builders** (`src/app/team/team-member-detail-client.tsx`)
 - **SEO: Add missing canonical tags to all pages** (`/`, `/blog`, `/blog/[slug]`, `/products`, `/products/[slug]`)
 - **SEO: Add missing `/blog` listing page to sitemap** (`sitemap.ts`)
+- **SSR Hydration**: Fixed missing `"use client"` directive in `AnimatedBackground` component (`src/components/animated-background.tsx`)
+- **A11y/UI**: Bypassed global focus ring on navbar search inputs for a cleaner focused state (`src/app/globals.css`, `src/components/blog/blog-navbar.tsx`, etc.)
 
 ### Security

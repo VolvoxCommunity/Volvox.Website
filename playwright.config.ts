@@ -18,10 +18,22 @@ export default defineConfig({
   projects: [
     {
       name: "chromium",
+      use: { ...devices["Desktop Chrome"] },
+    },
+    {
+      name: "firefox",
+      use: { ...devices["Desktop Firefox"] },
+    },
+    {
+      name: "webkit",
+      use: { ...devices["Desktop Safari"] },
+    },
+    {
+      name: "brave",
       use: {
         ...devices["Desktop Chrome"],
         launchOptions: {
-          executablePath: process.env.PLAYWRIGHT_CHROMIUM_EXECUTABLE_PATH,
+          executablePath: process.env.PLAYWRIGHT_BRAVE_EXECUTABLE_PATH,
         },
       },
     },

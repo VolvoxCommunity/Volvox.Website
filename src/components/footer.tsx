@@ -10,6 +10,9 @@ import {
   ArrowUpRight,
   TwitterLogo,
   LinkedinLogo,
+  YoutubeLogo,
+  InstagramLogo,
+  TiktokLogo,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import {
@@ -17,6 +20,9 @@ import {
   GITHUB_URL,
   TWITTER_URL,
   LINKEDIN_URL,
+  YOUTUBE_URL,
+  INSTAGRAM_URL,
+  TIKTOK_URL,
 } from "@/lib/constants";
 
 const footerLinks = {
@@ -30,6 +36,9 @@ const footerLinks = {
     { label: "GitHub", href: GITHUB_URL },
     { label: "Twitter", href: TWITTER_URL },
     { label: "LinkedIn", href: LINKEDIN_URL },
+    { label: "YouTube", href: YOUTUBE_URL },
+    { label: "Instagram", href: INSTAGRAM_URL },
+    { label: "TikTok", href: TIKTOK_URL },
   ],
   legal: [
     { label: "Privacy Policy", href: "/privacy" },
@@ -42,12 +51,15 @@ const socialLinks = [
   { icon: GithubLogo, href: GITHUB_URL, label: "GitHub" },
   { icon: TwitterLogo, href: TWITTER_URL, label: "Twitter" },
   { icon: LinkedinLogo, href: LINKEDIN_URL, label: "LinkedIn" },
+  { icon: YoutubeLogo, href: YOUTUBE_URL, label: "YouTube" },
+  { icon: InstagramLogo, href: INSTAGRAM_URL, label: "Instagram" },
+  { icon: TiktokLogo, href: TIKTOK_URL, label: "TikTok" },
 ];
 
 export function Footer() {
   return (
     <footer
-      className="relative overflow-hidden bg-background m-2 rounded-[25px]"
+      className="relative overflow-hidden bg-background"
       data-testid="footer"
     >
       {/* Background gradient */}
@@ -72,7 +84,7 @@ export function Footer() {
             fill="none"
             initial={{ pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 0.6 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 2, ease: "easeInOut" }}
           />
           {/* Wave 2: Opposing curve, entangling */}
@@ -83,7 +95,7 @@ export function Footer() {
             fill="none"
             initial={{ pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 0.4 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 2.2, ease: "easeInOut", delay: 0.1 }}
           />
           {/* Wave 3: Wide sweep */}
@@ -94,7 +106,7 @@ export function Footer() {
             fill="none"
             initial={{ pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 0.8 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 2.4, ease: "easeInOut", delay: 0.05 }}
           />
           {/* Wave 4: Bottom filler */}
@@ -105,7 +117,7 @@ export function Footer() {
             fill="none"
             initial={{ pathLength: 0, opacity: 0 }}
             whileInView={{ pathLength: 1, opacity: 0.5 }}
-            viewport={{ once: true }}
+            viewport={{ once: false, amount: 0.1 }}
             transition={{ duration: 2.1, ease: "easeInOut", delay: 0.15 }}
           />
         </svg>

@@ -637,6 +637,15 @@
     outline-offset: var(--focus-ring-offset) !important;
   }
 
+  /* Focus ring bypass utility */
+  .no-ring,
+  .no-ring:focus,
+  .no-ring:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+  }
+
   /* Ensure focus rings are never completely hidden */
   *:focus:not(:focus-visible) {
     outline: none;

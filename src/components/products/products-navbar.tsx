@@ -133,9 +133,7 @@ export function ProductsNavbar({
             layout
             className={cn(
               "relative transition-all duration-300 flex-1",
-              isSearchFocused
-                ? "shadow-lg rounded-full"
-                : "max-w-[256px] md:max-w-none"
+              isSearchFocused ? "rounded-full" : "max-w-[256px] md:max-w-none"
             )}
           >
             <div className="relative group w-full">
@@ -154,7 +152,7 @@ export function ProductsNavbar({
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
                 className={cn(
-                  "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-[10px] sm:text-xs md:text-sm",
+                  "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-[10px] sm:text-xs md:text-sm no-ring",
                   "focus:outline-none focus:bg-background focus:border-border transition-all",
                   "placeholder:text-muted-foreground/50 focus:ring-0 focus:ring-offset-0 ring-0 outline-none",
                   !isSearchFocused &&
