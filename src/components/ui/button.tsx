@@ -5,32 +5,19 @@ import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
-// --- 1. MATERIAL DESIGN TOKENS ---
-const MATERIAL_THEME = {
-  "--ease-standard": "cubic-bezier(0.2, 0, 0, 1)",
-  "--shadow-elevation-1":
-    "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15)",
-  "--shadow-elevation-2":
-    "0px 1px 2px 0px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15)",
-  "--ripple-hover-opacity": "0.16",
-  "--ripple-pressed-opacity": "0.32",
-} as React.CSSProperties;
-
-// --- 2. RIPPLE & PHYSICS LOGIC ---
-const PRESS_GROW_MS = 50;
-
-// CRITICAL FIX: Increased Minimum Press Time
-// We hold the 'pressed' state for at least 450ms.
-// This gives the CSS transition (300ms) enough time to fully morph
-// the shape before reverting, even on quick taps.
-const MINIMUM_PRESS_MS = 280;
-
+// --- 1. TUNED CONSTANTS (Physics Configuration) ---
+const PRESS_GROW_MS = 450;
+const MINIMUM_PRESS_MS = 300;
 const INITIAL_ORIGIN_SCALE = 0.2;
 const PADDING = 10;
 const SOFT_EDGE_MINIMUM_SIZE = 75;
 const SOFT_EDGE_CONTAINER_RATIO = 0.35;
+const ANIMATION_FILL = "forwards";
 const TOUCH_DELAY_MS = 150;
 
+const EASING_STANDARD = "cubic-bezier(0.2, 0, 0, 1)";
+
+// --- 2. TYPES & STATE MACHINE ---
 enum RippleState {
   INACTIVE,
   TOUCH_DELAY,
@@ -38,20 +25,42 @@ enum RippleState {
   WAITING_FOR_CLICK,
 }
 
+// --- 3. THE HOOK (FIXED) ---
 const useMaterialRipple = (disabled = false) => {
   const [hovered, setHovered] = React.useState(false);
   const [pressed, setPressed] = React.useState(false);
-  const rippleRef = React.useRef<HTMLDivElement>(null);
+
+  const surfaceRef = React.useRef<HTMLDivElement>(null);
+  const rippleEffectRef = React.useRef<HTMLDivElement>(null);
+
   const stateRef = React.useRef(RippleState.INACTIVE);
   const rippleStartEventRef = React.useRef<React.PointerEvent | null>(null);
   const growAnimationRef = React.useRef<Animation | null>(null);
+
   const initialSizeRef = React.useRef(0);
   const rippleScaleRef = React.useRef("");
   const rippleSizeRef = React.useRef("");
 
+  const isTouch = (event: React.PointerEvent) => event.pointerType === "touch";
+
+  const shouldReactToEvent = (event: React.PointerEvent) => {
+    if (disabled || !event.isPrimary) return false;
+    if (
+      rippleStartEventRef.current &&
+      rippleStartEventRef.current.pointerId !== event.pointerId
+    ) {
+      return false;
+    }
+    if (event.type === "pointerenter" || event.type === "pointerleave") {
+      return !isTouch(event);
+    }
+    const isPrimaryButton = event.buttons === 1;
+    return isTouch(event) || isPrimaryButton;
+  };
+
   const determineRippleSize = () => {
-    if (!rippleRef.current) return;
-    const { height, width } = rippleRef.current.getBoundingClientRect();
+    if (!surfaceRef.current) return;
+    const { height, width } = surfaceRef.current.getBoundingClientRect();
     const maxDim = Math.max(height, width);
     const softEdgeSize = Math.max(
       SOFT_EDGE_CONTAINER_RATIO * maxDim,
@@ -64,15 +73,17 @@ const useMaterialRipple = (disabled = false) => {
 
     initialSizeRef.current = initialSize;
     const rippleScale = (maxRadius + softEdgeSize) / initialSize;
+
     rippleScaleRef.current = `${rippleScale}`;
     rippleSizeRef.current = `${initialSize}px`;
   };
 
   const getTranslationCoordinates = (event?: React.PointerEvent) => {
-    if (!rippleRef.current)
+    if (!surfaceRef.current)
       return { startPoint: { x: 0, y: 0 }, endPoint: { x: 0, y: 0 } };
     const { height, width, left, top } =
-      rippleRef.current.getBoundingClientRect();
+      surfaceRef.current.getBoundingClientRect();
+
     const endPoint = {
       x: (width - initialSizeRef.current) / 2,
       y: (height - initialSizeRef.current) / 2,
@@ -100,18 +111,18 @@ const useMaterialRipple = (disabled = false) => {
   };
 
   const startPressAnimation = (event?: React.PointerEvent) => {
-    if (!rippleRef.current) return;
-
+    // FIXED: Always set pressed state first, regardless of refs
     setPressed(true);
-    growAnimationRef.current?.cancel();
 
+    // Only run animation if refs are available (for ripple effect)
+    if (!rippleEffectRef.current) return;
+
+    growAnimationRef.current?.cancel();
     determineRippleSize();
+
     const { startPoint, endPoint } = getTranslationCoordinates(event);
 
-    const rippleEffect = rippleRef.current.querySelector(".ripple-effect");
-    if (!rippleEffect) return;
-
-    growAnimationRef.current = rippleEffect.animate(
+    growAnimationRef.current = rippleEffectRef.current.animate(
       {
         top: [0, 0],
         left: [0, 0],
@@ -124,8 +135,8 @@ const useMaterialRipple = (disabled = false) => {
       },
       {
         duration: PRESS_GROW_MS,
-        easing: "cubic-bezier(0.2, 0, 0, 1)",
-        fill: "forwards",
+        easing: EASING_STANDARD,
+        fill: ANIMATION_FILL,
       }
     );
   };
@@ -141,8 +152,6 @@ const useMaterialRipple = (disabled = false) => {
       pressAnimationPlayState = animation.currentTime;
     }
 
-    // Logic: If the animation hasn't run for at least MINIMUM_PRESS_MS,
-    // we wait the remaining time before setting pressed = false.
     if (pressAnimationPlayState < MINIMUM_PRESS_MS) {
       await new Promise((resolve) => {
         setTimeout(resolve, MINIMUM_PRESS_MS - pressAnimationPlayState);
@@ -153,30 +162,33 @@ const useMaterialRipple = (disabled = false) => {
       return;
     }
 
+    // Always clear pressed state
     setPressed(false);
   };
 
   const handlePointerDown = async (event: React.PointerEvent) => {
-    if (disabled) return;
+    if (!shouldReactToEvent(event)) return;
     rippleStartEventRef.current = event;
 
-    if (event.pointerType !== "touch") {
+    if (!isTouch(event)) {
       stateRef.current = RippleState.WAITING_FOR_CLICK;
       startPressAnimation(event);
       return;
     }
 
     stateRef.current = RippleState.TOUCH_DELAY;
-    await new Promise((resolve) => setTimeout(resolve, TOUCH_DELAY_MS));
+    void (await new Promise((resolve) => setTimeout(resolve, TOUCH_DELAY_MS)));
 
-    if (stateRef.current === RippleState.TOUCH_DELAY) {
-      stateRef.current = RippleState.HOLDING;
-      startPressAnimation(event);
+    if (stateRef.current !== RippleState.TOUCH_DELAY) {
+      return;
     }
+
+    stateRef.current = RippleState.HOLDING;
+    startPressAnimation(event);
   };
 
-  const handlePointerUp = () => {
-    if (disabled) return;
+  const handlePointerUp = (event: React.PointerEvent) => {
+    if (!shouldReactToEvent(event)) return;
     if (stateRef.current === RippleState.HOLDING) {
       stateRef.current = RippleState.WAITING_FOR_CLICK;
       return;
@@ -184,33 +196,38 @@ const useMaterialRipple = (disabled = false) => {
     if (stateRef.current === RippleState.TOUCH_DELAY) {
       stateRef.current = RippleState.WAITING_FOR_CLICK;
       startPressAnimation(rippleStartEventRef.current || undefined);
+      return;
     }
   };
 
-  const handlePointerLeave = () => {
+  const handlePointerEnter = (event: React.PointerEvent) => {
+    if (!shouldReactToEvent(event)) return;
+    setHovered(true);
+  };
+
+  const handlePointerLeave = (event: React.PointerEvent) => {
+    if (!shouldReactToEvent(event)) return;
     setHovered(false);
     if (stateRef.current !== RippleState.INACTIVE) {
       void endPressAnimation();
     }
   };
 
-  const handlePointerEnter = (e: React.PointerEvent) => {
-    if (disabled || e.pointerType === "touch") return;
-    setHovered(true);
-  };
-
   const handleClick = () => {
     if (disabled) return;
     if (stateRef.current === RippleState.WAITING_FOR_CLICK) {
       void endPressAnimation();
-    } else if (stateRef.current === RippleState.INACTIVE) {
+      return;
+    }
+    if (stateRef.current === RippleState.INACTIVE) {
       startPressAnimation();
       void endPressAnimation();
     }
   };
 
   return {
-    rippleRef,
+    surfaceRef,
+    rippleEffectRef,
     hovered,
     pressed,
     events: {
@@ -220,38 +237,42 @@ const useMaterialRipple = (disabled = false) => {
       onPointerLeave: handlePointerLeave,
       onClick: handleClick,
       onKeyDown: (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") {
-          handleClick();
-        }
+        if (e.key === "Enter" || e.key === " ") void handleClick();
       },
     },
   };
 };
 
+// --- 4. RIPPLE COMPONENT ---
 const Ripple = React.forwardRef<
   HTMLDivElement,
-  { hovered: boolean; pressed: boolean }
->(({ hovered, pressed }, ref) => {
+  {
+    hovered: boolean;
+    pressed: boolean;
+    rippleEffectRef: React.RefObject<HTMLDivElement | null>;
+  }
+>(({ hovered, pressed, rippleEffectRef }, ref) => {
   return (
     <div
       ref={ref}
-      className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0"
+      className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0 surface"
       aria-hidden="true"
     >
       <div
         className={cn(
-          "absolute inset-0 bg-current transition-opacity duration-200",
-          hovered ? "opacity-[var(--ripple-hover-opacity)]" : "opacity-0"
+          "absolute inset-0 bg-current transition-opacity duration-[15ms] linear",
+          hovered ? "opacity-[0.08]" : "opacity-0"
         )}
       />
-      <span
-        className={cn(
-          "ripple-effect absolute rounded-full opacity-0",
-          "bg-[radial-gradient(circle,currentColor_45%,transparent_100%)]"
-        )}
+      <div
+        ref={rippleEffectRef}
+        className="absolute rounded-full opacity-0 bg-current"
         style={{
+          background:
+            "radial-gradient(closest-side, currentColor max(calc(100% - 70px), 65%), transparent 100%)",
           transition: "opacity 375ms linear",
-          opacity: pressed ? "var(--ripple-pressed-opacity)" : "0",
+          opacity: pressed ? "0.12" : "0",
+          transitionDuration: pressed ? "105ms" : "375ms",
         }}
       />
     </div>
@@ -259,45 +280,48 @@ const Ripple = React.forwardRef<
 });
 Ripple.displayName = "Ripple";
 
-// --- 3. CVA CONFIGURATION ---
+// --- 5. BUTTON COMPONENT ---
 const buttonVariants = cva(
-  // CRITICAL FIX: Increased duration to 300ms to allow shape morphing to be visible
-  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] transition-all duration-300 ease-[var(--ease-standard)] cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-[0.38] disabled:shadow-none",
+  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] transition-all duration-600 delay-50 ease-[cubic-bezier(0.2,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-38 disabled:shadow-none",
   {
     variants: {
       variant: {
         // MATERIAL VARIANTS
-        filled:
-          "bg-primary text-primary-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        filled: "bg-primary text-primary-foreground shadow-sm",
         elevated:
-          "bg-card text-primary shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
-        tonal: "bg-secondary text-secondary-foreground hover:shadow-none",
+          "bg-card text-primary shadow-md data-[pressed=true]:shadow-none",
+        tonal: "bg-secondary text-secondary-foreground shadow-none",
         outlined:
-          "border border-outline bg-transparent text-primary shadow-none",
+          "border border-border bg-transparent text-primary shadow-none",
         text: "bg-transparent text-primary shadow-none",
+        destructive: "bg-destructive text-destructive-foreground shadow-sm",
 
         // LEGACY MAPPINGS
-        default:
-          "bg-primary text-primary-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
-        destructive:
-          "bg-destructive text-destructive-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        default: "bg-primary text-primary-foreground shadow-sm",
         outline: "border border-border bg-transparent text-primary shadow-none",
-        secondary: "bg-secondary text-secondary-foreground hover:shadow-none",
+        secondary: "bg-secondary text-secondary-foreground shadow-none",
         ghost: "bg-transparent text-primary shadow-none",
-        link: "bg-transparent text-primary shadow-none underline-offset-4 hover:underline",
-        accent:
-          "bg-accent text-accent-foreground shadow-[var(--shadow-elevation-1)] hover:shadow-[var(--shadow-elevation-2)] active:shadow-[var(--shadow-elevation-1)]",
+        link: "bg-transparent text-primary shadow-none underline hover:underline",
+        accent: "bg-accent text-accent-foreground shadow-sm",
       },
       size: {
         default: "h-10 px-6",
         sm: "h-8 px-4 text-xs",
         lg: "h-12 px-8 text-base",
         icon: "h-10 w-10",
+        fab: "h-14 w-14 text-base",
+      },
+      shape: {
+        round:
+          "rounded-full data-[pressed=true]:rounded-xl data-[pressed=true]:duration-0 data-[pressed=true]:delay-0",
+        square:
+          "rounded-xl data-[pressed=true]:rounded-xl data-[pressed=true]:duration-0 data-[pressed=true]:delay-0",
       },
     },
     defaultVariants: {
       variant: "filled",
       size: "default",
+      shape: "round",
     },
   }
 );
@@ -308,6 +332,7 @@ export interface ButtonProps
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   noRipple?: boolean;
+  noMorph?: boolean;
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
@@ -316,8 +341,10 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       className,
       variant,
       size,
+      shape,
       asChild = false,
       noRipple = false,
+      noMorph = false,
       onClick,
       style,
       children,
@@ -325,55 +352,77 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
-    const Comp = asChild ? Slot : "button";
-    const { rippleRef, hovered, pressed, events } = useMaterialRipple(
-      props.disabled || noRipple
-    );
+    // Optimization: If both visual effects are disabled, disable the hook logic
+    const isRippleLogicDisabled = props.disabled || (noRipple && noMorph);
+    const { surfaceRef, rippleEffectRef, hovered, pressed, events } =
+      useMaterialRipple(isRippleLogicDisabled);
 
+    // Common props for both Button and Slot
+    const componentProps = {
+      className: cn(buttonVariants({ variant, size, shape, className })),
+      style: style,
+      "data-pressed": noMorph ? undefined : pressed,
+      ...events,
+      onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
+        events.onClick();
+        onClick?.(e);
+      },
+      ...props,
+    };
+
+    // RENDER LOGIC:
     if (asChild) {
+      // IMPORTANT: When using asChild, the child component MUST:
+      // 1. Accept a `children` prop and render it in its output
+      // 2. Forward all props (className, style, event handlers, etc.) to its root element
+      //
+      // This is because React.cloneElement replaces the child's children prop with our
+      // wrapped content (Ripple + original children). Icon-only components or components
+      // that don't forward/render their children prop will NOT work correctly.
+      //
+      // Example of a compatible component:
+      //   const MyLink = ({ children, ...props }) => <a {...props}>{children}</a>
+      //
+      // Example of an INCOMPATIBLE component (won't render ripple or content):
+      //   const IconButton = () => <svg>...</svg>  // No children prop
+      const child = React.Children.only(children) as React.ReactElement<{
+        children: React.ReactNode;
+      }>;
+
       return (
-        <Comp
-          className={cn(
-            buttonVariants({ variant, size, className }),
-            // Expressive Shape Morphing:
-            // Since MINIMUM_PRESS_MS is now 450ms and transition duration is 300ms,
-            // even a short click will trigger the full morph to rounded-md before reverting.
-            pressed ? "rounded-lg" : "rounded-full"
-          )}
-          ref={ref}
-          style={{ ...MATERIAL_THEME, ...style }}
-          {...events}
-          onClick={(e) => {
-            events.onClick();
-            onClick?.(e as React.MouseEvent<HTMLButtonElement>);
-          }}
-          {...props}
-        >
-          {children}
-        </Comp>
+        <Slot ref={ref} {...componentProps}>
+          {React.cloneElement(child, {
+            children: (
+              <>
+                {/* Inject Ripple inside the custom child */}
+                {!noRipple && (
+                  <Ripple
+                    ref={surfaceRef}
+                    rippleEffectRef={rippleEffectRef}
+                    hovered={hovered}
+                    pressed={pressed}
+                  />
+                )}
+                {/* Wrap content to ensure z-index layering above ripple */}
+                <span className="relative z-10 flex items-center gap-2 pointer-events-none">
+                  {child.props.children}
+                </span>
+              </>
+            ),
+          })}
+        </Slot>
       );
     }
 
     return (
-      <button
-        className={cn(
-          buttonVariants({ variant, size, className }),
-          // Expressive Shape Morphing:
-          // Since MINIMUM_PRESS_MS is now 450ms and transition duration is 300ms,
-          // even a short click will trigger the full morph to rounded-2xl before reverting.
-          pressed ? "rounded-lg" : "rounded-full"
-        )}
-        ref={ref}
-        style={{ ...MATERIAL_THEME, ...style }}
-        {...events}
-        onClick={(e) => {
-          events.onClick();
-          onClick?.(e as React.MouseEvent<HTMLButtonElement>);
-        }}
-        {...props}
-      >
+      <button ref={ref} {...componentProps}>
         {!noRipple && (
-          <Ripple ref={rippleRef} hovered={hovered} pressed={pressed} />
+          <Ripple
+            ref={surfaceRef}
+            rippleEffectRef={rippleEffectRef}
+            hovered={hovered}
+            pressed={pressed}
+          />
         )}
         <span className="relative z-10 flex items-center gap-2 pointer-events-none">
           {children}

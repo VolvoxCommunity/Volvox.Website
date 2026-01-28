@@ -1,6 +1,5 @@
 "use client";
 
-import { AnimatedBackground } from "@/components/animated-background";
 import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { Footer } from "@/components/footer";
 import { ProductHero } from "@/components/products/product-hero";
@@ -35,11 +34,6 @@ export function ProductDetailClient({ product }: ProductDetailClientProps) {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <AnimatedBackground />
-      </div>
-
       {/* Back Navbar */}
       <ProductPostNavbar />
 

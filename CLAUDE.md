@@ -18,8 +18,8 @@ pnpm test:e2e     # E2E tests (Chromium only)
 pnpm format       # Format with Prettier
 
 # E2E tests with Playwright
-pnpm exec playwright test --project=chromium  # Chromium only
-pnpm exec playwright test                      # All browsers
+pnpm exec playwright test --project=chromium  # Chromium only (for validation)
+pnpm exec playwright test                      # All configured browsers
 pnpm exec playwright test --ui                 # Interactive UI mode
 ```
 
@@ -29,7 +29,7 @@ pnpm exec playwright test --ui                 # Interactive UI mode
 
 **NEVER push changes to git without:**
 
-1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use Chromium only for E2E tests** (`pnpm exec playwright test --project=chromium`) for validation.
+1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use the "chromium" project for E2E tests** (`pnpm exec playwright test --project=chromium`) for validation.
 2. **⚠️ CHANGELOG.md updated** - Document ALL user-facing changes in `CHANGELOG.md` before committing. This is MANDATORY for every commit that adds features, fixes bugs, or makes user-visible changes. A pre-commit hook will auto-generate a draft for review.
 3. Explicit approval from the user
 
@@ -134,11 +134,12 @@ banner: /images/... # Optional banner image
 
 ## Environment Variables
 
-| Variable                   | Required | Description           |
-| -------------------------- | -------- | --------------------- |
-| `NEXT_PUBLIC_SENTRY_DSN`   | No       | Sentry error tracking |
-| `UPSTASH_REDIS_REST_URL`   | No       | Blog view counts      |
-| `UPSTASH_REDIS_REST_TOKEN` | No       | Blog view counts      |
+| Variable                           | Required | Description                         |
+| ---------------------------------- | -------- | ----------------------------------- |
+| `NEXT_PUBLIC_SENTRY_DSN`           | No       | Sentry error tracking               |
+| `UPSTASH_REDIS_REST_URL`           | No       | Blog view counts                    |
+| `UPSTASH_REDIS_REST_TOKEN`         | No       | Blog view counts                    |
+| `PLAYWRIGHT_BRAVE_EXECUTABLE_PATH` | No       | Path to Brave browser for E2E tests |
 
 ## Test Selectors
 

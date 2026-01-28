@@ -135,7 +135,7 @@ function ProductCard({ product }: ProductCardProps) {
               <div className="absolute top-6 left-6 z-10">
                 <Badge
                   variant="secondary"
-                  className="bg-background/90 backdrop-blur-md border-border/50 text-[10px] uppercase tracking-widest font-black py-1.5 px-3"
+                  className="bg-background/30 backdrop-blur-md border-border border-2 text-[10px] uppercase tracking-widest font-black py-1.5 px-3"
                 >
                   {product.type || "Software"}
                 </Badge>
@@ -143,7 +143,7 @@ function ProductCard({ product }: ProductCardProps) {
 
               {/* View Indicator */}
               <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-all duration-500 transform translate-y-4 group-hover/image:translate-y-0">
-                <div className="bg-background/20 backdrop-blur-sm border border-white/20 rounded-full px-6 py-2 text-white font-bold text-sm tracking-wide">
+                <div className="bg-background border-2 border-border rounded-full px-6 py-2 text-foreground font-bold text-sm tracking-wide">
                   Explore Project
                 </div>
               </div>
@@ -181,20 +181,20 @@ function ProductCard({ product }: ProductCardProps) {
               {product.description}
             </p>
 
-            {/* Features Preview - Custom Trance Hover */}
+            {/* Features Preview */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-              {product.features.slice(0, 4).map((feature, idx) => (
+              {product.features?.slice(0, 4).map((feature, idx) => (
                 <motion.div
                   key={idx}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * idx }}
-                  className="flex items-center gap-3 text-sm font-medium text-foreground/70 hover:text-primary transition-colors group/feat"
+                  className="flex items-center gap-3 text-sm font-medium text-foreground/70"
                 >
-                  <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0 group-hover/feat:bg-primary group-hover/feat:scale-110 transition-all">
+                  <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <CheckCircle
                       weight="fill"
-                      className="w-4 h-4 text-primary group-hover/feat:text-white"
+                      className="w-4 h-4 text-primary"
                     />
                   </div>
                   <span className="truncate">{feature}</span>
@@ -209,7 +209,7 @@ function ProductCard({ product }: ProductCardProps) {
                   <Badge
                     key={tech}
                     variant="outline"
-                    className="rounded-xl px-3 py-1.5 text-[11px] font-bold bg-secondary/5 border-secondary/20 text-secondary-foreground hover:bg-secondary/10 transition-colors"
+                    className="rounded-full px-3 py-1.5 text-[11px] font-bold bg-secondary border-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
                   >
                     {tech}
                   </Badge>

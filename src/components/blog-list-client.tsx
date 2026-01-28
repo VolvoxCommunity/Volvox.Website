@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/filter-controls";
 import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogCard } from "@/components/blog-card";
-import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 import { SITE_NAME } from "@/lib/constants";
 
@@ -190,11 +189,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <AnimatedBackground />
-      </div>
-
       {/* Content Layer */}
       <div className="relative z-10 flex-1">
         <BlogNavbar

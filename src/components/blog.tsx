@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+import { useMemo, useRef, useEffect } from "react";
 import Link from "next/link";
-
 import { ChevronRight } from "lucide-react";
 import {
   motion,
@@ -10,6 +9,8 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { Button } from "@/components/ui/button";
 import { BlogCard } from "@/components/blog-card";
@@ -20,6 +21,11 @@ import {
 } from "@/components/ui/filter-controls";
 import { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
+// Register ScrollTrigger
+if (typeof window !== "undefined") {
+  gsap.registerPlugin(ScrollTrigger);
+}
 
 interface BlogProps {
   posts: BlogPost[];
@@ -45,6 +51,9 @@ export function Blog({
   enableFilters = false,
 }: BlogProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const cardsContainerRef = useRef<HTMLDivElement>(null);
+  const animationInitializedRef = useRef(false);
+
   const { scrollYProgress } = useScroll({
     target: containerRef,
     offset: ["start end", "end start"],
@@ -91,15 +100,47 @@ export function Blog({
     return result;
   }, [allPosts, searchQuery, sortOption, enableFilters]);
 
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
+  // GSAP Animation Effect - only run on initial mount
+  useEffect(() => {
+    // Only initialize animation once to prevent re-triggering on filter changes
+    if (animationInitializedRef.current) {
+      return;
+    }
+
+    const ctx = gsap.context(() => {
+      // Animate cards when they come into view
+      const cards =
+        cardsContainerRef.current?.querySelectorAll(".blog-card-item");
+
+      if (cards && cards.length > 0) {
+        animationInitializedRef.current = true;
+
+        gsap.fromTo(
+          cards,
+          {
+            y: 100,
+            opacity: 0,
+            scale: 0.9,
+          },
+          {
+            y: 0,
+            opacity: 1,
+            scale: 1,
+            duration: 0.8,
+            stagger: 0.1,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: cardsContainerRef.current,
+              start: "top 80%", // Start animation when top of container hits 80% viewport
+              toggleActions: "play none none reverse", // Play on enter, reverse on leave back up
+            },
+          }
+        );
+      }
+    }, containerRef); // Scope to container
+
+    return () => ctx.revert(); // Cleanup
+  }, [filteredPosts, viewMode]); // Dependencies kept for initial render timing
 
   return (
     <section
@@ -226,12 +267,8 @@ export function Blog({
           )}
         </AnimatePresence>
 
-        <motion.div
-          layout
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true }}
+        <div
+          ref={cardsContainerRef}
           className={cn(
             "grid gap-6",
             viewMode === "grid"
@@ -239,12 +276,12 @@ export function Blog({
               : "grid-cols-1"
           )}
         >
-          <AnimatePresence mode="popLayout">
-            {filteredPosts.map((post) => (
-              <BlogCard key={post.id} post={post} viewMode={viewMode} />
-            ))}
-          </AnimatePresence>
-        </motion.div>
+          {filteredPosts.map((post) => (
+            <div key={post.id} className="blog-card-item gsap-will-animate">
+              <BlogCard post={post} viewMode={viewMode} />
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );

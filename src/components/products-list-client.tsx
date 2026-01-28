@@ -14,7 +14,6 @@ import type {
 import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { ProductsNavbar } from "@/components/products/products-navbar";
-import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 
 interface ProductsListClientProps {
@@ -195,11 +194,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      {/* Animated Background */}
-      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <AnimatedBackground />
-      </div>
-
       {/* Content Layer */}
       <div className="relative z-10 flex-1">
         {/* Navbar with Search & Filters */}
@@ -384,7 +378,7 @@ function ProductCardGrid({
               {product.techStack.slice(0, 3).map((tech) => (
                 <span
                   key={`${product.slug}:tech:${tech}`}
-                  className="inline-flex items-center px-2 py-0.5 rounded-lg bg-secondary/10 text-secondary-foreground text-[10px] font-medium border border-transparent group-hover:border-secondary/20 transition-colors"
+                  className="inline-flex items-center px-2 py-0.5 rounded-lg bg-secondary text-secondary-foreground text-[10px] font-medium border border-transparent group-hover:border-secondary/20 transition-colors"
                 >
                   {tech}
                 </span>
@@ -478,7 +472,7 @@ function ProductCardList({
                 {product.techStack.map((tech) => (
                   <span
                     key={`${product.slug}:tech:${tech}`}
-                    className="inline-flex items-center px-2.5 py-1 rounded-lg bg-secondary/10 text-secondary-foreground text-xs font-medium"
+                    className="inline-flex items-center px-2.5 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium"
                   >
                     {tech}
                   </span>

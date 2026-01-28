@@ -1,18 +1,42 @@
 "use client";
 
-import { useMemo, useRef } from "react";
+// Framework imports
+import { useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+
+// Third-party imports
+import {
+  useScroll,
+  useSpring,
+  useTransform,
+  motion,
+  useAnimationFrame,
+  useMotionValue,
+  useVelocity,
+} from "framer-motion";
+import { DiscordLogo, Users } from "@phosphor-icons/react";
+import confettiLib from "canvas-confetti";
+
+// Local imports
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { AnimatedBackground } from "@/components/animated-background";
-import { DiscordLogo, Users } from "@phosphor-icons/react";
 import { TeamMember } from "@/lib/types";
-import confettiLib from "canvas-confetti";
 import { DISCORD_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import { useScroll, useSpring, useTransform, motion } from "framer-motion";
+// Custom wrap function to replace @motionone/utils dependency
+const wrap = (min: number, max: number, v: number) => {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
+};
+
+/**
+ * Converts pixel drag distance to percentage movement in the marquee coordinate space.
+ * The marquee uses percentage-based positioning (0-25% range for seamless looping),
+ * so this factor maps raw pixel deltas to that coordinate system.
+ */
+const DRAG_PIXEL_TO_PERCENT = 0.015;
 
 interface MentorshipProps {
   teamMembers: TeamMember[];
@@ -21,27 +45,6 @@ interface MentorshipProps {
 export function Mentorship({ teamMembers }: MentorshipProps) {
   const router = useRouter();
   const containerRef = useRef<HTMLDivElement>(null);
-
-  // Duplicate data/logic for seamless infinite scroll
-  const marqueeData = useMemo<TeamMember[]>(() => {
-    if (!teamMembers || teamMembers.length === 0) return [];
-    // Duplicate 10x for smooth infinite scroll with low data count
-    return Array.from({ length: 10 }, () => teamMembers).flat();
-  }, [teamMembers]);
-
-  // Track scroll progress within the section
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  // Convert scroll progress to a smooth x offset (multiplied for effect)
-  const scrollX = useTransform(scrollYProgress, [0, 1], [0, -1500]);
-  const smoothX = useSpring(scrollX, {
-    stiffness: 100,
-    damping: 30,
-    mass: 0.5,
-  });
 
   const handleDiscordClick = (e: React.MouseEvent) => {
     const x = e.clientX / window.innerWidth;
@@ -70,7 +73,6 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
       className="relative min-h-[600px] w-full overflow-hidden bg-background flex flex-col items-center justify-center py-16 md:py-24"
     >
       {/* Background layer */}
-      <AnimatedBackground />
 
       {/* Header Content */}
       <div className="relative z-10 container mx-auto px-6 text-center mb-12 md:mb-16">
@@ -116,31 +118,13 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
         </div>
       </div>
 
-      {/* Horizontal Marquee - Scroll Velocity Driven */}
-      <div className="relative z-10 w-full overflow-hidden">
+      {/* Draggable Velocity Marquee */}
+      <div className="relative z-10 w-full overflow-hidden cursor-grab active:cursor-grabbing">
         {/* Left/Right Fade Gradients */}
         <div className="absolute top-0 left-0 w-20 md:w-40 h-full bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
         <div className="absolute top-0 right-0 w-20 md:w-40 h-full bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
 
-        {/* Marquee Track - Driven by scroll velocity + base animation */}
-        <motion.div
-          className="flex gap-4 md:gap-6 w-max"
-          style={{ x: smoothX }}
-        >
-          <motion.div
-            className="flex gap-4 md:gap-6"
-            animate={{ x: ["0%", "-25%"] }}
-            transition={{
-              duration: 20,
-              ease: "linear",
-              repeat: Infinity,
-            }}
-          >
-            {marqueeData.map((profile, i) => (
-              <CommunityCard key={`${profile.id}-${i}`} profile={profile} />
-            ))}
-          </motion.div>
-        </motion.div>
+        <ParallaxText baseVelocity={-1} teamMembers={teamMembers} />
       </div>
 
       {/* Top/Bottom Fade Gradients */}
@@ -152,17 +136,115 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
 
 // --- Internal Components ---
 
+interface ParallaxTextProps {
+  baseVelocity: number;
+  teamMembers: TeamMember[];
+}
+
+function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
+  const baseX = useMotionValue(0);
+  const { scrollY } = useScroll();
+  const scrollVelocity = useVelocity(scrollY);
+  const smoothVelocity = useSpring(scrollVelocity, {
+    damping: 50,
+    stiffness: 400,
+  });
+  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
+    clamp: false,
+  });
+
+  const [isHovered, setIsHovered] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+
+  // Duplicate data multiple times for a truly infinite feel
+  const marqueeData = useMemo(() => {
+    return [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
+  }, [teamMembers]);
+
+  /**
+   * We wrap between 0 and -25% (since we have 4 copies, 25% represents one full set)
+   * This ensures a seamless loop.
+   */
+  const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
+
+  const prevT = useRef<number>(0);
+
+  useAnimationFrame((t) => {
+    if (!prevT.current) {
+      prevT.current = t;
+      return;
+    }
+
+    const timeDelta = t - prevT.current;
+    prevT.current = t;
+
+    // Skip update if paused
+    if (isHovered || isDragging) return;
+
+    // baseVelocity is -1.
+    // We want slow, steady movement.
+    // 0.005 factor for smoothness with timeDelta (approx 0.08% per frame at 16ms)
+    let moveBy = baseVelocity * (timeDelta * 0.005);
+
+    /**
+     * Scroll velocity adds to the speed
+     * Scrolling increases speed in the same direction (negative X / left)
+     */
+    const v = velocityFactor.get();
+    if (v !== 0) {
+      // Math.abs(v) ensures scroll direction (up or down) always speeds it up leftwards
+      moveBy -= Math.abs(v) * (timeDelta * 0.005);
+    }
+
+    baseX.set(baseX.get() + moveBy);
+  });
+
+  const handleDragEnd = () => {
+    setIsDragging(false);
+    // Reset prevT to avoid jump when resuming
+    prevT.current = 0;
+  };
+
+  return (
+    <motion.div
+      className="flex gap-4 md:gap-6 w-max py-4"
+      style={{ x }}
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      drag="x"
+      // Large constraints to allow free sliding
+      dragConstraints={{ left: -5000, right: 5000 }}
+      onDragStart={() => setIsDragging(true)}
+      onDragEnd={handleDragEnd}
+      onDrag={(_, info) => {
+        // Update baseX directly based on drag delta
+        baseX.set(baseX.get() + info.delta.x * DRAG_PIXEL_TO_PERCENT);
+      }}
+      dragElastic={0}
+      dragMomentum={false}
+    >
+      {marqueeData.map((profile, i) => (
+        <CommunityCard key={`${profile.id}-${i}`} profile={profile} />
+      ))}
+    </motion.div>
+  );
+}
+
 function CommunityCard({ profile }: { profile: TeamMember }) {
   return (
     <div
       className={cn(
         "shrink-0 w-[320px] md:w-[400px] rounded-[24px] border bg-card/80 backdrop-blur-sm p-6 transition-all duration-300",
-        "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5"
+        "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 select-none"
       )}
     >
       <div className="flex items-center gap-4 mb-4">
         <Avatar className="h-12 w-12 border-2 border-border shadow-md">
-          <AvatarImage src={profile.avatar} alt={profile.name} />
+          <AvatarImage
+            src={profile.avatar}
+            alt={profile.name}
+            draggable={false}
+          />
           <AvatarFallback className="bg-primary/10 text-primary font-semibold">
             {profile.name.charAt(0)}
           </AvatarFallback>

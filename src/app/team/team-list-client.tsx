@@ -4,7 +4,6 @@ import { useState, useMemo } from "react";
 import { TeamMember } from "@/lib/types";
 import { TeamNavbar } from "@/components/team/team-navbar";
 import { TeamCard } from "@/components/team/team-card";
-import { AnimatedBackground } from "@/components/animated-background";
 import { Footer } from "@/components/footer";
 
 interface TeamListClientProps {
@@ -32,11 +31,6 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
 
   return (
     <div className="min-h-screen relative flex flex-col">
-      {/* Animated Background - decorative */}
-      <div className="fixed inset-0 pointer-events-none z-0" aria-hidden="true">
-        <AnimatedBackground />
-      </div>
-
       {/* Content Layer */}
       <div className="relative z-10 flex-1">
         <TeamNavbar

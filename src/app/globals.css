@@ -168,6 +168,17 @@
   }
 }
 
+/* Animated background bar pulse animation */
+@keyframes pulseBar {
+  0% {
+    transform: scaleY(var(--initial-scale));
+  }
+
+  100% {
+    transform: scaleY(calc(var(--initial-scale) * 0.7));
+  }
+}
+
 @keyframes infinite-scroll-y {
   from {
     transform: translateY(0);
@@ -637,6 +648,28 @@
     outline-offset: var(--focus-ring-offset) !important;
   }
 
+  /*
+   * Focus ring bypass utility
+   *
+   * WARNING: WCAG 2.4.7 Compliance
+   * Only use .no-ring on elements that provide ALTERNATIVE focus indicators
+   * (e.g., custom border styles, background changes, or other visual cues).
+   *
+   * Removing focus rings without a replacement violates WCAG 2.4.7:
+   * "Any keyboard operable user interface has a mode of operation where
+   * the keyboard focus indicator is visible."
+   *
+   * This utility is intended for custom-styled inputs and interactive elements
+   * that implement visual focus feedback through other means (border, shadow, etc.).
+   */
+  .no-ring,
+  .no-ring:focus,
+  .no-ring:focus-visible {
+    outline: none !important;
+    outline-offset: 0 !important;
+    box-shadow: none !important;
+  }
+
   /* Ensure focus rings are never completely hidden */
   *:focus:not(:focus-visible) {
     outline: none;
@@ -1042,4 +1075,15 @@
   .name-line {
     font-size: clamp(3rem, 15vw, 5rem);
   }
+}
+
+/* =========================================
+   GSAP Animation Fallback
+   =========================================
+   Provides visibility fallback for elements that rely on GSAP animations.
+   If JavaScript fails to load or GSAP doesn't initialize, elements remain
+   visible with opacity: 1. GSAP will override via inline styles when active.
+   ========================================= */
+.gsap-will-animate {
+  opacity: 1;
 }

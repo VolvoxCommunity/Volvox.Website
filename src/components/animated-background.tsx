@@ -1,53 +1,122 @@
 "use client";
 
-import { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
-import { SPLINE_IFRAME_URL } from "@/lib/constants";
 
-/**
- * Renders a full-screen, interactive Spline 3D background.
- * Includes a fallback state during loading or on error.
- *
- * @param className - Additional CSS classes for the container.
- * @returns The Spline background component.
- */
-export function AnimatedBackground({ className = "" }: { className?: string }) {
-  const [hasLoaded, setHasLoaded] = useState(false);
-  const [hasError, setHasError] = useState(false);
+interface GradientBarsProps {
+  numBars?: number;
+  gradientFrom?: string;
+  gradientTo?: string;
+  animationDuration?: number;
+  className?: string;
+}
+
+const GradientBars: React.FC<GradientBarsProps> = ({
+  numBars = 15,
+  gradientFrom = "var(--primary)",
+  gradientTo = "transparent",
+  animationDuration = 2,
+  className = "",
+}) => {
+  const calculateHeight = (index: number, total: number) => {
+    // Guard against division by zero when total <= 1
+    if (total <= 1) return 65;
+
+    const position = index / (total - 1);
+    const maxHeight = 100;
+    const minHeight = 30;
+
+    const center = 0.5;
+    const distanceFromCenter = Math.abs(position - center);
+    const heightPercentage = Math.pow(distanceFromCenter * 2, 1.2);
+
+    return minHeight + (maxHeight - minHeight) * heightPercentage;
+  };
+
+  return (
+    <div className={cn("absolute inset-0 z-0 overflow-hidden", className)}>
+      <div
+        className="flex h-full"
+        style={{
+          width: "100%",
+          transform: "translateZ(0)",
+          WebkitFontSmoothing: "antialiased",
+        }}
+      >
+        {Array.from({ length: numBars }).map((_, index) => {
+          const height = calculateHeight(index, numBars);
+          return (
+            <div
+              key={index}
+              style={
+                {
+                  flex: `1 0 calc(100% / ${numBars})`,
+                  maxWidth: `calc(100% / ${numBars})`,
+                  height: "100%",
+                  background: `linear-gradient(to top, ${gradientFrom}, ${gradientTo})`,
+                  transform: `scaleY(${height / 100})`,
+                  transformOrigin: "bottom",
+                  transition: "transform 0.5s ease-in-out",
+                  animation: `pulseBar ${animationDuration}s ease-in-out infinite alternate`,
+                  animationDelay: `${index * 0.1}s`,
+                  outline: "1px solid rgba(0, 0, 0, 0)",
+                  boxSizing: "border-box",
+                  "--initial-scale": height / 100,
+                } as React.CSSProperties
+              }
+            />
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export function AnimatedBackground({
+  className = "",
+  numBars,
+  gradientFrom = "var(--primary)",
+  gradientTo = "transparent",
+  animationDuration = 2,
+  backgroundColor = "var(--background)",
+}: {
+  className?: string;
+  numBars?: number;
+  gradientFrom?: string;
+  gradientTo?: string;
+  animationDuration?: number;
+  backgroundColor?: string;
+}) {
+  // Initialize to null to indicate "not yet determined" state
+  // This avoids hydration mismatch since both server and initial client render use null
+  const [isMobile, setIsMobile] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Use explicit numBars if provided, otherwise responsive default
+  // Use desktop default (18) until client determines actual viewport
+  const effectiveNumBars = numBars ?? (isMobile === true ? 8 : 18);
 
   return (
     <div
-      data-testid="animated-background"
       className={cn(
-        "spline-container absolute top-0 left-0 w-full h-full -z-10",
-        // Fallback or loading background: sleek dark gradient
-        "bg-[radial-gradient(ellipse_at_bottom,_var(--tw-gradient-stops))] from-slate-900 via-purple-900/20 to-slate-900",
+        "absolute inset-0 w-full h-full -z-10 overflow-hidden",
         className
       )}
+      style={{ backgroundColor }}
+      data-testid="animated-background"
     >
-      {!hasError && (
-        <iframe
-          src={SPLINE_IFRAME_URL}
-          width="100%"
-          height="100%"
-          id="aura-spline"
-          title="Interactive 3D Data Model Interaction"
-          loading="lazy"
-          sandbox="allow-scripts allow-same-origin allow-pointer-lock"
-          onLoad={() => setHasLoaded(true)}
-          onError={() => setHasError(true)}
-          style={{ border: 0 }}
-          className={cn(
-            "pointer-events-auto transition-opacity duration-1000",
-            hasLoaded ? "opacity-100" : "opacity-0"
-          )}
-        />
-      )}
-
-      {/* Accessible message for assistive tech if frame fails */}
-      {hasError && (
-        <span className="sr-only">Background scene failed to load.</span>
-      )}
+      <GradientBars
+        numBars={effectiveNumBars}
+        gradientFrom={gradientFrom}
+        gradientTo={gradientTo}
+        animationDuration={animationDuration}
+      />
     </div>
   );
 }
