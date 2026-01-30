@@ -1,121 +1,273 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
-interface GradientBarsProps {
-  numBars?: number;
-  gradientFrom?: string;
-  gradientTo?: string;
-  animationDuration?: number;
-  className?: string;
-}
+/**
+ * AnimatedBackground Component
+ *
+ * Implements a "Spline Depth Horizon" + Particle System effect.
+ * Layers:
+ * 1. Background (Solid/Theme based)
+ * 2. Noise Grain Overlay (SVG Filter)
+ * 3. Phong Lighting (Radial Gradient)
+ * 4. Depth Horizon Gradient (Radial Gradient simulating a horizon)
+ * 5. Particle System (Canvas based, floating particles)
+ */
+export function AnimatedBackground({ className = "" }: { className?: string }) {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const [mounted, setMounted] = useState(false);
 
-const GradientBars: React.FC<GradientBarsProps> = ({
-  numBars = 15,
-  gradientFrom = "var(--primary)",
-  gradientTo = "transparent",
-  animationDuration = 2,
-  className = "",
-}) => {
-  const calculateHeight = (index: number, total: number) => {
-    // Guard against division by zero when total <= 1
-    if (total <= 1) return 65;
-
-    const position = index / (total - 1);
-    const maxHeight = 100;
-    const minHeight = 30;
-
-    const center = 0.5;
-    const distanceFromCenter = Math.abs(position - center);
-    const heightPercentage = Math.pow(distanceFromCenter * 2, 1.2);
-
-    return minHeight + (maxHeight - minHeight) * heightPercentage;
-  };
-
-  return (
-    <div className={cn("absolute inset-0 z-0 overflow-hidden", className)}>
-      <div
-        className="flex h-full"
-        style={{
-          width: "100%",
-          transform: "translateZ(0)",
-          WebkitFontSmoothing: "antialiased",
-        }}
-      >
-        {Array.from({ length: numBars }).map((_, index) => {
-          const height = calculateHeight(index, numBars);
-          return (
-            <div
-              key={index}
-              style={
-                {
-                  flex: `1 0 calc(100% / ${numBars})`,
-                  maxWidth: `calc(100% / ${numBars})`,
-                  height: "100%",
-                  background: `linear-gradient(to top, ${gradientFrom}, ${gradientTo})`,
-                  transform: `scaleY(${height / 100})`,
-                  transformOrigin: "bottom",
-                  transition: "transform 0.5s ease-in-out",
-                  animation: `pulseBar ${animationDuration}s ease-in-out infinite alternate`,
-                  animationDelay: `${index * 0.1}s`,
-                  outline: "1px solid rgba(0, 0, 0, 0)",
-                  boxSizing: "border-box",
-                  "--initial-scale": height / 100,
-                } as React.CSSProperties
-              }
-            />
-          );
-        })}
-      </div>
-    </div>
-  );
-};
-
-export function AnimatedBackground({
-  className = "",
-  numBars,
-  gradientFrom = "var(--primary)",
-  gradientTo = "transparent",
-  animationDuration = 2,
-  backgroundColor = "var(--background)",
-}: {
-  className?: string;
-  numBars?: number;
-  gradientFrom?: string;
-  gradientTo?: string;
-  animationDuration?: number;
-  backgroundColor?: string;
-}) {
-  // Initialize to null to indicate "not yet determined" state
-  // This avoids hydration mismatch since both server and initial client render use null
-  const [isMobile, setIsMobile] = useState<boolean | null>(null);
-
+  // Initial mount check to avoid hydration mismatch
   useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+    setMounted(true);
   }, []);
 
-  // Use explicit numBars if provided, otherwise responsive default
-  // Use desktop default (18) until client determines actual viewport
-  const effectiveNumBars = numBars ?? (isMobile === true ? 8 : 18);
+  useEffect(() => {
+    if (!mounted) return;
+
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    let width: number = window.innerWidth;
+    let height: number = window.innerHeight;
+    let animationFrameId: number;
+    const particles: Particle[] = [];
+    let resizeTimeout: NodeJS.Timeout;
+
+    // Configuration
+    const config = {
+      maxParticles: 150,
+      spawnWidth: 800,
+      spawnHeight: 400,
+      size: 1.2,
+      colorA: "rgb(50, 100, 255)",
+      colorB: "rgb(255, 255, 255)",
+    };
+
+    // Helper to get CSS variable value
+    const getCssVar = (name: string) => {
+      if (typeof window === "undefined") return "";
+      return getComputedStyle(document.documentElement)
+        .getPropertyValue(name)
+        .trim();
+    };
+
+    // Update config colors from CSS variables
+    const updateColors = () => {
+      const color1 = getCssVar("--particle-color-1");
+      const color2 = getCssVar("--particle-color-2");
+
+      if (color1) config.colorA = color1;
+      if (color2) config.colorB = color2;
+    };
+
+    class Particle {
+      x: number;
+      y: number;
+      vy: number;
+      vx: number;
+      color: string;
+      initialSize: number;
+      age: number;
+      life: number;
+      wobble: number;
+
+      constructor() {
+        // 1. WIDTH: Spread across spawnWidth center
+        const offsetX = (Math.random() - 0.5) * config.spawnWidth;
+        this.x = width / 2 + offsetX;
+
+        // 2. HEIGHT: Spread across bottom spawnHeight
+        const offsetY = Math.random() * config.spawnHeight;
+        this.y = height - offsetY;
+
+        // 3. MOVEMENT: Slow drift up
+        this.vy = -0.2 - Math.random() * 0.3;
+        this.vx = (Math.random() - 0.5) * 0.1;
+
+        // Color selection
+        this.color = Math.random() > 0.5 ? config.colorA : config.colorB;
+        this.initialSize = Math.random() * config.size;
+
+        this.age = 0;
+        this.life = 120 + Math.random() * 80;
+        this.wobble = Math.random() * Math.PI * 2;
+      }
+
+      update() {
+        this.y += this.vy;
+        this.x += this.vx;
+        this.x += Math.sin(this.age * 0.05 + this.wobble) * 0.1;
+        this.age++;
+      }
+
+      draw(ctx: CanvasRenderingContext2D) {
+        const lifePercent = this.age / this.life;
+        let opacity = 0;
+
+        // Fade In (0-20%) -> Hold -> Fade Out (50-100%)
+        if (lifePercent < 0.2) {
+          opacity = lifePercent / 0.2;
+        } else if (lifePercent < 0.5) {
+          opacity = 1;
+        } else {
+          opacity = 1 - (lifePercent - 0.5) / 0.5;
+        }
+
+        // Safety Kill: If it floats higher than the spawn area + buffer
+        if (this.y < height - (config.spawnHeight + 100)) {
+          opacity = 0;
+        }
+
+        if (opacity <= 0) return;
+
+        ctx.globalAlpha = opacity;
+        ctx.fillStyle = this.color;
+
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.initialSize, 0, Math.PI * 2);
+        ctx.fill();
+
+        ctx.globalAlpha = 1.0;
+      }
+    }
+
+    const init = () => {
+      resize();
+      updateColors();
+
+      for (let i = 0; i < config.maxParticles; i++) {
+        const p = new Particle();
+        p.age = Math.random() * p.life;
+        particles.push(p);
+      }
+    };
+
+    const resize = () => {
+      const parent = canvas.parentElement;
+      if (parent) {
+        width = canvas.width = parent.clientWidth;
+        height = canvas.height = parent.clientHeight;
+      } else {
+        width = canvas.width = window.innerWidth;
+        height = canvas.height = window.innerHeight;
+      }
+    };
+
+    const handleResize = () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(() => {
+        resize();
+        updateColors(); // Re-fetch colors
+      }, 200);
+    };
+
+    const animate = () => {
+      ctx.clearRect(0, 0, width, height);
+
+      // Maintain density
+      if (particles.length < config.maxParticles) {
+        particles.push(new Particle());
+      } else if (Math.random() < 0.1) {
+        particles.push(new Particle());
+      }
+
+      for (let i = particles.length - 1; i >= 0; i--) {
+        const p = particles[i];
+        p.update();
+        p.draw(ctx);
+
+        if (p.age >= p.life || p.y < height - (config.spawnHeight + 150)) {
+          particles.splice(i, 1);
+        }
+      }
+
+      animationFrameId = requestAnimationFrame(animate);
+    };
+
+    window.addEventListener("resize", handleResize);
+    init();
+    animate();
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+      cancelAnimationFrame(animationFrameId);
+      clearTimeout(resizeTimeout);
+    };
+  }, [mounted]);
+
+  if (!mounted) return <div className="fixed inset-0 bg-background" />;
 
   return (
     <div
+      ref={containerRef}
       className={cn(
-        "absolute inset-0 w-full h-full -z-10 overflow-hidden",
+        "absolute inset-0 w-full h-full -z-10 overflow-hidden bg-background",
         className
       )}
-      style={{ backgroundColor }}
       data-testid="animated-background"
     >
-      <GradientBars
-        numBars={effectiveNumBars}
-        gradientFrom={gradientFrom}
-        gradientTo={gradientTo}
-        animationDuration={animationDuration}
+      <style jsx global>{`
+        @keyframes custom-fade-in {
+          from {
+            opacity: 0;
+            transform: translateY(200px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0px);
+          }
+        }
+        .animate-fade-in {
+          animation: custom-fade-in 3s 1s ease-out forwards;
+          opacity: 0;
+        }
+      `}</style>
+
+      {/* LAYER 1: Noise Grain */}
+      <div
+        className="absolute inset-0 z-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none mix-blend-overlay"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* LAYER 2: Phong Lighting - Kept mix-blend-screen for lighting effect, should be fine if opacity is low */}
+      <div
+        className="absolute inset-0 opacity-10 z-10 pointer-events-none mix-blend-screen"
+        style={{
+          background: `radial-gradient(
+                circle 100vh at 50% -20%, 
+                rgb(255, 255, 255) 0%, 
+                transparent 50%
+            )`,
+        }}
+      />
+
+      {/* LAYER 3: Depth Horizon Gradient - Removed mix-blend-screen */}
+      <div
+        className="absolute inset-0 w-full h-full z-20 animate-fade-in"
+        style={{
+          background: `radial-gradient(
+                circle 300vh at 50% -200vh, 
+                rgba(0,0,0,0) 0%,
+                rgba(0,0,0,0) 89%, 
+                var(--bg-depth-gradient-from) 96%, 
+                var(--bg-depth-gradient-to) 99%, 
+                rgba(255,255,255,0.8) 115%
+            )`,
+        }}
+      />
+
+      {/* LAYER 4: Particle Canvas - Removed mix-blend-screen */}
+      <canvas
+        ref={canvasRef}
+        className="absolute inset-0 w-full h-full z-30 pointer-events-none animate-fade-in"
       />
     </div>
   );

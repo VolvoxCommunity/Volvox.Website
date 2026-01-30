@@ -101,6 +101,14 @@
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
+    --bg-depth-gradient-from: #3c90ff;
+    /* Blue 100 */
+    --bg-depth-gradient-to: #1b73ff;
+    /* Blue 500 */
+    --particle-color-1: #2563eb;
+    /* Blue 600 */
+    --particle-color-2: #2e2e2e;
+    /* Slate 400 */
   }
 
   .dark {
@@ -143,6 +151,14 @@
     --chart-3: oklch(0.769 0.188 70.08);
     --chart-4: oklch(0.627 0.265 303.9);
     --chart-5: oklch(0.645 0.246 16.439);
+
+    /* Animated Background Colors - Dark Mode */
+    --bg-depth-gradient-from: #1d4ed8;
+    /* Blue 700 - smooth blend */
+    --bg-depth-gradient-to: #60a5fa;
+    /* Blue 400 - bright horizon */
+    --particle-color-1: rgb(29, 86, 255);
+    --particle-color-2: rgba(255, 255, 255, 1);
   }
 }
 
