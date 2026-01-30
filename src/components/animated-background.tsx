@@ -175,6 +175,9 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
         particles.push(new Particle());
       } else if (Math.random() < 0.1) {
         particles.push(new Particle());
+      // Maintain density
+      if (particles.length < config.maxParticles) {
+        particles.push(new Particle());
       }
 
       for (let i = particles.length - 1; i >= 0; i--) {
