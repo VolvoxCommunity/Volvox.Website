@@ -27,6 +27,12 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
   useEffect(() => {
     if (!mounted) return;
 
+    // Check for reduced motion preference
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReducedMotion) return;
+
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -38,6 +44,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     let animationFrameId: number;
     const particles: Particle[] = [];
     let resizeTimeout: NodeJS.Timeout;
+    let themeObserver: MutationObserver | null = null;
 
     // Configuration
     const config = {
@@ -64,6 +71,15 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
 
       if (color1) config.colorA = color1;
       if (color2) config.colorB = color2;
+    };
+
+    // Watch for theme changes via class mutations on documentElement
+    const startThemeObserver = () => {
+      themeObserver = new MutationObserver(() => updateColors());
+      themeObserver.observe(document.documentElement, {
+        attributes: true,
+        attributeFilter: ["class", "style"],
+      });
     };
 
     class Particle {
@@ -150,13 +166,17 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
 
     const resize = () => {
       const parent = canvas.parentElement;
-      if (parent) {
-        width = canvas.width = parent.clientWidth;
-        height = canvas.height = parent.clientHeight;
-      } else {
-        width = canvas.width = window.innerWidth;
-        height = canvas.height = window.innerHeight;
-      }
+      const targetWidth = parent ? parent.clientWidth : window.innerWidth;
+      const targetHeight = parent ? parent.clientHeight : window.innerHeight;
+      const dpr = window.devicePixelRatio || 1;
+
+      width = targetWidth;
+      height = targetHeight;
+      canvas.width = Math.floor(targetWidth * dpr);
+      canvas.height = Math.floor(targetHeight * dpr);
+      canvas.style.width = `${targetWidth}px`;
+      canvas.style.height = `${targetHeight}px`;
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     };
 
     const handleResize = () => {
@@ -170,11 +190,6 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     const animate = () => {
       ctx.clearRect(0, 0, width, height);
 
-      // Maintain density
-      if (particles.length < config.maxParticles) {
-        particles.push(new Particle());
-      } else if (Math.random() < 0.1) {
-        particles.push(new Particle());
       // Maintain density
       if (particles.length < config.maxParticles) {
         particles.push(new Particle());
@@ -194,6 +209,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     };
 
     window.addEventListener("resize", handleResize);
+    startThemeObserver();
     init();
     animate();
 
@@ -201,6 +217,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
       window.removeEventListener("resize", handleResize);
       cancelAnimationFrame(animationFrameId);
       clearTimeout(resizeTimeout);
+      themeObserver?.disconnect();
     };
   }, [mounted]);
 
