@@ -69,7 +69,7 @@ export function TeamNavbar({
             className="hidden md:flex items-center gap-1"
           >
             {NAV_ITEMS.map((item) => {
-              const isActive = item.id === "team";
+              const isActive = (item.id as string) === "team";
               return (
                 <Link
                   key={item.id}

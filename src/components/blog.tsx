@@ -115,27 +115,30 @@ export function Blog({
       if (cards && cards.length > 0) {
         animationInitializedRef.current = true;
 
-        gsap.fromTo(
-          cards,
-          {
-            y: 100,
-            opacity: 0,
-            scale: 0.9,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: cardsContainerRef.current,
-              start: "top 80%", // Start animation when top of container hits 80% viewport
-              toggleActions: "play none none reverse", // Play on enter, reverse on leave back up
+        cards.forEach((card) => {
+          gsap.fromTo(
+            card,
+            {
+              y: 100,
+              opacity: 0,
+              scale: 0.95,
+              filter: "blur(10px)",
             },
-          }
-        );
+            {
+              scrollTrigger: {
+                trigger: card,
+                start: "top 95%",
+                end: "top 70%",
+                scrub: 1,
+              },
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              ease: "power2.out",
+            }
+          );
+        });
       }
     }, containerRef); // Scope to container
 
@@ -276,8 +279,14 @@ export function Blog({
               : "grid-cols-1"
           )}
         >
-          {filteredPosts.map((post) => (
-            <div key={post.id} className="blog-card-item gsap-will-animate">
+          {filteredPosts.map((post, index) => (
+            <div
+              key={post.id}
+              className={cn(
+                "blog-card-item gsap-will-animate",
+                !enableFilters && index === 2 && "hidden lg:block" // Hide 3rd item on mobile/tablet, show on lg+
+              )}
+            >
               <BlogCard post={post} viewMode={viewMode} />
             </div>
           ))}

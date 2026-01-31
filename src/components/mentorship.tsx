@@ -1,18 +1,16 @@
 "use client";
 
 // Framework imports
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // Third-party imports
 import {
-  useScroll,
-  useSpring,
   useTransform,
   motion,
   useAnimationFrame,
   useMotionValue,
-  useVelocity,
+  animate,
 } from "framer-motion";
 import { DiscordLogo, Users } from "@phosphor-icons/react";
 import confettiLib from "canvas-confetti";
@@ -143,18 +141,34 @@ interface ParallaxTextProps {
 
 function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
   const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400,
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false,
-  });
+  const speedFactor = useMotionValue(1);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isToggledPause, setIsToggledPause] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+  const lastTapTimeRef = useRef<number>(0);
+
+  // Detect mobile
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Smoothly animate speed factor based on hover/drag/toggle state
+  useEffect(() => {
+    const isPaused = isDragging || (isMobile ? isToggledPause : isHovered);
+    const controls = animate(speedFactor, isPaused ? 0 : 1, {
+      type: "spring",
+      stiffness: 100,
+      damping: 20,
+      restDelta: 0.001,
+    });
+
+    return () => controls.stop();
+  }, [isHovered, isDragging, isToggledPause, isMobile, speedFactor]);
 
   // Duplicate data multiple times for a truly infinite feel
   const marqueeData = useMemo(() => {
@@ -178,23 +192,13 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
     const timeDelta = t - prevT.current;
     prevT.current = t;
 
-    // Skip update if paused
-    if (isHovered || isDragging) return;
-
     // baseVelocity is -1.
     // We want slow, steady movement.
-    // 0.005 factor for smoothness with timeDelta (approx 0.08% per frame at 16ms)
-    let moveBy = baseVelocity * (timeDelta * 0.005);
-
-    /**
-     * Scroll velocity adds to the speed
-     * Scrolling increases speed in the same direction (negative X / left)
-     */
-    const v = velocityFactor.get();
-    if (v !== 0) {
-      // Math.abs(v) ensures scroll direction (up or down) always speeds it up leftwards
-      moveBy -= Math.abs(v) * (timeDelta * 0.005);
-    }
+    // Adjusted velocity: slower overall, even slower on mobile.
+    // Desktop: 0.002 multiplier, Mobile: 0.001 multiplier
+    const velocityFactor = isMobile ? 0.001 : 0.002;
+    const moveBy =
+      baseVelocity * (timeDelta * velocityFactor) * speedFactor.get();
 
     baseX.set(baseX.get() + moveBy);
   });
@@ -209,8 +213,27 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
     <motion.div
       className="flex gap-4 md:gap-6 w-max py-4"
       style={{ x }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => !isMobile && setIsHovered(true)}
+      onHoverEnd={() => !isMobile && setIsHovered(false)}
+      onTap={() => {
+        if (!isMobile) return;
+        const now = Date.now();
+        const DOUBLE_TAP_DELAY = 300; // ms
+
+        if (isToggledPause) {
+          // If already paused, require double tap to resume
+          if (now - lastTapTimeRef.current < DOUBLE_TAP_DELAY) {
+            setIsToggledPause(false);
+            lastTapTimeRef.current = 0;
+          } else {
+            lastTapTimeRef.current = now;
+          }
+        } else {
+          // If running, single tap to pause
+          setIsToggledPause(true);
+          lastTapTimeRef.current = now;
+        }
+      }}
       drag="x"
       // Large constraints to allow free sliding
       dragConstraints={{ left: -5000, right: 5000 }}
@@ -234,50 +257,50 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
   return (
     <div
       className={cn(
-        "shrink-0 w-[320px] md:w-[400px] rounded-[24px] border bg-card/80 backdrop-blur-sm p-6 transition-all duration-300",
+        "shrink-0 w-[240px] md:w-[400px] rounded-[16px] md:rounded-[24px] border bg-card/80 backdrop-blur-sm p-3 md:p-6 transition-all duration-300",
         "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 select-none"
       )}
     >
-      <div className="flex items-center gap-4 mb-4">
-        <Avatar className="h-12 w-12 border-2 border-border shadow-md">
+      <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+        <Avatar className="h-8 w-8 md:h-12 md:w-12 border-2 border-border shadow-md">
           <AvatarImage
             src={profile.avatar}
             alt={profile.name}
             draggable={false}
           />
-          <AvatarFallback className="bg-primary/10 text-primary font-semibold">
+          <AvatarFallback className="bg-primary/10 text-primary font-semibold text-[10px] md:text-sm">
             {profile.name.charAt(0)}
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <h4 className="font-bold text-foreground text-base truncate leading-tight">
+          <h4 className="font-bold text-foreground text-xs md:text-base truncate leading-tight">
             {profile.name}
           </h4>
-          <div className="flex items-center gap-2 mt-1">
+          <div className="flex items-center gap-1.5 md:gap-2 mt-0.5 md:mt-1">
             {profile.type === "mentor" ? (
               <Badge
                 variant="default"
-                className="bg-primary/20 text-primary border-primary/20 text-[10px] px-2 h-5"
+                className="bg-primary/20 text-primary border-primary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 MENTOR
               </Badge>
             ) : profile.type === "builder" ? (
               <Badge
                 variant="secondary"
-                className="bg-secondary/20 text-secondary border-secondary/20 text-[10px] px-2 h-5"
+                className="bg-secondary/20 text-secondary border-secondary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 BUILDER
               </Badge>
             ) : (
               <Badge
                 variant="outline"
-                className="bg-accent/20 text-accent border-accent/20 text-[10px] px-2 h-5"
+                className="bg-accent/20 text-accent border-accent/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 MENTEE
               </Badge>
             )}
             {(profile.type === "mentor" || profile.type === "builder") && (
-              <span className="text-[10px] text-muted-foreground truncate max-w-[120px]">
+              <span className="text-[8px] md:text-[10px] text-muted-foreground truncate max-w-[80px] md:max-w-[120px]">
                 {profile.role}
               </span>
             )}
@@ -285,9 +308,9 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
         </div>
       </div>
 
-      <div className="space-y-3">
+      <div className="space-y-2 md:space-y-3">
         {/* Bio / Goal Snippet */}
-        <p className="text-sm text-muted-foreground line-clamp-4 min-h-[4em] leading-relaxed">
+        <p className="text-[10px] md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-4 min-h-[2.5em] md:min-h-[4em] leading-relaxed">
           {profile.type === "mentee" ? profile.goals : profile.bio}
         </p>
 
@@ -304,7 +327,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
             {profile.expertise?.slice(0, 3).map((tech) => (
               <span
                 key={tech}
-                className="text-[10px] px-1.5 py-0.5 rounded-[4px] bg-muted text-muted-foreground border border-border"
+                className="text-[8px] md:text-[10px] px-1.5 py-0.5 rounded-[4px] bg-muted text-muted-foreground border border-border"
               >
                 {tech}
               </span>
