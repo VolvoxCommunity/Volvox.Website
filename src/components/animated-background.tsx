@@ -221,7 +221,16 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     };
   }, [mounted]);
 
-  if (!mounted) return <div className="fixed inset-0 bg-background" />;
+  if (!mounted) {
+    return (
+      <div
+        className={cn(
+          "absolute inset-0 w-full h-full -z-10 overflow-hidden bg-background",
+          className
+        )}
+      />
+    );
+  }
 
   return (
     <div
@@ -246,6 +255,13 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
         .animate-fade-in {
           animation: custom-fade-in 3s 1s ease-out forwards;
           opacity: 0;
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .animate-fade-in {
+            animation: none;
+            opacity: 1;
+            transform: none;
+          }
         }
       `}</style>
 
