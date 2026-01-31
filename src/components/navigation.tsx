@@ -49,11 +49,6 @@ export function Navigation(props: NavigationProps) {
           onNavigate ? onNavigate("mentorship") : router.push("/#mentorship"),
       },
       {
-        key: "t",
-        description: "Go to Team",
-        action: () => router.push("/team"),
-      },
-      {
         key: "a",
         description: "Go to About",
         action: () =>
@@ -200,7 +195,7 @@ export function Navigation(props: NavigationProps) {
           >
             {navItems.map((item) => (
               <li key={item.id}>
-                {linkMode || item.id === "team" ? (
+                {linkMode ? (
                   <Link
                     href={item.href}
                     aria-current={
@@ -324,7 +319,7 @@ export function Navigation(props: NavigationProps) {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 + i * 0.05 }}
                 >
-                  {linkMode || item.id === "team" ? (
+                  {linkMode ? (
                     <Link
                       href={item.href}
                       onClick={() => setMobileOpen(false)}
