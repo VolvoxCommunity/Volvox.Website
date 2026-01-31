@@ -115,27 +115,30 @@ export function Blog({
       if (cards && cards.length > 0) {
         animationInitializedRef.current = true;
 
-        gsap.fromTo(
-          cards,
-          {
-            y: 100,
-            opacity: 0,
-            scale: 0.9,
-          },
-          {
-            y: 0,
-            opacity: 1,
-            scale: 1,
-            duration: 0.8,
-            stagger: 0.1,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: cardsContainerRef.current,
-              start: "top 80%", // Start animation when top of container hits 80% viewport
-              toggleActions: "play none none reverse", // Play on enter, reverse on leave back up
+        cards.forEach((card) => {
+          gsap.fromTo(
+            card,
+            {
+              y: 100,
+              opacity: 0,
+              scale: 0.95,
+              filter: "blur(10px)",
             },
-          }
-        );
+            {
+              scrollTrigger: {
+                trigger: card,
+                start: "top 95%",
+                end: "top 70%",
+                scrub: 1,
+              },
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              filter: "blur(0px)",
+              ease: "power2.out",
+            }
+          );
+        });
       }
     }, containerRef); // Scope to container
 
