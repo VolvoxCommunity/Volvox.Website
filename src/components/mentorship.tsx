@@ -145,10 +145,20 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
 
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isToggledPause, setIsToggledPause] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
-  // Smoothly animate speed factor based on hover/drag state
+  // Detect mobile
   useEffect(() => {
-    const isPaused = isHovered || isDragging;
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  // Smoothly animate speed factor based on hover/drag/toggle state
+  useEffect(() => {
+    const isPaused = isDragging || (isMobile ? isToggledPause : isHovered);
     const controls = animate(speedFactor, isPaused ? 0 : 1, {
       type: "spring",
       stiffness: 100,
@@ -157,7 +167,7 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
     });
 
     return () => controls.stop();
-  }, [isHovered, isDragging, speedFactor]);
+  }, [isHovered, isDragging, isToggledPause, isMobile, speedFactor]);
 
   // Duplicate data multiple times for a truly infinite feel
   const marqueeData = useMemo(() => {
@@ -183,9 +193,11 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
 
     // baseVelocity is -1.
     // We want slow, steady movement.
-    // 0.005 factor for smoothness with timeDelta (approx 0.08% per frame at 16ms)
-    // Multiplied by speedFactor for smooth slowing/starting
-    const moveBy = baseVelocity * (timeDelta * 0.005) * speedFactor.get();
+    // Adjusted velocity: slower overall, even slower on mobile.
+    // Desktop: 0.003 multiplier, Mobile: 0.002 multiplier
+    const velocityFactor = isMobile ? 0.002 : 0.003;
+    const moveBy =
+      baseVelocity * (timeDelta * velocityFactor) * speedFactor.get();
 
     baseX.set(baseX.get() + moveBy);
   });
@@ -200,8 +212,9 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
     <motion.div
       className="flex gap-4 md:gap-6 w-max py-4"
       style={{ x }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
+      onHoverStart={() => !isMobile && setIsHovered(true)}
+      onHoverEnd={() => !isMobile && setIsHovered(false)}
+      onTap={() => isMobile && setIsToggledPause(!isToggledPause)}
       drag="x"
       // Large constraints to allow free sliding
       dragConstraints={{ left: -5000, right: 5000 }}
