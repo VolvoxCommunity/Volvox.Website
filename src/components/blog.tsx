@@ -38,7 +38,7 @@ interface BlogProps {
   enableFilters?: boolean;
 }
 
-const MAX_HOMEPAGE_POSTS = 4;
+const MAX_HOMEPAGE_POSTS = 3;
 
 export function Blog({
   posts: allPosts,
@@ -281,8 +281,7 @@ export function Blog({
               key={post.id}
               className={cn(
                 "blog-card-item gsap-will-animate",
-                !enableFilters && index === 2 && "hidden md:block", // Hide 3rd item on mobile, show on md+
-                !enableFilters && index === 3 && "hidden md:block lg:hidden" // Hide 4th item on mobile/desktop, show only on md (tablet)
+                !enableFilters && index === 2 && "hidden lg:block" // Hide 3rd item on mobile/tablet, show on lg+
               )}
             >
               <BlogCard post={post} viewMode={viewMode} />
