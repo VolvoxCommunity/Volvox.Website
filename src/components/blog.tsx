@@ -38,7 +38,7 @@ interface BlogProps {
   enableFilters?: boolean;
 }
 
-const MAX_HOMEPAGE_POSTS = 3;
+const MAX_HOMEPAGE_POSTS = 4;
 
 export function Blog({
   posts: allPosts,
@@ -276,8 +276,15 @@ export function Blog({
               : "grid-cols-1"
           )}
         >
-          {filteredPosts.map((post) => (
-            <div key={post.id} className="blog-card-item gsap-will-animate">
+          {filteredPosts.map((post, index) => (
+            <div
+              key={post.id}
+              className={cn(
+                "blog-card-item gsap-will-animate",
+                !enableFilters && index === 2 && "hidden md:block", // Hide 3rd item on mobile, show on md+
+                !enableFilters && index === 3 && "hidden md:block lg:hidden" // Hide 4th item on mobile/desktop, show only on md (tablet)
+              )}
+            >
               <BlogCard post={post} viewMode={viewMode} />
             </div>
           ))}

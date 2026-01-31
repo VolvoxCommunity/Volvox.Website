@@ -1,18 +1,16 @@
 "use client";
 
 // Framework imports
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 
 // Third-party imports
 import {
-  useScroll,
-  useSpring,
   useTransform,
   motion,
   useAnimationFrame,
   useMotionValue,
-  useVelocity,
+  animate,
 } from "framer-motion";
 import { DiscordLogo, Users } from "@phosphor-icons/react";
 import confettiLib from "canvas-confetti";
@@ -143,18 +141,23 @@ interface ParallaxTextProps {
 
 function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
   const baseX = useMotionValue(0);
-  const { scrollY } = useScroll();
-  const scrollVelocity = useVelocity(scrollY);
-  const smoothVelocity = useSpring(scrollVelocity, {
-    damping: 50,
-    stiffness: 400,
-  });
-  const velocityFactor = useTransform(smoothVelocity, [0, 1000], [0, 5], {
-    clamp: false,
-  });
+  const speedFactor = useMotionValue(1);
 
   const [isHovered, setIsHovered] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+
+  // Smoothly animate speed factor based on hover/drag state
+  useEffect(() => {
+    const isPaused = isHovered || isDragging;
+    const controls = animate(speedFactor, isPaused ? 0 : 1, {
+      type: "spring",
+      stiffness: 100,
+      damping: 20,
+      restDelta: 0.001,
+    });
+
+    return () => controls.stop();
+  }, [isHovered, isDragging, speedFactor]);
 
   // Duplicate data multiple times for a truly infinite feel
   const marqueeData = useMemo(() => {
@@ -178,23 +181,11 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
     const timeDelta = t - prevT.current;
     prevT.current = t;
 
-    // Skip update if paused
-    if (isHovered || isDragging) return;
-
     // baseVelocity is -1.
     // We want slow, steady movement.
     // 0.005 factor for smoothness with timeDelta (approx 0.08% per frame at 16ms)
-    let moveBy = baseVelocity * (timeDelta * 0.005);
-
-    /**
-     * Scroll velocity adds to the speed
-     * Scrolling increases speed in the same direction (negative X / left)
-     */
-    const v = velocityFactor.get();
-    if (v !== 0) {
-      // Math.abs(v) ensures scroll direction (up or down) always speeds it up leftwards
-      moveBy -= Math.abs(v) * (timeDelta * 0.005);
-    }
+    // Multiplied by speedFactor for smooth slowing/starting
+    const moveBy = baseVelocity * (timeDelta * 0.005) * speedFactor.get();
 
     baseX.set(baseX.get() + moveBy);
   });

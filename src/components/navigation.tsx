@@ -136,7 +136,7 @@ export function Navigation(props: NavigationProps) {
       <header
         className={cn(
           "fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out",
-          isVisible ? "translate-y-0" : "md:-translate-y-full translate-y-0"
+          isVisible ? "translate-y-0" : "lg:-translate-y-full translate-y-0"
         )}
       >
         {/* Nav Container */}
@@ -148,12 +148,12 @@ export function Navigation(props: NavigationProps) {
             "pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
             "w-full py-2 px-3 bg-transparent",
             isIsland
-              ? "group md:w-[90%] md:max-w-[850px] md:mt-6 md:py-3 md:px-5 md:rounded-full md:bg-background/50 md:backdrop-blur-xl md:border md:border-foreground/[0.08] md:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
-              : "md:w-full md:max-w-full md:py-6 md:px-10 md:border-b md:border-border/5"
+              ? "group lg:w-[90%] lg:max-w-[850px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+              : "lg:w-full lg:max-w-full lg:py-6 lg:px-10 lg:border-b lg:border-border/5"
           )}
         >
           {/* Mobile Progressive Blur Background */}
-          <div className="absolute inset-0 md:hidden z-[-1] pointer-events-none">
+          <div className="absolute inset-0 lg:hidden z-[-1] pointer-events-none">
             {/* Layer 1 - Base blur that fades completely */}
             <div className="absolute inset-0 backdrop-blur-[18px] [mask-image:linear-gradient(to_bottom,black_0%,transparent_100%)]" />
             {/* Layer 2 - Medium blur fading at 60% */}
@@ -167,7 +167,7 @@ export function Navigation(props: NavigationProps) {
           {/* Spotlight Effect (Desktop Only) */}
           <div
             className={cn(
-              "absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden md:block",
+              "absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden lg:block",
               isIsland ? "group-hover:opacity-100 hover:opacity-100" : ""
             )}
             style={{
@@ -186,7 +186,7 @@ export function Navigation(props: NavigationProps) {
               priority
             />
             {/* Logo Text Hidden on Mobile */}
-            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground hidden md:block">
+            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground hidden lg:block">
               Volvox
             </span>
           </Link>
@@ -194,7 +194,7 @@ export function Navigation(props: NavigationProps) {
           {/* Desktop Links */}
           <ul
             className={cn(
-              "hidden md:flex z-[2] list-none",
+              "hidden lg:flex z-[2] list-none",
               isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8"
             )}
           >
@@ -254,7 +254,7 @@ export function Navigation(props: NavigationProps) {
             </Button>
 
             <Button
-              className="hidden md:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none"
+              className="hidden lg:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none"
               onClick={(e) => {
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
@@ -269,7 +269,7 @@ export function Navigation(props: NavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden rounded-full"
+              className="lg:hidden rounded-full"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
               data-testid="nav-mobile-open"
