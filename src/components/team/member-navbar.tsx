@@ -5,7 +5,6 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
 
 export function MemberNavbar() {
@@ -55,23 +54,15 @@ export function MemberNavbar() {
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
           >
-            {NAV_ITEMS.map((item) => {
-              const isActive = (item.id as string) === "team";
-              return (
-                <Link
-                  key={item.id}
-                  href={item.href}
-                  className={cn(
-                    "text-sm font-medium py-2 px-3 rounded-full transition-all duration-300",
-                    isActive
-                      ? "bg-foreground/5 text-foreground"
-                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
-                  )}
-                >
-                  {item.label}
-                </Link>
-              );
-            })}
+            {NAV_ITEMS.map((item) => (
+              <Link
+                key={item.id}
+                href={item.href}
+                className="text-sm font-medium py-2 px-3 rounded-full transition-all duration-300 opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+              >
+                {item.label}
+              </Link>
+            ))}
           </nav>
         </div>
 
