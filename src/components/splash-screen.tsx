@@ -1,15 +1,25 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
 
   useEffect(() => {
+    // Respect user's motion preferences
+    const prefersReducedMotion = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+
+    if (prefersReducedMotion) {
+      // Skip splash screen entirely for users who prefer reduced motion
+      setIsVisible(false);
+      return;
+    }
+
     // Phase 1: 1.5s delay before video appears
     const initialDelay = setTimeout(() => {
       setShowVideo(true);
@@ -32,11 +42,19 @@ export function SplashScreen() {
   }, [isVisible]);
 
   const handleVideoEnd = () => {
-    // Phase 3: 2s hold after video ends
+    // Hold for 1.5s after video ends before fading out
     setTimeout(() => {
       setIsVisible(false);
     }, 1500);
   };
+
+  const handleVideoError = () => {
+    // If video fails to load, hide splash screen
+    setIsVisible(false);
+  };
+
+  // Don't render anything if not visible (after reduced motion check)
+  if (!isVisible) return null;
 
   return (
     <AnimatePresence>
@@ -46,6 +64,7 @@ export function SplashScreen() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
           className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-none"
+          aria-hidden="true"
         >
           <AnimatePresence>
             {showVideo && (
@@ -56,12 +75,12 @@ export function SplashScreen() {
                 className="w-full max-w-[500px] px-6"
               >
                 <video
-                  ref={videoRef}
                   src="/animated-logo.webm"
                   autoPlay
                   muted
                   playsInline
                   onEnded={handleVideoEnd}
+                  onError={handleVideoError}
                   className={cn(
                     "w-full h-auto",
                     // Light mode (default): invert + hue-rotate to keep logo colors while making bg white.
