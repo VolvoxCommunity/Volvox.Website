@@ -253,7 +253,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
           }
         }
         .animate-fade-in {
-          animation: custom-fade-in 3s 1s ease-out forwards;
+          animation: custom-fade-in 3s 6s ease-out forwards;
           opacity: 0;
         }
         @media (prefers-reduced-motion: reduce) {
