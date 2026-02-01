@@ -9,6 +9,7 @@ import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { SkipLink } from "@/components/skip-link";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
+import { SplashScreen } from "@/components/splash-screen";
 import { generateOrganizationSchema } from "@/lib/structured-data";
 import {
   safeJsonLdSerialize,
@@ -106,6 +107,7 @@ export default function RootLayout({
       <body
         className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased font-sans`}
       >
+        <SplashScreen />
         <div className="noise" />
         <SmoothScroll>
           <SkipLink />
