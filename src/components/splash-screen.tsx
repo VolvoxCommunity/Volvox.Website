@@ -2,10 +2,21 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { reportError } from "@/lib/logger";
 import { cn } from "@/lib/utils";
 
-export function SplashScreen() {
-  const [isVisible, setIsVisible] = useState(true);
+/**
+ * Check if the user prefers reduced motion.
+ * Returns true during SSR to avoid animation flash.
+ */
+function getPrefersReducedMotion(): boolean {
+  if (typeof window === "undefined") return true;
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+export function SplashScreen(): React.ReactElement | null {
+  // Initialize state based on reduced motion preference to avoid setState in useEffect
+  const [isVisible, setIsVisible] = useState(() => !getPrefersReducedMotion());
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -13,6 +24,8 @@ export function SplashScreen() {
   const initialTimerRef = useRef<NodeJS.Timeout | null>(null);
   const dismissTimerRef = useRef<NodeJS.Timeout | null>(null);
   const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
+  // Store original overflow value
+  const originalOverflowRef = useRef<string>("");
 
   const dismissSplash = () => {
     setIsVisible(false);
@@ -20,20 +33,11 @@ export function SplashScreen() {
     if (initialTimerRef.current) clearTimeout(initialTimerRef.current);
     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
     if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
-    // Final safety: ensure scroll is restored
-    document.body.style.overflow = "unset";
   };
 
   useEffect(() => {
-    // Respect user's motion preferences
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-
-    if (prefersReducedMotion) {
-      setTimeout(() => setIsVisible(false), 0);
-      return;
-    }
+    // If reduced motion is preferred, splash is already hidden via initial state
+    if (!isVisible) return;
 
     // Phase 1: 1.5s delay before video appears
     initialTimerRef.current = setTimeout(() => {
@@ -51,18 +55,22 @@ export function SplashScreen() {
       if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
       if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
     };
-  }, []);
+  }, [isVisible]);
 
   useEffect(() => {
     // Prevent scrolling while splash screen is visible
     if (isVisible) {
+      // Store original overflow value before modifying
+      originalOverflowRef.current = document.body.style.overflow;
       document.body.style.overflow = "hidden";
     } else {
-      document.body.style.overflow = "unset";
+      // Restore original overflow value
+      document.body.style.overflow = originalOverflowRef.current;
     }
 
     return () => {
-      document.body.style.overflow = "unset";
+      // Restore original overflow on cleanup
+      document.body.style.overflow = originalOverflowRef.current;
     };
   }, [isVisible]);
 
@@ -74,11 +82,9 @@ export function SplashScreen() {
   };
 
   const handleVideoError = () => {
-    console.error("SplashScreen video failed to load, dismissing.");
+    reportError("SplashScreen video failed to load", new Error("Video load error"));
     dismissSplash();
   };
-
-  if (!isVisible) return null;
 
   return (
     <AnimatePresence>
