@@ -96,6 +96,7 @@ export function SplashScreen(): React.ReactElement | null {
           // Block interactions while splash is visible
           className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-auto"
           aria-hidden="true"
+          data-testid="splash-screen"
         >
           <AnimatePresence>
             {showVideo && (
