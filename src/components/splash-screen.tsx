@@ -1,22 +1,35 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useSyncExternalStore } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { reportError } from "@/lib/logger";
 import { cn } from "@/lib/utils";
 
 /**
- * Check if the user prefers reduced motion.
- * Returns true during SSR to avoid animation flash.
+ * Hook to detect user's reduced motion preference with proper SSR handling.
+ * Uses useSyncExternalStore to avoid hydration mismatches.
+ *
+ * Server snapshot returns false (show splash) to match initial client render,
+ * then syncs to actual preference after hydration.
  */
-function getPrefersReducedMotion(): boolean {
-  if (typeof window === "undefined") return true;
-  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+function usePrefersReducedMotion(): boolean {
+  return useSyncExternalStore(
+    (callback) => {
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      mediaQuery.addEventListener("change", callback);
+      return () => mediaQuery.removeEventListener("change", callback);
+    },
+    () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+    () => false // Server snapshot: assume no reduced motion preference
+  );
 }
 
 export function SplashScreen(): React.ReactElement | null {
-  // Initialize state based on reduced motion preference to avoid setState in useEffect
-  const [isVisible, setIsVisible] = useState(() => !getPrefersReducedMotion());
+  const prefersReducedMotion = usePrefersReducedMotion();
+  // Track whether splash has been dismissed (separate from reduced motion)
+  const [isDismissed, setIsDismissed] = useState(false);
+  // Compute visibility: visible if not dismissed AND not preferring reduced motion
+  const isVisible = !isDismissed && !prefersReducedMotion;
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
 
@@ -29,7 +42,7 @@ export function SplashScreen(): React.ReactElement | null {
   const didLockRef = useRef<boolean>(false);
 
   const dismissSplash = () => {
-    setIsVisible(false);
+    setIsDismissed(true);
     // Ensure all timers are cleared when dismissing
     if (initialTimerRef.current) clearTimeout(initialTimerRef.current);
     if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
@@ -40,6 +53,14 @@ export function SplashScreen(): React.ReactElement | null {
     // If reduced motion is preferred, splash is already hidden via initial state
     if (!isVisible) return;
 
+    // Local dismiss function to avoid stale closure issues
+    const dismiss = () => {
+      setIsDismissed(true);
+      if (initialTimerRef.current) clearTimeout(initialTimerRef.current);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
+
     // Phase 1: 1.5s delay before video appears
     initialTimerRef.current = setTimeout(() => {
       setShowVideo(true);
@@ -47,7 +68,7 @@ export function SplashScreen(): React.ReactElement | null {
       // Robustness: Start a max-duration fallback timer once we intend to show the video.
       // If the video fails to load or the 'ended' event doesn't fire, we still dismiss.
       fallbackTimerRef.current = setTimeout(() => {
-        dismissSplash();
+        dismiss();
       }, 10000);
     }, 1500);
 
