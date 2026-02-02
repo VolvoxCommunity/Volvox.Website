@@ -1,12 +1,28 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 export function SplashScreen() {
   const [isVisible, setIsVisible] = useState(true);
   const [showVideo, setShowVideo] = useState(false);
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Timer refs to allow precise clearing
+  const initialTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const dismissTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
+
+  const dismissSplash = () => {
+    setIsVisible(false);
+    // Ensure all timers are cleared when dismissing
+    if (initialTimerRef.current) clearTimeout(initialTimerRef.current);
+    if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+    if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    // Final safety: ensure scroll is restored
+    document.body.style.overflow = "unset";
+  };
 
   useEffect(() => {
     // Respect user's motion preferences
@@ -15,17 +31,26 @@ export function SplashScreen() {
     ).matches;
 
     if (prefersReducedMotion) {
-      // Skip splash screen entirely for users who prefer reduced motion
-      setIsVisible(false);
+      setTimeout(() => setIsVisible(false), 0);
       return;
     }
 
     // Phase 1: 1.5s delay before video appears
-    const initialDelay = setTimeout(() => {
+    initialTimerRef.current = setTimeout(() => {
       setShowVideo(true);
+
+      // Robustness: Start a max-duration fallback timer once we intend to show the video.
+      // If the video fails to load or the 'ended' event doesn't fire, we still dismiss.
+      fallbackTimerRef.current = setTimeout(() => {
+        dismissSplash();
+      }, 10000);
     }, 1500);
 
-    return () => clearTimeout(initialDelay);
+    return () => {
+      if (initialTimerRef.current) clearTimeout(initialTimerRef.current);
+      if (dismissTimerRef.current) clearTimeout(dismissTimerRef.current);
+      if (fallbackTimerRef.current) clearTimeout(fallbackTimerRef.current);
+    };
   }, []);
 
   useEffect(() => {
@@ -42,18 +67,17 @@ export function SplashScreen() {
   }, [isVisible]);
 
   const handleVideoEnd = () => {
-    // Hold for 1.5s after video ends before fading out
-    setTimeout(() => {
-      setIsVisible(false);
+    // Phase 3: Hold after video ends before fading out
+    dismissTimerRef.current = setTimeout(() => {
+      dismissSplash();
     }, 1500);
   };
 
   const handleVideoError = () => {
-    // If video fails to load, hide splash screen
-    setIsVisible(false);
+    console.error("SplashScreen video failed to load, dismissing.");
+    dismissSplash();
   };
 
-  // Don't render anything if not visible (after reduced motion check)
   if (!isVisible) return null;
 
   return (
@@ -63,7 +87,8 @@ export function SplashScreen() {
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-none"
+          // Block interactions while splash is visible
+          className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-auto"
           aria-hidden="true"
         >
           <AnimatePresence>
@@ -75,6 +100,7 @@ export function SplashScreen() {
                 className="w-full max-w-[500px] px-6"
               >
                 <video
+                  ref={videoRef}
                   src="/animated-logo.webm"
                   autoPlay
                   muted
@@ -83,9 +109,7 @@ export function SplashScreen() {
                   onError={handleVideoError}
                   className={cn(
                     "w-full h-auto",
-                    // Light mode (default): invert + hue-rotate to keep logo colors while making bg white.
                     "invert hue-rotate-180 brightness-125 contrast-110 mix-blend-multiply",
-                    // Dark mode: restore original colors and use screen blend.
                     "dark:invert-0 dark:hue-rotate-0 dark:brightness-110 dark:contrast-100 dark:mix-blend-screen"
                   )}
                 />
