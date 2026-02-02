@@ -58,19 +58,17 @@ export function SplashScreen(): React.ReactElement | null {
   }, [isVisible]);
 
   useEffect(() => {
-    // Prevent scrolling while splash screen is visible
-    if (isVisible) {
-      // Store original overflow value before modifying
-      originalOverflowRef.current = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-    } else {
-      // Restore original overflow value
-      document.body.style.overflow = originalOverflowRef.current;
-    }
+    // Only lock scrolling when splash is visible; skip if already hidden (reduced motion)
+    if (!isVisible) return;
+
+    // Store original overflow value before modifying
+    const previousOverflow = document.body.style.overflow;
+    originalOverflowRef.current = previousOverflow;
+    document.body.style.overflow = "hidden";
 
     return () => {
       // Restore original overflow on cleanup
-      document.body.style.overflow = originalOverflowRef.current;
+      document.body.style.overflow = previousOverflow;
     };
   }, [isVisible]);
 
