@@ -9,8 +9,7 @@ import { cn } from "@/lib/utils";
  * Hook to detect user's reduced motion preference with proper SSR handling.
  * Uses useSyncExternalStore to avoid hydration mismatches.
  *
- * Server snapshot returns false (show splash) to match initial client render,
- * then syncs to actual preference after hydration.
+ * Server snapshot returns true to avoid showing animations during hydration.
  */
 function usePrefersReducedMotion(): boolean {
   return useSyncExternalStore(
@@ -20,7 +19,7 @@ function usePrefersReducedMotion(): boolean {
       return () => mediaQuery.removeEventListener("change", callback);
     },
     () => window.matchMedia("(prefers-reduced-motion: reduce)").matches,
-    () => false // Server snapshot: assume no reduced motion preference
+    () => true // Server snapshot: assume reduced motion to be safe
   );
 }
 
@@ -28,10 +27,11 @@ export function SplashScreen(): React.ReactElement | null {
   const prefersReducedMotion = usePrefersReducedMotion();
   // Track whether splash has been dismissed (separate from reduced motion)
   const [isDismissed, setIsDismissed] = useState(false);
-  // Compute visibility: visible if not dismissed AND not preferring reduced motion
-  const isVisible = !isDismissed && !prefersReducedMotion;
   const [showVideo, setShowVideo] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Derive visibility from preference and dismissal state
+  const isVisible = !prefersReducedMotion && !isDismissed;
 
   // Timer refs to allow precise clearing
   const initialTimerRef = useRef<NodeJS.Timeout | null>(null);
