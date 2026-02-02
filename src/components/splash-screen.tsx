@@ -24,8 +24,9 @@ export function SplashScreen(): React.ReactElement | null {
   const initialTimerRef = useRef<NodeJS.Timeout | null>(null);
   const dismissTimerRef = useRef<NodeJS.Timeout | null>(null);
   const fallbackTimerRef = useRef<NodeJS.Timeout | null>(null);
-  // Store original overflow value
+  // Store original overflow value and tracking flag
   const originalOverflowRef = useRef<string>("");
+  const didLockRef = useRef<boolean>(false);
 
   const dismissSplash = () => {
     setIsVisible(false);
@@ -58,17 +59,20 @@ export function SplashScreen(): React.ReactElement | null {
   }, [isVisible]);
 
   useEffect(() => {
-    // Only lock scrolling when splash is visible; skip if already hidden (reduced motion)
-    if (!isVisible) return;
-
-    // Store original overflow value before modifying
-    const previousOverflow = document.body.style.overflow;
-    originalOverflowRef.current = previousOverflow;
-    document.body.style.overflow = "hidden";
+    // Prevent scrolling while splash screen is visible
+    if (isVisible && !didLockRef.current) {
+      // Store original overflow value before modifying
+      originalOverflowRef.current = document.body.style.overflow;
+      document.body.style.overflow = "hidden";
+      didLockRef.current = true;
+    }
 
     return () => {
-      // Restore original overflow on cleanup
-      document.body.style.overflow = previousOverflow;
+      // Restore original overflow on cleanup or hide, ONLY if we previously locked it
+      if (didLockRef.current) {
+        document.body.style.overflow = originalOverflowRef.current;
+        didLockRef.current = false;
+      }
     };
   }, [isVisible]);
 
@@ -80,7 +84,10 @@ export function SplashScreen(): React.ReactElement | null {
   };
 
   const handleVideoError = () => {
-    reportError("SplashScreen video failed to load", new Error("Video load error"));
+    reportError(
+      "SplashScreen video failed to load",
+      new Error("Video load error")
+    );
     dismissSplash();
   };
 
@@ -94,7 +101,7 @@ export function SplashScreen(): React.ReactElement | null {
           // Block interactions while splash is visible
           className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-auto"
           aria-hidden="true"
-          data-testid="splash-screen"
+          data-testid="splash-overlay"
         >
           <AnimatePresence>
             {showVideo && (
