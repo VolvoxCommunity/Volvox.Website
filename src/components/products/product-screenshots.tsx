@@ -40,8 +40,7 @@ export function ProductScreenshots({
   const [isPaused, setIsPaused] = useState(false);
   const [direction, setDirection] = useState(0);
 
-  // Filter out hero image (index 0) - carousel only shows additional screenshots
-  const galleryImages = screenshots.slice(1);
+  const galleryImages = screenshots;
 
   const nextSlide = useCallback(() => {
     setDirection(1);
