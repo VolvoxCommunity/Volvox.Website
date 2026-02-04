@@ -1,0 +1,58 @@
+{
+  "id": "a3f8b2c1-7d4e-4a9f-b6c3-e8d5f2a1b9c4",
+  "name": "Decision Jar",
+  "type": "Lifestyle Tool",
+  "slug": "decision-jar",
+  "tagline": "Shake away decision fatigue.",
+  "description": "A fun decision-making app that helps you overcome choice paralysis by shaking your phone to randomly pick from custom jars of options—powered by AI suggestions and modern glassmorphism design.",
+  "longDescription": "Decision Jar eliminates decision fatigue with a playful approach to everyday choices. Create virtual jars filled with options for any scenario—what to eat, where to go, which movie to watch—then shake your device to receive a random selection. AI-powered suggestions help expand your choices, while decision history tracking reveals patterns in your selections. Share jars with friends via QR codes for instant importing, and enjoy a privacy-first experience with all data stored locally on your device. Built with React Native and Expo featuring a modern glassmorphism design with dark mode support.",
+  "features": [
+    "Shake-to-decide or tap for random selection from custom jars",
+    "AI-powered suggestions to expand your options (up to 50/day on Premium)",
+    "Decision history tracking to identify choice patterns",
+    "QR code sharing for instant jar importing with friends",
+    "Privacy-first design with local device storage",
+    "Modern glassmorphism UI with dark mode support",
+    "Gamification with streaks and achievements",
+    "Multi-language support (English, Spanish)"
+  ],
+  "techStack": ["iOS", "Android", "React Native", "Expo"],
+  "updatedAt": "2025-02-04T10:00:00Z",
+  "links": {
+    "demo": "https://decisionjar.app",
+    "appStore": "https://apps.apple.com/us/app/decision-jar-choice-maker/id6756397435",
+    "playStore": "https://play.google.com/store/apps/details?id=com.volvox.decisionjar"
+  },
+  "screenshots": ["1.png", "2.png", "3.png", "4.png", "5.png"],
+  "faq": [
+    {
+      "question": "Is Decision Jar free to use?",
+      "answer": "Yes! The free tier includes 3 jars with 5 options each and 5 AI suggestions per day. Premium unlocks unlimited jars, unlimited options, and 50 AI suggestions daily for $2.99/month or $14.99/year."
+    },
+    {
+      "question": "How does shake-to-decide work?",
+      "answer": "Simply shake your phone and Decision Jar will randomly select one option from your jar. Don't want to shake? You can also tap to decide. Either way, the universe (well, randomness) makes the choice so you don't have to."
+    },
+    {
+      "question": "Can I share jars with friends?",
+      "answer": "Absolutely! Generate a QR code for any jar and share it with friends. They can scan it to instantly import your jar into their app—perfect for group decisions like 'Where should we eat tonight?'"
+    },
+    {
+      "question": "Is my data private?",
+      "answer": "100%. All your jars and decision history are stored locally on your device, not on our servers. Your indecision is nobody's business but your own."
+    },
+    {
+      "question": "What are AI suggestions?",
+      "answer": "When creating a jar, AI can suggest additional options based on your theme. Creating a 'Date Night Ideas' jar? AI might suggest options you haven't thought of. Free users get 5 suggestions per day, Premium gets 50."
+    },
+    {
+      "question": "What platforms is Decision Jar available on?",
+      "answer": "iOS and Android. Download from the App Store or Google Play and start shaking away your indecision."
+    },
+    {
+      "question": "Why should I trust a random selection?",
+      "answer": "Science says we make around 35,000 decisions daily. Decision fatigue is real. For low-stakes choices like what to have for dinner, random selection conserves mental energy for decisions that actually matter. Plus, if you don't like the result, you can always shake again."
+    }
+  ],
+  "testimonials": []
+}

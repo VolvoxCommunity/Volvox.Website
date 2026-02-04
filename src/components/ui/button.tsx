@@ -282,7 +282,7 @@ Ripple.displayName = "Ripple";
 
 // --- 5. BUTTON COMPONENT ---
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] transition-all duration-600 delay-50 ease-[cubic-bezier(0.2,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-38 disabled:shadow-none",
+  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] cursor-pointer transition-all duration-600 delay-50 ease-[cubic-bezier(0.2,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-38 disabled:shadow-none",
   {
     variants: {
       variant: {
