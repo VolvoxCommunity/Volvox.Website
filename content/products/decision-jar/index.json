@@ -23,7 +23,13 @@
     "appStore": "https://apps.apple.com/us/app/decision-jar-choice-maker/id6756397435",
     "playStore": "https://play.google.com/store/apps/details?id=com.volvox.decisionjar"
   },
-  "screenshots": ["1.png", "2.png", "3.png", "4.png", "5.png"],
+  "screenshots": [
+    "/images/products/decision-jar/1.png",
+    "/images/products/decision-jar/2.png",
+    "/images/products/decision-jar/3.png",
+    "/images/products/decision-jar/4.png",
+    "/images/products/decision-jar/5.png"
+  ],
   "faq": [
     {
       "question": "Is Decision Jar free to use?",
