@@ -39,11 +39,19 @@ export function HomepageClient({
   products,
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
+  const [pendingHash, setPendingHash] = useState<string | null>(null);
+  const [introFinished, setIntroFinished] = useState(false);
 
   const router = useRouter();
 
   const handleNavigate = useCallback(
     (section: string) => {
+      // Defer navigation if intro is still playing
+      if (!introFinished && section !== "home") {
+        setPendingHash(section);
+        return;
+      }
+
       setCurrentSection(section);
 
       if (section === "home") {
@@ -64,27 +72,26 @@ export function HomepageClient({
         }
       }
     },
-    [router]
+    [router, introFinished]
   );
 
-  // Handle URL hash on initial load
+  // Handle URL hash on initial load or intro completion
   useEffect(() => {
-    const hash = window.location.hash.slice(1); // Remove the '#'
+    if (!introFinished) return;
+
+    const hash = pendingHash || window.location.hash.slice(1);
     if (hash) {
       const startTime = performance.now();
-      const timeout = 2000; // 2 seconds timeout
+      const timeout = 2000;
       let animationFrameId: number | undefined;
 
       const checkAndScroll = () => {
         const element = document.getElementById(hash);
         if (element) {
           handleNavigate(hash);
+          if (pendingHash) setPendingHash(null);
         } else if (performance.now() - startTime < timeout) {
           animationFrameId = requestAnimationFrame(checkAndScroll);
-        } else {
-          console.warn(
-            `Volvox: Could not find element with id '${hash}' to scroll to.`
-          );
         }
       };
 
@@ -96,7 +103,7 @@ export function HomepageClient({
         }
       };
     }
-  }, [handleNavigate]);
+  }, [introFinished, pendingHash, handleNavigate]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -140,7 +147,7 @@ export function HomepageClient({
         />
 
         <main id="main-content">
-          <IntroSection />
+          <IntroSection onComplete={() => setIntroFinished(true)} />
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />

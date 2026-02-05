@@ -33,14 +33,38 @@ const letterVariants: Variants = {
   },
 };
 
-export function IntroSection() {
+interface IntroSectionProps {
+  onComplete?: () => void;
+}
+
+export function IntroSection({ onComplete }: IntroSectionProps) {
   const [phase, setPhase] = useState<"video" | "text" | "interactive">("video");
+  const [isDark, setIsDark] = useState(false);
   const videoRef = useRef<HTMLVideoElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
+  const isTransitioning = useRef(false);
 
   // Scroll locking logic
   const didLockRef = useRef(false);
   const originalOverflowRef = useRef("");
+
+  // Detect theme on mount
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+  }, []);
+
+  // Detect prefers-reduced-motion
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    if (mediaQuery.matches) {
+      requestAnimationFrame(() => {
+        setPhase("interactive");
+        onComplete?.();
+      });
+    }
+  }, [onComplete]);
 
   // Scroll animations for exit
   const { scrollYProgress } = useScroll({
@@ -56,9 +80,12 @@ export function IntroSection() {
   useEffect(() => {
     // Lock scroll initially
     if (phase !== "interactive" && !didLockRef.current) {
-      originalOverflowRef.current = document.body.style.overflow;
-      document.body.style.overflow = "hidden";
-      didLockRef.current = true;
+      const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+      if (!mediaQuery.matches) {
+        originalOverflowRef.current = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        didLockRef.current = true;
+      }
     }
 
     // Unlock scroll once we hit the interactive text phase
@@ -76,12 +103,18 @@ export function IntroSection() {
   }, [phase]);
 
   const handleVideoEnd = () => {
-    setPhase("text");
+    if (phase === "video" && !isTransitioning.current) {
+      isTransitioning.current = true;
+      setPhase("text");
+    }
   };
+
+  const videoSrc = isDark ? "/animated-logo.webm" : "/animated-logo-white.mp4";
 
   return (
     <section
       ref={containerRef}
+      data-testid="intro-section"
       className="relative h-screen w-full flex items-center justify-center overflow-hidden z-20"
       style={{ perspective: "1000px" }}
     >
@@ -93,29 +126,16 @@ export function IntroSection() {
           transition={{ duration: 0.8 }}
           className="absolute inset-0 z-30 flex items-center justify-center bg-background"
         >
-          {/* Light Mode Video - Natural background as requested (no transparency filter) */}
           <video
             ref={videoRef}
-            src="/animated-logo-white.mp4"
+            src={videoSrc}
             autoPlay
             muted
             playsInline
             onEnded={handleVideoEnd}
             className={cn(
-              "dark:hidden block w-full max-w-[500px] h-auto pointer-events-none select-none"
-            )}
-          />
-
-          {/* Dark Mode Video - Retain background transparency filtering */}
-          <video
-            src="/animated-logo.webm"
-            autoPlay
-            muted
-            playsInline
-            onEnded={handleVideoEnd}
-            className={cn(
-              "hidden dark:block w-full max-w-[500px] h-auto pointer-events-none select-none",
-              "mix-blend-screen brightness-90 contrast-125"
+              "w-full max-w-[500px] h-auto pointer-events-none select-none",
+              isDark && "mix-blend-screen brightness-90 contrast-125"
             )}
           />
         </motion.div>
@@ -127,7 +147,6 @@ export function IntroSection() {
           style={{ scale, opacity, filter: blur, y }}
           className="relative z-10 w-full text-center"
         >
-          {/* Faded Background Logo - Visible in both modes */}
           <motion.img
             src="/logo.png"
             alt="Volvox Logo"
@@ -141,21 +160,19 @@ export function IntroSection() {
             variants={containerVariants}
             initial="hidden"
             animate="visible"
-            onAnimationComplete={() => setPhase("interactive")}
+            onAnimationComplete={() => {
+              setPhase("interactive");
+              onComplete?.();
+            }}
             className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[22vw] leading-none font-extrabold tracking-tighter select-none p-4"
             style={{
-              // Shiny Chrome Gradient Fill
               backgroundImage:
                 "linear-gradient(180deg, #FFFFFF 10%, #C0C0C0 30%, #505050 48%, #FFFFFF 50%, #C0C0C0 70%, #606060 90%)",
               backgroundClip: "text",
               WebkitBackgroundClip: "text",
               WebkitTextFillColor: "transparent",
               color: "transparent",
-
-              // Define Outline (Stroke)
               WebkitTextStroke: "4px rgba(129, 129, 129, 0.4)",
-
-              // Glow
               filter: "drop-shadow(0 0 20px rgba(255,255,255,0.4))",
             }}
           >
