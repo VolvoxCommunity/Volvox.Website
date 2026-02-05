@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { TermsClient } from "./terms-client";
-import { generateWebPageSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize } from "@/lib/constants";
+import {
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+} from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | Volvox",
+  title: "Terms of Service",
   description:
     "Terms of Service for Volvox - Read our terms and conditions for using our website and services.",
   alternates: {
@@ -45,6 +48,19 @@ export default function TermsPage() {
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(jsonLd),
+        }}
+      />
+      <Script
+        id="terms-breadcrumb-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Terms of Service", url: `${SITE_URL}/terms` },
+            ])
+          ),
         }}
       />
       <TermsClient />

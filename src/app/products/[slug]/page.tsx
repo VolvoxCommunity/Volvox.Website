@@ -1,10 +1,16 @@
 import { Metadata } from "next";
+import Script from "next/script";
 import { notFound } from "next/navigation";
 import {
   getAllExtendedProducts,
   getExtendedProductBySlug,
 } from "@/lib/content";
 import { ProductDetailClient } from "./product-detail-client";
+import {
+  generateBreadcrumbSchema,
+  generateSoftwareApplicationSchema,
+} from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
 /**
  * Disable dynamic params to only allow known product slugs.
@@ -77,5 +83,33 @@ export default async function ProductPage({
     notFound();
   }
 
-  return <ProductDetailClient product={product} />;
+  return (
+    <>
+      <Script
+        id={`product-breadcrumb-schema-${slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Products", url: `${SITE_URL}/products` },
+              { name: product.name, url: `${SITE_URL}/products/${slug}` },
+            ])
+          ),
+        }}
+      />
+      <Script
+        id={`product-software-schema-${slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateSoftwareApplicationSchema(product)
+          ),
+        }}
+      />
+      <ProductDetailClient product={product} />
+    </>
+  );
 }

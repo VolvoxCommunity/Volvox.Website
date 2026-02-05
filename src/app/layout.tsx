@@ -9,7 +9,10 @@ import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { SkipLink } from "@/components/skip-link";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
-import { generateOrganizationSchema } from "@/lib/structured-data";
+import {
+  generateOrganizationSchema,
+  generateWebSiteSchema,
+} from "@/lib/structured-data";
 import {
   safeJsonLdSerialize,
   SITE_URL,
@@ -100,6 +103,12 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{
             __html: safeJsonLdSerialize(generateOrganizationSchema()),
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLdSerialize(generateWebSiteSchema()),
           }}
         />
       </head>

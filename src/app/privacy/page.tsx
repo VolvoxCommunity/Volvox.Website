@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import Script from "next/script";
 import { PrivacyClient } from "./privacy-client";
-import { generateWebPageSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize } from "@/lib/constants";
+import {
+  generateWebPageSchema,
+  generateBreadcrumbSchema,
+} from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | Volvox",
+  title: "Privacy Policy",
   description:
     "Privacy Policy for Volvox - Learn how we collect, use, and protect your personal information.",
   alternates: {
@@ -45,6 +48,19 @@ export default function PrivacyPage() {
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(jsonLd),
+        }}
+      />
+      <Script
+        id="privacy-breadcrumb-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Privacy Policy", url: `${SITE_URL}/privacy` },
+            ])
+          ),
         }}
       />
       <PrivacyClient />

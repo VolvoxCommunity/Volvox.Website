@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
+import Script from "next/script";
 import { getAllPosts } from "@/lib/blog";
 import { BlogListClient } from "@/components/blog-list-client";
-import { SITE_NAME } from "@/lib/constants";
+import { generateBreadcrumbSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Blog",
@@ -22,8 +24,23 @@ export default async function BlogPage() {
   const posts = allPosts.filter((post) => post.published);
 
   return (
-    <Suspense fallback={null}>
-      <BlogListClient posts={posts} />
-    </Suspense>
+    <>
+      <Script
+        id="blog-breadcrumb-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Blog", url: `${SITE_URL}/blog` },
+            ])
+          ),
+        }}
+      />
+      <Suspense fallback={null}>
+        <BlogListClient posts={posts} />
+      </Suspense>
+    </>
   );
 }

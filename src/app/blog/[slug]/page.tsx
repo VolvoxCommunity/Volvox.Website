@@ -12,8 +12,11 @@ import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
 import { Footer } from "@/components/footer";
 import { ViewTracker } from "@/components/blog/view-tracker";
-import { generateArticleSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize, SITE_NAME } from "@/lib/constants";
+import {
+  generateArticleSchema,
+  generateBreadcrumbSchema,
+} from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -110,6 +113,20 @@ export default async function BlogPostPage({
         strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
+        }}
+      />
+      <Script
+        id={`blog-breadcrumb-schema-${slug}`}
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Blog", url: `${SITE_URL}/blog` },
+              { name: frontmatter.title, url: `${SITE_URL}/blog/${slug}` },
+            ])
+          ),
         }}
       />
 
