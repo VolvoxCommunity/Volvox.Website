@@ -328,7 +328,6 @@
     background: color-mix(in srgb, var(--primary), transparent 70%);
     border-radius: 5px;
     border: 2px solid var(--background);
-    transition: background 0.3s ease;
   }
 
   ::-webkit-scrollbar-thumb:hover {
