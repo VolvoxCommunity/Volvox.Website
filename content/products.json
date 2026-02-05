@@ -15,5 +15,21 @@
     "githubUrl": "https://github.com/VolvoxCommunity/sobers",
     "demoUrl": "https://sobers.app",
     "image": "/images/product/sobers.png"
+  },
+  {
+    "id": "a3f8b2c1-7d4e-4a9f-b6c3-e8d5f2a1b9c4",
+    "name": "Decision Jar",
+    "description": "A fun decision-making app that helps you overcome choice paralysis by shaking your phone to randomly pick from custom jars of options—powered by AI suggestions and modern glassmorphism design.",
+    "longDescription": "Decision Jar eliminates decision fatigue with a playful approach to everyday choices. Create virtual jars filled with options for any scenario—what to eat, where to go, which movie to watch—then shake your device to receive a random selection. AI-powered suggestions help expand your choices, while decision history tracking reveals patterns in your selections. Share jars with friends via QR codes for instant importing, and enjoy a privacy-first experience with all data stored locally on your device.",
+    "features": [
+      "Shake-to-decide or tap for random selection from custom jars",
+      "AI-powered suggestions to expand your options",
+      "Decision history tracking to identify choice patterns",
+      "QR code sharing for instant jar importing",
+      "Privacy-first design with local device storage",
+      "Cross-platform support (iOS, Android)"
+    ],
+    "demoUrl": "https://decisionjar.app",
+    "image": "/images/product/decision-jar/1.png"
   }
 ]
