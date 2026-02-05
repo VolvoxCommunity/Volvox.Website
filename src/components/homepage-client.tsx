@@ -10,6 +10,7 @@ import { Blog } from "@/components/blog";
 import { Mentorship } from "@/components/mentorship";
 import { About } from "@/components/about";
 import { Footer } from "@/components/footer";
+import { IntroSection } from "@/components/intro-section";
 import { AnimatedBackground } from "@/components/animated-background";
 import type { BlogPost, TeamMember, ExtendedProduct } from "@/lib/types";
 
@@ -139,6 +140,7 @@ export function HomepageClient({
         />
 
         <main id="main-content">
+          <IntroSection />
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />

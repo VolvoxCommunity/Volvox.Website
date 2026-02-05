@@ -41,15 +41,6 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
       data-testid="hero-section"
       className="hero-section relative min-h-screen md:min-h-[120vh] pt-32 md:pt-[180px] flex flex-col items-center overflow-hidden"
     >
-      {/* Background Glow */}
-      <div
-        className="hero-bg-glow absolute -top-[20%] left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] -z-[1] pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(circle, oklch(from var(--primary) l c h / 0.15) 0%, transparent 70%)",
-        }}
-      />
-
       {/* Hero Content */}
       <div className="hero-content text-center max-w-[1100px] px-4 z-[2]">
         <div className="hero-badge inline-flex items-center py-1.5 px-3 md:py-2 md:px-4 rounded-full bg-primary/10 text-primary text-xs md:text-sm font-semibold mb-6 border border-primary/20">
