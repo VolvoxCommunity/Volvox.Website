@@ -150,7 +150,15 @@ export function HomepageClient({
         />
 
         <main id="main-content">
-          <IntroSection onComplete={handleIntroComplete} />
+          <IntroSection
+            onComplete={handleIntroComplete}
+            skipIntroForBots={
+              typeof window !== "undefined" &&
+              /bot|googlebot|crawler|spider|robot|crawling/i.test(
+                navigator.userAgent
+              )
+            }
+          />
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />

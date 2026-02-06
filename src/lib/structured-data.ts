@@ -85,6 +85,7 @@ export function generateBreadcrumbSchema(
 interface SoftwareApplicationSchemaInput {
   name: string;
   slug: string;
+  tagline: string;
   description: string;
   screenshots: string[];
   links: {
@@ -116,6 +117,7 @@ export function generateSoftwareApplicationSchema(
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
     name: product.name,
+    alternativeHeadline: product.tagline,
     description: product.description,
     url: productUrl,
     applicationCategory: "DeveloperApplication",
@@ -123,7 +125,7 @@ export function generateSoftwareApplicationSchema(
       operatingSystem: operatingSystems.join(", "),
     }),
     ...(product.screenshots.length > 0 && {
-      screenshot: product.screenshots.map((s) =>
+      screenshot: product.screenshots.map((s: string) =>
         s.startsWith("http") ? s : `${SITE_URL}${s}`
       ),
     }),
