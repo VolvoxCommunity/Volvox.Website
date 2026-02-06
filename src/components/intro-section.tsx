@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
-import { cn } from "@/lib/utils";
 
 // Luminous Solid variants
 const containerVariants: Variants = {
@@ -38,22 +37,12 @@ interface IntroSectionProps {
 }
 
 export function IntroSection({ onComplete }: IntroSectionProps) {
-  const [phase, setPhase] = useState<"video" | "text" | "interactive">("video");
-  const [isDark, setIsDark] = useState(false);
-  const videoRef = useRef<HTMLVideoElement>(null);
+  const [phase, setPhase] = useState<"text" | "interactive">("text");
   const containerRef = useRef<HTMLDivElement>(null);
-  const isTransitioning = useRef(false);
 
   // Scroll locking logic
   const didLockRef = useRef(false);
   const originalOverflowRef = useRef("");
-
-  // Detect theme on mount
-  useEffect(() => {
-    requestAnimationFrame(() => {
-      setIsDark(document.documentElement.classList.contains("dark"));
-    });
-  }, []);
 
   // Detect prefers-reduced-motion
   useEffect(() => {
@@ -102,15 +91,6 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
     };
   }, [phase]);
 
-  const handleVideoEnd = () => {
-    if (phase === "video" && !isTransitioning.current) {
-      isTransitioning.current = true;
-      setPhase("text");
-    }
-  };
-
-  const videoSrc = isDark ? "/animated-logo.webm" : "/animated-logo-white.mp4";
-
   return (
     <section
       ref={containerRef}
@@ -118,30 +98,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
       className="relative h-screen w-full flex items-center justify-center overflow-hidden z-20"
       style={{ perspective: "1000px" }}
     >
-      {/* Video Phase */}
-      {phase === "video" && (
-        <motion.div
-          initial={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.8 }}
-          className="absolute inset-0 z-30 flex items-center justify-center bg-background"
-        >
-          <video
-            ref={videoRef}
-            src={videoSrc}
-            autoPlay
-            muted
-            playsInline
-            onEnded={handleVideoEnd}
-            className={cn(
-              "w-full max-w-[500px] h-auto pointer-events-none select-none",
-              isDark && "mix-blend-screen brightness-90 contrast-125"
-            )}
-          />
-        </motion.div>
-      )}
-
-      {/* Text Phase */}
+      {/* Text Phase - Now the starting phase */}
       {(phase === "text" || phase === "interactive") && (
         <motion.div
           style={{ scale, opacity, filter: blur, y }}
@@ -161,8 +118,10 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
             initial="hidden"
             animate="visible"
             onAnimationComplete={() => {
-              setPhase("interactive");
-              onComplete?.();
+              requestAnimationFrame(() => {
+                setPhase("interactive");
+                onComplete?.();
+              });
             }}
             className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[22vw] leading-none font-extrabold tracking-tighter select-none p-4"
             style={{
