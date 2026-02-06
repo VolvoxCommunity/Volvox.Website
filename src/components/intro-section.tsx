@@ -44,9 +44,10 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
 
   // Detect theme on mount
   useEffect(() => {
-    requestAnimationFrame(() => {
+    const frameId = requestAnimationFrame(() => {
       setIsDark(document.documentElement.classList.contains("dark"));
     });
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   // Scroll locking logic
@@ -57,10 +58,11 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mediaQuery.matches) {
-      requestAnimationFrame(() => {
+      const frameId = requestAnimationFrame(() => {
         setPhase("interactive");
         onComplete?.();
       });
+      return () => cancelAnimationFrame(frameId);
     }
   }, [onComplete]);
 
@@ -128,6 +130,10 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
               loop
               muted
               playsInline
+              onError={() => {
+                // Video failed to load - log warning but don't block intro
+                console.warn("IntroSection video failed to load:", videoSrc);
+              }}
               className={cn(
                 "w-full h-full object-contain pointer-events-none select-none",
                 isDark && "mix-blend-screen brightness-90 contrast-125"
@@ -140,10 +146,9 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
             initial="hidden"
             animate="visible"
             onAnimationComplete={() => {
-              requestAnimationFrame(() => {
-                setPhase("interactive");
-                onComplete?.();
-              });
+              // Defer to next frame to avoid render conflicts
+              setPhase("interactive");
+              onComplete?.();
             }}
             className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[18vw] leading-none font-extrabold tracking-tighter select-none p-4"
             style={{
@@ -159,7 +164,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
           >
             {Array.from("VOLVOX").map((letter, index) => (
               <motion.span
-                key={index}
+                key={`${letter}-${index}`}
                 variants={letterVariants}
                 className="inline-block"
               >

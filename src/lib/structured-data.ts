@@ -271,8 +271,8 @@ export function generateWebPageSchema(
         url: `${SITE_URL}/volvox-logo.png`,
       },
     },
-    datePublished: datePublished,
-    dateModified: dateModified,
+    ...(datePublished && { datePublished }),
+    ...(dateModified && { dateModified }),
     inLanguage: "en-US",
     isPartOf: {
       "@type": "WebSite",
