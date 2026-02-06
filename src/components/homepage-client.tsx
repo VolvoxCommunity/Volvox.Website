@@ -44,6 +44,9 @@ export function HomepageClient({
 
   const router = useRouter();
 
+  // Memoize callback to prevent unnecessary effect re-runs in IntroSection
+  const handleIntroComplete = useCallback(() => setIntroFinished(true), []);
+
   const handleNavigate = useCallback(
     (section: string) => {
       // Defer navigation if intro is still playing
@@ -147,7 +150,7 @@ export function HomepageClient({
         />
 
         <main id="main-content">
-          <IntroSection onComplete={() => setIntroFinished(true)} />
+          <IntroSection onComplete={handleIntroComplete} />
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
           <Blog posts={blogPosts || []} />

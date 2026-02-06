@@ -41,23 +41,28 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
 
   // Detect theme on mount
   useEffect(() => {
-    requestAnimationFrame(() => {
+    const frameId = requestAnimationFrame(() => {
       setIsDark(document.documentElement.classList.contains("dark"));
     });
+    return () => cancelAnimationFrame(frameId);
   }, []);
 
   // Scroll locking logic
   const didLockRef = useRef(false);
   const originalOverflowRef = useRef("");
+  const didCompleteRef = useRef(false);
 
   // Detect prefers-reduced-motion
+  const didSkipRef = useRef(false);
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mediaQuery.matches) {
-      requestAnimationFrame(() => {
+    if (mediaQuery.matches && !didSkipRef.current) {
+      didSkipRef.current = true;
+      const frameId = requestAnimationFrame(() => {
         setPhase("interactive");
         onComplete?.();
       });
+      return () => cancelAnimationFrame(frameId);
     }
   }, [onComplete]);
 
@@ -135,7 +140,13 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
                   autoPlay
                   muted
                   playsInline
+                  aria-hidden="true"
                   onEnded={() => setLogoFinished(true)}
+                  onError={() => {
+                    // Fail gracefully if video fails to load
+                    console.warn("IntroSection video failed to load:", videoSrc);
+                    setLogoFinished(true);
+                  }}
                   initial={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   transition={{ duration: 0.5 }}
@@ -164,6 +175,8 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
             initial="hidden"
             animate="visible"
             onAnimationComplete={() => {
+              if (didCompleteRef.current) return;
+              didCompleteRef.current = true;
               requestAnimationFrame(() => {
                 setPhase("interactive");
                 onComplete?.();
@@ -173,6 +186,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
           >
             <svg
               viewBox="0 0 800 200"
+              aria-hidden="true"
               className="w-full h-auto overflow-visible pointer-events-none select-none"
             >
               <defs>
