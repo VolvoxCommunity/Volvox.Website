@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, Variants } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 // Luminous Solid variants
 const containerVariants: Variants = {
@@ -38,7 +39,15 @@ interface IntroSectionProps {
 
 export function IntroSection({ onComplete }: IntroSectionProps) {
   const [phase, setPhase] = useState<"text" | "interactive">("text");
+  const [isDark, setIsDark] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+
+  // Detect theme on mount
+  useEffect(() => {
+    requestAnimationFrame(() => {
+      setIsDark(document.documentElement.classList.contains("dark"));
+    });
+  }, []);
 
   // Scroll locking logic
   const didLockRef = useRef(false);
@@ -91,6 +100,8 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
     };
   }, [phase]);
 
+  const videoSrc = isDark ? "/animated-logo.webm" : "/animated-logo-white.mp4";
+
   return (
     <section
       ref={containerRef}
@@ -98,20 +109,31 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
       className="relative h-screen w-full flex items-center justify-center overflow-hidden z-20"
       style={{ perspective: "1000px" }}
     >
-      {/* Text Phase - Now the starting phase */}
+      {/* Text Phase */}
       {(phase === "text" || phase === "interactive") && (
         <motion.div
           style={{ scale, opacity, filter: blur, y }}
           className="relative z-10 w-full text-center"
         >
-          <motion.img
-            src="/logo.png"
-            alt="Volvox Logo"
+          {/* Logo Video - Replaces static image */}
+          <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 0.9, scale: 1 }}
-            transition={{ duration: 2, delay: 0.5, ease: "easeOut" }}
-            className="absolute top-[-50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] -z-10 object-contain pointer-events-none"
-          />
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+            className="absolute top-[-50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] -z-10 flex items-center justify-center"
+          >
+            <video
+              src={videoSrc}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className={cn(
+                "w-full h-full object-contain pointer-events-none select-none",
+                isDark && "mix-blend-screen brightness-90 contrast-125"
+              )}
+            />
+          </motion.div>
 
           <motion.h1
             variants={containerVariants}
@@ -123,7 +145,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
                 onComplete?.();
               });
             }}
-            className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[22vw] leading-none font-extrabold tracking-tighter select-none p-4"
+            className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[18vw] leading-none font-extrabold tracking-tighter select-none p-4"
             style={{
               backgroundImage:
                 "linear-gradient(180deg, #FFFFFF 10%, #C0C0C0 30%, #505050 48%, #FFFFFF 50%, #C0C0C0 70%, #606060 90%)",
