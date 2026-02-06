@@ -1,8 +1,8 @@
 @import "tailwindcss";
-
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-volvox: var(--font-saira-stencil), sans-serif;
   /* Colors - direct values for Tailwind v4 */
   --color-*: initial;
   --color-background: var(--background);

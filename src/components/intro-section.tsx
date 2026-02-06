@@ -1,34 +1,30 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, useScroll, useTransform, Variants } from "framer-motion";
+import {
+  motion,
+  AnimatePresence,
+  useScroll,
+  useTransform,
+  Variants,
+} from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// Luminous Solid variants
-const containerVariants: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.3,
-    },
-  },
-};
-
-const letterVariants: Variants = {
+// Entrance variants for the SVG container
+const svgContainerVariants: Variants = {
   hidden: {
-    y: "40%",
     opacity: 0,
-    filter: "blur(8px)",
+    y: 40,
+    filter: "blur(10px)",
   },
   visible: {
-    y: "0%",
     opacity: 1,
+    y: 0,
     filter: "blur(0px)",
     transition: {
-      duration: 1.4,
+      duration: 1.5,
       ease: [0.19, 1, 0.22, 1], // Fluid cinematic ease
+      delay: 0.2,
     },
   },
 };
@@ -40,14 +36,14 @@ interface IntroSectionProps {
 export function IntroSection({ onComplete }: IntroSectionProps) {
   const [phase, setPhase] = useState<"text" | "interactive">("text");
   const [isDark, setIsDark] = useState(false);
+  const [logoFinished, setLogoFinished] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
 
   // Detect theme on mount
   useEffect(() => {
-    const frameId = requestAnimationFrame(() => {
+    requestAnimationFrame(() => {
       setIsDark(document.documentElement.classList.contains("dark"));
     });
-    return () => cancelAnimationFrame(frameId);
   }, []);
 
   // Scroll locking logic
@@ -58,11 +54,10 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
   useEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mediaQuery.matches) {
-      const frameId = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
         setPhase("interactive");
         onComplete?.();
       });
-      return () => cancelAnimationFrame(frameId);
     }
   }, [onComplete]);
 
@@ -111,80 +106,113 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
       className="relative h-screen w-full flex items-center justify-center overflow-hidden z-20"
       style={{ perspective: "1000px" }}
     >
-      {/* Text Phase */}
+      {/* Background Gradient / Vignette for depth */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-neutral-800/10 via-background to-background pointer-events-none" />
+
+      {/* Intro Phase */}
       {(phase === "text" || phase === "interactive") && (
         <motion.div
           style={{ scale, opacity, filter: blur, y }}
-          className="relative z-10 w-full text-center"
+          className="relative z-10 w-full text-center flex flex-col items-center justify-center"
         >
           {/* Logo Video - Replaces static image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.5 }} // Start smaller for better pop
+            initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{
               type: "spring",
               stiffness: 200,
               damping: 20,
-              delay: 1.2, // Slightly more delay to let text start first
+              delay: 1.2,
             }}
-            className="absolute top-[-50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] -z-10 flex items-center justify-center"
+            className="absolute top-[-50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120px] md:w-[170px] h-[120px] md:h-[170px] -z-10 flex items-center justify-center"
           >
-            <video
-              src={videoSrc}
-              autoPlay
-              muted
-              playsInline
-              onError={() => {
-                // Video failed to load - log warning but don't block intro
-                console.warn("IntroSection video failed to load:", videoSrc);
-              }}
-              className={cn(
-                "w-full h-full object-contain pointer-events-none select-none",
-                isDark && "mix-blend-screen brightness-90 contrast-125"
+            <AnimatePresence mode="wait">
+              {!logoFinished ? (
+                <motion.video
+                  key="video"
+                  src={videoSrc}
+                  autoPlay
+                  muted
+                  playsInline
+                  onEnded={() => setLogoFinished(true)}
+                  initial={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.5 }}
+                  className={cn(
+                    "w-full h-full object-contain pointer-events-none select-none",
+                    isDark && "mix-blend-screen brightness-90 contrast-125"
+                  )}
+                />
+              ) : (
+                <motion.img
+                  key="image"
+                  src="/logo.png"
+                  alt="Volvox Logo"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ duration: 1 }}
+                  className="w-full h-full object-contain pointer-events-none select-none"
+                />
               )}
-            />
+            </AnimatePresence>
           </motion.div>
 
-          <motion.h1
-            variants={containerVariants}
+          {/* Stencil SVG Typography */}
+          <motion.div
+            variants={svgContainerVariants}
             initial="hidden"
             animate="visible"
             onAnimationComplete={() => {
-              // Defer to next frame to avoid render conflicts
-              setPhase("interactive");
-              onComplete?.();
+              requestAnimationFrame(() => {
+                setPhase("interactive");
+                onComplete?.();
+              });
             }}
-            className="relative z-10 font-[family-name:var(--font-space-grotesk)] text-[18vw] leading-none font-extrabold tracking-tighter select-none p-4"
-            style={{
-              backgroundImage:
-                "linear-gradient(180deg, #FFFFFF 10%, #C0C0C0 30%, #505050 48%, #FFFFFF 50%, #C0C0C0 70%, #606060 90%)",
-              backgroundClip: "text",
-              WebkitBackgroundClip: "text",
-              WebkitTextFillColor: "transparent",
-              color: "transparent",
-              WebkitTextStroke: "4px rgba(129, 129, 129, 0.4)",
-              filter: "drop-shadow(0 0 20px rgba(255,255,255,0.4))",
-            }}
+            className="relative z-10 w-full max-w-5xl px-4"
           >
-            {Array.from("VOLVOX").map((letter, index) => (
-              <motion.span
-                key={`${letter}-${index}`}
-                variants={letterVariants}
-                className="inline-block"
+            <svg
+              viewBox="0 0 800 200"
+              className="w-full h-auto overflow-visible pointer-events-none select-none"
+            >
+              <defs>
+                <linearGradient
+                  id="metallic-gradient"
+                  x1="0%"
+                  y1="0%"
+                  x2="100%"
+                  y2="100%"
+                  gradientUnits="userSpaceOnUse"
+                >
+                  <stop offset="0%" stopColor="#333" />
+                  <stop offset="20%" stopColor="#555" />
+                  <stop offset="22%" stopColor="#fff" />
+                  <stop offset="25%" stopColor="#555" />
+                  <stop offset="40%" stopColor="#222" />
+                  <stop offset="58%" stopColor="#999" />
+                  <stop offset="60%" stopColor="#e0e0e0" />
+                  <stop offset="62%" stopColor="#555" />
+                  <stop offset="100%" stopColor="#111" />
+                </linearGradient>
+              </defs>
+              <text
+                x="50%"
+                y="80%"
+                textAnchor="middle"
+                className="font-volvox tracking-widest uppercase pointer-events-none select-none"
+                style={{
+                  fontFamily: "var(--font-saira-stencil)",
+                  fontSize: "140px",
+                  fill: "transparent",
+                  stroke: "url(#metallic-gradient)",
+                  strokeWidth: "4px",
+                  strokeLinejoin: "round",
+                }}
               >
-                {letter}
-              </motion.span>
-            ))}
-          </motion.h1>
-
-          {/* Subtle Ambient Glow */}
-          <div
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80vw] h-[40vw] -z-10 blur-[120px] opacity-20 pointer-events-none animate-pulse-slow"
-            style={{
-              background:
-                "radial-gradient(ellipse at center, var(--primary) 0%, transparent 60%)",
-            }}
-          />
+                VOLVOX
+              </text>
+            </svg>
+          </motion.div>
         </motion.div>
       )}
     </section>
