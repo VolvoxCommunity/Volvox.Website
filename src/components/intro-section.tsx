@@ -142,6 +142,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
                 muted
                 playsInline
                 onEnded={() => setLogoFinished(true)}
+                onError={() => setLogoFinished(true)}
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
@@ -181,6 +182,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
             viewBox="0 0 800 200"
             className="w-full h-auto drop-shadow-2xl overflow-visible pointer-events-none select-none"
             role="presentation"
+            aria-hidden="true"
           >
             <defs>
               <linearGradient
@@ -206,7 +208,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
               x="50%"
               y="80%"
               textAnchor="middle"
-              className="font-volvox tracking-widest uppercase pointer-events-none select-none"
+              className="tracking-widest uppercase pointer-events-none select-none"
               style={{
                 fontFamily: "var(--font-saira-stencil)",
                 fontSize: "140px",

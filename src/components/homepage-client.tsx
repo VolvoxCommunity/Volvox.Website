@@ -65,7 +65,7 @@ export function HomepageClient({
         if (element) {
           const offset = 80;
           const elementPosition = element.getBoundingClientRect().top;
-          const offsetPosition = elementPosition + window.pageYOffset - offset;
+          const offsetPosition = elementPosition + window.scrollY - offset;
 
           window.scrollTo({
             top: offsetPosition,

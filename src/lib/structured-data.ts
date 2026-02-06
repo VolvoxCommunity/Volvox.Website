@@ -9,7 +9,7 @@ import {
   YOUTUBE_URL,
   INSTAGRAM_URL,
   TIKTOK_URL,
-} from "./constants";
+} from "@/lib/constants";
 
 /**
  * Minimal product data needed for SoftwareApplication schema generation.
