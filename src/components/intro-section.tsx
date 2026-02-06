@@ -31,13 +31,9 @@ const svgContainerVariants: Variants = {
 
 interface IntroSectionProps {
   onComplete?: () => void;
-  skipIntroForBots?: boolean;
 }
 
-export function IntroSection({
-  onComplete,
-  skipIntroForBots = false,
-}: IntroSectionProps) {
+export function IntroSection({ onComplete }: IntroSectionProps) {
   const [phase, setPhase] = useState<"text" | "interactive">("text");
   const [isDark, setIsDark] = useState(false);
   const [logoFinished, setLogoFinished] = useState(false);
@@ -71,8 +67,11 @@ export function IntroSection({
     if (typeof window === "undefined") return;
 
     const mediaQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const isBot = /bot|googlebot|crawler|spider|robot|crawling/i.test(
+      navigator.userAgent
+    );
 
-    if (skipIntroForBots || mediaQuery.matches) {
+    if (isBot || mediaQuery.matches) {
       // Immediate skip
       requestAnimationFrame(() => {
         setPhase("interactive");
@@ -90,7 +89,7 @@ export function IntroSection({
     }
 
     return () => unlockScroll();
-  }, [skipIntroForBots, onComplete, unlockScroll]);
+  }, [onComplete, unlockScroll]);
 
   // Scroll animations for exit
   const { scrollYProgress } = useScroll({
@@ -157,7 +156,7 @@ export function IntroSection({
               <motion.img
                 key="image"
                 src="/logo.png"
-                alt="Volvox Logo"
+                alt=""
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ duration: 1 }}

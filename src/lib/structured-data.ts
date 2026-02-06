@@ -12,6 +12,47 @@ import {
 } from "./constants";
 
 /**
+ * Minimal product data needed for SoftwareApplication schema generation.
+ */
+interface SoftwareApplicationSchemaInput {
+  name: string;
+  slug: string;
+  tagline: string;
+  description: string;
+  screenshots: string[];
+  links: {
+    appStore?: string;
+    playStore?: string;
+    github?: string;
+    demo?: string;
+  };
+}
+
+/**
+ * Minimal team member data needed for Person schema generation.
+ */
+interface PersonSchemaInput {
+  name: string;
+  slug: string;
+  tagline: string;
+  avatar: string;
+  role?: string;
+  githubUrl?: string;
+  linkedinUrl?: string;
+}
+
+/**
+ * Minimal blog post data needed for article schema generation.
+ * Uses only the fields actually needed for the JSON-LD output.
+ */
+interface ArticleSchemaInput {
+  title: string;
+  excerpt: string;
+  date: string;
+  author?: { name: string } | null;
+}
+
+/**
  * Schema.org Organization structured data for Volvox.
  * Used on all pages to establish brand identity in search results.
  */
@@ -80,23 +121,6 @@ export function generateBreadcrumbSchema(
 }
 
 /**
- * Minimal product data needed for SoftwareApplication schema generation.
- */
-interface SoftwareApplicationSchemaInput {
-  name: string;
-  slug: string;
-  tagline: string;
-  description: string;
-  screenshots: string[];
-  links: {
-    appStore?: string;
-    playStore?: string;
-    github?: string;
-    demo?: string;
-  };
-}
-
-/**
  * Schema.org SoftwareApplication structured data for product pages.
  * Enables rich product snippets in search results with application details.
  *
@@ -143,19 +167,6 @@ export function generateSoftwareApplicationSchema(
 }
 
 /**
- * Minimal team member data needed for Person schema generation.
- */
-interface PersonSchemaInput {
-  name: string;
-  slug: string;
-  tagline: string;
-  avatar: string;
-  role?: string;
-  githubUrl?: string;
-  linkedinUrl?: string;
-}
-
-/**
  * Schema.org Person structured data for team member pages.
  * Enables rich person snippets in search results with profile details.
  *
@@ -186,17 +197,6 @@ export function generatePersonSchema(member: PersonSchemaInput) {
       url: SITE_URL,
     },
   };
-}
-
-/**
- * Minimal blog post data needed for article schema generation.
- * Uses only the fields actually needed for the JSON-LD output.
- */
-interface ArticleSchemaInput {
-  title: string;
-  excerpt: string;
-  date: string;
-  author?: { name: string } | null;
 }
 
 /**
