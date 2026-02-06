@@ -119,15 +119,19 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
         >
           {/* Logo Video - Replaces static image */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
+            initial={{ opacity: 0, scale: 0.5 }} // Start smaller for better pop
             animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 1.5, delay: 1, ease: "easeOut" }}
+            transition={{
+              type: "spring",
+              stiffness: 200,
+              damping: 20,
+              delay: 1.2, // Slightly more delay to let text start first
+            }}
             className="absolute top-[-50px] left-1/2 -translate-x-1/2 -translate-y-1/2 w-[100px] h-[100px] -z-10 flex items-center justify-center"
           >
             <video
               src={videoSrc}
               autoPlay
-              loop
               muted
               playsInline
               onError={() => {
