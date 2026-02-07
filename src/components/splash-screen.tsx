@@ -118,11 +118,11 @@ export function SplashScreen(): React.ReactElement | null {
         <motion.div
           initial={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+        <motion.div
+          initial={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
           transition={{ duration: 0.8, ease: "easeInOut" }}
-          // Block interactions while splash is visible
-          className="fixed inset-0 z-[10000] bg-background flex items-center justify-center pointer-events-auto"
-          aria-hidden="true"
-          data-testid="splash-overlay"
+          className="fixed inset-0 z-[10000] bg-background flex items-center justify-center"
         >
           <AnimatePresence>
             {showVideo && (
