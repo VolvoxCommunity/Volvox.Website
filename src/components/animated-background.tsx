@@ -48,9 +48,9 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
 
     // Configuration
     const config = {
-      maxParticles: 150,
-      spawnWidth: 800,
-      spawnHeight: 400,
+      maxParticles: 175,
+      spawnWidth: 1000,
+      spawnHeight: 500,
       size: 1.2,
       colorA: "rgb(50, 100, 255)",
       colorB: "rgb(255, 255, 255)",
@@ -241,30 +241,6 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
       )}
       data-testid="animated-background"
     >
-      <style jsx global>{`
-        @keyframes custom-fade-in {
-          from {
-            opacity: 0;
-            transform: translateY(200px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0px);
-          }
-        }
-        .animate-fade-in {
-          animation: custom-fade-in 3s 1s ease-out forwards;
-          opacity: 0;
-        }
-        @media (prefers-reduced-motion: reduce) {
-          .animate-fade-in {
-            animation: none;
-            opacity: 1;
-            transform: none;
-          }
-        }
-      `}</style>
-
       {/* LAYER 1: Noise Grain */}
       <div
         className="absolute inset-0 z-0 opacity-[0.05] dark:opacity-[0.08] pointer-events-none mix-blend-overlay"

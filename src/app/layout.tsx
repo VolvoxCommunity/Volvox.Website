@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
+import {
+  JetBrains_Mono,
+  Manrope,
+  Space_Grotesk,
+  Saira_Stencil_One,
+} from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
 import { ThemeProvider } from "@/components/providers/theme-provider";
@@ -9,7 +14,10 @@ import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { SkipLink } from "@/components/skip-link";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
-import { generateOrganizationSchema } from "@/lib/structured-data";
+import {
+  generateOrganizationSchema,
+  generateWebSiteSchema,
+} from "@/lib/structured-data";
 import {
   safeJsonLdSerialize,
   SITE_URL,
@@ -35,6 +43,13 @@ const spaceGrotesk = Space_Grotesk({
   subsets: ["latin"],
   weight: ["300", "500", "700"],
   variable: "--font-space-grotesk",
+  display: "swap",
+});
+
+const sairaStencilOne = Saira_Stencil_One({
+  subsets: ["latin"],
+  weight: ["400"],
+  variable: "--font-saira-stencil",
   display: "swap",
 });
 
@@ -102,9 +117,15 @@ export default function RootLayout({
             __html: safeJsonLdSerialize(generateOrganizationSchema()),
           }}
         />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{
+            __html: safeJsonLdSerialize(generateWebSiteSchema()),
+          }}
+        />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased font-sans`}
+        className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} ${sairaStencilOne.variable} antialiased font-sans`}
       >
         <div className="noise" />
         <SmoothScroll>

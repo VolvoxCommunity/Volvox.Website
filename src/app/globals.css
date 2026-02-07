@@ -1,8 +1,8 @@
 @import "tailwindcss";
-
 @variant dark (&:where(.dark, .dark *));
 
 @theme {
+  --font-volvox: var(--font-saira-stencil), sans-serif;
   /* Colors - direct values for Tailwind v4 */
   --color-*: initial;
   --color-background: var(--background);
@@ -101,9 +101,9 @@
     --chart-3: oklch(0.398 0.07 227.392);
     --chart-4: oklch(0.828 0.189 84.429);
     --chart-5: oklch(0.769 0.188 70.08);
-    --bg-depth-gradient-from: #3c90ff;
+    --bg-depth-gradient-from: #559fff;
     /* Blue 100 */
-    --bg-depth-gradient-to: #1b73ff;
+    --bg-depth-gradient-to: #3281ff;
     /* Blue 500 */
     --particle-color-1: #2563eb;
     /* Blue 600 */
@@ -256,6 +256,31 @@
     }
   }
 
+  @keyframes custom-fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(200px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0px);
+    }
+  }
+
+  .animate-fade-in {
+    animation: custom-fade-in 3s 3s ease-out forwards;
+    opacity: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .animate-fade-in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+
   * {
     @apply border-border;
   }
@@ -272,6 +297,7 @@
     text-size-adjust: 100%;
     /* Prevent font scaling in landscape on mobile */
     -webkit-text-size-adjust: 100%;
+    scrollbar-gutter: stable;
   }
 
   body {
@@ -283,6 +309,29 @@
     /* Minimum recommended line height */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Custom Scrollbar Styling */
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  ::-webkit-scrollbar-track:hover {
+    background: var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: color-mix(in srgb, var(--primary), transparent 70%);
+    border-radius: 5px;
+    border: 2px solid var(--background);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: color-mix(in srgb, var(--primary), transparent 40%);
   }
 
   /* Custom selection colors for better accessibility and brand consistency */

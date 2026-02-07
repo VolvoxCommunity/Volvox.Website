@@ -1,8 +1,10 @@
 import { Suspense } from "react";
 import { Metadata } from "next";
+import Script from "next/script";
 import { getAllExtendedProducts } from "@/lib/content";
 import { ProductsListClient } from "@/components/products-list-client";
-import { SITE_NAME } from "@/lib/constants";
+import { generateBreadcrumbSchema } from "@/lib/structured-data";
+import { safeJsonLdSerialize, SITE_NAME, SITE_URL } from "@/lib/constants";
 
 export const metadata: Metadata = {
   title: "Products",
@@ -21,8 +23,23 @@ export default function ProductsPage() {
   const products = getAllExtendedProducts();
 
   return (
-    <Suspense fallback={null}>
-      <ProductsListClient products={products} />
-    </Suspense>
+    <>
+      <Script
+        id="products-breadcrumb-schema"
+        type="application/ld+json"
+        strategy="beforeInteractive"
+        dangerouslySetInnerHTML={{
+          __html: safeJsonLdSerialize(
+            generateBreadcrumbSchema([
+              { name: "Home", url: SITE_URL },
+              { name: "Products", url: `${SITE_URL}/products` },
+            ])
+          ),
+        }}
+      />
+      <Suspense fallback={null}>
+        <ProductsListClient products={products} />
+      </Suspense>
+    </>
   );
 }
