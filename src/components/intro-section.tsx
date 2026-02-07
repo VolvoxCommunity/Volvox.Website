@@ -9,6 +9,7 @@ import {
   Variants,
 } from "framer-motion";
 import { cn } from "@/lib/utils";
+import { reportError } from "@/lib/logger";
 
 // Entrance variants for the SVG container
 const svgContainerVariants: Variants = {
@@ -39,6 +40,12 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
   const [logoFinished, setLogoFinished] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const onCompleteRef = useRef(onComplete);
+
+  // Sync ref when onComplete changes
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   // Scroll locking & transition control refs
   const didLockRef = useRef(false);
@@ -75,7 +82,7 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
       // Immediate skip
       requestAnimationFrame(() => {
         setPhase("interactive");
-        onComplete?.();
+        onCompleteRef.current?.();
       });
     } else {
       // Show intro and lock scroll
@@ -89,7 +96,20 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
     }
 
     return () => unlockScroll();
-  }, [onComplete, unlockScroll]);
+  }, [unlockScroll]); // Stable - runs once on mount
+
+  // Safety hang timeout
+  useEffect(() => {
+    if (phase !== "text") return;
+
+    const safetyTimer = setTimeout(() => {
+      if (!isSkippingRef.current) {
+        handleComplete();
+      }
+    }, 10000); // 10s fallback
+
+    return () => clearTimeout(safetyTimer);
+  }, [phase, handleComplete]);
 
   // Scroll animations for exit
   const { scrollYProgress } = useScroll({
@@ -142,7 +162,10 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
                 muted
                 playsInline
                 onEnded={() => setLogoFinished(true)}
-                onError={() => setLogoFinished(true)}
+                onError={(e) => {
+                  reportError("IntroSection video failure", e);
+                  setLogoFinished(true);
+                }}
                 initial={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
                 transition={{ duration: 0.5 }}
