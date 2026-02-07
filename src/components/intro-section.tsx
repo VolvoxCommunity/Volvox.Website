@@ -66,8 +66,8 @@ export function IntroSection({ onComplete }: IntroSectionProps) {
     unlockScroll();
     setPhase("interactive");
     setIsVisible(false);
-    onComplete?.();
-  }, [onComplete, unlockScroll]);
+    onCompleteRef.current?.();
+  }, [unlockScroll]);
 
   // Initial check for skip conditions
   useEffect(() => {

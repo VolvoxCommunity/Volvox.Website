@@ -92,10 +92,6 @@ export function HomepageClient({
         const element = document.getElementById(hash);
         if (element) {
           handleNavigate(hash);
-      const checkAndScroll = () => {
-        const element = document.getElementById(hash);
-        if (element) {
-          handleNavigate(hash);
         } else if (performance.now() - startTime < timeout) {
           animationFrameId = requestAnimationFrame(checkAndScroll);
         }
@@ -103,12 +99,6 @@ export function HomepageClient({
 
       // Clear pendingHash synchronously to prevent re-entry
       if (pendingHash) setPendingHash(null);
-      animationFrameId = requestAnimationFrame(checkAndScroll);
-        } else if (performance.now() - startTime < timeout) {
-          animationFrameId = requestAnimationFrame(checkAndScroll);
-        }
-      };
-
       animationFrameId = requestAnimationFrame(checkAndScroll);
 
       return () => {
