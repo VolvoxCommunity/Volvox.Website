@@ -21,7 +21,7 @@ interface NavigationProps {
 
 export function Navigation(props: NavigationProps) {
   const { onNavigate, currentSection, linkMode = false } = props;
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
   const router = useRouter();
   // Initialize keyboard shortcuts
   useKeyboardShortcuts({
@@ -98,7 +98,8 @@ export function Navigation(props: NavigationProps) {
     navRef.current.style.setProperty("--mouse-y", `${e.clientY - rect.top}px`);
   };
 
-  const toggleTheme = () => setTheme(theme === "light" ? "dark" : "light");
+  const toggleTheme = () =>
+    setTheme(resolvedTheme === "light" ? "dark" : "light");
 
   const handleDiscordClick = (e: React.MouseEvent) => {
     void confettiLib({
@@ -241,7 +242,7 @@ export function Navigation(props: NavigationProps) {
               aria-label="Toggle theme"
               data-testid="nav-theme-toggle"
             >
-              {theme === "light" ? (
+              {resolvedTheme === "light" ? (
                 <Moon weight="fill" className="h-5 w-5" />
               ) : (
                 <Sun weight="fill" className="h-5 w-5" />

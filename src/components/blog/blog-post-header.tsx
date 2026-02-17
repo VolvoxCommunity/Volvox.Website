@@ -17,10 +17,10 @@ import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
  */
 export function BlogPostHeader() {
   const router = useRouter();
-  const { theme, setTheme } = useTheme();
+  const { resolvedTheme, setTheme } = useTheme();
 
   const toggleTheme = () => {
-    setTheme(theme === "light" ? "dark" : "light");
+    setTheme(resolvedTheme === "light" ? "dark" : "light");
   };
 
   return (
@@ -64,12 +64,12 @@ export function BlogPostHeader() {
                 onClick={toggleTheme}
                 className="rounded-full hover:bg-muted"
                 aria-label={
-                  theme === "light"
+                  resolvedTheme === "light"
                     ? "Switch to dark mode"
                     : "Switch to light mode"
                 }
               >
-                {theme === "light" ? (
+                {resolvedTheme === "light" ? (
                   <Moon weight="fill" className="h-5 w-5" />
                 ) : (
                   <Sun weight="fill" className="h-5 w-5" />

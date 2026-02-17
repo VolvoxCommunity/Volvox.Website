@@ -478,9 +478,11 @@ export function Products({
             variant="default"
             size="lg"
             className="rounded-full h-14 px-12 font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-            onClick={() => router.push("/products")}
+            asChild
           >
-            All Products
+            <Link href="/products" onClick={() => window.scrollTo(0, 0)}>
+              All Products
+            </Link>
           </Button>
         </div>
       </div>

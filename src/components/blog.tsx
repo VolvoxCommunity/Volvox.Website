@@ -291,6 +291,30 @@ export function Blog({
             </div>
           ))}
         </div>
+
+        {/* Footer CTA - homepage only */}
+        {!enableFilters && (
+          <div className="mt-32 p-12 md:p-20 rounded-[4rem] bg-gradient-to-br from-secondary/5 via-background to-primary/5 border border-secondary/10 flex flex-col items-center text-center relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[100px] rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
+            <h3 className="text-3xl md:text-5xl font-black tracking-tight mb-6">
+              Want to read more?
+            </h3>
+            <p className="text-muted-foreground text-lg mb-10 max-w-xl">
+              Dive deeper into our articles, tutorials, and stories from the
+              team. New posts added regularly.
+            </p>
+            <Button
+              variant="default"
+              size="lg"
+              className="rounded-full h-14 px-12 font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
+              asChild
+            >
+              <Link href="/blog" onClick={() => window.scrollTo(0, 0)}>
+                All Blog Posts
+              </Link>
+            </Button>
+          </div>
+        )}
       </div>
     </section>
   );
