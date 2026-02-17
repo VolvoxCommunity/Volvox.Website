@@ -1,4 +1,5 @@
 import { Redis } from "@upstash/redis";
+import { unstable_cache } from "next/cache";
 import { reportError } from "./logger";
 
 /**
@@ -55,12 +56,9 @@ function isRedisConfigured(): boolean {
 }
 
 /**
- * Retrieves the view count for a blog post.
- *
- * @param slug - The blog post slug
- * @returns The current view count, or 0 if not found or Redis is unavailable
+ * Retrieves the view count for a blog post (uncached, for API routes).
  */
-export async function getPostViews(slug: string): Promise<number> {
+export async function fetchPostViews(slug: string): Promise<number> {
   const client = getRedisClient();
   if (!client) {
     return 0;
@@ -76,7 +74,21 @@ export async function getPostViews(slug: string): Promise<number> {
 }
 
 /**
+ * Retrieves the view count for a blog post, cached for static generation.
+ * Revalidates every 60 seconds at runtime.
+ *
+ * @param slug - The blog post slug
+ * @returns The current view count, or 0 if not found or Redis is unavailable
+ */
+export const getPostViews = unstable_cache(
+  fetchPostViews,
+  ["blog-post-views"],
+  { revalidate: 60 }
+);
+
+/**
  * Retrieves view counts for multiple blog posts.
+ * Uses the cached single-post fetcher so results are compatible with static generation.
  *
  * @param slugs - Array of blog post slugs
  * @returns Map of slug to view count
@@ -86,26 +98,16 @@ export async function getPostViewsBatch(
 ): Promise<Map<string, number>> {
   const viewsMap = new Map<string, number>();
 
-  const client = getRedisClient();
-  if (!client || slugs.length === 0) {
-    slugs.forEach((slug) => viewsMap.set(slug, 0));
+  if (slugs.length === 0) {
     return viewsMap;
   }
 
-  try {
-    const keys = slugs.map(getViewKey);
-    const values = await client.mget<(number | null)[]>(...keys);
+  const results = await Promise.all(slugs.map((slug) => getPostViews(slug)));
+  slugs.forEach((slug, index) => {
+    viewsMap.set(slug, results[index]);
+  });
 
-    slugs.forEach((slug, index) => {
-      viewsMap.set(slug, values[index] ?? 0);
-    });
-
-    return viewsMap;
-  } catch (error) {
-    reportError("Failed to get batch views", error);
-    slugs.forEach((slug) => viewsMap.set(slug, 0));
-    return viewsMap;
-  }
+  return viewsMap;
 }
 
 /**
