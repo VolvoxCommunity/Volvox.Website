@@ -1,0 +1,111 @@
+---
+title: "How to Build a Gesture-Controlled Humanoid Robot - An Interview With Unes Jami"
+slug: "unes-video-interview"
+excerpt: "Robotics enthusiasts and aspiring engineers often ask: How can I build a robot that reacts to gestures and voice commands using affordable tools? If you're curious about blending hardware with software to create an interactive humanoid robot, you've come to the right place."
+authorId: "a1b2c3d4-e5f6-7890-ab12-cd34ef567890"
+date: "2026-03-03"
+banner: "/images/blog/unes-video-interview.png"
+tags: ["Interview", "Community", "Builder"]
+published: true
+---
+
+## Introduction
+
+Discover how Unes Jami created an interactive humanoid robot controlled by hand gestures, voice commands, and even your phone. Unes Jami in this interview covers the hardware setup, collaborative software development, and future enhancements, giving you everything you need to start your own robotics project.
+
+Robotics enthusiasts and aspiring engineers often ask: *How can I build a robot that reacts to gestures and voice commands using affordable tools?* If you're curious about blending hardware with software to create an interactive humanoid robot, you've come to the right place.
+
+In this article, we'll explore the inspiring project of Unes, a student/developer who built a gesture-controlled humanoid robot using Arduino, Python, OpenCV, and Android.
+
+🎥 Watch the full video interview [here](https://www.youtube.com/watch?v=MX553Y7GSO0).
+
+### **1. Building the Hardware: From Concept to Creation**
+
+### **Choosing Cost-Effective Materials**
+
+Une's robot measures just a few centimeters tall and is crafted primarily from simple, inexpensive materials like cardboard, hot glue, and basic tools. The use of such readily available supplies demonstrates that creating functional robotics doesn't require expensive 3D printers or specialized parts.
+
+### **Key Components:**
+
+- ✔️ **Arduino UNO R3:** The microcontroller that acts as the robot's brain, programmed with C++.
+- ✔️ **Servo motors and LEDs:** For physical movement and visual feedback.
+- ✔️ **Bluetooth Module (HC-05/HC-06):** Enables wireless control via a mobile device.
+- ✔️ **Power supply:** Usually a simple battery setup for portability.
+
+### **Assembling the Robot**
+
+The process involves cutting and gluing cardboard to form the robot's body, then attaching servo motors at joints to facilitate movement. Even with limited resources, Unes explains that the design process is straightforward and primarily driven by creativity.
+
+💡 If you join our Discord Server you can [see here](https://discord.com/channels/1438631180474781909/1468795731493261384) some images from the robot!
+
+### **Demonstrating the Hardware in Action**
+
+Once assembled, the robot responds to double claps to turn on or off—activated simply by sound. LED eyes light up to indicate power status. Its simplicity makes it an excellent starter project for beginners, emphasizing that complex behaviors can be achieved with basic materials.
+
+Check this video here for more details about the [robot](https://youtu.be/dtPNefikXYU?si=2-ugzm5XhND30RhP).
+
+### **2. Programming the Robot: From Microcontroller to Python Scripts**
+
+### **Controlling with Arduino and C++**
+
+The core logic runs on the Arduino UNO, where Unes programmed servo movements and LED control using C++. The code manages movement commands based on inputs received via Bluetooth or Python scripts.
+
+Check Unes [GitHub repo](https://github.com/unesjami/Gesture-Interaction-Robot-GIR) for the exact details.
+
+### **Highlights:**
+
+- ✔️ **Gesture commands:** Turn right, turn left, move forward/backward.
+- ✔️ **Voice commands:** Responds to verbal instructions like "turn right."
+- ✔️ **Power control:** Double clap to activate or deactivate.
+
+_Unes notes that it took about two to three months to develop and fine-tune the Arduino code, emphasizing effort and patience in robotics development._
+
+### **Integrating Python for Gesture Recognition**
+
+Unes \*\*uses Python with OpenCV to recognize hand gestures via webcam. When a gesture is detected, the script sends commands over Bluetooth to the Arduino, triggering actions like turning or moving.
+
+### **Sample flow:**
+
+1. User shows a hand gesture to the computer camera.
+2. OpenCV detects the gesture.
+3. Python script interprets the gesture and sends a serial command.
+4. Arduino executes the corresponding movement.
+
+### **Voice and Remote Control**
+
+The robot can also respond to voice commands through a mobile app. Eunice explains that speaking phrases like "turn to the right" will animate the robot accordingly. Bluetooth connectivity is essential here, linking the phone directly to the robot.
+
+### **3. Practical Tips and Future Enhancements**
+
+### **Making the Design More Autonomous**
+
+Looking ahead, Unes aims to automate the robot fully, removing manual controls and voice commands for a smart home environment. The vision includes voice-activated door control, lamp automation, and even more advanced gesture recognition driven by AI.
+
+### **Adding New Features**
+
+Some planned upgrades include:
+
+- ✔️ **Full speech recognition:** Using AI tools to process natural language commands.
+- ✔️ **Autonomous navigation:** Developing sensors-based obstacle avoidance.
+- ✔️ **Home automation integration:** Connecting with IoT devices for smarter living.
+
+_Unes’s projects also extend to drones and house automation, demonstrating passion for continuous innovation._
+
+### **4. Final Thoughts & Next Steps**
+
+Unes's project encapsulates how accessible robotics can be when combining affordable hardware with versatile software. Whether you're a hobbyist or student, building a gesture-controlled humanoid robot is within reach by following this blueprint.
+
+### **What you can do next:**
+
+- ✔️ Start with simple materials and basic coding.
+- ✔️ Experiment with gesture recognition using OpenCV.
+- ✔️ Expand functionality gradually—adding voice control, automation, or AI.
+
+### **Your Turn: Create Your Own Gesture Robot**
+
+Interested in trying this yourself? Begin by assembling a small humanoid figure, connect it with an Arduino, and explore gesture detection with OpenCV. With patience and curiosity, you'll be amazed at what you can achieve.
+
+## Conclusion
+
+If you like this type of content join us on [Discord](https://discord.com/invite/8ahXACdamN) and connect with like-minded tech enthusiasts and explore the exciting possibilities of AI, tech, software and hardware.
+For those interested in participating in future videos, feel free to DM me, [Eleftheria](https://www.notion.so/Introducing-Eleftheria-Volvox-s-Developer-Advocate-And-Community-Manager-2ea63ea2cd5680dea15cd5b4297e6fe4?pvs=21), on Discord.
