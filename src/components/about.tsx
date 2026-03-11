@@ -183,7 +183,7 @@ function BentoCard({
     <Container {...props} className={cn(className, "block h-full")}>
       <Spotlight
         className={cn(
-          "group relative h-full flex flex-col justify-between rounded-3xl border border-border/40 bg-card p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl"
+          "group relative h-full flex flex-col justify-between rounded-[16px] md:rounded-[24px] border border-border/40 bg-card p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl"
         )}
         fill="oklch(from var(--primary) l c h / 0.15)"
       >
