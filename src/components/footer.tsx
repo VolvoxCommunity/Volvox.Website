@@ -277,7 +277,7 @@ export function Footer() {
               <span>v{version}</span>
               <span className="hidden md:inline">•</span>
               <span className="hidden md:inline">
-                Built with ❤️ by the Volvox team
+                Built with ❤️ by the Volvox
               </span>
             </div>
           </div>

@@ -1,16 +1,16 @@
 [
   {
-    "id": "19936da2-8ef1-4703-88c9-6210a7555c3f",
+    "id": "1",
     "name": "Bill Chirico",
     "role": "CEO & Founder",
     "avatar": "https://github.com/BillChirico.png",
-    "website": "https://github.com/BillChirico"
+    "website": "http://localhost:3000/team/bill-chirico"
   },
   {
-    "id": "a1b2c3d4-e5f6-7890-ab12-cd34ef567890",
+    "id": "2",
     "name": "Eleftheria Batsou",
     "role": "Developer Advocate",
     "avatar": "https://github.com/EleftheriaBatsou.png",
-    "website": "https://github.com/EleftheriaBatsou"
+    "website": "http://localhost:3000/team/eleftheria-batsou"
   }
 ]
