@@ -1,4 +1,4 @@
-import { getAllProducts as getProducts, getAllTeamMembers } from "./content";
+import { getAllTeamMembers, getAllProducts as getProducts } from "./content";
 
 /**
  * Fetches all products.

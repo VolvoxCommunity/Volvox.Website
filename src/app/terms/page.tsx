@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { TermsClient } from "./terms-client";
-import { generateWebPageSchema } from "@/lib/structured-data";
 import { safeJsonLdSerialize } from "@/lib/constants";
+import { generateWebPageSchema } from "@/lib/structured-data";
+import { TermsClient } from "./terms-client";
 
 export const metadata: Metadata = {
   title: "Terms of Service | Volvox",
@@ -34,7 +34,7 @@ export default function TermsPage() {
     "Terms of Service for Volvox - Read our terms and conditions for using our website and services.",
     "/terms",
     undefined,
-    "2025-12-07" // Matching the "Last updated" date in content
+    "2025-12-07", // Matching the "Last updated" date in content
   );
 
   return (

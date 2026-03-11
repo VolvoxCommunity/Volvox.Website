@@ -14,7 +14,7 @@ export const runtime = "nodejs";
  */
 export async function POST(
   _request: Request,
-  { params }: { params: Promise<{ slug: string }> }
+  { params }: { params: Promise<{ slug: string }> },
 ) {
   const { slug } = await params;
 
@@ -30,7 +30,7 @@ export async function POST(
     if (newCount === -1) {
       return NextResponse.json(
         { error: "Failed to increment views" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -38,7 +38,7 @@ export async function POST(
   } catch {
     return NextResponse.json(
       { error: "Internal server error" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

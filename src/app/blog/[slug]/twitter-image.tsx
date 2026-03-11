@@ -1,5 +1,5 @@
-import { generateBlogPostSocialImage, getLogoData } from "@/lib/social-images";
 import { getPostBySlug } from "@/lib/blog";
+import { generateBlogPostSocialImage, getLogoData } from "@/lib/social-images";
 
 // Use Node.js runtime to access file system
 export const runtime = "nodejs";

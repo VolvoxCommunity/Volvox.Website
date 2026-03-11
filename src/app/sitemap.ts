@@ -1,7 +1,7 @@
-import { MetadataRoute } from "next";
+import type { MetadataRoute } from "next";
 import { getAllPosts } from "@/lib/blog";
-import { getAllExtendedProducts, getAllTeamMembers } from "@/lib/content";
 import { SITE_URL } from "@/lib/constants";
+import { getAllExtendedProducts, getAllTeamMembers } from "@/lib/content";
 
 // Force Node.js runtime since blog.ts uses fs/path APIs
 export const runtime = "nodejs";

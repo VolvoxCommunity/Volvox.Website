@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useRef, useState } from "react";
+import type React from "react";
+import { useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface SpotlightProps {

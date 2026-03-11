@@ -1,8 +1,8 @@
 "use client";
 
+import type { CSSProperties } from "react";
+import { Toaster as Sonner, type ToasterProps } from "sonner";
 import { useTheme } from "@/components/providers/theme-provider";
-import { CSSProperties } from "react";
-import { Toaster as Sonner, ToasterProps } from "sonner";
 
 const Toaster = ({ ...props }: ToasterProps) => {
   const { resolvedTheme } = useTheme();

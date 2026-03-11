@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, startTransition } from "react";
+import { startTransition, useEffect, useState } from "react";
 import { generateHeadingId } from "@/lib/utils";
 
 interface Heading {
@@ -78,7 +78,7 @@ export function TableOfContents() {
       },
       {
         rootMargin: "-100px 0px -80% 0px",
-      }
+      },
     );
 
     elements.forEach((element) => {

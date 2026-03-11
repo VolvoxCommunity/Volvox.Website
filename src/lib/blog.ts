@@ -1,16 +1,16 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import matter from "gray-matter";
+import { getAuthorById } from "./content";
 import { reportError } from "./logger";
 import { BlogPostFrontmatterSchema } from "./schemas";
+import type { BlogPost } from "./types";
 import { normalizeSlug } from "./validation";
-import { getAuthorById } from "./content";
 import {
   getPostViews,
   getPostViewsBatch,
   incrementPostViews as incrementViews,
 } from "./views";
-import type { BlogPost } from "./types";
 
 /**
  * Calculates estimated reading time based on word count.
@@ -82,12 +82,12 @@ export async function getAllPosts(): Promise<BlogPost[]> {
         readingTime: calculateReadingTime(content),
         published: frontmatter.published,
         banner: frontmatter.banner,
-      })
+      }),
     );
 
     // Sort by date (newest first)
     posts.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
     );
 
     return posts;

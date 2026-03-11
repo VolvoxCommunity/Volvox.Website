@@ -1,28 +1,29 @@
 "use client";
 
-// Framework imports
-import { useMemo, useRef, useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { DiscordLogo, Users } from "@phosphor-icons/react";
+import confettiLib from "canvas-confetti";
 
 // Third-party imports
 import {
-  useTransform,
+  animate,
   motion,
   useAnimationFrame,
   useMotionValue,
-  animate,
+  useTransform,
 } from "framer-motion";
-import { DiscordLogo, Users } from "@phosphor-icons/react";
-import confettiLib from "canvas-confetti";
+import { useRouter } from "next/navigation";
+// Framework imports
+import { useEffect, useMemo, useRef, useState } from "react";
 
 // Local imports
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "@/components/ui/magnetic-button";
-import { TeamMember } from "@/lib/types";
 import { DISCORD_URL } from "@/lib/constants";
+import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
+
 // Custom wrap function to replace @motionone/utils dependency
 const wrap = (min: number, max: number, v: number) => {
   const rangeSize = max - min;
@@ -258,7 +259,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
     <div
       className={cn(
         "shrink-0 w-[240px] md:w-[400px] rounded-[16px] md:rounded-[24px] border bg-card/80 backdrop-blur-sm p-3 md:p-6 transition-all duration-300",
-        "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 select-none"
+        "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 select-none",
       )}
     >
       <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">

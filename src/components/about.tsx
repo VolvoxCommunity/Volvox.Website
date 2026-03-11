@@ -1,18 +1,18 @@
 "use client";
 
 import {
-  Code,
-  Lightbulb,
-  Heart,
-  Target,
-  GithubLogo,
   ArrowRight,
+  Code,
+  GithubLogo,
+  Heart,
+  Lightbulb,
   Sparkle,
+  Target,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
 import { Spotlight } from "@/components/ui/spotlight";
-import { cn } from "@/lib/utils";
 import { GITHUB_URL } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 /**
  * Renders the "About Volvox" section as a modern Bento Grid.
@@ -183,7 +183,7 @@ function BentoCard({
     <Container {...props} className={cn(className, "block h-full")}>
       <Spotlight
         className={cn(
-          "group relative h-full flex flex-col justify-between rounded-3xl border border-border/40 bg-card p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl"
+          "group relative h-full flex flex-col justify-between rounded-3xl border border-border/40 bg-card p-6 overflow-hidden transition-all duration-300 hover:shadow-2xl",
         )}
         fill="oklch(from var(--primary) l c h / 0.15)"
       >
@@ -192,7 +192,7 @@ function BentoCard({
           <div
             className={cn(
               "absolute inset-0 bg-gradient-to-br opacity-30",
-              gradient
+              gradient,
             )}
           />
         )}

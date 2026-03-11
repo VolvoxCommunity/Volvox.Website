@@ -21,7 +21,7 @@ interface ProductTocProps {
 export function ProductToc({ sections }: ProductTocProps) {
   // Default to first section (overview) on initial load
   const [activeSection, setActiveSection] = useState<string>(
-    sections[0]?.id ?? ""
+    sections[0]?.id ?? "",
   );
 
   useEffect(() => {
@@ -38,7 +38,7 @@ export function ProductToc({ sections }: ProductTocProps) {
           }
         });
       },
-      { rootMargin: "-20% 0px -70% 0px" }
+      { rootMargin: "-20% 0px -70% 0px" },
     );
 
     sections.forEach(({ id }) => {
@@ -76,7 +76,7 @@ export function ProductToc({ sections }: ProductTocProps) {
                   "w-full text-left px-4 py-2 text-sm rounded-xl transition-colors",
                   activeSection === id
                     ? "bg-primary text-primary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted",
                 )}
               >
                 {label}

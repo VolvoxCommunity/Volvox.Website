@@ -1,20 +1,20 @@
-import { Metadata } from "next";
+import { Calendar, Clock, Eye } from "lucide-react";
+import type { Metadata } from "next";
+import Image from "next/image";
+import { notFound } from "next/navigation";
 import Script from "next/script";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import { getPostBySlug, getAllPosts } from "@/lib/blog";
-import { notFound } from "next/navigation";
-import Image from "next/image";
-import { Calendar, Eye, Clock } from "lucide-react";
-import { Badge } from "@/components/ui/badge";
 import rehypeHighlight from "rehype-highlight";
-import { mdxComponents } from "@/lib/mdx-components";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
-import { Footer } from "@/components/footer";
-import { ViewTracker } from "@/components/blog/view-tracker";
 import { RelatedPosts } from "@/components/blog/related-posts";
+import { ViewTracker } from "@/components/blog/view-tracker";
+import { Footer } from "@/components/footer";
+import { Badge } from "@/components/ui/badge";
+import { getAllPosts, getPostBySlug } from "@/lib/blog";
+import { SITE_NAME, safeJsonLdSerialize } from "@/lib/constants";
+import { mdxComponents } from "@/lib/mdx-components";
 import { generateArticleSchema } from "@/lib/structured-data";
-import { safeJsonLdSerialize, SITE_NAME } from "@/lib/constants";
 
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
@@ -107,7 +107,7 @@ export default async function BlogPostPage({
       banner,
       tags,
       date,
-    })
+    }),
   );
 
   return (

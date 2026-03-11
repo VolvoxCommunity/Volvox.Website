@@ -73,7 +73,7 @@ export function SkipLink() {
 
   const handleClick = (
     e: React.MouseEvent<HTMLAnchorElement>,
-    targetId: string
+    targetId: string,
   ) => {
     e.preventDefault();
     const target = document.getElementById(targetId);
@@ -86,7 +86,7 @@ export function SkipLink() {
           () => {
             target.removeAttribute("tabindex");
           },
-          { once: true }
+          { once: true },
         );
       }
       target.focus({ preventScroll: true });

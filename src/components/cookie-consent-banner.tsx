@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { ArrowUpRight, Cookie, X } from "@phosphor-icons/react";
+import { AnimatePresence, motion } from "framer-motion";
 import Link from "next/link";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, Cookie, ArrowUpRight } from "@phosphor-icons/react";
+import { useState } from "react";
+import { useCookieConsent } from "@/components/providers/cookie-consent-provider";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,7 +13,6 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { useCookieConsent } from "@/components/providers/cookie-consent-provider";
 import { cn } from "@/lib/utils";
 
 interface CookieToggleProps {
@@ -48,13 +48,13 @@ function CookieToggle({
         onClick={() => !disabled && onChange(!checked)}
         className={cn(
           "relative inline-flex h-7 w-12 shrink-0 cursor-pointer items-center rounded-full transition-colors duration-200 ease-in-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50",
-          checked ? "bg-primary" : "bg-input"
+          checked ? "bg-primary" : "bg-input",
         )}
       >
         <span
           className={cn(
             "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-md ring-0 transition-transform duration-200 ease-in-out",
-            checked ? "translate-x-6" : "translate-x-1"
+            checked ? "translate-x-6" : "translate-x-1",
           )}
         />
       </button>

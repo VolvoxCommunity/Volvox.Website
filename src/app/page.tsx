@@ -1,7 +1,7 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { HomepageClient } from "@/components/homepage-client";
 import { getAllPosts } from "@/lib/blog";
-import { getAllTeamMembers, getAllExtendedProducts } from "@/lib/content";
+import { getAllExtendedProducts, getAllTeamMembers } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 
 export const metadata: Metadata = {
@@ -26,7 +26,7 @@ export default async function HomePage() {
   if (blogPostsResult.status === "rejected") {
     reportError(
       "Failed to load blog posts for HomePage",
-      blogPostsResult.reason
+      blogPostsResult.reason,
     );
   }
 

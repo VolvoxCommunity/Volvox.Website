@@ -56,7 +56,7 @@ interface UseKeyboardShortcutsResult {
  * @returns Modal state and the list of registered shortcuts.
  */
 export function useKeyboardShortcuts(
-  options: UseKeyboardShortcutsOptions
+  options: UseKeyboardShortcutsOptions,
 ): UseKeyboardShortcutsResult {
   const { shortcuts, enabled = true } = options;
   const [isHelpModalOpen, setIsHelpModalOpen] = useState(false);
@@ -93,7 +93,7 @@ export function useKeyboardShortcuts(
         shortcut.action();
       }
     },
-    [enabled, shortcuts]
+    [enabled, shortcuts],
   );
 
   useEffect(() => {

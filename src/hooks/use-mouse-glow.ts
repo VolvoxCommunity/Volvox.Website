@@ -1,4 +1,4 @@
-import { useRef, MouseEvent } from "react";
+import { type MouseEvent, useRef } from "react";
 
 export function useMouseGlow() {
   const buttonRef = useRef<HTMLButtonElement>(null);

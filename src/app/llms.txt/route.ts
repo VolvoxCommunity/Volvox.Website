@@ -1,13 +1,13 @@
 import { z } from "zod";
 import { getAllPosts } from "@/lib/blog";
-import { getAllProducts } from "@/lib/content";
 import {
-  SITE_URL,
-  SITE_NAME,
-  SITE_DESCRIPTION,
   DISCORD_URL,
   GITHUB_URL,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
 } from "@/lib/constants";
+import { getAllProducts } from "@/lib/content";
 import { reportError } from "@/lib/logger";
 import { ProductsArraySchema } from "@/lib/schemas";
 import type { BlogPost, Product } from "@/lib/types";
@@ -44,7 +44,7 @@ function generateProductsList(products: Product[]): string {
   return products
     .map(
       (product) =>
-        `- [${product.name}](${SITE_URL}/products/${product.id}): ${product.description}`
+        `- [${product.name}](${SITE_URL}/products/${product.id}): ${product.description}`,
     )
     .join("\n");
 }
@@ -64,7 +64,7 @@ function generateBlogList(posts: BlogPost[]): string {
     .slice(0, MAX_BLOG_POSTS_IN_LLM_TXT)
     .map(
       (post) =>
-        `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${post.excerpt}`
+        `- [${post.title}](${SITE_URL}/blog/${post.slug}): ${post.excerpt}`,
     )
     .join("\n");
 }
@@ -168,12 +168,12 @@ export async function GET(): Promise<Response> {
       try {
         // Runtime validation of blog posts (validate only fields needed for llms.txt)
         const validatedPosts = LlmsBlogPostsArraySchema.parse(
-          postsResult.value
+          postsResult.value,
         );
         // Filter to published posts and cast back to BlogPost for type safety
         posts = postsResult.value.filter(
           (_: BlogPost, index: number) =>
-            validatedPosts[index]?.published === true
+            validatedPosts[index]?.published === true,
         );
       } catch (validationError) {
         reportError("llms.txt: Blog posts validation failed", validationError);
@@ -200,7 +200,7 @@ export async function GET(): Promise<Response> {
 
     const fallbackContent = generateLlmsContent(
       "_Products information temporarily unavailable._",
-      "_Blog posts temporarily unavailable._"
+      "_Blog posts temporarily unavailable._",
     );
 
     return new Response(fallbackContent, {

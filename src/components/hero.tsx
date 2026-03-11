@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useEffect } from "react";
 import { HeroSection } from "./hero/hero-section";
 
 interface HeroProps {
@@ -33,7 +33,7 @@ export function Hero({ onNavigate }: HeroProps) {
           duration: 1.2,
           transformOrigin: "0% 50% -50",
         },
-        "-=0.6"
+        "-=0.6",
       );
 
       // Subheadline

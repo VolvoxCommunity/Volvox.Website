@@ -1,29 +1,29 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { version } from "../../package.json";
-import { CookieSettingsButton } from "@/components/cookie-consent-banner";
 import {
+  ArrowUpRight,
   DiscordLogo,
   GithubLogo,
-  ArrowUpRight,
-  TwitterLogo,
-  LinkedinLogo,
-  YoutubeLogo,
   InstagramLogo,
+  LinkedinLogo,
   TiktokLogo,
+  TwitterLogo,
+  YoutubeLogo,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { CookieSettingsButton } from "@/components/cookie-consent-banner";
 import {
   DISCORD_URL,
   GITHUB_URL,
-  TWITTER_URL,
-  LINKEDIN_URL,
-  YOUTUBE_URL,
   INSTAGRAM_URL,
+  LINKEDIN_URL,
   TIKTOK_URL,
+  TWITTER_URL,
+  YOUTUBE_URL,
 } from "@/lib/constants";
+import { version } from "../../package.json";
 
 const footerLinks = {
   product: [

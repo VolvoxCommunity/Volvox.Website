@@ -1,17 +1,17 @@
 "use client";
 
+import { DiscordLogo, List, Moon, Sun, X } from "@phosphor-icons/react";
+import confettiLib from "canvas-confetti";
+import { AnimatePresence, motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
-import { cn } from "@/lib/utils";
-import { Moon, Sun, List, DiscordLogo, X } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
 import { useTheme } from "@/components/providers/theme-provider";
-import confettiLib from "canvas-confetti";
-import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { useKeyboardShortcuts } from "@/hooks/use-keyboard-shortcuts";
 import { DISCORD_URL, NAV_ITEMS } from "@/lib/constants";
-import { motion, AnimatePresence } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 interface NavigationProps {
   onNavigate?: (section: string) => void;
@@ -132,7 +132,7 @@ export function Navigation(props: NavigationProps) {
       <header
         className={cn(
           "fixed top-0 left-0 w-full flex justify-center z-[1000] pointer-events-none transition-transform duration-300 ease-in-out",
-          isVisible ? "translate-y-0" : "lg:-translate-y-full translate-y-0"
+          isVisible ? "translate-y-0" : "lg:-translate-y-full translate-y-0",
         )}
       >
         {/* Nav Container */}
@@ -145,7 +145,7 @@ export function Navigation(props: NavigationProps) {
             "w-full py-2 px-3 bg-transparent",
             isIsland
               ? "group lg:w-[90%] lg:max-w-[850px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
-              : "lg:w-full lg:max-w-full lg:py-6 lg:px-10 lg:border-b lg:border-border/5"
+              : "lg:w-full lg:max-w-full lg:py-6 lg:px-10 lg:border-b lg:border-border/5",
           )}
         >
           {/* Mobile Progressive Blur Background */}
@@ -164,7 +164,7 @@ export function Navigation(props: NavigationProps) {
           <div
             className={cn(
               "absolute inset-0 pointer-events-none z-0 opacity-0 transition-opacity duration-300 hidden lg:block",
-              isIsland ? "group-hover:opacity-100 hover:opacity-100" : ""
+              isIsland ? "group-hover:opacity-100 hover:opacity-100" : "",
             )}
             style={{
               background: `radial-gradient(600px circle at var(--mouse-x, 50%) var(--mouse-y, 50%), oklch(from var(--primary) l c h / 0.15), transparent 40%)`,
@@ -191,7 +191,7 @@ export function Navigation(props: NavigationProps) {
           <ul
             className={cn(
               "hidden lg:flex z-[2] list-none",
-              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8"
+              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8",
             )}
           >
             {navItems.map((item) => (
@@ -206,7 +206,7 @@ export function Navigation(props: NavigationProps) {
                       "inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300",
                       currentSection === item.id
                         ? "opacity-100 bg-foreground/5 text-foreground"
-                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
                     )}
                   >
                     {item.label}
@@ -222,7 +222,7 @@ export function Navigation(props: NavigationProps) {
                       "inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none",
                       currentSection === item.id
                         ? "opacity-100 bg-foreground/5 text-foreground"
-                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
                     )}
                   >
                     {item.label}

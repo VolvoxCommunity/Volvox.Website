@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
-import { motion } from "framer-motion";
 import { Quotes } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import type { Testimonial } from "@/lib/types";
 
 interface ProductTestimonialsProps {

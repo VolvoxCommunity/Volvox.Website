@@ -1,7 +1,7 @@
 import {
-  SITE_URL,
-  SITE_NAME,
   SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
   TWITTER_URL,
 } from "./constants";
 
@@ -87,7 +87,7 @@ export function generateWebPageSchema(
   description: string,
   path: string,
   datePublished?: string,
-  dateModified?: string
+  dateModified?: string,
 ) {
   const url = `${SITE_URL}${path}`;
 

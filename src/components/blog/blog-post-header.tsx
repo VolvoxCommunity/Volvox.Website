@@ -1,14 +1,14 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { ArrowLeft } from "lucide-react";
-import { GithubLogo, DiscordLogo, Moon, Sun } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { useTheme } from "@/components/providers/theme-provider";
+import { DiscordLogo, GithubLogo, Moon, Sun } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { GITHUB_URL, DISCORD_URL } from "@/lib/constants";
+import { ArrowLeft } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useTheme } from "@/components/providers/theme-provider";
+import { Button } from "@/components/ui/button";
+import { DISCORD_URL, GITHUB_URL } from "@/lib/constants";
 
 /**
  * Renders the blog post header with back-to-home navigation, branding, a theme toggle, and social links.

@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
-import { TeamMember } from "@/lib/types";
-import { TeamNavbar } from "@/components/team/team-navbar";
-import { TeamCard } from "@/components/team/team-card";
+import { useMemo, useState } from "react";
 import { Footer } from "@/components/footer";
+import { TeamCard } from "@/components/team/team-card";
+import { TeamNavbar } from "@/components/team/team-navbar";
+import type { TeamMember } from "@/lib/types";
 
 interface TeamListClientProps {
   teamMembers: TeamMember[];

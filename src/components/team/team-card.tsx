@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
-import { TeamMember } from "@/lib/types";
+import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface TeamCardProps {
@@ -18,7 +18,7 @@ export function TeamCard({ member }: TeamCardProps) {
       className={cn(
         "group relative rounded-[32px] bg-card overflow-hidden",
         "h-[440px] md:h-[500px] p-2 transition-all duration-300",
-        "hover:shadow-lg block"
+        "hover:shadow-lg block",
       )}
       aria-label={`View ${member.name}'s profile`}
     >
@@ -59,7 +59,7 @@ export function TeamCard({ member }: TeamCardProps) {
               member.type === "mentor" && "bg-primary text-primary-foreground",
               member.type === "builder" && "bg-accent text-accent-foreground",
               member.type === "mentee" &&
-                "bg-secondary text-secondary-foreground"
+                "bg-secondary text-secondary-foreground",
             )}
           >
             {member.type}

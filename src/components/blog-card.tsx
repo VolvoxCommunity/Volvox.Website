@@ -1,13 +1,13 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ArrowUpRight, Eye } from "lucide-react";
 import { motion } from "framer-motion";
-import { BlogPost } from "@/lib/types";
-import { ViewMode } from "@/components/ui/filter-controls";
+import { ArrowUpRight, Eye } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import type { ViewMode } from "@/components/ui/filter-controls";
+import type { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 interface BlogCardProps {
@@ -43,7 +43,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
             "h-full bg-card backdrop-blur-sm rounded-[2rem] p-4 transition-all duration-300",
             "border border-border/40 hover:border-border/80 shadow-sm hover:shadow-xl hover:shadow-primary/5",
             viewMode === "list" &&
-              "p-6 flex flex-col md:flex-row gap-6 items-center"
+              "p-6 flex flex-col md:flex-row gap-6 items-center",
           )}
         >
           {/* Inset Image Container */}
@@ -54,7 +54,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
               viewMode === "grid"
                 ? "aspect-[4/3] w-full"
                 : "w-full md:w-64 aspect-video md:aspect-[4/3] flex-shrink-0 mb-0",
-              "rounded-lg md:rounded-[2rem] group-hover:rounded-lg" // Responsive + Hover logic
+              "rounded-lg md:rounded-[2rem] group-hover:rounded-lg", // Responsive + Hover logic
             )}
           >
             <div className="w-full h-full relative overflow-hidden">
@@ -90,7 +90,7 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
           <div
             className={cn(
               "px-1 flex flex-col flex-1",
-              viewMode === "list" && "px-0"
+              viewMode === "list" && "px-0",
             )}
           >
             {/* Author & Read Time */}

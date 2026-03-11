@@ -1,9 +1,9 @@
 "use client";
 
-import { useState, useId, type HTMLAttributes, type ReactNode } from "react";
-import { Link2, Check } from "lucide-react";
-import { generateHeadingId, cn } from "@/lib/utils";
+import { Check, Link2 } from "lucide-react";
+import { type HTMLAttributes, type ReactNode, useId, useState } from "react";
 import { reportError } from "@/lib/logger";
+import { cn, generateHeadingId } from "@/lib/utils";
 
 interface HeadingWithAnchorProps extends HTMLAttributes<HTMLHeadingElement> {
   as: "h1" | "h2" | "h3" | "h4" | "h5" | "h6";

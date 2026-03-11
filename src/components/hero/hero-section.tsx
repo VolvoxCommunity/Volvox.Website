@@ -2,8 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useTypewriter } from "react-simple-typewriter";
-import { MagneticButton } from "@/components/ui/magnetic-button";
 import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { cn } from "@/lib/utils";
 
 interface HeroSectionProps {
@@ -96,7 +96,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
                 <span
                   className={cn(
                     "ml-0.5 w-[2px] h-[1.1em] bg-current inline-block",
-                    isAnimating ? "animate-pulse" : "opacity-0"
+                    isAnimating ? "animate-pulse" : "opacity-0",
                   )}
                   aria-hidden="true"
                 />

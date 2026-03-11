@@ -1,22 +1,21 @@
 "use client";
 
-import Image from "next/image";
-import Link from "next/link";
-
 import {
+  ArrowSquareOut,
+  Briefcase,
   Envelope,
+  FolderOpen,
   GithubLogo,
   LinkedinLogo,
-  Briefcase,
-  ArrowSquareOut,
-  FolderOpen,
 } from "@phosphor-icons/react";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import { MemberNavbar } from "@/components/team/member-navbar";
+import Image from "next/image";
+import Link from "next/link";
 import { Footer } from "@/components/footer";
-import { TeamMember } from "@/lib/types";
+import { MemberNavbar } from "@/components/team/member-navbar";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/magnetic-button";
+import type { TeamMember } from "@/lib/types";
 
 interface TeamMemberDetailClientProps {
   member: TeamMember;
@@ -271,7 +270,7 @@ export function TeamMemberDetailClient({
                       window.open(
                         member.githubUrl,
                         "_blank",
-                        "noopener,noreferrer"
+                        "noopener,noreferrer",
                       )
                     }
                   >
@@ -291,7 +290,7 @@ export function TeamMemberDetailClient({
                       window.open(
                         member.linkedinUrl,
                         "_blank",
-                        "noopener,noreferrer"
+                        "noopener,noreferrer",
                       )
                     }
                   >

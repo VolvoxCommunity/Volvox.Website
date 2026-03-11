@@ -1,123 +1,101 @@
 # CLAUDE.md
 
-Guidance for Claude Code working with the Volvox.Website repository.
-
 ## Overview
 
-Next.js 16 website for Volvox - software development, mentorship, and blog content. Uses React 19, TypeScript, Tailwind CSS v4, and pnpm.
+Next.js 16 website for Volvox (`volvox.dev`) — software development, mentorship, and blog. React 19, TypeScript (strict), Tailwind CSS v4, Biome, pnpm.
 
 ## Commands
 
 ```bash
-pnpm dev          # Dev server (localhost:3000)
-pnpm build        # Production build
-pnpm typecheck    # Type checking
-pnpm lint         # Linting
-pnpm test         # Unit tests (Jest)
-pnpm test:e2e     # E2E tests (Chromium only)
-pnpm format       # Format with Prettier
-
-# E2E tests with Playwright
-pnpm exec playwright test --project=chromium  # Chromium only (for validation)
-pnpm exec playwright test                      # All configured browsers
-pnpm exec playwright test --ui                 # Interactive UI mode
+pnpm dev              # Dev server (localhost:3000)
+pnpm build            # Production build
+pnpm typecheck        # TypeScript type checking
+pnpm lint             # Biome lint + format check
+pnpm lint:fix         # Auto-fix lint + format issues
+pnpm format           # Format with Biome (write)
+pnpm format:check     # Format check (no write)
 ```
 
-**Pre-commit hooks run automatically**: lint-staged → typecheck → test → build → test:e2e
-
-## ⚠️ Git Policy (CRITICAL)
-
-**NEVER push changes to git without:**
-
-1. All validation passing (typecheck, lint, test, build, test:e2e) - Run e2e tests in parallel with other validation checks. **Use the "chromium" project for E2E tests** (`pnpm exec playwright test --project=chromium`) for validation.
-2. **⚠️ CHANGELOG.md updated** - Document ALL user-facing changes in `CHANGELOG.md` before committing. This is MANDATORY for every commit that adds features, fixes bugs, or makes user-visible changes. A pre-commit hook will auto-generate a draft for review.
-3. Explicit approval from the user
-
-Always ask before pushing. No exceptions.
-
-### CHANGELOG Guidelines
-
-When making changes that affect users, update `CHANGELOG.md` following [Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format with [Semantic Versioning](https://semver.org/):
-
-| Category   | SemVer | Description                      |
-| ---------- | ------ | -------------------------------- |
-| Added      | MINOR  | New features                     |
-| Changed    | PATCH  | Backwards-compatible changes     |
-| Deprecated | MINOR  | Soon-to-be removed features      |
-| Removed    | MAJOR  | Removed features (breaking)      |
-| Fixed      | PATCH  | Bug fixes                        |
-| Security   | PATCH  | Security vulnerability fixes     |
-| feat!      | MAJOR  | Breaking change (via `!` suffix) |
-
-Example entry:
-
-```markdown
-### Added
-
-- **Blog listing page** (`/blog`) with search and filters (abc1234)
+**E2E tests** (Playwright):
+```bash
+pnpm exec playwright test --project=chromium  # Chromium only (fast validation)
+pnpm exec playwright test                      # All browsers
 ```
 
-**Auto-generation**: The pre-commit hook automatically generates a draft CHANGELOG entry from your commit message (must use conventional commit format like `feat: description`). Review and edit the draft before committing again. To generate manually from a range: `pnpm changelog:generate <commit-range>`
+**Pre-commit hook**: lint-staged (Biome) -> typecheck -> build
+
+## Visual Change Verification (MANDATORY)
+
+**ALL visual changes MUST be verified using the Chrome DevTools MCP server.** After making any UI/styling/layout change:
+
+1. Ensure the dev server is running (`pnpm dev`)
+2. Use `chrome-devtools` MCP tools to take a screenshot and visually confirm the change renders correctly
+3. Do NOT mark visual work as complete without screenshot verification
+
+This is non-negotiable. No exceptions.
+
+## Git Policy
+
+**NEVER push without explicit user approval.** Before committing:
+
+1. All validation passing: `pnpm lint && pnpm typecheck && pnpm build`
+2. Update `CHANGELOG.md` for user-facing changes ([Keep a Changelog](https://keepachangelog.com/en/1.1.0/) format, [SemVer](https://semver.org/))
+3. Use conventional commits (`feat:`, `fix:`, `chore:`, `refactor:`)
 
 ## Project Structure
 
 ```
 src/
-├── app/                    # Next.js App Router
-│   ├── blog/[slug]/        # Blog post pages + OG images
-│   ├── products/[slug]/    # Product pages + OG images
-│   ├── privacy/            # Privacy policy
-│   ├── terms/              # Terms of service
-│   ├── llms.txt/           # LLM-friendly content endpoint
-│   ├── api/blog/[slug]/    # Blog API (views)
-│   ├── styles/             # CSS modules (animations, prose, syntax)
-│   ├── layout.tsx          # Root layout
-│   ├── page.tsx            # Homepage (Server Component)
-│   ├── not-found.tsx       # Custom 404 page
-│   ├── sitemap.ts          # Dynamic sitemap
-│   └── robots.ts           # Robots.txt config
-├── components/
-│   ├── ui/                 # Primitives (button, card, dialog, etc.)
-│   ├── blog/               # Blog components
-│   ├── mdx/                # MDX components (callout, code-block, etc.)
-│   ├── products/           # Product components
-│   └── providers/          # Context providers
-├── hooks/                  # use-mobile, use-mouse-glow
-└── lib/
-    ├── blog.ts             # getAllPosts, getPostBySlug
-    ├── content.ts          # getAllProducts, getAllMentors, etc.
-    ├── constants.ts        # SITE_URL, SITE_NAME, brand colors
-    ├── schemas.ts          # Zod validation schemas
-    ├── types.ts            # BlogPost, Product, Author, etc.
-    ├── views.ts            # Blog view tracking (Upstash Redis)
-    ├── structured-data.ts  # Schema.org JSON-LD generators
-    └── utils.ts            # cn(), generateHeadingId()
+  app/
+    blog/[slug]/          # Blog post pages + OG images
+    products/[slug]/      # Product pages + OG images
+    team/[slug]/          # Team member pages
+    privacy/, terms/      # Legal pages
+    llms.txt/             # LLM-friendly content endpoint
+    api/blog/[slug]/      # Blog API (view counts)
+    styles/               # CSS (animations, prose, syntax highlighting)
+    layout.tsx            # Root layout (fonts, analytics, Sentry)
+    page.tsx              # Homepage (Server Component)
+    globals.css           # Tailwind v4 theme + custom styles
+  components/
+    ui/                   # Primitives (button, card, dialog, filter-controls)
+    blog/                 # Blog-specific (heading-with-anchor)
+    hero/                 # Hero section components
+    mdx/                  # MDX renderers (callout, code-block, image-zoom)
+    products/             # Product detail components
+    providers/            # Context providers (smooth-scroll)
+    team/                 # Team member components
+  hooks/                  # use-mobile, use-mouse-glow, use-keyboard-shortcuts
+  lib/
+    blog.ts               # getAllPosts, getPostBySlug (reads content/blog/*.mdx)
+    content.ts            # getAllProducts, getTeamMembers (reads content/*.json)
+    constants.ts          # SITE_URL, SITE_NAME, NAV_ITEMS, BRAND_COLORS
+    schemas.ts            # Zod validation for all content types
+    types.ts              # BlogPost, Product, Author, TeamMember
+    social-images.tsx     # OG image generation (ImageResponse API)
+    structured-data.ts    # Schema.org JSON-LD generators
+    views.ts              # Blog view tracking (Upstash Redis)
+    utils.ts              # cn(), generateHeadingId()
 
 content/
-├── blog/*.mdx              # Blog posts with frontmatter
-├── products/[slug]/        # Product content (changelog, index.json)
-├── authors.json            # Author profiles
-├── products.json           # Product data
-├── mentors.json            # Mentor profiles
-└── mentees.json            # Mentee profiles
+  blog/*.mdx              # Blog posts (frontmatter + MDX)
+  products/[slug]/        # Product data (changelog, index.json, screenshots/)
+  authors.json            # Author profiles
+  products.json           # Product catalog
+  team.json               # Team member profiles
 
-e2e/                        # Playwright E2E tests
-tests/                      # Jest unit tests
+e2e/                      # Playwright E2E tests
 ```
 
 ## Key Patterns
 
-**Server → Client Component Flow**:
+**Server -> Client flow**: Server Components fetch data (`page.tsx`) -> pass as props to Client Components (`*-client.tsx`) for interactivity.
 
-1. Server Components fetch data (`src/app/page.tsx`)
-2. Pass data as props to Client Components (`homepage-client.tsx`)
-3. Client Components handle interactivity and state
+**Content pipeline**: Local MDX/JSON in `content/` -> validated with Zod schemas (`lib/schemas.ts`) -> consumed by `lib/blog.ts` and `lib/content.ts`.
 
-**Content**: Local MDX/JSON files in `content/`, validated with Zod schemas at runtime.
+**Styling**: Tailwind CSS v4 with `@theme` in `globals.css`. Use `cn()` from `lib/utils.ts` for conditional classes. Dark mode via `next-themes` (class strategy with `.dark`).
 
-**Styling**: Tailwind CSS v4 with `@theme` directive in `globals.css`. Use `cn()` from `src/lib/utils.ts` for conditional classes.
-
-**Theming**: `next-themes` with system/light/dark modes, stored as `volvox-theme` in localStorage.
+**OG images**: Generated dynamically via `lib/social-images.tsx` using Next.js `ImageResponse`. Uses raw `<img>` tags (not `next/image`) — this is intentional for OG context.
 
 ## Blog Post Frontmatter
 
@@ -125,41 +103,34 @@ tests/                      # Jest unit tests
 title: Post Title
 slug: url-slug
 excerpt: Brief description
-authorId: author-id # References content/authors.json
+authorId: author-id     # References content/authors.json
 date: 2024-01-15
 tags: [tag1, tag2]
-published: true # Only published posts are displayed
-banner: /images/... # Optional banner image
+published: true          # Only published posts are displayed
+banner: /images/...      # Optional banner image
 ```
 
 ## Environment Variables
 
-| Variable                           | Required | Description                         |
-| ---------------------------------- | -------- | ----------------------------------- |
-| `NEXT_PUBLIC_SENTRY_DSN`           | No       | Sentry error tracking               |
-| `UPSTASH_REDIS_REST_URL`           | No       | Blog view counts                    |
-| `UPSTASH_REDIS_REST_TOKEN`         | No       | Blog view counts                    |
-| `PLAYWRIGHT_BRAVE_EXECUTABLE_PATH` | No       | Path to Brave browser for E2E tests |
+| Variable | Purpose |
+|----------|---------|
+| `NEXT_PUBLIC_SENTRY_DSN` | Sentry error tracking |
+| `UPSTASH_REDIS_REST_URL` | Blog view counts |
+| `UPSTASH_REDIS_REST_TOKEN` | Blog view counts |
+
+## Gotchas
+
+- **`globals.css` excluded from Biome** — Tailwind v4 `@variant` syntax causes parse errors; file is excluded in `biome.json`
+- **Sentry tunnel route** — `/monitoring` is a Sentry tunnel (see `next.config.ts`), not an app route
+- **Security headers** — Custom headers configured in `next.config.ts` (HSTS, X-Frame-Options, CSP, etc.)
+- **Path alias**: `@/*` -> `src/*`
+- **Font**: JetBrains Mono (variable, 300-800 weights)
+- **Images**: GitHub remote patterns allowed in `next.config.ts`
 
 ## Test Selectors
 
-Key `data-testid` attributes:
+Key `data-testid` attributes for E2E:
 
-- `hero-section`, `products-section`, `blog-section`, `mentorship-section`, `about-section`
-- `footer`, `theme-toggle`, `mobile-menu-button`, `cookie-consent-banner`
-- `blog-header`, `post-date`, `author-info`, `blog-content`
-
-## Dependencies
-
-- **UI**: Radix UI primitives, Framer Motion, Sonner (toasts)
-- **Icons**: `@phosphor-icons/react`, `lucide-react`
-- **Content**: `next-mdx-remote`, `gray-matter`, `rehype-highlight`, `remark-gfm`
-- **Analytics**: Sentry, Vercel Analytics, Vercel Speed Insights
-- **Storage**: Upstash Redis (blog views)
-
-## Notes
-
-- Path alias: `@/*` → `src/*`
-- Strict TypeScript enabled
-- Images: GitHub remote patterns allowed
-- Font: JetBrains Mono (300-800 weights)
+- Homepage: `hero-section`, `products-section`, `blog-section`, `mentorship-section`, `about-section`
+- Global: `footer`, `theme-toggle`, `mobile-menu-button`, `cookie-consent-banner`
+- Blog: `blog-header`, `post-date`, `author-info`, `blog-content`

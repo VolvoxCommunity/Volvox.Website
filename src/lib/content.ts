@@ -1,13 +1,13 @@
-import * as fs from "fs";
-import * as path from "path";
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { reportError } from "./logger";
 import {
   AuthorsArraySchema,
+  extendedProductSchema,
   ProductsArraySchema,
   TeamMembersArraySchema,
-  extendedProductSchema,
 } from "./schemas";
-import type { Author, Product, TeamMember, ExtendedProduct } from "./types";
+import type { Author, ExtendedProduct, Product, TeamMember } from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
@@ -120,7 +120,7 @@ export function getAllExtendedProducts(): ExtendedProduct[] {
       if (!isValidSlug(folder.name)) {
         reportError(
           `Invalid product folder slug: ${folder.name}`,
-          new Error("Invalid slug")
+          new Error("Invalid slug"),
         );
         continue;
       }
@@ -138,8 +138,8 @@ export function getAllExtendedProducts(): ExtendedProduct[] {
           reportError(
             `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`,
             new Error(
-              `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`
-            )
+              `Product slug mismatch: folder=${folder.name} json.slug=${validated.slug}`,
+            ),
           );
           continue;
         }

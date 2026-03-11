@@ -1,10 +1,10 @@
 "use client";
 
-import { useState } from "react";
 import { CaretDown } from "@phosphor-icons/react";
-import { motion, AnimatePresence } from "framer-motion";
-import { cn } from "@/lib/utils";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
 import type { FaqItem } from "@/lib/types";
+import { cn } from "@/lib/utils";
 
 interface ProductFaqProps {
   faq: FaqItem[];
@@ -48,7 +48,7 @@ export function ProductFaq({ faq }: ProductFaqProps) {
                     weight="bold"
                     className={cn(
                       "h-5 w-5 flex-shrink-0 transition-transform duration-200",
-                      openIndex === idx && "rotate-180"
+                      openIndex === idx && "rotate-180",
                     )}
                   />
                 </button>

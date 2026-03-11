@@ -83,7 +83,7 @@ export async function fetchPostViews(slug: string): Promise<number> {
 export const getPostViews = unstable_cache(
   fetchPostViews,
   ["blog-post-views"],
-  { revalidate: 60 }
+  { revalidate: 60 },
 );
 
 /**
@@ -94,7 +94,7 @@ export const getPostViews = unstable_cache(
  * @returns Map of slug to view count
  */
 export async function getPostViewsBatch(
-  slugs: string[]
+  slugs: string[],
 ): Promise<Map<string, number>> {
   const viewsMap = new Map<string, number>();
 

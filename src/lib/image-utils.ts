@@ -11,7 +11,7 @@
  */
 export function resolveProductImagePath(
   screenshot: string | undefined,
-  productSlug: string
+  productSlug: string,
 ): string | null {
   if (!screenshot) return null;
   if (screenshot.startsWith("http://") || screenshot.startsWith("https://")) {

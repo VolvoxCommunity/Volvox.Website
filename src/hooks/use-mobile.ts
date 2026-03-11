@@ -6,7 +6,7 @@ export function useIsMobile() {
   const [isMobile, setIsMobile] = useState<boolean | undefined>(() =>
     typeof window !== "undefined"
       ? window.innerWidth < MOBILE_BREAKPOINT
-      : undefined
+      : undefined,
   );
 
   useEffect(() => {

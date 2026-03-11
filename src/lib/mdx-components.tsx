@@ -1,16 +1,16 @@
 import type {
+  AnchorHTMLAttributes,
   HTMLAttributes,
   ImgHTMLAttributes,
   ReactElement,
-  AnchorHTMLAttributes,
 } from "react";
 import { isValidElement } from "react";
-import { Callout, CodeBlock, ImageZoom, CustomLink } from "@/components/mdx";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
+import { Callout, CodeBlock, CustomLink, ImageZoom } from "@/components/mdx";
 
 // Type guard to check if a value is a React element with props
 function isReactElementWithProps(
-  value: unknown
+  value: unknown,
 ): value is ReactElement<{ className?: string; filename?: string }> {
   return (
     isValidElement(value) &&
@@ -21,7 +21,7 @@ function isReactElementWithProps(
 
 // Type guard for checkbox input elements
 function isCheckboxElement(
-  value: unknown
+  value: unknown,
 ): value is ReactElement<{ type: string }> {
   return (
     isValidElement(value) &&
@@ -95,12 +95,12 @@ export const mdxComponents = {
       if (!alt || alt.trim() === "") {
         console.warn(
           `[A11Y Warning] Image missing alt text: ${srcString}\n` +
-            'Add descriptive alt text for screen readers, or use alt="" for decorative images.'
+            'Add descriptive alt text for screen readers, or use alt="" for decorative images.',
         );
       } else if (genericAltPatterns.test(alt.trim())) {
         console.warn(
           `[A11Y Warning] Image has generic alt text "${alt}": ${srcString}\n` +
-            "Use descriptive alt text that conveys the image's meaning or purpose."
+            "Use descriptive alt text that conveys the image's meaning or purpose.",
         );
       }
     }

@@ -1,23 +1,23 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { usePathname } from "next/navigation";
 import Lenis from "lenis";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef } from "react";
 
 export function SmoothScroll({ children }: { children: React.ReactNode }) {
   const lenisRef = useRef<Lenis | null>(null);
-  const pathname = usePathname();
+  const _pathname = usePathname();
 
   useEffect(() => {
     // Respect user's preference for reduced motion
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReducedMotion) return;
 
     const lenis = new Lenis({
       duration: 1.2,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      easing: (t) => Math.min(1, 1.001 - 2 ** (-10 * t)),
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
@@ -48,7 +48,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
     } else {
       window.scrollTo(0, 0);
     }
-  }, [pathname]);
+  }, []);
 
   return <>{children}</>;
 }

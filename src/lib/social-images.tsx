@@ -1,10 +1,8 @@
-/* eslint-disable @next/next/no-img-element */
+import * as fs from "node:fs";
+import * as path from "node:path";
 import { ImageResponse } from "next/og";
-
-import * as fs from "fs";
-import * as path from "path";
-import { reportError } from "./logger";
 import { BRAND_COLORS, SITE_NAME } from "./constants";
+import { reportError } from "./logger";
 
 /**
  * Converts a Node.js Buffer to an ArrayBuffer.
@@ -66,7 +64,7 @@ async function fetchJetBrainsMonoFont(): Promise<ArrayBuffer | null> {
           "User-Agent":
             "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_8; de-at) AppleWebKit/533.21.1 (KHTML, like Gecko) Version/5.0.5 Safari/533.21.1",
         },
-      }
+      },
     );
     const fontCss = await fontCssResponse.text();
 
@@ -106,7 +104,7 @@ export function getLogoData(): ArrayBuffer | null {
  */
 export function getProductScreenshotData(
   slug: string,
-  filename: string
+  filename: string,
 ): ArrayBuffer | null {
   try {
     const screenshotPath = path.join(
@@ -115,7 +113,7 @@ export function getProductScreenshotData(
       "products",
       slug,
       "screenshots",
-      filename
+      filename,
     );
     if (fs.existsSync(screenshotPath)) {
       return bufferToArrayBuffer(fs.readFileSync(screenshotPath));
@@ -285,7 +283,7 @@ export function createFallbackImage(logoData?: ArrayBuffer | null) {
  */
 export async function generateSocialImage(
   config: SocialImageConfig | null | undefined,
-  logoData: ArrayBuffer | null
+  logoData: ArrayBuffer | null,
 ): Promise<ImageResponse> {
   const fontData = await fetchJetBrainsMonoFont();
   const logoSrc = logoData ? toBase64DataUrl(logoData) : null;
@@ -421,7 +419,7 @@ export async function generateSocialImage(
           </div>
         </div>
       </div>,
-      options
+      options,
     );
   } catch (e) {
     reportError("Social image generation failed", e);
@@ -440,7 +438,7 @@ export async function generateSocialImage(
  */
 export async function generateBlogPostSocialImage(
   frontmatter: BlogFrontmatter | null | undefined,
-  logoData: ArrayBuffer | null
+  logoData: ArrayBuffer | null,
 ): Promise<ImageResponse> {
   if (!frontmatter) {
     return generateSocialImage(null, logoData);
@@ -674,7 +672,7 @@ export async function generateBlogPostSocialImage(
           )}
         </div>
       </div>,
-      options
+      options,
     );
   } catch (e) {
     reportError("Blog social image generation failed", e);
@@ -692,7 +690,7 @@ export async function generateBlogPostSocialImage(
  */
 export async function generateProductSocialImage(
   product: ProductOgData | null | undefined,
-  logoData: ArrayBuffer | null
+  logoData: ArrayBuffer | null,
 ): Promise<ImageResponse> {
   if (!product) {
     return generateSocialImage(null, logoData);
@@ -886,7 +884,7 @@ export async function generateProductSocialImage(
           )}
         </div>
       </div>,
-      options
+      options,
     );
   } catch (e) {
     reportError("Product social image generation failed", e);

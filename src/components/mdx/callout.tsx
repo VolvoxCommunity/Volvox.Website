@@ -1,11 +1,11 @@
-import { ReactNode } from "react";
 import {
-  Info,
-  AlertTriangle,
-  Lightbulb,
   AlertOctagon,
+  AlertTriangle,
   FileText,
+  Info,
+  Lightbulb,
 } from "lucide-react";
+import type { ReactNode } from "react";
 
 type CalloutType = "info" | "warning" | "tip" | "danger" | "note";
 

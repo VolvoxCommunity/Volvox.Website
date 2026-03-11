@@ -1,4 +1,4 @@
-import { test, expect } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
 /**
  * Verification tests for semantic landmark roles.
@@ -119,7 +119,7 @@ test.describe("Semantic Landmarks Verification", () => {
 
     // Verify team members section with aria-labelledby (region for screen reader navigation)
     const teamSection = page.locator(
-      'section[aria-labelledby="team-grid-heading"]'
+      'section[aria-labelledby="team-grid-heading"]',
     );
     await expect(teamSection).toBeVisible();
 
@@ -198,7 +198,7 @@ test.describe("Semantic Landmarks Verification", () => {
 
       // Also check for labeled sections (region role implied by section with aria-label)
       const labeledSections = document.querySelectorAll(
-        "section[aria-label], section[aria-labelledby]"
+        "section[aria-label], section[aria-labelledby]",
       );
       const sectionLabels: string[] = [];
       labeledSections.forEach((el) => {
@@ -233,7 +233,7 @@ test.describe("Semantic Landmarks Verification", () => {
 
     // Verify we have labeled sections for navigation
     const sectionLandmarks = landmarks.find(
-      (l) => l.role === "region (sections)"
+      (l) => l.role === "region (sections)",
     );
     expect(sectionLandmarks?.count).toBeGreaterThanOrEqual(4); // Hero, Blog, Community, About
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -29,7 +29,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
 
     // Check for reduced motion preference
     const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
+      "(prefers-reduced-motion: reduce)",
     ).matches;
     if (prefersReducedMotion) return;
 
@@ -226,7 +226,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
       <div
         className={cn(
           "absolute inset-0 w-full h-full -z-10 overflow-hidden bg-background",
-          className
+          className,
         )}
       />
     );
@@ -237,7 +237,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
       ref={containerRef}
       className={cn(
         "absolute inset-0 w-full h-full -z-10 overflow-hidden bg-background",
-        className
+        className,
       )}
       data-testid="animated-background"
     >

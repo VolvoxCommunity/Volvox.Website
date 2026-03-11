@@ -1,20 +1,19 @@
 "use client";
 
-// Framework
-import { useState, useEffect, useCallback } from "react";
-import Image from "next/image";
-
-// Third-party
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+// Third-party
+import { AnimatePresence, motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import Image from "next/image";
+// Framework
+import { useCallback, useEffect, useState } from "react";
 
 // Local
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { cn } from "@/lib/utils";
@@ -50,7 +49,7 @@ export function ProductScreenshots({
   const prevSlide = useCallback(() => {
     setDirection(-1);
     setCurrentIndex(
-      (prev) => (prev - 1 + galleryImages.length) % galleryImages.length
+      (prev) => (prev - 1 + galleryImages.length) % galleryImages.length,
     );
   }, [galleryImages.length]);
 
@@ -59,7 +58,7 @@ export function ProductScreenshots({
       setDirection(index > currentIndex ? 1 : -1);
       setCurrentIndex(index);
     },
-    [currentIndex]
+    [currentIndex],
   );
 
   // Auto-rotation
@@ -76,7 +75,7 @@ export function ProductScreenshots({
 
   const currentImage = resolveProductImagePath(
     galleryImages[currentIndex],
-    slug
+    slug,
   );
 
   const slideVariants = {
@@ -194,7 +193,7 @@ export function ProductScreenshots({
                     "w-2 h-2 rounded-full transition-all duration-300",
                     idx === currentIndex
                       ? "bg-primary w-6"
-                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50"
+                      : "bg-muted-foreground/30 hover:bg-muted-foreground/50",
                   )}
                   aria-label={`Go to screenshot ${idx + 1}`}
                   aria-current={idx === currentIndex ? "true" : undefined}
@@ -219,7 +218,7 @@ export function ProductScreenshots({
                     "relative flex-shrink-0 w-20 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200",
                     idx === currentIndex
                       ? "border-primary ring-2 ring-primary/20"
-                      : "border-transparent hover:border-border opacity-60 hover:opacity-100"
+                      : "border-transparent hover:border-border opacity-60 hover:opacity-100",
                   )}
                   aria-label={`View screenshot ${idx + 1}`}
                   aria-current={idx === currentIndex ? "true" : undefined}

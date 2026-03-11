@@ -32,7 +32,7 @@ export function ScrollReveal({
   const [isVisible, setIsVisible] = useState(() =>
     typeof window !== "undefined"
       ? window.matchMedia("(prefers-reduced-motion: reduce)").matches
-      : false
+      : false,
   );
   const ref = useRef<HTMLDivElement>(null);
   const prefersReducedMotion = useRef(isVisible);
@@ -58,7 +58,7 @@ export function ScrollReveal({
       {
         threshold: 0.1,
         rootMargin: "50px",
-      }
+      },
     );
 
     observer.observe(element);

@@ -1,13 +1,13 @@
 "use client";
 
-import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { Footer } from "@/components/footer";
-import { ProductHero } from "@/components/products/product-hero";
-import { ProductToc } from "@/components/products/product-toc";
-import { ProductFeatures } from "@/components/products/product-features";
 import { ProductFaq } from "@/components/products/product-faq";
-import { ProductTestimonials } from "@/components/products/product-testimonials";
+import { ProductFeatures } from "@/components/products/product-features";
+import { ProductHero } from "@/components/products/product-hero";
+import { ProductPostNavbar } from "@/components/products/product-post-navbar";
 import { ProductScreenshots } from "@/components/products/product-screenshots";
+import { ProductTestimonials } from "@/components/products/product-testimonials";
+import { ProductToc } from "@/components/products/product-toc";
 import type { ExtendedProduct } from "@/lib/types";
 
 interface ProductDetailClientProps {

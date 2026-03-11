@@ -48,13 +48,13 @@ export interface Product {
 export type {
   ExtendedProduct,
   FaqItem,
-  Testimonial,
   ProductLinks,
   TeamMemberProject,
+  Testimonial,
 } from "./schemas";
 
-import { z } from "zod";
-import { TeamMemberSchema } from "./schemas";
+import type { z } from "zod";
+import type { TeamMemberSchema } from "./schemas";
 
 export type TeamMember = z.infer<typeof TeamMemberSchema>;
 export type Mentor = Extract<TeamMember, { type: "mentor" }>;

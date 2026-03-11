@@ -2,11 +2,11 @@
 
 import {
   createContext,
+  type ReactNode,
   useCallback,
   useContext,
-  useSyncExternalStore,
   useState,
-  type ReactNode,
+  useSyncExternalStore,
 } from "react";
 
 /** Cookie consent preferences stored in localStorage */
@@ -110,7 +110,7 @@ interface CookieConsentContextType {
   declineAll: () => void;
   /** Update specific consent preferences */
   updateConsent: (
-    preferences: Partial<Omit<CookieConsent, "essential">>
+    preferences: Partial<Omit<CookieConsent, "essential">>,
   ) => void;
   /** Reset consent and show banner again */
   resetConsent: () => void;
@@ -146,7 +146,7 @@ export function CookieConsentProvider({
   const consent = useSyncExternalStore(
     subscribeToStorage,
     getStoredConsent,
-    getServerSnapshot
+    getServerSnapshot,
   );
 
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -166,7 +166,7 @@ export function CookieConsentProvider({
     saveStoredConsent(newConsent);
     // Dispatch storage event to trigger re-render via useSyncExternalStore
     window.dispatchEvent(
-      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY })
+      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }),
     );
     setIsSettingsOpen(false);
   }, []);
@@ -182,7 +182,7 @@ export function CookieConsentProvider({
     };
     saveStoredConsent(newConsent);
     window.dispatchEvent(
-      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY })
+      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }),
     );
     setIsSettingsOpen(false);
   }, []);
@@ -199,11 +199,11 @@ export function CookieConsentProvider({
       };
       saveStoredConsent(newConsent);
       window.dispatchEvent(
-        new StorageEvent("storage", { key: COOKIE_CONSENT_KEY })
+        new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }),
       );
       setIsSettingsOpen(false);
     },
-    []
+    [],
   );
 
   const resetConsent = useCallback(() => {
@@ -213,7 +213,7 @@ export function CookieConsentProvider({
       // Silently fail
     }
     window.dispatchEvent(
-      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY })
+      new StorageEvent("storage", { key: COOKIE_CONSENT_KEY }),
     );
   }, []);
 
@@ -254,7 +254,7 @@ export function useCookieConsent(): CookieConsentContextType {
   const context = useContext(CookieConsentContext);
   if (context === undefined) {
     throw new Error(
-      "useCookieConsent must be used within a CookieConsentProvider"
+      "useCookieConsent must be used within a CookieConsentProvider",
     );
   }
   return context;

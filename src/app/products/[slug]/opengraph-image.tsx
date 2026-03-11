@@ -1,9 +1,9 @@
+import { getExtendedProductBySlug } from "@/lib/content";
 import {
   generateProductSocialImage,
   getLogoData,
   getProductScreenshotData,
 } from "@/lib/social-images";
-import { getExtendedProductBySlug } from "@/lib/content";
 
 export const runtime = "nodejs";
 export const size = { width: 1200, height: 630 };

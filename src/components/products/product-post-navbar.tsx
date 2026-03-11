@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 export function ProductPostNavbar() {
   const router = useRouter();
@@ -66,7 +66,7 @@ export function ProductPostNavbar() {
                     "text-sm font-medium py-2 px-3 rounded-full transition-all duration-300",
                     isActive
                       ? "bg-foreground/5 text-foreground"
-                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
                   )}
                 >
                   {item.label}

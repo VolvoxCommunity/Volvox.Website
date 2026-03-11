@@ -1,9 +1,9 @@
+import { ArrowLeft } from "lucide-react";
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { AnimatedBackground } from "@/components/animated-background";
-import { Navigation } from "@/components/navigation";
 import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 import { NAV_HEIGHT } from "@/lib/constants";
 
 /**

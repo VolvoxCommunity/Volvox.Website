@@ -1,8 +1,8 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Metadata } from "next";
-import { getAllExtendedProducts } from "@/lib/content";
 import { ProductsListClient } from "@/components/products-list-client";
 import { SITE_NAME } from "@/lib/constants";
+import { getAllExtendedProducts } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Products",

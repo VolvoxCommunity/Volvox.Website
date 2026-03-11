@@ -1,26 +1,21 @@
 "use client";
 
-import { useState } from "react";
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import {
-  MagnifyingGlass,
   ArrowLeft,
-  List,
-  SquaresFour,
   CaretDown,
-  X,
   Funnel,
+  List,
+  MagnifyingGlass,
+  SquaresFour,
+  X,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Badge } from "@/components/ui/badge";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -28,9 +23,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+import type {
+  ProductSortOption,
+  ViewMode,
+} from "@/components/ui/filter-controls";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 import { NAV_ITEMS } from "@/lib/constants";
-import { ProductSortOption, ViewMode } from "@/components/ui/filter-controls";
+import { cn } from "@/lib/utils";
 
 interface ProductsNavbarProps {
   searchQuery: string;
@@ -117,7 +120,7 @@ export function ProductsNavbar({
                     "text-sm font-medium py-2 px-3 rounded-full transition-all duration-300",
                     isActive
                       ? "bg-foreground/5 text-foreground"
-                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
                   )}
                 >
                   {item.label}
@@ -133,14 +136,14 @@ export function ProductsNavbar({
             layout
             className={cn(
               "relative transition-all duration-300 flex-1",
-              isSearchFocused ? "rounded-full" : "max-w-[256px] md:max-w-none"
+              isSearchFocused ? "rounded-full" : "max-w-[256px] md:max-w-none",
             )}
           >
             <div className="relative group w-full">
               <MagnifyingGlass
                 className={cn(
                   "absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 h-4 w-4 transition-colors z-10",
-                  isSearchFocused ? "text-primary" : "text-muted-foreground"
+                  isSearchFocused ? "text-primary" : "text-muted-foreground",
                 )}
               />
               <input
@@ -155,7 +158,8 @@ export function ProductsNavbar({
                   "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-[10px] sm:text-xs md:text-sm no-ring",
                   "focus:bg-background focus:border-border transition-all",
                   "placeholder:text-muted-foreground/50",
-                  !isSearchFocused && "hover:bg-muted/60 hover:border-border/30"
+                  !isSearchFocused &&
+                    "hover:bg-muted/60 hover:border-border/30",
                 )}
               />
               {searchQuery && (
@@ -183,7 +187,7 @@ export function ProductsNavbar({
                   className={cn(
                     "h-10 gap-2 rounded-full border-border/60",
                     selectedTech.length > 0 &&
-                      "bg-secondary/10 border-secondary/50 text-primary"
+                      "bg-secondary/10 border-secondary/50 text-primary",
                   )}
                 >
                   <span>Tech</span>
@@ -224,7 +228,7 @@ export function ProductsNavbar({
                             "px-3 py-1.5 rounded-full text-xs transition-all border",
                             isSelected
                               ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground"
+                              : "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground",
                           )}
                         >
                           {tech}
@@ -251,7 +255,7 @@ export function ProductsNavbar({
                     "px-3 py-1.5 text-xs font-medium rounded-full transition-all",
                     sortOption === opt.value
                       ? "bg-background text-foreground shadow-sm"
-                      : "text-muted-foreground hover:text-foreground"
+                      : "text-muted-foreground hover:text-foreground",
                   )}
                 >
                   {opt.label}
@@ -270,7 +274,7 @@ export function ProductsNavbar({
                   "p-2 rounded-full transition-all",
                   viewMode === "grid"
                     ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <SquaresFour className="h-4 w-4" />
@@ -284,7 +288,7 @@ export function ProductsNavbar({
                   "p-2 rounded-full transition-all",
                   viewMode === "list"
                     ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <List className="h-4 w-4" />
@@ -306,7 +310,7 @@ export function ProductsNavbar({
                     className={cn(
                       "h-4 w-4",
                       (selectedTech.length > 0 || sortOption !== "a-z") &&
-                        "text-primary"
+                        "text-primary",
                     )}
                     weight={selectedTech.length > 0 ? "fill" : "regular"}
                   />
@@ -340,7 +344,7 @@ export function ProductsNavbar({
                             "flex-1 px-3 py-2.5 text-[11px] font-semibold rounded-[2rem] transition-all duration-300",
                             sortOption === opt.value
                               ? "bg-primary text-primary-foreground shadow-md shadow-primary/20"
-                              : "text-muted-foreground hover:text-foreground"
+                              : "text-muted-foreground hover:text-foreground",
                           )}
                         >
                           {opt.label}
@@ -377,7 +381,7 @@ export function ProductsNavbar({
                               "px-3.5 py-2 rounded-[2rem] text-xs font-medium border transition-all duration-200 active:scale-95",
                               isSelected
                                 ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                                : "bg-background border-border/60 text-muted-foreground hover:border-border hover:bg-muted/20 hover:text-foreground"
+                                : "bg-background border-border/60 text-muted-foreground hover:border-border hover:bg-muted/20 hover:text-foreground",
                             )}
                           >
                             {tech}

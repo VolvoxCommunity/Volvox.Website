@@ -1,6 +1,6 @@
-import Link from "next/link";
-import { AnchorHTMLAttributes } from "react";
 import { ExternalLink } from "lucide-react";
+import Link from "next/link";
+import type { AnchorHTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -37,7 +37,7 @@ export function CustomLink({
         href={href}
         className={cn(
           "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors",
-          className
+          className,
         )}
         {...props}
       >
@@ -52,7 +52,7 @@ export function CustomLink({
         href={href}
         className={cn(
           "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors",
-          className
+          className,
         )}
         {...props}
       >
@@ -68,7 +68,7 @@ export function CustomLink({
       rel="noopener noreferrer"
       className={cn(
         "font-medium text-primary underline underline-offset-4 decoration-border hover:decoration-primary transition-colors inline-flex items-center gap-1",
-        className
+        className,
       )}
       {...props}
     >

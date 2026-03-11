@@ -1,7 +1,7 @@
+import type { Metadata } from "next";
 import { Suspense } from "react";
-import { Metadata } from "next";
-import { getAllPosts } from "@/lib/blog";
 import { BlogListClient } from "@/components/blog-list-client";
+import { getAllPosts } from "@/lib/blog";
 import { SITE_NAME } from "@/lib/constants";
 
 export const metadata: Metadata = {

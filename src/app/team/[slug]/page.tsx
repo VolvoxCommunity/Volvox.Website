@@ -1,4 +1,4 @@
-import { Metadata } from "next";
+import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getAllTeamMembers, isValidSlug } from "@/lib/content";
 import { TeamMemberDetailClient } from "../team-member-detail-client";

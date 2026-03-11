@@ -2,20 +2,20 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
-import { ThemeProvider } from "@/components/providers/theme-provider";
-import { CookieConsentProvider } from "@/components/providers/cookie-consent-provider";
-import { Toaster } from "@/components/ui/sonner";
-import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
-import { SkipLink } from "@/components/skip-link";
+import { CookieConsentBanner } from "@/components/cookie-consent-banner";
+import { CookieConsentProvider } from "@/components/providers/cookie-consent-provider";
 import { SmoothScroll } from "@/components/providers/smooth-scroll";
-import { generateOrganizationSchema } from "@/lib/structured-data";
+import { ThemeProvider } from "@/components/providers/theme-provider";
+import { SkipLink } from "@/components/skip-link";
+import { Toaster } from "@/components/ui/sonner";
 import {
-  safeJsonLdSerialize,
-  SITE_URL,
-  SITE_NAME,
   SITE_DESCRIPTION,
+  SITE_NAME,
+  SITE_URL,
+  safeJsonLdSerialize,
 } from "@/lib/constants";
+import { generateOrganizationSchema } from "@/lib/structured-data";
 
 const jetbrainsMono = JetBrains_Mono({
   subsets: ["latin"],

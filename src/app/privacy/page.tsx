@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import Script from "next/script";
-import { PrivacyClient } from "./privacy-client";
-import { generateWebPageSchema } from "@/lib/structured-data";
 import { safeJsonLdSerialize } from "@/lib/constants";
+import { generateWebPageSchema } from "@/lib/structured-data";
+import { PrivacyClient } from "./privacy-client";
 
 export const metadata: Metadata = {
   title: "Privacy Policy | Volvox",
@@ -34,7 +34,7 @@ export default function PrivacyPage() {
     "Privacy Policy for Volvox - Learn how we collect, use, and protect your personal information.",
     "/privacy",
     undefined,
-    "2025-12-07" // Matching the "Last updated" date in content
+    "2025-12-07", // Matching the "Last updated" date in content
   );
 
   return (

@@ -1,15 +1,15 @@
 "use client";
 
-import { useState } from "react";
-import Image from "next/image";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { X } from "lucide-react";
+import Image from "next/image";
+import { useState } from "react";
 import {
   Dialog,
   DialogContent,
-  DialogTitle,
   DialogDescription,
+  DialogTitle,
 } from "@/components/ui/dialog";
-import { X } from "lucide-react";
 
 interface ImageZoomProps {
   src: string;
@@ -61,7 +61,6 @@ export function ImageZoom({
               className="w-full h-auto"
             />
           ) : (
-            // eslint-disable-next-line @next/next/no-img-element
             <img src={src} alt={alt} className="w-full h-auto" />
           )}
         </button>
@@ -100,7 +99,6 @@ export function ImageZoom({
                 className="max-w-full max-h-full object-contain"
               />
             ) : (
-              // eslint-disable-next-line @next/next/no-img-element
               <img
                 src={src}
                 alt={alt}

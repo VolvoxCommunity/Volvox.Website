@@ -1,20 +1,20 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import { motion } from "framer-motion";
-import { Button } from "@/components/ui/button";
 import { ArrowUpRight } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useCallback, useMemo, useState } from "react";
+import { Footer } from "@/components/footer";
+import { ProductsNavbar } from "@/components/products/products-navbar";
+import { Button } from "@/components/ui/button";
 import type {
   ProductSortOption,
   ViewMode,
 } from "@/components/ui/filter-controls";
-import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
-import { ProductsNavbar } from "@/components/products/products-navbar";
-import { Footer } from "@/components/footer";
+import type { ExtendedProduct } from "@/lib/types";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
@@ -55,7 +55,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   const allTechStack = useMemo(() => {
     const techSet = new Set<string>();
     products.forEach((product) =>
-      product.techStack.forEach((tech) => techSet.add(tech))
+      product.techStack.forEach((tech) => techSet.add(tech)),
     );
     return Array.from(techSet).sort();
   }, [products]);
@@ -72,14 +72,14 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           product.name.toLowerCase().includes(query) ||
           product.description.toLowerCase().includes(query) ||
           product.tagline.toLowerCase().includes(query) ||
-          product.techStack.some((tech) => tech.toLowerCase().includes(query))
+          product.techStack.some((tech) => tech.toLowerCase().includes(query)),
       );
     }
 
     // Tech stack filter (OR logic)
     if (selectedTech.length > 0) {
       result = result.filter((product) =>
-        selectedTech.some((tech) => product.techStack.includes(tech))
+        selectedTech.some((tech) => product.techStack.includes(tech)),
       );
     }
 
@@ -134,7 +134,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         scroll: false,
       });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   // Handlers
@@ -144,7 +144,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
       setSearchQuery(value);
       updateUrl({ q: value });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleTechToggle = useCallback(
@@ -157,7 +157,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         return newTech;
       });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleClearTech = useCallback(() => {
@@ -170,7 +170,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
       setSortOption(value);
       updateUrl({ sort: value });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleViewModeChange = useCallback(
@@ -179,7 +179,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
       localStorage.setItem(STORAGE_KEY, value);
       updateUrl({ view: value });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleClearAll = useCallback(() => {

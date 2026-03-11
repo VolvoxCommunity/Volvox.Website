@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useRef, useEffect, useCallback } from "react";
 import {
-  MagnifyingGlass,
-  X,
-  List,
-  SquaresFour,
   CaretDown,
+  List,
+  MagnifyingGlass,
   SortAscending,
+  SquaresFour,
+  X,
 } from "@phosphor-icons/react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 
 // Shared types
@@ -116,7 +116,7 @@ export function FilterControls({
         onSearchChange(value);
       }, 300);
     },
-    [onSearchChange]
+    [onSearchChange],
   );
 
   // Close sort dropdown when clicking outside
@@ -183,7 +183,7 @@ export function FilterControls({
                 "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
                 selectedTags.length === 0
                   ? "bg-secondary text-secondary-foreground border-secondary font-medium"
-                  : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
+                  : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted",
               )}
               aria-label="Show all items"
               aria-pressed={selectedTags.length === 0}
@@ -198,7 +198,7 @@ export function FilterControls({
                   "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
                   selectedTags.includes(tag)
                     ? "bg-secondary text-secondary-foreground border-secondary font-medium"
-                    : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted"
+                    : "bg-muted/50 text-muted-foreground border-border hover:border-secondary/50 hover:bg-muted",
                 )}
                 aria-label={`Filter by ${tag}`}
                 aria-pressed={selectedTags.includes(tag)}
@@ -263,7 +263,7 @@ export function FilterControls({
                 <CaretDown
                   className={cn(
                     "h-3 w-3 transition-transform",
-                    sortOpen && "rotate-180"
+                    sortOpen && "rotate-180",
                   )}
                   aria-hidden="true"
                 />
@@ -281,7 +281,7 @@ export function FilterControls({
                       className={cn(
                         "w-full px-4 py-2.5 text-sm text-left hover:bg-muted transition-colors",
                         sortOption === option.value &&
-                          "bg-secondary/10 text-secondary font-medium"
+                          "bg-secondary/10 text-secondary font-medium",
                       )}
                     >
                       {option.label}
@@ -299,7 +299,7 @@ export function FilterControls({
                   "px-3 py-2 transition-colors",
                   viewMode === "grid"
                     ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                 )}
                 aria-label="Grid view"
                 aria-pressed={viewMode === "grid"}
@@ -312,7 +312,7 @@ export function FilterControls({
                   "px-3 py-2 transition-colors",
                   viewMode === "list"
                     ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
                 )}
                 aria-label="List view"
                 aria-pressed={viewMode === "list"}

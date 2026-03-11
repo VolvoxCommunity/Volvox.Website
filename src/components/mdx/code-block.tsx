@@ -1,9 +1,14 @@
 "use client";
 
-import { ReactNode, useState, isValidElement, ReactElement } from "react";
 import { Check, Copy } from "lucide-react";
-import { cn } from "@/lib/utils";
+import {
+  isValidElement,
+  type ReactElement,
+  type ReactNode,
+  useState,
+} from "react";
 import { reportError } from "@/lib/logger";
+import { cn } from "@/lib/utils";
 
 interface CodeBlockProps {
   children: ReactNode;
@@ -17,7 +22,7 @@ interface CodeBlockProps {
  * This is specifically for code blocks where we expect the content to be text.
  */
 function hasStringChildren(
-  value: unknown
+  value: unknown,
 ): value is ReactElement<{ children: string }> {
   return (
     isValidElement(value) &&
@@ -61,7 +66,7 @@ export function CodeBlock({
     if (!text) {
       reportError(
         "CodeBlock: No text content found to copy",
-        new Error("Empty code block content")
+        new Error("Empty code block content"),
       );
       return;
     }

@@ -1,8 +1,8 @@
 "use client";
 
+import { motion } from "framer-motion";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
-import { motion } from "framer-motion";
 
 interface ProductChangelogProps {
   content: string | null;

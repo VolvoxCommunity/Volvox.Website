@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
-import { Toaster } from "@/components/ui/sonner";
-import { Navigation } from "@/components/navigation";
-import { Hero } from "@/components/hero";
-import { Products } from "@/components/products";
-import { Blog } from "@/components/blog";
-import { Mentorship } from "@/components/mentorship";
+import { useCallback, useEffect, useState } from "react";
 import { About } from "@/components/about";
-import { Footer } from "@/components/footer";
 import { AnimatedBackground } from "@/components/animated-background";
-import type { BlogPost, TeamMember, ExtendedProduct } from "@/lib/types";
+import { Blog } from "@/components/blog";
+import { Footer } from "@/components/footer";
+import { Hero } from "@/components/hero";
+import { Mentorship } from "@/components/mentorship";
+import { Navigation } from "@/components/navigation";
+import { Products } from "@/components/products";
+import { Toaster } from "@/components/ui/sonner";
+import type { BlogPost, ExtendedProduct, TeamMember } from "@/lib/types";
 
 interface HomepageClientProps {
   blogPosts: BlogPost[];
@@ -63,7 +63,7 @@ export function HomepageClient({
         }
       }
     },
-    [router]
+    [router],
   );
 
   // Handle URL hash on initial load
@@ -82,7 +82,7 @@ export function HomepageClient({
           animationFrameId = requestAnimationFrame(checkAndScroll);
         } else {
           console.warn(
-            `Volvox: Could not find element with id '${hash}' to scroll to.`
+            `Volvox: Could not find element with id '${hash}' to scroll to.`,
           );
         }
       };

@@ -1,19 +1,18 @@
 "use client";
 
+// Third-party
+import { ArrowUpRight, GithubLogo } from "@phosphor-icons/react";
+import { motion } from "framer-motion";
+import { X } from "lucide-react";
+import Image from "next/image";
 // Framework
 import { useState } from "react";
-import Image from "next/image";
-
-// Third-party
-import { GithubLogo, ArrowUpRight } from "@phosphor-icons/react";
-import { X } from "lucide-react";
-import { motion } from "framer-motion";
 
 // Local
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
-import type { ExtendedProduct } from "@/lib/types";
 import { resolveProductImagePath } from "@/lib/image-utils";
+import type { ExtendedProduct } from "@/lib/types";
 
 interface ProductHeroProps {
   product: ExtendedProduct;
@@ -109,7 +108,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                         window.open(
                           product.links.demo,
                           "_blank",
-                          "noopener,noreferrer"
+                          "noopener,noreferrer",
                         )
                       }
                     >
@@ -126,7 +125,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                         window.open(
                           product.links.github,
                           "_blank",
-                          "noopener,noreferrer"
+                          "noopener,noreferrer",
                         )
                       }
                     >

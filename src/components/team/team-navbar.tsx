@@ -1,12 +1,12 @@
 "use client";
 
-import Link from "next/link";
-import Image from "next/image";
-import { useRouter } from "next/navigation";
 import { ArrowLeft } from "@phosphor-icons/react";
+import Image from "next/image";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import { NAV_ITEMS } from "@/lib/constants";
+import { cn } from "@/lib/utils";
 
 type FilterMode = "all" | "mentors";
 
@@ -78,7 +78,7 @@ export function TeamNavbar({
                     "text-sm font-medium py-2 px-3 rounded-full transition-all duration-300",
                     isActive
                       ? "bg-foreground/5 text-foreground"
-                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5"
+                      : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
                   )}
                 >
                   {item.label}
@@ -103,7 +103,7 @@ export function TeamNavbar({
                   "px-3 md:px-4 py-1.5 text-[10px] md:text-xs font-semibold rounded-full transition-all flex items-center gap-1.5",
                   filterMode === opt.value
                     ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
                 )}
               >
                 <span>{opt.label}</span>
@@ -112,7 +112,7 @@ export function TeamNavbar({
                     "px-1.5 py-0.5 rounded-full text-[9px] md:text-[10px]",
                     filterMode === opt.value
                       ? "bg-primary/10 text-primary"
-                      : "bg-muted-foreground/10 text-muted-foreground"
+                      : "bg-muted-foreground/10 text-muted-foreground",
                   )}
                 >
                   {opt.count}

@@ -1,17 +1,17 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { BlogPost } from "@/lib/types";
-import {
-  type BlogSortOption,
-  type ProductSortOption,
-  type ViewMode,
-} from "@/components/ui/filter-controls";
+import { useCallback, useMemo, useState } from "react";
 import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogCard } from "@/components/blog-card";
 import { Footer } from "@/components/footer";
+import type {
+  BlogSortOption,
+  ProductSortOption,
+  ViewMode,
+} from "@/components/ui/filter-controls";
 import { SITE_NAME } from "@/lib/constants";
+import type { BlogPost } from "@/lib/types";
 
 interface BlogListClientProps {
   posts: BlogPost[];
@@ -66,14 +66,14 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(query))
+          post.tags.some((tag) => tag.toLowerCase().includes(query)),
       );
     }
 
     // Tag filter (OR logic)
     if (selectedTags.length > 0) {
       result = result.filter((post) =>
-        selectedTags.some((tag) => post.tags.includes(tag))
+        selectedTags.some((tag) => post.tags.includes(tag)),
       );
     }
 
@@ -130,7 +130,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         scroll: false,
       });
     },
-    [router, searchParams]
+    [router, searchParams],
   );
 
   // Handlers
@@ -139,7 +139,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       setSearchQuery(value);
       updateUrl({ q: value });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleTagToggle = useCallback(
@@ -152,7 +152,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         return newTags;
       });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleClearTags = useCallback(() => {
@@ -165,7 +165,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       setSortOption(value as BlogSortOption);
       updateUrl({ sort: value as BlogSortOption });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleViewModeChange = useCallback(
@@ -174,7 +174,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       localStorage.setItem(STORAGE_KEY, value);
       updateUrl({ view: value });
     },
-    [updateUrl]
+    [updateUrl],
   );
 
   const handleClearAll = useCallback(() => {

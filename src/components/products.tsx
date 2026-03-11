@@ -1,28 +1,28 @@
 "use client";
 
-import { useMemo, useEffect, useRef } from "react";
-import { useRouter } from "next/navigation";
-import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import {
-  CheckCircle,
-  ArrowUpRight,
   ArrowRight,
+  ArrowUpRight,
+  CheckCircle,
   Globe,
   Tag,
 } from "@phosphor-icons/react";
-import { motion, AnimatePresence } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import type { ExtendedProduct } from "@/lib/types";
-import { resolveProductImagePath } from "@/lib/image-utils";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useMemo, useRef } from "react";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   FilterControls,
   type ProductSortOption,
   type ViewMode,
 } from "@/components/ui/filter-controls";
+import { resolveProductImagePath } from "@/lib/image-utils";
+import type { ExtendedProduct } from "@/lib/types";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -32,7 +32,7 @@ interface ProductsProps {
   onSearchChange?: (value: string) => void;
   sortOption?: ProductSortOption;
   onSortChange?: (
-    value: ProductSortOption | "newest" | "oldest" | "views"
+    value: ProductSortOption | "newest" | "oldest" | "views",
   ) => void;
   viewMode?: ViewMode;
   onViewModeChange?: (value: ViewMode) => void;
@@ -76,7 +76,7 @@ function ProductCard({ product }: ProductCardProps) {
           scale: 1,
           filter: "blur(0px)",
           ease: "power2.out",
-        }
+        },
       );
 
       // Parallax effect for the image
@@ -238,7 +238,7 @@ function ProductCard({ product }: ProductCardProps) {
                       window.open(
                         product.links.demo,
                         "_blank",
-                        "noopener,noreferrer"
+                        "noopener,noreferrer",
                       )
                     }
                   >
@@ -308,7 +308,7 @@ export function Products({
           opacity: 1,
           filter: "blur(0px)",
           ease: "power3.out",
-        }
+        },
       );
     }, sectionRef);
 
@@ -338,7 +338,7 @@ export function Products({
           product.name.toLowerCase().includes(query) ||
           product.description.toLowerCase().includes(query) ||
           product.tagline?.toLowerCase().includes(query) ||
-          product.techStack?.some((tech) => tech.toLowerCase().includes(query))
+          product.techStack?.some((tech) => tech.toLowerCase().includes(query)),
       );
     }
 

@@ -1,8 +1,8 @@
 "use client";
 
-import { Navigation } from "@/components/navigation";
-import { Footer } from "@/components/footer";
 import { useRouter } from "next/navigation";
+import { Footer } from "@/components/footer";
+import { Navigation } from "@/components/navigation";
 
 /**
  * Renders the Terms of Service page with an animated background, top navigation, and footer.

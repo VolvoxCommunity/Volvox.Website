@@ -56,8 +56,8 @@ Volvox combines powerful features with a beautiful, accessible interface:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/volvox.git
-cd volvox
+git clone https://github.com/VolvoxCommunity/Volvox.Website.git
+cd Volvox.Website
 
 # Install dependencies
 pnpm install
@@ -70,25 +70,6 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 
 ---
 
-## **Tech Stack**
-
-| Category       | Technology                                                                         |
-| -------------- | ---------------------------------------------------------------------------------- |
-| **Framework**  | [Next.js 16](https://nextjs.org/) (App Router)                                     |
-| **UI Library** | [React 19](https://react.dev/)                                                     |
-| **Language**   | [TypeScript](https://www.typescriptlang.org/) (strict mode)                        |
-| **Styling**    | [Tailwind CSS v4](https://tailwindcss.com/) with Lightning CSS                     |
-| **Components** | [Radix UI](https://www.radix-ui.com/) primitives                                   |
-| **Animations** | [Framer Motion](https://www.framer.com/motion/)                                    |
-| **Content**    | MDX via `next-mdx-remote`, `rehype-highlight`                                      |
-| **Icons**      | [@phosphor-icons/react](https://phosphoricons.com/), [Lucide](https://lucide.dev/) |
-| **Monitoring** | [Sentry](https://sentry.io/) (error tracking + replay)                             |
-| **Analytics**  | [Vercel Analytics](https://vercel.com/analytics) & Speed Insights                  |
-
-| **Package Manager** | [pnpm](https://pnpm.io/) v10+ |
-
----
-
 ## **Commands**
 
 | Command          | Description                                |
@@ -97,9 +78,9 @@ Open [http://localhost:3000](http://localhost:3000) to view the application.
 | `pnpm build`     | Create production build                    |
 | `pnpm start`     | Start production server                    |
 | `pnpm typecheck` | Run TypeScript type checking               |
-| `pnpm lint`      | Run ESLint                                 |
-| `pnpm test`      | Run unit tests (stub)                      |
-| `pnpm format`    | Format code with Prettier                  |
+| `pnpm lint`      | Lint + format check (Biome)                |
+| `pnpm lint:fix`  | Auto-fix lint + format issues              |
+| `pnpm format`    | Format code with Biome                     |
 
 > **Note:** Pre-commit hooks automatically run: `lint-staged` → `typecheck` → `build`
 
@@ -120,7 +101,7 @@ authorId: "author-id-from-authors-json"
 date: "2024-01-15"
 tags: ["tag1", "tag2"]
 published: true
-banner: /images/your-banner.png
+banner: /images/blog/your-banner.png
 ---
 Your MDX content goes here...
 ```
@@ -154,7 +135,7 @@ content/products/
     "github": "https://github.com/user/repo",
     "demo": "https://demo-url.com"
   },
-  "screenshots": ["hero.png"],
+  "screenshots": ["/images/product/your-product/image.png"],
   "faq": [
     {
       "question": "Common question?",
@@ -164,13 +145,13 @@ content/products/
 }
 ```
 
-### **Authors & Mentors**
+### **Authors & Team**
 
 Edit the respective JSON files in `content/`:
 
-- `authors.json` — Author profiles
-- `mentors.json` — Mentor profiles
-- `mentees.json` — Mentee profiles
+- `authors.json` — Author profiles (referenced by blog posts)
+- `team.json` — Team member profiles
+- `products.json` — Product catalog
 
 ---
 
@@ -182,6 +163,6 @@ This project is private and not licensed for reuse.
 
 <div align="center">
 
-**Built with ❤️ for the developer community**
+**Built with ❤️ by [Volvox](https://volvox.dev)**
 
 </div>

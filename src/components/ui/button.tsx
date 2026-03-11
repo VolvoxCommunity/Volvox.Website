@@ -1,8 +1,8 @@
 "use client";
 
-import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
+import * as React from "react";
 import { cn } from "@/lib/utils";
 
 // --- 1. TUNED CONSTANTS (Physics Configuration) ---
@@ -64,7 +64,7 @@ const useMaterialRipple = (disabled = false) => {
     const maxDim = Math.max(height, width);
     const softEdgeSize = Math.max(
       SOFT_EDGE_CONTAINER_RATIO * maxDim,
-      SOFT_EDGE_MINIMUM_SIZE
+      SOFT_EDGE_MINIMUM_SIZE,
     );
 
     const initialSize = Math.floor(maxDim * INITIAL_ORIGIN_SCALE);
@@ -137,7 +137,7 @@ const useMaterialRipple = (disabled = false) => {
         duration: PRESS_GROW_MS,
         easing: EASING_STANDARD,
         fill: ANIMATION_FILL,
-      }
+      },
     );
   };
 
@@ -261,7 +261,7 @@ const Ripple = React.forwardRef<
       <div
         className={cn(
           "absolute inset-0 bg-current transition-opacity duration-[15ms] linear",
-          hovered ? "opacity-[0.08]" : "opacity-0"
+          hovered ? "opacity-[0.08]" : "opacity-0",
         )}
       />
       <div
@@ -323,12 +323,11 @@ const buttonVariants = cva(
       size: "default",
       shape: "round",
     },
-  }
+  },
 );
 
 export interface ButtonProps
-  extends
-    React.ButtonHTMLAttributes<HTMLButtonElement>,
+  extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean;
   noRipple?: boolean;
@@ -350,7 +349,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
       children,
       ...props
     },
-    ref
+    ref,
   ) => {
     // Optimization: If both visual effects are disabled, disable the hook logic
     const isRippleLogicDisabled = props.disabled || (noRipple && noMorph);
@@ -429,7 +428,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         </span>
       </button>
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

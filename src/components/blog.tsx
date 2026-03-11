@@ -1,25 +1,24 @@
 "use client";
 
-import { useMemo, useRef, useEffect } from "react";
-import Link from "next/link";
-import { ChevronRight } from "lucide-react";
 import {
-  motion,
   AnimatePresence,
+  motion,
   useScroll,
   useTransform,
 } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-import { Button } from "@/components/ui/button";
+import { ChevronRight } from "lucide-react";
+import Link from "next/link";
+import { useEffect, useMemo, useRef } from "react";
 import { BlogCard } from "@/components/blog-card";
+import { Button } from "@/components/ui/button";
 import {
-  FilterControls,
   type BlogSortOption,
+  FilterControls,
   type ViewMode,
 } from "@/components/ui/filter-controls";
-import { BlogPost } from "@/lib/types";
+import type { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
 // Register ScrollTrigger
@@ -64,7 +63,7 @@ export function Blog({
   const backgroundOpacity = useTransform(
     scrollYProgress,
     [0, 0.2, 0.8, 1],
-    [0.3, 1, 1, 0.3]
+    [0.3, 1, 1, 0.3],
   );
 
   // Filter and sort posts
@@ -77,7 +76,7 @@ export function Blog({
         (post) =>
           post.title.toLowerCase().includes(query) ||
           post.excerpt.toLowerCase().includes(query) ||
-          post.tags.some((tag) => tag.toLowerCase().includes(query))
+          post.tags.some((tag) => tag.toLowerCase().includes(query)),
       );
     }
 
@@ -87,7 +86,6 @@ export function Blog({
           return new Date(a.date).getTime() - new Date(b.date).getTime();
         case "views":
           return b.views - a.views;
-        case "newest":
         default:
           return new Date(b.date).getTime() - new Date(a.date).getTime();
       }
@@ -136,14 +134,14 @@ export function Blog({
               scale: 1,
               filter: "blur(0px)",
               ease: "power2.out",
-            }
+            },
           );
         });
       }
     }, containerRef); // Scope to container
 
     return () => ctx.revert(); // Cleanup
-  }, [filteredPosts, viewMode]); // Dependencies kept for initial render timing
+  }, []); // Dependencies kept for initial render timing
 
   return (
     <section
@@ -276,7 +274,7 @@ export function Blog({
             "grid gap-6",
             viewMode === "grid"
               ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
-              : "grid-cols-1"
+              : "grid-cols-1",
           )}
         >
           {filteredPosts.map((post, index) => (
@@ -284,7 +282,7 @@ export function Blog({
               key={post.id}
               className={cn(
                 "blog-card-item gsap-will-animate",
-                !enableFilters && index === 2 && "hidden lg:block" // Hide 3rd item on mobile/tablet, show on lg+
+                !enableFilters && index === 2 && "hidden lg:block", // Hide 3rd item on mobile/tablet, show on lg+
               )}
             >
               <BlogCard post={post} viewMode={viewMode} />
