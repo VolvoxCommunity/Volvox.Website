@@ -12,6 +12,7 @@ import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
 import { Footer } from "@/components/footer";
 import { ViewTracker } from "@/components/blog/view-tracker";
+import { RelatedPosts } from "@/components/blog/related-posts";
 import { generateArticleSchema } from "@/lib/structured-data";
 import { safeJsonLdSerialize, SITE_NAME } from "@/lib/constants";
 
@@ -97,6 +98,17 @@ export default async function BlogPostPage({
   } catch {
     notFound();
   }
+
+  const allPosts = (await getAllPosts()).map(
+    ({ slug, title, excerpt, banner, tags, date }) => ({
+      slug,
+      title,
+      excerpt,
+      banner,
+      tags,
+      date,
+    })
+  );
 
   return (
     <div className="min-h-screen relative flex flex-col bg-background">
@@ -258,6 +270,8 @@ export default async function BlogPostPage({
                 }}
               />
             </div>
+
+            <RelatedPosts currentSlug={slug} posts={allPosts} />
           </BlogContentWrapper>
         </main>
       </div>
