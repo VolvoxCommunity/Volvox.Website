@@ -1,0 +1,8 @@
+allowBuilds:
+  '@sentry/cli': true
+  esbuild: true
+  sharp: true
+
+overrides:
+  electron-to-chromium: 1.5.321
+  enhanced-resolve: 5.20.1
