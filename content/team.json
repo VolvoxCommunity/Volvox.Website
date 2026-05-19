@@ -199,5 +199,35 @@
     "linkedinUrl": "",
     "email": "mohsin@volvox.dev",
     "isHireable": false
+  },
+  {
+    "id": "Madhurima",
+    "slug": "Madhurima-Gupta",
+    "name": "Madhurima Gupta",
+    "role": "Digital Marketing Specialist",
+    "tagline": "Helping Volvox Grow Online with Smart, Creative Marketing.",
+    "bio": "Madhurima is a Digital Marketing Specialist at Volvox. She is a recent graduate honing her creative and marketing skills. She has a passion for design, comes from a VFX background, and brings both creative and analytical skills to her work.",
+    "avatar": "https://github.com/madhurimagupta11.png",
+    "expertise": [
+      "Digital Marketing",
+      "Social Media Marketing",
+      "Content Creation",
+      "Graphic Design",
+      "Web Design",
+      "Content Writing",
+      "Content Strategy",
+      "Brand Building",
+      "Paid Ads",
+      "Analytics",
+      "SEO",
+      "Email Marketing",
+      "Visual Design",
+      "Creative Direction"
+    ],
+    "type": "Marketer",
+    "githubUrl": "https://github.com/madhurimagupta11",
+    "linkedinUrl": "https://www.linkedin.com/in/madhurimagupta11",
+    "email": "madhurima@volvox.dev",
+    "isHireable": false
   }
 ]
