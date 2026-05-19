@@ -58,6 +58,8 @@ export function TeamCard({ member }: TeamCardProps) {
               "absolute top-0 right-0 border-none text-[10px] px-2 h-5 font-bold uppercase",
               member.type === "mentor" && "bg-primary text-primary-foreground",
               member.type === "builder" && "bg-accent text-accent-foreground",
+              member.type === "marketer" &&
+                "bg-secondary text-secondary-foreground",
               member.type === "mentee" &&
                 "bg-secondary text-secondary-foreground",
             )}

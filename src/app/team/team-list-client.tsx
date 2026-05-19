@@ -54,7 +54,8 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
               Our Team
             </h1>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              Meet the mentors and builders who make up the Volvox community.
+              Meet the mentors, builders, and marketers who make up the Volvox
+              community.
             </p>
           </header>
 

@@ -59,3 +59,5 @@ import type { TeamMemberSchema } from "./schemas";
 export type TeamMember = z.infer<typeof TeamMemberSchema>;
 export type Mentor = Extract<TeamMember, { type: "mentor" }>;
 export type Mentee = Extract<TeamMember, { type: "mentee" }>;
+export type Builder = Extract<TeamMember, { type: "builder" }>;
+export type Marketer = Extract<TeamMember, { type: "marketer" }>;

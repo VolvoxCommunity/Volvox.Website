@@ -151,7 +151,7 @@
         "url": "https://21st.dev/easemize"
       }
     ],
-    "type": "builder",
+    "type": "marketer",
     "githubUrl": "https://github.com/rabden",
     "linkedinUrl": "",
     "email": "easemize@gmail.com",
@@ -201,8 +201,8 @@
     "isHireable": false
   },
   {
-    "id": "Madhurima",
-    "slug": "Madhurima-Gupta",
+    "id": "madhurima",
+    "slug": "madhurima-gupta",
     "name": "Madhurima Gupta",
     "role": "Digital Marketing Specialist",
     "tagline": "Helping Volvox Grow Online with Smart, Creative Marketing.",
@@ -224,7 +224,7 @@
       "Visual Design",
       "Creative Direction"
     ],
-    "type": "Marketer",
+    "type": "marketer",
     "githubUrl": "https://github.com/madhurimagupta11",
     "linkedinUrl": "https://www.linkedin.com/in/madhurimagupta11",
     "email": "madhurima@volvox.dev",
