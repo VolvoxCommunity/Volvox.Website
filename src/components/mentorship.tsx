@@ -80,8 +80,8 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
         </h2>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-          Meet the mentors and builders who make up the Volvox ecosystem. Join
-          our community to learn, grow, and build together.
+          Meet the mentors, builders, and marketers who make up the Volvox
+          ecosystem. Join our community to learn, grow, and build together.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
@@ -292,6 +292,13 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
               >
                 BUILDER
               </Badge>
+            ) : profile.type === "marketer" ? (
+              <Badge
+                variant="secondary"
+                className="bg-secondary/20 text-secondary border-secondary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
+              >
+                MARKETER
+              </Badge>
             ) : (
               <Badge
                 variant="outline"
@@ -300,7 +307,7 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
                 MENTEE
               </Badge>
             )}
-            {(profile.type === "mentor" || profile.type === "builder") && (
+            {profile.type !== "mentee" && (
               <span className="text-[8px] md:text-[10px] text-muted-foreground truncate max-w-[80px] md:max-w-[120px]">
                 {profile.role}
               </span>

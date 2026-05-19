@@ -169,27 +169,26 @@ export function TeamMemberDetailClient({
               </div>
             )}
 
-            {/* Expertise (for mentors and builders) */}
-            {(member.type === "mentor" || member.type === "builder") &&
-              member.expertise && (
-                <div className="space-y-6" data-testid="expertise-section">
-                  <h2 className="text-2xl font-bold font-[family-name:var(--font-jetbrains-mono)]">
-                    Expertise
-                  </h2>
-                  <div className="flex flex-wrap gap-3">
-                    {member.expertise.map((skill) => (
-                      <Badge
-                        key={skill}
-                        variant="outline"
-                        className="px-5 py-2 text-sm rounded-full border-border/60 font-medium bg-muted/30"
-                        data-testid="expertise-badge"
-                      >
-                        {skill}
-                      </Badge>
-                    ))}
-                  </div>
+            {/* Expertise (for professional member types) */}
+            {member.type !== "mentee" && member.expertise && (
+              <div className="space-y-6" data-testid="expertise-section">
+                <h2 className="text-2xl font-bold font-[family-name:var(--font-jetbrains-mono)]">
+                  Expertise
+                </h2>
+                <div className="flex flex-wrap gap-3">
+                  {member.expertise.map((skill) => (
+                    <Badge
+                      key={skill}
+                      variant="outline"
+                      className="px-5 py-2 text-sm rounded-full border-border/60 font-medium bg-muted/30"
+                      data-testid="expertise-badge"
+                    >
+                      {skill}
+                    </Badge>
+                  ))}
                 </div>
-              )}
+              </div>
+            )}
           </div>
 
           {/* Projects Section */}

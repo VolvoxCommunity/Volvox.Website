@@ -1,5 +1,10 @@
 import { z } from "zod";
 
+const slugSchema = z
+  .string()
+  .min(1)
+  .regex(/^[a-z0-9-]+$/);
+
 /**
  * Author schema matching the Author interface
  */
@@ -56,7 +61,7 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("mentor"),
     id: z.string(),
-    slug: z.string(),
+    slug: slugSchema,
     name: z.string(),
     avatar: z.string(),
     role: z.string(),
@@ -73,7 +78,7 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("mentee"),
     id: z.string(),
-    slug: z.string(),
+    slug: slugSchema,
     name: z.string(),
     avatar: z.string(),
     tagline: z.string(),
@@ -89,7 +94,24 @@ export const TeamMemberSchema = z.discriminatedUnion("type", [
   z.object({
     type: z.literal("builder"),
     id: z.string(),
-    slug: z.string(),
+    slug: slugSchema,
+    name: z.string(),
+    avatar: z.string(),
+    role: z.string(),
+    tagline: z.string(),
+    bio: z.string(),
+    expertise: z.array(z.string()),
+    projects: z.array(TeamMemberProjectSchema).optional(),
+    updatedAt: z.string().optional(),
+    githubUrl: z.string().optional(),
+    linkedinUrl: z.string().optional(),
+    email: z.string().optional(),
+    isHireable: z.boolean().optional(),
+  }),
+  z.object({
+    type: z.literal("marketer"),
+    id: z.string(),
+    slug: slugSchema,
     name: z.string(),
     avatar: z.string(),
     role: z.string(),
@@ -155,11 +177,7 @@ export const extendedProductSchema = z.object({
   id: z.string().uuid(),
   name: z.string().min(1),
   type: z.string().optional(),
-  slug: z
-    .string()
-    .min(1)
-    // Only allows lowercase alphanumeric characters and hyphens
-    .regex(/^[a-z0-9-]+$/),
+  slug: slugSchema,
   tagline: z.string().min(1),
   description: z.string().min(1),
   longDescription: z.string().min(1),

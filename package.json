@@ -10,7 +10,7 @@
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No tests specified\" && exit 0",
+    "test": "tsx --test tests/**/*.test.ts",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "prepare": "husky"
