@@ -13,10 +13,11 @@ import { ProductsArraySchema } from "@/lib/schemas";
 import type { BlogPost, Product } from "@/lib/types";
 
 const MAX_BLOG_POSTS_IN_LLM_TXT = 10;
-const CACHE_CONTROL_MAX_AGE_SECONDS = 3600;
 
 export const dynamic = "force-static";
-export const revalidate = 3600;
+export const revalidate = 86400;
+
+const LLM_TXT_REVALIDATE_SECONDS = revalidate;
 
 /**
  * Schema for validating blog posts used in llms.txt generation.
@@ -146,7 +147,7 @@ export async function GET(): Promise<Response> {
     // Use Promise.allSettled for resilience against partial failures
     const [productsResult, postsResult] = await Promise.allSettled([
       Promise.resolve(getAllProducts()),
-      getAllPosts(),
+      getAllPosts({ includeViews: false }),
     ]);
 
     // Extract products with validation and error reporting
@@ -192,7 +193,7 @@ export async function GET(): Promise<Response> {
     return new Response(content, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": `public, max-age=${CACHE_CONTROL_MAX_AGE_SECONDS}, s-maxage=${CACHE_CONTROL_MAX_AGE_SECONDS}`,
+        "Cache-Control": `public, max-age=${LLM_TXT_REVALIDATE_SECONDS}, s-maxage=${LLM_TXT_REVALIDATE_SECONDS}`,
       },
     });
   } catch (error) {

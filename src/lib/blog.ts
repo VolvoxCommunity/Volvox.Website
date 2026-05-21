@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import matter from "gray-matter";
+import { isBlogPostPublishable, parseBlogPublishDate } from "./blog-dates";
 import { getAuthorById } from "./content";
 import { reportError } from "./logger";
 import { BlogPostFrontmatterSchema } from "./schemas";
@@ -12,13 +13,12 @@ import {
   incrementPostViews as incrementViews,
 } from "./views";
 
-type BlogPostFrontmatter = ReturnType<typeof BlogPostFrontmatterSchema.parse>;
-type PublishDate = {
-  isDateOnly: boolean;
-  timestamp: number;
-};
+export { isBlogPostPublishable } from "./blog-dates";
 
-const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+type BlogPostFrontmatter = ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+type GetAllPostsOptions = {
+  includeViews?: boolean;
+};
 
 class PostUnavailableError extends Error {
   constructor(slug: string) {
@@ -37,58 +37,16 @@ function calculateReadingTime(content: string): number {
   return Math.max(1, Math.round(words / wordsPerMinute));
 }
 
-function parsePublishDate(date: string): PublishDate | null {
-  const trimmedDate = date.trim();
-  const dateOnlyMatch = DATE_ONLY_PATTERN.exec(trimmedDate);
-
-  if (!dateOnlyMatch) {
-    const timestamp = Date.parse(trimmedDate);
-    return Number.isFinite(timestamp) ? { isDateOnly: false, timestamp } : null;
-  }
-
-  const [, yearValue, monthValue, dayValue] = dateOnlyMatch;
-  if (!yearValue || !monthValue || !dayValue) {
-    return null;
-  }
-
-  const year = Number.parseInt(yearValue, 10);
-  const month = Number.parseInt(monthValue, 10);
-  const day = Number.parseInt(dayValue, 10);
-  const timestamp = Date.UTC(year, month - 1, day);
-  const parsedDate = new Date(timestamp);
-  const isValidDate =
-    parsedDate.getUTCFullYear() === year &&
-    parsedDate.getUTCMonth() === month - 1 &&
-    parsedDate.getUTCDate() === day;
-
-  return isValidDate ? { isDateOnly: true, timestamp } : null;
-}
-
-function getCurrentPublishTimestamp(now: Date, isDateOnly: boolean): number {
-  if (!isDateOnly) {
-    return now.getTime();
-  }
-
-  return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
-}
-
-function isPostPublishable(
+function isContentPostPublishable(
   frontmatter: BlogPostFrontmatter,
   now = new Date(),
 ): boolean {
-  if (!frontmatter.published) {
+  try {
+    return isBlogPostPublishable(frontmatter, now);
+  } catch (error) {
+    reportError(`Invalid blog post date: ${frontmatter.slug}`, error);
     return false;
   }
-
-  const publishDate = parsePublishDate(frontmatter.date);
-  if (!publishDate) {
-    return false;
-  }
-
-  return (
-    publishDate.timestamp <=
-    getCurrentPublishTimestamp(now, publishDate.isDateOnly)
-  );
 }
 
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
@@ -98,8 +56,12 @@ const BLOG_DIR = path.join(process.cwd(), "content", "blog");
  *
  * @returns A list of published posts whose scheduled date has been met.
  */
-export async function getAllPosts(): Promise<BlogPost[]> {
+export async function getAllPosts(
+  options: GetAllPostsOptions = {},
+): Promise<BlogPost[]> {
   try {
+    const includeViews = options.includeViews ?? true;
+
     // Read all MDX files from content/blog
     const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
     const now = new Date();
@@ -114,29 +76,33 @@ export async function getAllPosts(): Promise<BlogPost[]> {
     }> = [];
 
     for (const file of files) {
-      const filePath = path.join(BLOG_DIR, file);
-      const fileContents = fs.readFileSync(filePath, "utf8");
+      try {
+        const filePath = path.join(BLOG_DIR, file);
+        const fileContents = fs.readFileSync(filePath, "utf8");
 
-      // Parse frontmatter
-      const { data, content } = matter(fileContents);
+        // Parse frontmatter
+        const { data, content } = matter(fileContents);
 
-      // Validate frontmatter with Zod
-      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+        // Validate frontmatter with Zod
+        const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include posts that are published and past their scheduled date
-      if (!isPostPublishable(frontmatter, now)) {
-        continue;
+        // Only include posts that are published and past their scheduled date
+        if (!isContentPostPublishable(frontmatter, now)) {
+          continue;
+        }
+
+        // Get author details
+        const author = getAuthorById(frontmatter.authorId);
+
+        postsData.push({ frontmatter, content, author });
+      } catch (error) {
+        reportError(`Failed to load blog post file: ${file}`, error);
       }
-
-      // Get author details
-      const author = getAuthorById(frontmatter.authorId);
-
-      postsData.push({ frontmatter, content, author });
     }
 
     // Fetch views for all posts in batch
     const slugs = postsData.map((p) => p.frontmatter.slug);
-    const viewsMap = await getPostViewsBatch(slugs);
+    const viewsMap = includeViews ? await getPostViewsBatch(slugs) : new Map();
 
     const posts: BlogPost[] = postsData.map(
       ({ frontmatter, content, author }) => ({
@@ -157,7 +123,9 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
     // Sort by date (newest first)
     posts.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      (a, b) =>
+        parseBlogPublishDate(b.date).timestamp -
+        parseBlogPublishDate(a.date).timestamp,
     );
 
     return posts;
@@ -196,7 +164,7 @@ export async function getPostBySlug(slug: string) {
     // Validate frontmatter
     const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-    if (!isPostPublishable(frontmatter)) {
+    if (!isBlogPostPublishable(frontmatter)) {
       throw new PostUnavailableError(slug);
     }
 
@@ -245,16 +213,20 @@ export async function getPostSlugs(): Promise<string[]> {
     const slugs: string[] = [];
 
     for (const file of files) {
-      const filePath = path.join(BLOG_DIR, file);
-      const fileContents = fs.readFileSync(filePath, "utf8");
-      const { data } = matter(fileContents);
+      try {
+        const filePath = path.join(BLOG_DIR, file);
+        const fileContents = fs.readFileSync(filePath, "utf8");
+        const { data } = matter(fileContents);
 
-      // Validate frontmatter
-      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+        // Validate frontmatter
+        const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include posts that are published and past their scheduled date
-      if (isPostPublishable(frontmatter, now)) {
-        slugs.push(frontmatter.slug);
+        // Only include posts that are published and past their scheduled date
+        if (isContentPostPublishable(frontmatter, now)) {
+          slugs.push(frontmatter.slug);
+        }
+      } catch (error) {
+        reportError(`Failed to load blog post slug from file: ${file}`, error);
       }
     }
 

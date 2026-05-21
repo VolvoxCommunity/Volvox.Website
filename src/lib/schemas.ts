@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { isValidBlogPublishDate } from "./blog-dates";
 
 const slugSchema = z
   .string()
@@ -24,7 +25,10 @@ export const BlogPostFrontmatterSchema = z.object({
   slug: z.string(),
   excerpt: z.string(),
   authorId: z.string(),
-  date: z.string(),
+  date: z.string().refine(isValidBlogPublishDate, {
+    message:
+      "Date must be YYYY-MM-DD or an ISO datetime with Z or an explicit timezone offset.",
+  }),
   tags: z.array(z.string()),
   published: z.boolean(),
   banner: z.string().optional(),
