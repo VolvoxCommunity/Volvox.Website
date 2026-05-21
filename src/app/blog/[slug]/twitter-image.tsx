@@ -3,6 +3,7 @@ import { generateBlogPostSocialImage, getLogoData } from "@/lib/social-images";
 
 // Use Node.js runtime to access file system
 export const runtime = "nodejs";
+export const revalidate = 3600;
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
 export const alt = "Volvox Blog Post";

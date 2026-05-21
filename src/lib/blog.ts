@@ -12,6 +12,21 @@ import {
   incrementPostViews as incrementViews,
 } from "./views";
 
+type BlogPostFrontmatter = ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+type PublishDate = {
+  isDateOnly: boolean;
+  timestamp: number;
+};
+
+const DATE_ONLY_PATTERN = /^(\d{4})-(\d{2})-(\d{2})$/;
+
+class PostUnavailableError extends Error {
+  constructor(slug: string) {
+    super(`Post not found: ${slug}`);
+    this.name = "PostUnavailableError";
+  }
+}
+
 /**
  * Calculates estimated reading time based on word count.
  * Returns a whole number of minutes, minimum 1.
@@ -22,23 +37,78 @@ function calculateReadingTime(content: string): number {
   return Math.max(1, Math.round(words / wordsPerMinute));
 }
 
+function parsePublishDate(date: string): PublishDate | null {
+  const trimmedDate = date.trim();
+  const dateOnlyMatch = DATE_ONLY_PATTERN.exec(trimmedDate);
+
+  if (!dateOnlyMatch) {
+    const timestamp = Date.parse(trimmedDate);
+    return Number.isFinite(timestamp) ? { isDateOnly: false, timestamp } : null;
+  }
+
+  const [, yearValue, monthValue, dayValue] = dateOnlyMatch;
+  if (!yearValue || !monthValue || !dayValue) {
+    return null;
+  }
+
+  const year = Number.parseInt(yearValue, 10);
+  const month = Number.parseInt(monthValue, 10);
+  const day = Number.parseInt(dayValue, 10);
+  const timestamp = Date.UTC(year, month - 1, day);
+  const parsedDate = new Date(timestamp);
+  const isValidDate =
+    parsedDate.getUTCFullYear() === year &&
+    parsedDate.getUTCMonth() === month - 1 &&
+    parsedDate.getUTCDate() === day;
+
+  return isValidDate ? { isDateOnly: true, timestamp } : null;
+}
+
+function getCurrentPublishTimestamp(now: Date, isDateOnly: boolean): number {
+  if (!isDateOnly) {
+    return now.getTime();
+  }
+
+  return Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate());
+}
+
+function isPostPublishable(
+  frontmatter: BlogPostFrontmatter,
+  now = new Date(),
+): boolean {
+  if (!frontmatter.published) {
+    return false;
+  }
+
+  const publishDate = parsePublishDate(frontmatter.date);
+  if (!publishDate) {
+    return false;
+  }
+
+  return (
+    publishDate.timestamp <=
+    getCurrentPublishTimestamp(now, publishDate.isDateOnly)
+  );
+}
+
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 /**
- * Fetches all published blog posts ordered by date (newest first).
+ * Fetches all available blog posts ordered by date (newest first).
  *
- * @returns A list of published `BlogPost` objects.
+ * @returns A list of published posts whose scheduled date has been met.
  */
 export async function getAllPosts(): Promise<BlogPost[]> {
   try {
     // Read all MDX files from content/blog
     const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+    const now = new Date();
 
     // Simulate async operation
     await Promise.resolve();
 
     const postsData: Array<{
-      frontmatter: ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+      frontmatter: BlogPostFrontmatter;
       content: string;
       author: ReturnType<typeof getAuthorById>;
     }> = [];
@@ -53,8 +123,8 @@ export async function getAllPosts(): Promise<BlogPost[]> {
       // Validate frontmatter with Zod
       const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include published posts
-      if (!frontmatter.published) {
+      // Only include posts that are published and past their scheduled date
+      if (!isPostPublishable(frontmatter, now)) {
         continue;
       }
 
@@ -117,7 +187,7 @@ export async function getPostBySlug(slug: string) {
     const filePath = path.join(BLOG_DIR, `${validSlug}.mdx`);
 
     if (!fs.existsSync(filePath)) {
-      throw new Error(`Post not found: ${slug}`);
+      throw new PostUnavailableError(slug);
     }
 
     const fileContents = fs.readFileSync(filePath, "utf8");
@@ -125,6 +195,10 @@ export async function getPostBySlug(slug: string) {
 
     // Validate frontmatter
     const frontmatter = BlogPostFrontmatterSchema.parse(data);
+
+    if (!isPostPublishable(frontmatter)) {
+      throw new PostUnavailableError(slug);
+    }
 
     // Get author details
     const author = getAuthorById(frontmatter.authorId);
@@ -148,20 +222,25 @@ export async function getPostBySlug(slug: string) {
       readingTime: calculateReadingTime(content),
     };
   } catch (error) {
+    if (error instanceof PostUnavailableError) {
+      throw error;
+    }
+
     reportError(`Failed to fetch post: ${slug}`, error);
     throw new Error(`Post not found: ${slug}`);
   }
 }
 
 /**
- * Retrieves all published blog slugs.
+ * Retrieves all available blog slugs.
  *
- * @returns Array of slug strings.
+ * @returns Slugs for published posts whose scheduled date has been met.
  */
 export async function getPostSlugs(): Promise<string[]> {
   try {
     await Promise.resolve();
     const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+    const now = new Date();
 
     const slugs: string[] = [];
 
@@ -173,8 +252,8 @@ export async function getPostSlugs(): Promise<string[]> {
       // Validate frontmatter
       const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include published posts
-      if (frontmatter.published) {
+      // Only include posts that are published and past their scheduled date
+      if (isPostPublishable(frontmatter, now)) {
         slugs.push(frontmatter.slug);
       }
     }

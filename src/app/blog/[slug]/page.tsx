@@ -16,6 +16,9 @@ import { SITE_NAME, safeJsonLdSerialize } from "@/lib/constants";
 import { mdxComponents } from "@/lib/mdx-components";
 import { generateArticleSchema } from "@/lib/structured-data";
 
+export const dynamicParams = true;
+export const revalidate = 3600;
+
 /**
  * Collects all blog post slugs to supply route parameters for static generation.
  *
@@ -83,21 +86,16 @@ export default async function BlogPostPage({
 }) {
   const { slug } = await params;
 
-  let frontmatter;
-  let content;
-  let views: number;
-  let readingTime: number;
+  let post: Awaited<ReturnType<typeof getPostBySlug>>;
 
   try {
-    const post = await getPostBySlug(slug);
-    frontmatter = post.frontmatter;
-    content = post.content;
-    views = post.views;
-    // Normalize to whole minutes, minimum 1
-    readingTime = Math.max(1, Math.round(post.readingTime));
+    post = await getPostBySlug(slug);
   } catch {
     notFound();
   }
+
+  const { frontmatter, content, views } = post;
+  const readingTime = Math.max(1, Math.round(post.readingTime));
 
   const allPosts = (await getAllPosts()).map(
     ({ slug, title, excerpt, banner, tags, date }) => ({

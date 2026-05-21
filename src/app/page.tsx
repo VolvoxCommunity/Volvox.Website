@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 /**
  * Renders the homepage server component with resilient data fetching.
  */
