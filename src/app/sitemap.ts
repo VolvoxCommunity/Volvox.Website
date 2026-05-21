@@ -5,6 +5,7 @@ import { getAllExtendedProducts, getAllTeamMembers } from "@/lib/content";
 
 // Force Node.js runtime since blog.ts uses fs/path APIs
 export const runtime = "nodejs";
+export const revalidate = 3600;
 
 /**
  * Generates a dynamic sitemap for search engine crawlers.

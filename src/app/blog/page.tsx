@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 3600;
+
 /**
  * Server component for the blog landing page.
  * Fetches all published posts and passes them to the client component for filtering.

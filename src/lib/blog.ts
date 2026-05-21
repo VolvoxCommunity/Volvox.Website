@@ -1,6 +1,7 @@
 import * as fs from "node:fs";
 import * as path from "node:path";
 import matter from "gray-matter";
+import { isBlogPostPublishable, parseBlogPublishDate } from "./blog-dates";
 import { getAuthorById } from "./content";
 import { reportError } from "./logger";
 import { BlogPostFrontmatterSchema } from "./schemas";
@@ -12,6 +13,20 @@ import {
   incrementPostViews as incrementViews,
 } from "./views";
 
+export { isBlogPostPublishable } from "./blog-dates";
+
+type BlogPostFrontmatter = ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+type GetAllPostsOptions = {
+  includeViews?: boolean;
+};
+
+class PostUnavailableError extends Error {
+  constructor(slug: string) {
+    super(`Post not found: ${slug}`);
+    this.name = "PostUnavailableError";
+  }
+}
+
 /**
  * Calculates estimated reading time based on word count.
  * Returns a whole number of minutes, minimum 1.
@@ -22,51 +37,72 @@ function calculateReadingTime(content: string): number {
   return Math.max(1, Math.round(words / wordsPerMinute));
 }
 
+function isContentPostPublishable(
+  frontmatter: BlogPostFrontmatter,
+  now = new Date(),
+): boolean {
+  try {
+    return isBlogPostPublishable(frontmatter, now);
+  } catch (error) {
+    reportError(`Invalid blog post date: ${frontmatter.slug}`, error);
+    return false;
+  }
+}
+
 const BLOG_DIR = path.join(process.cwd(), "content", "blog");
 
 /**
- * Fetches all published blog posts ordered by date (newest first).
+ * Fetches all available blog posts ordered by date (newest first).
  *
- * @returns A list of published `BlogPost` objects.
+ * @returns A list of published posts whose scheduled date has been met.
  */
-export async function getAllPosts(): Promise<BlogPost[]> {
+export async function getAllPosts(
+  options: GetAllPostsOptions = {},
+): Promise<BlogPost[]> {
   try {
+    const includeViews = options.includeViews ?? true;
+
     // Read all MDX files from content/blog
     const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+    const now = new Date();
 
     // Simulate async operation
     await Promise.resolve();
 
     const postsData: Array<{
-      frontmatter: ReturnType<typeof BlogPostFrontmatterSchema.parse>;
+      frontmatter: BlogPostFrontmatter;
       content: string;
       author: ReturnType<typeof getAuthorById>;
     }> = [];
 
     for (const file of files) {
-      const filePath = path.join(BLOG_DIR, file);
-      const fileContents = fs.readFileSync(filePath, "utf8");
+      try {
+        const filePath = path.join(BLOG_DIR, file);
+        const fileContents = fs.readFileSync(filePath, "utf8");
 
-      // Parse frontmatter
-      const { data, content } = matter(fileContents);
+        // Parse frontmatter
+        const { data, content } = matter(fileContents);
 
-      // Validate frontmatter with Zod
-      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+        // Validate frontmatter with Zod
+        const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include published posts
-      if (!frontmatter.published) {
-        continue;
+        // Only include posts that are published and past their scheduled date
+        if (!isContentPostPublishable(frontmatter, now)) {
+          continue;
+        }
+
+        // Get author details
+        const author = getAuthorById(frontmatter.authorId);
+
+        postsData.push({ frontmatter, content, author });
+      } catch (error) {
+        reportError(`Failed to load blog post file: ${file}`, error);
       }
-
-      // Get author details
-      const author = getAuthorById(frontmatter.authorId);
-
-      postsData.push({ frontmatter, content, author });
     }
 
     // Fetch views for all posts in batch
     const slugs = postsData.map((p) => p.frontmatter.slug);
-    const viewsMap = await getPostViewsBatch(slugs);
+    const viewsMap = includeViews ? await getPostViewsBatch(slugs) : new Map();
 
     const posts: BlogPost[] = postsData.map(
       ({ frontmatter, content, author }) => ({
@@ -87,7 +123,9 @@ export async function getAllPosts(): Promise<BlogPost[]> {
 
     // Sort by date (newest first)
     posts.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime(),
+      (a, b) =>
+        parseBlogPublishDate(b.date).timestamp -
+        parseBlogPublishDate(a.date).timestamp,
     );
 
     return posts;
@@ -117,7 +155,7 @@ export async function getPostBySlug(slug: string) {
     const filePath = path.join(BLOG_DIR, `${validSlug}.mdx`);
 
     if (!fs.existsSync(filePath)) {
-      throw new Error(`Post not found: ${slug}`);
+      throw new PostUnavailableError(slug);
     }
 
     const fileContents = fs.readFileSync(filePath, "utf8");
@@ -125,6 +163,10 @@ export async function getPostBySlug(slug: string) {
 
     // Validate frontmatter
     const frontmatter = BlogPostFrontmatterSchema.parse(data);
+
+    if (!isBlogPostPublishable(frontmatter)) {
+      throw new PostUnavailableError(slug);
+    }
 
     // Get author details
     const author = getAuthorById(frontmatter.authorId);
@@ -148,34 +190,43 @@ export async function getPostBySlug(slug: string) {
       readingTime: calculateReadingTime(content),
     };
   } catch (error) {
+    if (error instanceof PostUnavailableError) {
+      throw error;
+    }
+
     reportError(`Failed to fetch post: ${slug}`, error);
     throw new Error(`Post not found: ${slug}`);
   }
 }
 
 /**
- * Retrieves all published blog slugs.
+ * Retrieves all available blog slugs.
  *
- * @returns Array of slug strings.
+ * @returns Slugs for published posts whose scheduled date has been met.
  */
 export async function getPostSlugs(): Promise<string[]> {
   try {
     await Promise.resolve();
     const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith(".mdx"));
+    const now = new Date();
 
     const slugs: string[] = [];
 
     for (const file of files) {
-      const filePath = path.join(BLOG_DIR, file);
-      const fileContents = fs.readFileSync(filePath, "utf8");
-      const { data } = matter(fileContents);
+      try {
+        const filePath = path.join(BLOG_DIR, file);
+        const fileContents = fs.readFileSync(filePath, "utf8");
+        const { data } = matter(fileContents);
 
-      // Validate frontmatter
-      const frontmatter = BlogPostFrontmatterSchema.parse(data);
+        // Validate frontmatter
+        const frontmatter = BlogPostFrontmatterSchema.parse(data);
 
-      // Only include published posts
-      if (frontmatter.published) {
-        slugs.push(frontmatter.slug);
+        // Only include posts that are published and past their scheduled date
+        if (isContentPostPublishable(frontmatter, now)) {
+          slugs.push(frontmatter.slug);
+        }
+      } catch (error) {
+        reportError(`Failed to load blog post slug from file: ${file}`, error);
       }
     }
 

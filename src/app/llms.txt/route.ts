@@ -15,7 +15,9 @@ import type { BlogPost, Product } from "@/lib/types";
 const MAX_BLOG_POSTS_IN_LLM_TXT = 10;
 
 export const dynamic = "force-static";
-export const revalidate = 86400; // Revalidate daily
+export const revalidate = 86400;
+
+const LLM_TXT_REVALIDATE_SECONDS = revalidate;
 
 /**
  * Schema for validating blog posts used in llms.txt generation.
@@ -145,7 +147,7 @@ export async function GET(): Promise<Response> {
     // Use Promise.allSettled for resilience against partial failures
     const [productsResult, postsResult] = await Promise.allSettled([
       Promise.resolve(getAllProducts()),
-      getAllPosts(),
+      getAllPosts({ includeViews: false }),
     ]);
 
     // Extract products with validation and error reporting
@@ -191,7 +193,7 @@ export async function GET(): Promise<Response> {
     return new Response(content, {
       headers: {
         "Content-Type": "text/plain; charset=utf-8",
-        "Cache-Control": "public, max-age=86400, s-maxage=86400",
+        "Cache-Control": `public, max-age=${LLM_TXT_REVALIDATE_SECONDS}, s-maxage=${LLM_TXT_REVALIDATE_SECONDS}`,
       },
     });
   } catch (error) {
