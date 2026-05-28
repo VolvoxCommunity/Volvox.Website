@@ -5,7 +5,7 @@
     "name": "Bill Chirico",
     "role": "CEO & Founder",
     "tagline": "Full-stack architect building scalable systems and mentoring the next generation.",
-    "bio": "Founder and CEO of Volvox LLC. 15+ years building apps, websites, and the occasional mass of spaghetti code he's not proud of. Runs a dev mentorship community since 2018 because he remembers what it's like to be lost. Believes software should help people help each other.",
+    "bio": "Founder and CEO of Volvox LLC. 20+ years building apps, websites, and SaaS products. Runs a dev mentorship community since 2018 because he remembers what it's like to be lost. Believes software should help people help each other.",
     "avatar": "https://github.com/BillChirico.png",
     "expertise": [
       ".NET - C#",
@@ -228,6 +228,31 @@
     "githubUrl": "https://github.com/madhurimagupta11",
     "linkedinUrl": "https://www.linkedin.com/in/madhurimagupta11",
     "email": "madhurima@volvox.dev",
+    "isHireable": false
+  },
+  {
+    "id": "olivia",
+    "slug": "olivia-hart",
+    "name": "Olivia Hart",
+    "role": "Digital Marketing Specialist",
+    "tagline": "Dedicated to crafting meaningful content and engaging social media strategies that connect with our community.",
+    "bio": "Olivia is a Digital Marketing Specialist at Volvox. She is a recent Digital Marketing graduate from Louisiana State University, passionate about content creation, storytelling, and social media strategy. She has a strong drive for learning and growth in the marketing field, and is excited to create memorable content that resonates with Volvox's community.",
+    "avatar": "https://github.com/olivia-hart.png",
+    "expertise": [
+      "Digital Marketing",
+      "Social Media Strategy",
+      "Content Creation & Branding",
+      "Canva Graphic Design",
+      "Copywriting",
+      "Paid Social Advertising",
+      "Analytics & Performance Tracking",
+      "SEO & Search Engine Marketing (SEM)",
+      "Email Marketing"
+    ],
+    "type": "marketer",
+    "githubUrl": "https://github.com/olivia-hart",
+    "linkedinUrl": "https://www.linkedin.com/in/olivia-bhart",
+    "email": "olivia@volvox.dev",
     "isHireable": false
   }
 ]
