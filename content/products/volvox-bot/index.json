@@ -1,0 +1,34 @@
+{
+  "id": "c9c6e9f4-0f69-4cce-bc38-5f5f42ac8b3d",
+  "name": "Volvox.Bot",
+  "type": "Discord Bot",
+  "slug": "volvox-bot",
+  "tagline": "AI for Discord communities.",
+  "description": "An AI-powered Discord bot that brings chat, moderation, summaries, memory, XP, and community tooling into one command center.",
+  "longDescription": "Volvox.Bot brings AI-native community tooling to Discord servers. It supports context-aware AI chat, model-selectable auto-moderation with configurable actions, reputation and XP tracking, long-term user memory, and TL;DR summaries for catching up on busy conversations. The hosted dashboard gives community operators a single place to configure and monitor the bot.",
+  "features": [
+    "AI chat for context-aware Discord replies",
+    "AI auto-moderation with configurable thresholds and actions",
+    "Reputation and XP tracking with role rewards",
+    "Long-term user memory for personalized interactions",
+    "TL;DR summaries for busy Discord conversations",
+    "Hosted dashboard for community configuration"
+  ],
+  "techStack": ["Discord", "AI", "Moderation", "Analytics", "Dashboard"],
+  "updatedAt": "2026-06-07T00:00:00Z",
+  "links": {
+    "demo": "https://volvox.bot"
+  },
+  "screenshots": ["/logo.png"],
+  "faq": [
+    {
+      "question": "What does Volvox.Bot do?",
+      "answer": "Volvox.Bot brings AI chat, auto-moderation, TL;DR summaries, user memory, reputation, XP, and community analytics into Discord."
+    },
+    {
+      "question": "Where can I try Volvox.Bot?",
+      "answer": "Visit https://volvox.bot to open the dashboard or add the bot to a Discord server."
+    }
+  ],
+  "testimonials": []
+}

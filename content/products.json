@@ -1,5 +1,21 @@
 [
   {
+    "id": "volvox-bot",
+    "name": "Volvox.Bot",
+    "description": "An AI-powered Discord bot that brings chat, moderation, summaries, memory, XP, and community tooling into one command center.",
+    "longDescription": "Volvox.Bot brings AI-native community tooling to Discord servers. It supports context-aware AI chat, model-selectable auto-moderation with configurable actions, reputation and XP tracking, long-term user memory, and TL;DR summaries for catching up on busy conversations. The hosted dashboard gives community operators a single place to configure and monitor the bot.",
+    "features": [
+      "AI chat for context-aware Discord replies",
+      "AI auto-moderation with configurable thresholds and actions",
+      "Reputation and XP tracking with role rewards",
+      "Long-term user memory for personalized interactions",
+      "TL;DR summaries for busy Discord conversations",
+      "Hosted dashboard for community configuration"
+    ],
+    "demoUrl": "https://volvox.bot",
+    "image": "/logo.png"
+  },
+  {
     "id": "ee7a459b-9319-4568-8c70-a9842e3c3558",
     "name": "Sobers",
     "description": "A comprehensive accountability app empowering sponsors and sponsees in 12-step recovery programs through structured task management, sobriety tracking, and visual progress timelines.",
