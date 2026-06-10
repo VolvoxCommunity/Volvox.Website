@@ -1,4 +1,4 @@
-import { SITE_URL } from "@/lib/constants";
+import { DISCORD_URL, GITHUB_URL, SITE_URL } from "@/lib/constants";
 import {
   getAllExtendedProducts,
   getAllProducts,
@@ -71,6 +71,7 @@ export interface ProductDetail {
   };
   updatedAt?: string;
   pageUrl: string;
+  image: string;
 }
 
 export interface BlogPostSummary {
@@ -172,11 +173,21 @@ function shortTagline(p: Product): string {
   return (first ?? p.description).slice(0, 140);
 }
 
+let _productIdToSlug: Map<string, string> | null = null;
+
 function getProductSlugFromId(id: string): string {
-  if (id.includes("ee7a459b") || id.startsWith("ee7a459b")) return "sobers";
-  if (id.includes("a3f8b2c1") || id.startsWith("a3f8b2c1"))
-    return "decision-jar";
-  return id;
+  if (!_productIdToSlug) {
+    _productIdToSlug = new Map(
+      getAllExtendedProducts().map((p) => [p.id, p.slug]),
+    );
+  }
+  return _productIdToSlug.get(id) ?? id;
+}
+
+function getProductImage(slug: string): string {
+  const products = getAllProducts();
+  const product = products.find((p) => getProductSlugFromId(p.id) === slug);
+  return product?.image ?? `/images/product/${slug}.png`;
 }
 
 function toProductDetail(p: ExtendedProduct): ProductDetail {
@@ -193,6 +204,7 @@ function toProductDetail(p: ExtendedProduct): ProductDetail {
     links: p.links,
     updatedAt: p.updatedAt,
     pageUrl: `${SITE_URL}/products/${p.slug}`,
+    image: getProductImage(p.slug),
   };
 }
 

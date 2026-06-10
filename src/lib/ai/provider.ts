@@ -12,10 +12,17 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 // ── ACTIVE: OpenRouter (free tier) ────────────────────────────────────
 // Free models on OpenRouter: https://openrouter.ai/models?q=free
 // Set OPENROUTER_API_KEY in your .env (or .env.local) file.
+const openrouterApiKey = process.env.OPENROUTER_API_KEY;
+if (!openrouterApiKey) {
+  throw new Error(
+    "OPENROUTER_API_KEY is required. Set it in your .env file or environment variables.",
+  );
+}
+
 const openrouter = createOpenAICompatible({
   name: "openrouter",
   baseURL: process.env.OPENROUTER_BASE_URL ?? "https://openrouter.ai/api/v1",
-  apiKey: process.env.OPENROUTER_API_KEY ?? "",
+  apiKey: openrouterApiKey,
 });
 
 const openrouterModelId =

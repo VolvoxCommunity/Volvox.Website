@@ -80,7 +80,7 @@ export function ChatPanel({
         onWheelCapture={(event) => event.stopPropagation()}
         onTouchMoveCapture={(event) => event.stopPropagation()}
         className={cn(
-          "min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-16 pt-20 sm:px-4 sm:pb-20 sm:pt-24",
+          "min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-28 pt-20 sm:px-4 sm:pb-32 sm:pt-24",
           variant === "fullscreen" && "rounded-[24px] bg-background/70",
           "[&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/50 [&::-webkit-scrollbar-thumb]:hover:bg-border/80",
         )}

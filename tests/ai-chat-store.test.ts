@@ -56,6 +56,44 @@ test("chat-store clears a chat", () => {
   assert.equal(loadChat(), null);
 });
 
+test("chat-store persists only user-facing message parts", () => {
+  memory.clear();
+  saveChat({
+    messages: [
+      {
+        id: "1",
+        role: "user",
+        parts: [{ type: "text", text: "Who can I hire?" }],
+      },
+      {
+        id: "2",
+        role: "assistant",
+        content: "Hossain is the best match.",
+        parts: [
+          { type: "tool-get_team_members", input: { isHireable: true } },
+          { type: "text", text: "Hossain is the best match." },
+          {
+            type: "tool-surface_team_card",
+            input: { slug: "rabden", reason: "Available for hire." },
+            output: { found: true, name: "Hossain Jahed" },
+          },
+        ],
+      },
+    ],
+    intent: "hirer",
+  });
+
+  const raw = memory.get("volvox-chat-history");
+  assert.ok(raw);
+  const parsed = JSON.parse(raw);
+  assert.equal(parsed.messages.length, 2);
+  assert.deepEqual(
+    parsed.messages[1].parts.map((part: { type: string }) => part.type),
+    ["text", "tool-surface_team_card"],
+  );
+  assert.equal(parsed.messages[0].content, "Who can I hire?");
+});
+
 test("chat-store expires after TTL", () => {
   memory.clear();
   saveChat({

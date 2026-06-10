@@ -11,12 +11,19 @@ const redis =
     : null;
 
 let limiter: Ratelimit | null = null;
+let anonLimiter: Ratelimit | null = null;
 if (redis) {
   try {
     limiter = new Ratelimit({
       redis,
       limiter: Ratelimit.slidingWindow(20, "10 m"),
       prefix: "volvox:chat",
+      analytics: false,
+    });
+    anonLimiter = new Ratelimit({
+      redis,
+      limiter: Ratelimit.slidingWindow(200, "10 m"),
+      prefix: "volvox:chat:anon",
       analytics: false,
     });
   } catch (err) {
@@ -41,11 +48,13 @@ const PASS_THROUGH: RateLimitResult = {
 export async function assertChatRateLimit(
   identifier: string,
 ): Promise<RateLimitResult> {
-  if (!limiter) {
+  if (!limiter || !anonLimiter) {
     return PASS_THROUGH;
   }
   try {
-    const result = await limiter.limit(identifier);
+    const isAnon = identifier === "anon";
+    const rl = isAnon ? anonLimiter : limiter;
+    const result = await rl.limit(isAnon ? "anon" : identifier);
     return {
       success: result.success,
       limit: result.limit,

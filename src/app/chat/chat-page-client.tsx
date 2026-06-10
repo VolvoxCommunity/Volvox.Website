@@ -4,7 +4,7 @@ import { ArrowLeft, ChatsCircle, Sparkle } from "@phosphor-icons/react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { ChatPanel } from "@/components/ai/chat-panel";
 import { ChatProvider, useChatContext } from "@/components/ai/chat-provider";
 import type { VisitorIntent } from "@/lib/ai/types";
@@ -17,9 +17,11 @@ const INTENT_VALUES = new Set<VisitorIntent>([
 
 function PageInner() {
   const params = useSearchParams();
-  const { sendMessage, setExplicitSeed } = useChatContext();
+  const { sendMessage, setExplicitSeed, messages, storageLoaded } =
+    useChatContext();
   const intentParam = params.get("intent");
   const promptParam = params.get("q");
+  const sentRef = useRef(false);
 
   useEffect(() => {
     if (intentParam && INTENT_VALUES.has(intentParam as VisitorIntent)) {
@@ -28,12 +30,27 @@ function PageInner() {
   }, [intentParam, setExplicitSeed]);
 
   useEffect(() => {
-    if (!promptParam) return;
+    if (!promptParam || sentRef.current || !storageLoaded) return;
+    const alreadySent = messages.some(
+      (m) =>
+        m.role === "user" &&
+        m.parts?.some(
+          (p) =>
+            typeof p === "object" &&
+            p !== null &&
+            "type" in p &&
+            p.type === "text" &&
+            "text" in p &&
+            (p as { text: string }).text === promptParam,
+        ),
+    );
+    if (alreadySent) return;
+    sentRef.current = true;
     const timer = setTimeout(() => {
       sendMessage({ text: promptParam });
     }, 300);
     return () => clearTimeout(timer);
-  }, [promptParam, sendMessage]);
+  }, [promptParam, sendMessage, messages, storageLoaded]);
 
   return null;
 }

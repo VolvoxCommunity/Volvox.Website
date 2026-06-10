@@ -53,8 +53,14 @@ export async function POST(req: Request) {
     return new Response("No messages provided", { status: 400 });
   }
 
-  const ipHeader = req.headers.get("x-forwarded-for") ?? "";
-  const ip = ipHeader.split(",")[0]?.trim() || "anon";
+  const vercelForwarded = req.headers.get("x-vercel-forwarded-for") ?? "";
+  const realIp = req.headers.get("x-real-ip") ?? "";
+  const forwardedFor = req.headers.get("x-forwarded-for") ?? "";
+  const ip =
+    vercelForwarded.split(",")[0]?.trim() ||
+    realIp.split(",")[0]?.trim() ||
+    forwardedFor.split(",")[0]?.trim() ||
+    "anon";
 
   let rateLimit: RateLimitResult;
   try {

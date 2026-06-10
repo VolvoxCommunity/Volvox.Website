@@ -10,6 +10,67 @@ import {
   listTeamMembers,
 } from "./tool-handlers";
 
+const surfaceTeamCardOutputSchema = z.discriminatedUnion("found", [
+  z.object({
+    kind: z.literal("team"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(true),
+    name: z.string(),
+    role: z.string(),
+    avatar: z.string(),
+    profileUrl: z.string(),
+    isHireable: z.boolean(),
+    tagline: z.string(),
+  }),
+  z.object({
+    kind: z.literal("team"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(false),
+  }),
+]);
+
+const surfaceProductCardOutputSchema = z.discriminatedUnion("found", [
+  z.object({
+    kind: z.literal("product"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(true),
+    name: z.string(),
+    tagline: z.string(),
+    pageUrl: z.string(),
+    image: z.string(),
+  }),
+  z.object({
+    kind: z.literal("product"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(false),
+  }),
+]);
+
+const surfaceBlogCardOutputSchema = z.discriminatedUnion("found", [
+  z.object({
+    kind: z.literal("blog"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(true),
+    title: z.string(),
+    excerpt: z.string(),
+    authorName: z.string(),
+    readingTime: z.number(),
+    url: z.string(),
+    banner: z.string().optional(),
+  }),
+  z.object({
+    kind: z.literal("blog"),
+    slug: z.string(),
+    reason: z.string(),
+    found: z.literal(false),
+  }),
+]);
+
 export const aiTools = {
   get_team_members: tool({
     description:
@@ -109,19 +170,29 @@ export const aiTools = {
     }),
     execute: async ({ slug, reason }) => {
       const member = getTeamMemberBySlug(slug);
-      if (!member) return { kind: "team" as const, slug, reason, found: false };
-      return {
-        kind: "team" as const,
-        slug,
-        reason,
-        found: true,
-        name: member.name,
-        role: member.role,
-        avatar: member.avatar,
-        profileUrl: member.profileUrl,
-        isHireable: member.isHireable,
-        tagline: member.tagline,
-      };
+      const raw: z.infer<typeof surfaceTeamCardOutputSchema> = member
+        ? {
+            kind: "team",
+            slug,
+            reason,
+            found: true,
+            name: member.name,
+            role: member.role,
+            avatar: member.avatar,
+            profileUrl: member.profileUrl,
+            isHireable: member.isHireable,
+            tagline: member.tagline,
+          }
+        : { kind: "team", slug, reason, found: false };
+      const result = surfaceTeamCardOutputSchema.safeParse(raw);
+      if (!result.success) {
+        console.warn(
+          "[surface_team_card] output validation failed",
+          result.error,
+        );
+        return { kind: "team", slug, reason, found: false };
+      }
+      return result.data;
     },
   }),
 
@@ -140,18 +211,27 @@ export const aiTools = {
     }),
     execute: async ({ slug, reason }) => {
       const product = getProductBySlug(slug);
-      if (!product)
-        return { kind: "product" as const, slug, reason, found: false };
-      return {
-        kind: "product" as const,
-        slug,
-        reason,
-        found: true,
-        name: product.name,
-        tagline: product.tagline,
-        pageUrl: product.pageUrl,
-        image: `/images/product/${product.slug === "sobers" ? "sobers.png" : "decision-jar/1.png"}`,
-      };
+      const raw: z.infer<typeof surfaceProductCardOutputSchema> = product
+        ? {
+            kind: "product",
+            slug,
+            reason,
+            found: true,
+            name: product.name,
+            tagline: product.tagline,
+            pageUrl: product.pageUrl,
+            image: product.image,
+          }
+        : { kind: "product", slug, reason, found: false };
+      const result = surfaceProductCardOutputSchema.safeParse(raw);
+      if (!result.success) {
+        console.warn(
+          "[surface_product_card] output validation failed",
+          result.error,
+        );
+        return { kind: "product", slug, reason, found: false };
+      }
+      return result.data;
     },
   }),
 
@@ -168,42 +248,30 @@ export const aiTools = {
     }),
     execute: async ({ slug, reason }) => {
       const post = await getBlogPostBySlug(slug);
-      if (!post) return { kind: "blog" as const, slug, reason, found: false };
-      return {
-        kind: "blog" as const,
-        slug,
-        reason,
-        found: true,
-        title: post.title,
-        excerpt: post.excerpt,
-        authorName: post.authorName,
-        readingTime: post.readingTime,
-        url: post.url,
-        banner: post.banner,
-      };
+      const raw: z.infer<typeof surfaceBlogCardOutputSchema> = post
+        ? {
+            kind: "blog",
+            slug,
+            reason,
+            found: true,
+            title: post.title,
+            excerpt: post.excerpt,
+            authorName: post.authorName,
+            readingTime: post.readingTime,
+            url: post.url,
+            banner: post.banner,
+          }
+        : { kind: "blog", slug, reason, found: false };
+      const result = surfaceBlogCardOutputSchema.safeParse(raw);
+      if (!result.success) {
+        console.warn(
+          "[surface_blog_card] output validation failed",
+          result.error,
+        );
+        return { kind: "blog", slug, reason, found: false };
+      }
+      return result.data;
     },
-  }),
-
-  report_intent: tool({
-    description:
-      "Report the assistant's read of the current user intent. The server already runs its own intent detector each turn — this tool lets the model communicate its own read for transparency. Safe to call once per turn, optional.",
-    inputSchema: z.object({
-      intent: z.enum(["beginner", "professional", "hirer"]),
-      confidence: z
-        .number()
-        .min(0)
-        .max(1)
-        .describe("How confident the assistant is in this intent (0-1)"),
-      reasoning: z
-        .string()
-        .optional()
-        .describe("Short note on what signals led to this read"),
-    }),
-    execute: async ({ intent, confidence, reasoning }) => ({
-      intent,
-      confidence,
-      reasoning: reasoning ?? "",
-    }),
   }),
 } as const;
 

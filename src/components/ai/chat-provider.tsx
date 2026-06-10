@@ -14,6 +14,7 @@ import {
 } from "react";
 import { clearChat, loadChat, saveChat } from "@/lib/ai/chat-store";
 import type { VisitorIntent } from "@/lib/ai/types";
+import { reportError } from "@/lib/logger";
 
 interface ChatContextValue {
   isOpen: boolean;
