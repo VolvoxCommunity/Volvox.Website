@@ -104,7 +104,7 @@ export function ChatProvider({ children }: { children: ReactNode }) {
       }
     },
     onError: (err) => {
-      console.error("[Volvox Assistant] chat error:", err);
+      reportError("[Volvox Assistant] chat error", err);
     },
   });
 
