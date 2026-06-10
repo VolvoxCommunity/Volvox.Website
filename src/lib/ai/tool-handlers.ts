@@ -337,8 +337,8 @@ export async function getBlogPostBySlug(
 
 export function getCommunityInfo(): CommunityInfo {
   return {
-    discord: "https://discord.gg/8ahXACdamN",
-    github: "https://github.com/VolvoxCommunity",
+    discord: DISCORD_URL,
+    github: GITHUB_URL,
     blog: `${SITE_URL}/blog`,
     products: `${SITE_URL}/products`,
     team: `${SITE_URL}/team`,
