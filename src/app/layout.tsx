@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
+import { VolvoxAssistant } from "@/components/ai/volvox-assistant";
 import { ConditionalAnalytics } from "@/components/conditional-analytics";
 import { CookieConsentBanner } from "@/components/cookie-consent-banner";
 import { CookieConsentProvider } from "@/components/providers/cookie-consent-provider";
@@ -114,6 +115,7 @@ export default function RootLayout({
               {children}
               <Toaster />
               <CookieConsentBanner />
+              <VolvoxAssistant />
             </ThemeProvider>
             <ConditionalAnalytics />
           </CookieConsentProvider>

@@ -86,3 +86,9 @@ test-results/
 worktrees/
 .worktrees/
 .automaker/
+
+# AI agent scratch files
+.antigravitycli/
+.impeccable/
+DESIGN.md
+PRODUCT.md
