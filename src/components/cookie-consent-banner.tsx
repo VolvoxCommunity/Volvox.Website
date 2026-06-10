@@ -128,7 +128,7 @@ export function CookieConsentBanner() {
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: 20, opacity: 0, scale: 0.95 }}
             transition={{ duration: 0.2 }}
-            className="fixed bottom-4 right-4 z-50 w-full max-w-[300px]"
+            className="fixed bottom-4 left-4 z-50 w-full max-w-[300px]"
           >
             <div
               className="rounded-lg border bg-background/95 backdrop-blur-sm shadow-xl p-4 relative"
