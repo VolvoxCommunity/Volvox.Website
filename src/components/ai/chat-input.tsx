@@ -51,13 +51,13 @@ export function ChatInput({ floating }: ChatInputProps) {
       onSubmit={handleSubmit}
       data-lenis-prevent
       className={cn(
-        "transition-[border-color,background-color]",
+        "transition-[border-color,background-color] mx-auto w-full max-w-4xl",
         floating
           ? "px-3 pb-3 pt-0 sm:px-4 sm:pb-4"
-          : "border-t border-border/40 bg-card p-3 sm:p-4",
+          : "border-t border-border/40 bg-transparent p-3 sm:p-4",
       )}
     >
-      <div className="flex items-end gap-2 rounded-[24px] border border-border/60 bg-background p-2 transition-[border-color,box-shadow] focus-within:border-primary/50 focus-within:shadow-[0_4px_15px_oklch(from_var(--primary)_l_c_h_/_0.22)]">
+      <div className="flex items-end gap-2 rounded-[24px] border border-border/60 bg-background p-2 transition-[border-color,box-shadow] focus-within:border-primary/50 focus-within:bg-background focus-within:shadow-[0_4px_15px_oklch(from_var(--primary)_l_c_h_/_0.22)]">
         <textarea
           ref={inputRef}
           name="message"

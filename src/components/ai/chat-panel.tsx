@@ -55,9 +55,9 @@ export function ChatPanel({
   };
 
   const containerClasses = cn(
-    "relative flex h-full min-h-0 w-full flex-col overflow-hidden border border-border/60 bg-card shadow-[0_20px_50px_-10px_hsla(0,0%,0%,0.28)]",
-    variant === "floating" && "rounded-none sm:rounded-[32px]",
-    variant === "fullscreen" && "rounded-[32px] bg-card p-2",
+    "relative flex h-full min-h-0 w-full flex-col overflow-hidden bg-background",
+    variant === "floating" && "rounded-none shadow-2xl bg-card",
+    variant === "fullscreen" && "rounded-none",
     className,
   );
 
@@ -81,7 +81,7 @@ export function ChatPanel({
         onTouchMoveCapture={(event) => event.stopPropagation()}
         className={cn(
           "min-h-0 flex-1 overflow-y-auto overscroll-contain px-3 pb-28 pt-20 sm:px-4 sm:pb-32 sm:pt-24",
-          variant === "fullscreen" && "rounded-[24px] bg-background/70",
+          variant === "fullscreen" && "rounded-none",
           "[&::-webkit-scrollbar]:w-[3px] [&::-webkit-scrollbar-track]:bg-transparent [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-thumb]:bg-border/50 [&::-webkit-scrollbar-thumb]:hover:bg-border/80",
         )}
         role="log"
@@ -89,9 +89,14 @@ export function ChatPanel({
         aria-label="Chat messages"
       >
         {messages.length === 0 ? (
-          <ChatWelcome onPick={handlePick} onPickPersona={handlePickPersona} />
+          <div className="mx-auto max-w-4xl">
+            <ChatWelcome
+              onPick={handlePick}
+              onPickPersona={handlePickPersona}
+            />
+          </div>
         ) : (
-          <div className="space-y-3">
+          <div className="mx-auto max-w-4xl space-y-3">
             <ChatMessageList
               messages={messages}
               resumeMessage={resumeMessage}

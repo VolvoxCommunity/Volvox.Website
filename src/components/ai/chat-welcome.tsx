@@ -67,7 +67,7 @@ interface ChatWelcomeProps {
 export function ChatWelcome({ onPick, onPickPersona }: ChatWelcomeProps) {
   return (
     <div className="flex min-h-full flex-col gap-6 px-1 py-2 sm:px-2 sm:py-3">
-      <div className="relative overflow-hidden rounded-[24px] bg-card p-5 sm:p-6">
+      <div className="relative overflow-hidden rounded-[24px] bg-background/50 border border-border/40 p-5 sm:p-6">
         <div
           className="pointer-events-none absolute -top-24 left-1/2 h-56 w-56 -translate-x-1/2 rounded-full opacity-80 blur-3xl"
           style={{
@@ -101,7 +101,7 @@ export function ChatWelcome({ onPick, onPickPersona }: ChatWelcomeProps) {
               key={chip.intent}
               type="button"
               onClick={() => onPickPersona(chip.intent, chip.prompt)}
-              className="group flex items-center gap-3 rounded-[20px] border border-border/50 bg-card p-3 text-left transition-[border-color,background-color,transform] hover:border-primary/40 hover:bg-background/70 active:scale-[0.99]"
+              className="group flex items-center gap-3 rounded-[20px] border border-border/50 bg-background/50 p-3 text-left transition-[border-color,background-color,transform] hover:border-primary/40 hover:bg-background/80 active:scale-[0.99]"
             >
               <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-[16px] border border-border/40 bg-background text-primary transition-colors group-hover:bg-primary/10">
                 <chip.icon className="h-4 w-4" weight="duotone" />
@@ -129,7 +129,7 @@ export function ChatWelcome({ onPick, onPickPersona }: ChatWelcomeProps) {
               key={s.text}
               type="button"
               onClick={() => onPick(s.text)}
-              className="group flex items-center gap-2.5 rounded-full border border-border/40 bg-card px-3.5 py-2 text-left text-sm text-foreground/80 transition-[border-color,background-color] hover:border-primary/30 hover:bg-background/70"
+              className="group flex items-center gap-2.5 rounded-full border border-border/40 bg-background/50 px-3.5 py-2 text-left text-sm text-foreground/80 transition-[border-color,background-color] hover:border-primary/30 hover:bg-background/80"
             >
               <s.icon
                 className="h-3.5 w-3.5 shrink-0 text-muted-foreground"
