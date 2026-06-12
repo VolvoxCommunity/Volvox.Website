@@ -9,7 +9,7 @@ import {
 import { z } from "zod";
 import type { VisitorIntent } from "@/lib/ai/intent";
 import { detectIntent } from "@/lib/ai/intent";
-import { chatModel } from "@/lib/ai/provider";
+import { getChatModel } from "@/lib/ai/provider";
 import { assertChatRateLimit, type RateLimitResult } from "@/lib/ai/rate-limit";
 import { buildSystemPrompt } from "@/lib/ai/system-prompt";
 import { aiTools } from "@/lib/ai/tools";
@@ -133,7 +133,7 @@ export async function POST(req: Request) {
       });
 
       const result = streamText({
-        model: chatModel,
+        model: getChatModel(),
         system,
         messages: modelMessages,
         tools: aiTools,
