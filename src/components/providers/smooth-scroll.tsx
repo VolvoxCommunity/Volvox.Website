@@ -21,6 +21,7 @@ export function SmoothScroll({ children }: { children: React.ReactNode }) {
       orientation: "vertical",
       gestureOrientation: "vertical",
       smoothWheel: true,
+      prevent: (node) => node.hasAttribute("data-lenis-prevent"),
     });
 
     lenisRef.current = lenis;
