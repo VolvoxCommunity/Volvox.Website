@@ -23,8 +23,9 @@ const BLOG_SORT_OPTIONS: { value: BlogSortOption; label: string }[] = [
 ];
 
 // Product-specific types
-export type ProductSortOption = "a-z" | "z-a";
+export type ProductSortOption = "newest" | "a-z" | "z-a";
 const PRODUCT_SORT_OPTIONS: { value: ProductSortOption; label: string }[] = [
+  { value: "newest", label: "Newest First" },
   { value: "a-z", label: "Name A-Z" },
   { value: "z-a", label: "Name Z-A" },
 ];

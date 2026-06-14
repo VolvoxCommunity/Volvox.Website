@@ -21,6 +21,23 @@ interface ProductsListClientProps {
 }
 
 const STORAGE_KEY = "volvox-products-view";
+const DEFAULT_PRODUCT_SORT_OPTION: ProductSortOption = "newest";
+const PRODUCT_SORT_OPTIONS: readonly ProductSortOption[] = [
+  "newest",
+  "a-z",
+  "z-a",
+];
+
+function isProductSortOption(value: string | null): value is ProductSortOption {
+  return PRODUCT_SORT_OPTIONS.includes(value as ProductSortOption);
+}
+
+function getProductTimestamp(product: ExtendedProduct): number {
+  if (!product.updatedAt) return 0;
+
+  const timestamp = Date.parse(product.updatedAt);
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
 
 /**
  * Client component for the products listing page.
@@ -38,7 +55,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   });
   const [sortOption, setSortOption] = useState<ProductSortOption>(() => {
     const sort = searchParams.get("sort");
-    return (sort as ProductSortOption) || "a-z";
+    return isProductSortOption(sort) ? sort : DEFAULT_PRODUCT_SORT_OPTION;
   });
   const [viewMode, setViewMode] = useState<ViewMode>(() => {
     const view = searchParams.get("view");
@@ -86,6 +103,11 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     // Sort
     result.sort((a, b) => {
       switch (sortOption) {
+        case "newest":
+          return (
+            getProductTimestamp(b) - getProductTimestamp(a) ||
+            a.name.localeCompare(b.name)
+          );
         case "a-z":
           return a.name.localeCompare(b.name);
         case "z-a":
@@ -120,7 +142,8 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
       }
 
       if (params.sort !== undefined) {
-        if (params.sort !== "a-z") newParams.set("sort", params.sort);
+        if (params.sort !== DEFAULT_PRODUCT_SORT_OPTION)
+          newParams.set("sort", params.sort);
         else newParams.delete("sort");
       }
 
@@ -185,12 +208,14 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   const handleClearAll = useCallback(() => {
     setSearchQuery("");
     setSelectedTech([]);
-    setSortOption("a-z");
+    setSortOption(DEFAULT_PRODUCT_SORT_OPTION);
     router.replace("/products", { scroll: false });
   }, [router]);
 
   const hasActiveFilters =
-    searchQuery || selectedTech.length > 0 || sortOption !== "a-z";
+    searchQuery ||
+    selectedTech.length > 0 ||
+    sortOption !== DEFAULT_PRODUCT_SORT_OPTION;
 
   return (
     <div className="min-h-screen relative flex flex-col">

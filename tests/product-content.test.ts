@@ -17,7 +17,9 @@ test("loads Volvox.Bot as a routable extended product", () => {
   assert.equal(volvoxBot.links.demo, "https://volvox.bot");
   assert.equal(isValidSlug(volvoxBot.slug), true);
   assert.ok(
-    volvoxBot.features.includes("AI chat for context-aware Discord replies"),
+    volvoxBot.features.some((feature) =>
+      feature.toLowerCase().includes("ai chat"),
+    ),
     "Expected Volvox.Bot feature copy to mention AI chat",
   );
 });

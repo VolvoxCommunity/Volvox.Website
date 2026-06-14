@@ -4,7 +4,7 @@
   "type": "Discord Bot",
   "slug": "volvox-bot",
   "tagline": "AI for Discord communities.",
-  "description": "An AI-powered Discord bot that brings chat, moderation, summaries, memory, XP, and community tooling into one command center.",
+  "description": "An AI-powered Discord bot that brings chat, auto-moderation, XP, community tooling, and more into one command center.",
   "longDescription": "Volvox.Bot brings AI-native community tooling to Discord servers. It supports context-aware AI chat, model-selectable auto-moderation with configurable actions, reputation and XP tracking, long-term user memory, and TL;DR summaries for catching up on busy conversations. The hosted dashboard gives community operators a single place to configure and monitor the bot.",
   "features": [
     "AI chat for context-aware Discord replies",
@@ -14,20 +14,37 @@
     "TL;DR summaries for busy Discord conversations",
     "Hosted dashboard for community configuration"
   ],
-  "techStack": ["Discord", "AI", "Moderation", "Analytics", "Dashboard"],
+  "techStack": [
+    "Discord",
+    "Bot",
+    "AI",
+    "Moderation",
+    "Analytics"
+  ],
   "updatedAt": "2026-06-07T00:00:00Z",
   "links": {
     "demo": "https://volvox.bot"
   },
-  "screenshots": ["/logo.png"],
+  "screenshots": [
+    "/images/product/volvox-bot/icon.png",
+    "/images/product/volvox-bot/analytics.png"
+  ],
   "faq": [
     {
       "question": "What does Volvox.Bot do?",
-      "answer": "Volvox.Bot brings AI chat, auto-moderation, TL;DR summaries, user memory, reputation, XP, and community analytics into Discord."
+      "answer": "Volvox.Bot brings AI chat, AI-powered auto-moderation, TL;DR summaries, user memory, reputatio (XP), community analytic, and much more to your Discord server."
     },
     {
       "question": "Where can I try Volvox.Bot?",
       "answer": "Visit https://volvox.bot to open the dashboard or add the bot to a Discord server."
+    },
+    {
+      "question": "How much does Volvox.Bot cost?",
+      "answer": "Volvox.Bot is completely free to use and has no hidden fees or ads."
+    },
+    {
+      "question": "What is the hosted dashboard?",
+      "answer": "The hosted dashboard is a web interface that allows you to configure and monitor the bot. It is hosted on our own servers and is completely free to use."
     }
   ],
   "testimonials": []
