@@ -4,12 +4,32 @@ import test from "node:test";
 
 const globalsCss = readFileSync("src/app/globals.css", "utf8");
 
-function getThemeBlock(selector: ":root" | ".dark"): string {
-  const match = globalsCss.match(
-    new RegExp(`${selector.replace(".", "\\.")} \\{([\\s\\S]*?)\\n  \\}`),
-  );
-  assert.ok(match, `Expected ${selector} theme block`);
-  return match[1];
+function getThemeBlock(
+  selector: ":root" | ".dark",
+  source = globalsCss,
+): string {
+  const selectorMatch = new RegExp(
+    `${selector.replace(".", "\\.")}\\s*\\{`,
+  ).exec(source);
+  assert.ok(selectorMatch, `Expected ${selector} theme block`);
+
+  const blockStart = selectorMatch.index + selectorMatch[0].length;
+  let depth = 1;
+
+  for (let index = blockStart; index < source.length; index += 1) {
+    if (source[index] === "{") {
+      depth += 1;
+    }
+
+    if (source[index] === "}") {
+      depth -= 1;
+      if (depth === 0) {
+        return source.slice(blockStart, index);
+      }
+    }
+  }
+
+  assert.fail(`Expected ${selector} theme block to close`);
 }
 
 function getColor(block: string, token: string): string {
@@ -99,6 +119,21 @@ test("filled primary and secondary colors meet WCAG AA contrast", () => {
       );
     }
   }
+});
+
+test("theme block parser tolerates non-Biome indentation", () => {
+  const reindentedCss = `
+    @layer base {
+      :root {
+        --primary: #0068d9;
+      }
+    }
+  `;
+
+  assert.equal(
+    getColor(getThemeBlock(":root", reindentedCss), "primary"),
+    "#0068d9",
+  );
 });
 
 test("muted foreground colors meet WCAG AA contrast on muted surfaces", () => {
