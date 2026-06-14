@@ -1,6 +1,6 @@
 [
   {
-    "id": "volvox-bot",
+    "id": "c9c6e9f4-0f69-4cce-bc38-5f5f42ac8b3d",
     "name": "Volvox.Bot",
     "description": "An AI-powered Discord bot that brings chat, moderation, summaries, memory, XP, and community tooling into one command center.",
     "longDescription": "Volvox.Bot brings AI-native community tooling to Discord servers. It supports context-aware AI chat, model-selectable auto-moderation with configurable actions, reputation and XP tracking, long-term user memory, and TL;DR summaries for catching up on busy conversations. The hosted dashboard gives community operators a single place to configure and monitor the bot.",

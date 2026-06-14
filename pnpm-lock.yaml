@@ -154,6 +154,9 @@ importers:
       dotenv:
         specifier: ^17.4.2
         version: 17.4.2
+      expect:
+        specifier: 30.4.1
+        version: 30.4.1
       husky:
         specifier: ^9.1.7
         version: 9.1.7

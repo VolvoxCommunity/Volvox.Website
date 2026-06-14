@@ -44,6 +44,23 @@ interface ProductCardProps {
   product: ExtendedProduct;
 }
 
+function getProductTimestamp(product: ExtendedProduct): number {
+  if (!product.updatedAt) return 0;
+
+  const timestamp = Date.parse(product.updatedAt);
+  return Number.isFinite(timestamp) ? timestamp : 0;
+}
+
+function sortProductsByNewest(
+  productA: ExtendedProduct,
+  productB: ExtendedProduct,
+): number {
+  return (
+    getProductTimestamp(productB) - getProductTimestamp(productA) ||
+    productA.name.localeCompare(productB.name)
+  );
+}
+
 function ProductCard({ product }: ProductCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
@@ -317,11 +334,7 @@ export function Products({
 
   const filteredProducts = useMemo(() => {
     // First sort by updatedAt (latest first) to get "latest"
-    let result = [...allProducts].sort((a, b) => {
-      const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-      const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-      return dateB - dateA;
-    });
+    let result = [...allProducts].sort(sortProductsByNewest);
 
     // Apply limit if provided (for homepage)
     if (limit && !enableFilters && !searchQuery) {
@@ -343,13 +356,7 @@ export function Products({
     // Apply explicit sort option only when filters are enabled (products page)
     // Homepage keeps updatedAt order (latest first)
     if (enableFilters) {
-      if (sortOption === "newest") {
-        result.sort((a, b) => {
-          const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-          const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-          return dateB - dateA;
-        });
-      } else if (sortOption === "z-a") {
+      if (sortOption === "z-a") {
         result.sort((a, b) => b.name.localeCompare(a.name));
       } else if (sortOption === "a-z") {
         result.sort((a, b) => a.name.localeCompare(b.name));

@@ -1,45 +1,49 @@
-import assert from "node:assert/strict";
-import test from "node:test";
-
 import {
   getAllExtendedProducts,
   getAllProducts,
   getExtendedProductBySlug,
   isValidSlug,
 } from "../src/lib/content";
+import { describe, expect, it } from "./setup-globals";
 
-test("loads Volvox.Bot as a routable extended product", () => {
-  const products = getAllExtendedProducts();
-  const volvoxBot = products.find((product) => product.slug === "volvox-bot");
+describe("product content", () => {
+  it("loads Volvox.Bot as a routable extended product", () => {
+    const products = getAllExtendedProducts();
+    const volvoxBot = products.find((product) => product.slug === "volvox-bot");
 
-  assert.ok(volvoxBot, "Expected Volvox.Bot to load from content/products");
-  assert.equal(volvoxBot.name, "Volvox.Bot");
-  assert.equal(volvoxBot.links.demo, "https://volvox.bot");
-  assert.equal(isValidSlug(volvoxBot.slug), true);
-  assert.ok(
-    volvoxBot.features.some((feature) =>
-      feature.toLowerCase().includes("ai chat"),
-    ),
-    "Expected Volvox.Bot feature copy to mention AI chat",
-  );
-});
+    expect(volvoxBot).toBeDefined();
+    if (!volvoxBot) {
+      throw new Error("Expected Volvox.Bot to load from content/products");
+    }
 
-test("loads Volvox.Bot in the legacy products list used by llms.txt", () => {
-  const products = getAllProducts();
-  const volvoxBot = products.find((product) => product.name === "Volvox.Bot");
+    expect(volvoxBot.name).toBe("Volvox.Bot");
+    expect(volvoxBot.links.demo).toBe("https://volvox.bot");
+    expect(isValidSlug(volvoxBot.slug)).toBe(true);
+    expect(
+      volvoxBot.features.some((feature) =>
+        feature.toLowerCase().includes("ai chat"),
+      ),
+    ).toBe(true);
+  });
 
-  assert.ok(
-    volvoxBot,
-    "Expected Volvox.Bot to load from content/products.json",
-  );
-  assert.equal(volvoxBot.demoUrl, "https://volvox.bot");
-  assert.ok(
-    volvoxBot.description.includes("AI-powered Discord bot"),
-    "Expected Volvox.Bot summary to describe the product category",
-  );
-});
+  it("loads Volvox.Bot in the legacy products list used by llms.txt", () => {
+    const products = getAllProducts();
+    const volvoxBot = products.find((product) => product.name === "Volvox.Bot");
+    const extendedProduct = getExtendedProductBySlug("volvox-bot");
 
-test("rejects the Volvox.Bot domain as a product route slug", () => {
-  assert.equal(isValidSlug("volvox.bot"), false);
-  assert.equal(getExtendedProductBySlug("volvox.bot"), null);
+    expect(volvoxBot).toBeDefined();
+    if (!volvoxBot) {
+      throw new Error("Expected Volvox.Bot to load from content/products.json");
+    }
+
+    expect(extendedProduct).not.toBeNull();
+    expect(volvoxBot.id).toBe(extendedProduct?.id);
+    expect(volvoxBot.demoUrl).toBe("https://volvox.bot");
+    expect(volvoxBot.description).toContain("AI-powered Discord bot");
+  });
+
+  it("rejects the Volvox.Bot domain as a product route slug", () => {
+    expect(isValidSlug("volvox.bot")).toBe(false);
+    expect(getExtendedProductBySlug("volvox.bot")).toBeNull();
+  });
 });
