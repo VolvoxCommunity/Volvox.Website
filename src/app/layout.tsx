@@ -1,5 +1,3 @@
-/* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
-
 import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -104,6 +102,7 @@ export default function RootLayout({
         <link rel="icon" type="image/png" href="/logo.png" />
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering.
           dangerouslySetInnerHTML={{
             __html: safeJsonLdSerialize(generateOrganizationSchema()),
           }}

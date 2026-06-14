@@ -31,3 +31,23 @@ test("Sentry artifacts upload only from Vercel production with an auth token", (
     true,
   );
 });
+
+test("Sentry artifacts stay disabled for false CI flags and blank tokens", () => {
+  assert.equal(
+    shouldUploadSentryArtifacts({
+      CI: "false",
+      SENTRY_AUTH_TOKEN: "token",
+      VERCEL_ENV: "production",
+    }),
+    false,
+  );
+
+  assert.equal(
+    shouldUploadSentryArtifacts({
+      CI: "true",
+      SENTRY_AUTH_TOKEN: "   ",
+      VERCEL_ENV: "production",
+    }),
+    false,
+  );
+});

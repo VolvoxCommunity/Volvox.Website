@@ -70,7 +70,6 @@ export function ImageZoom({
               width={FALLBACK_IMAGE_WIDTH}
               height={FALLBACK_IMAGE_HEIGHT}
               className="w-full h-auto"
-              unoptimized
             />
           )}
         </button>
@@ -115,7 +114,6 @@ export function ImageZoom({
                 width={FALLBACK_IMAGE_WIDTH}
                 height={FALLBACK_IMAGE_HEIGHT}
                 className="max-w-full max-h-full object-contain"
-                unoptimized
               />
             )}
           </div>
