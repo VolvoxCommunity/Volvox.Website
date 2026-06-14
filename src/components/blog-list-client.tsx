@@ -51,7 +51,11 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   // Extract all unique tags from posts
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
-    posts.forEach((post) => post.tags.forEach((tag) => tagSet.add(tag)));
+    posts.forEach((post) => {
+      post.tags.forEach((tag) => {
+        tagSet.add(tag);
+      });
+    });
     return Array.from(tagSet).sort();
   }, [posts]);
 

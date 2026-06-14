@@ -144,9 +144,9 @@ test.describe("Semantic Landmarks Verification", () => {
         const uniqueElements = new Set<Element>();
 
         // Add elements with explicit role attribute
-        document
-          .querySelectorAll(`[role="${role}"]`)
-          .forEach((el) => uniqueElements.add(el));
+        document.querySelectorAll(`[role="${role}"]`).forEach((el) => {
+          uniqueElements.add(el);
+        });
 
         // For banner, also add <header> elements (implicit banner role)
         // Only top-level headers have implicit banner role - exclude those nested in sectioning content
@@ -160,16 +160,16 @@ test.describe("Semantic Landmarks Verification", () => {
 
         // For navigation, also add <nav> elements (implicit navigation role)
         if (role === "navigation") {
-          document
-            .querySelectorAll("nav")
-            .forEach((el) => uniqueElements.add(el));
+          document.querySelectorAll("nav").forEach((el) => {
+            uniqueElements.add(el);
+          });
         }
 
         // For contentinfo, also add <footer> elements (implicit contentinfo role)
         if (role === "contentinfo") {
-          document
-            .querySelectorAll("footer")
-            .forEach((el) => uniqueElements.add(el));
+          document.querySelectorAll("footer").forEach((el) => {
+            uniqueElements.add(el);
+          });
         }
 
         const labels: string[] = [];

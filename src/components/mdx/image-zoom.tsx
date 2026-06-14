@@ -19,6 +19,9 @@ interface ImageZoomProps {
   caption?: string;
 }
 
+const FALLBACK_IMAGE_WIDTH = 1200;
+const FALLBACK_IMAGE_HEIGHT = 675;
+
 /**
  * Renders a thumbnail image that opens a centered, zoomable dialog when activated.
  *
@@ -61,7 +64,14 @@ export function ImageZoom({
               className="w-full h-auto"
             />
           ) : (
-            <img src={src} alt={alt} className="w-full h-auto" />
+            <Image
+              src={src}
+              alt={alt}
+              width={FALLBACK_IMAGE_WIDTH}
+              height={FALLBACK_IMAGE_HEIGHT}
+              className="w-full h-auto"
+              unoptimized
+            />
           )}
         </button>
         {(caption || alt) && (
@@ -99,10 +109,13 @@ export function ImageZoom({
                 className="max-w-full max-h-full object-contain"
               />
             ) : (
-              <img
+              <Image
                 src={src}
                 alt={alt}
+                width={FALLBACK_IMAGE_WIDTH}
+                height={FALLBACK_IMAGE_HEIGHT}
                 className="max-w-full max-h-full object-contain"
+                unoptimized
               />
             )}
           </div>

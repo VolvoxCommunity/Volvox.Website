@@ -11,19 +11,19 @@
   --color-card-foreground: var(--card-foreground);
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
-  --color-primary: #007aff;
+  --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: #af58da;
+  --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-accent: #ff9500;
+  --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-destructive-foreground: var(--destructive-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
-  --color-ring: #007aff;
+  --color-ring: var(--ring);
 
   /* Fonts */
   --font-sans: var(--font-jetbrains-mono), ui-sans-serif, system-ui, sans-serif;
@@ -78,14 +78,14 @@
     --popover: oklch(1 0 0);
     --popover-foreground: oklch(0.2 0.03 260);
 
-    --primary: #007aff;
+    --primary: #0068d9;
     --primary-foreground: #ffffff;
 
-    --secondary: #af58da;
+    --secondary: #9b3fca;
     --secondary-foreground: #ffffff;
 
     --muted: oklch(0.96 0.01 240);
-    --muted-foreground: oklch(0.55 0.03 260);
+    --muted-foreground: #626d7d;
 
     --accent: #ff9500;
     --accent-foreground: #000000;
@@ -95,7 +95,7 @@
 
     --border: oklch(0.85 0.02 260);
     --input: oklch(0.85 0.02 260);
-    --ring: #007aff;
+    --ring: #0068d9;
 
     --discord: #5865f2;
     /* Discord Brand Color */
@@ -130,11 +130,11 @@
     --popover: oklch(0.16 0.02 260);
     --popover-foreground: oklch(0.92 0.01 260);
 
-    --primary: #0a84ff;
-    --primary-foreground: #ffffff;
+    --primary: #40a3ff;
+    --primary-foreground: #000000;
 
-    --secondary: #bf5af2;
-    --secondary-foreground: #ffffff;
+    --secondary: #d28aff;
+    --secondary-foreground: #000000;
 
     --muted: oklch(0.2 0.02 260);
     --muted-foreground: oklch(0.6 0.01 260);
@@ -147,7 +147,7 @@
 
     --border: oklch(0.3 0.02 260);
     --input: oklch(0.3 0.02 260);
-    --ring: #0a84ff;
+    --ring: #40a3ff;
 
     --discord: #5865f2;
 

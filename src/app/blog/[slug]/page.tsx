@@ -1,3 +1,5 @@
+/* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
+
 import { Calendar, Clock, Eye } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";

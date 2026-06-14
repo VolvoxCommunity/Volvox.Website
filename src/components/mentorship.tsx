@@ -91,7 +91,7 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
               size="lg"
               className="h-14 px-8 text-base gap-3"
               onClick={handleDiscordClick}
-              aria-label="Join our Discord community (opens in new tab)"
+              aria-label="Join Us - opens Discord community in a new tab"
             >
               <DiscordLogo
                 weight="fill"
@@ -108,7 +108,7 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
               variant="ghost"
               className="h-14 px-8 text-base gap-3 bg-white/5 hover:bg-white/10 hover:text-white border border-white/10 backdrop-blur-md"
               onClick={handleTeamClick}
-              aria-label="View team members page"
+              aria-label="Meet the Team - view team members page"
             >
               <Users weight="fill" className="h-6 w-6" aria-hidden="true" />
               Meet the Team
@@ -138,6 +138,11 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
 interface ParallaxTextProps {
   baseVelocity: number;
   teamMembers: TeamMember[];
+}
+
+interface MarqueeProfile {
+  key: string;
+  profile: TeamMember;
 }
 
 function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
@@ -172,8 +177,13 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
   }, [isHovered, isDragging, isToggledPause, isMobile, speedFactor]);
 
   // Duplicate data multiple times for a truly infinite feel
-  const marqueeData = useMemo(() => {
-    return [...teamMembers, ...teamMembers, ...teamMembers, ...teamMembers];
+  const marqueeData = useMemo<MarqueeProfile[]>(() => {
+    return Array.from({ length: 4 }, (_, groupIndex) =>
+      teamMembers.map((profile) => ({
+        key: `${groupIndex}-${profile.id}`,
+        profile,
+      })),
+    ).flat();
   }, [teamMembers]);
 
   /**
@@ -247,8 +257,8 @@ function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
       dragElastic={0}
       dragMomentum={false}
     >
-      {marqueeData.map((profile, i) => (
-        <CommunityCard key={`${profile.id}-${i}`} profile={profile} />
+      {marqueeData.map(({ key, profile }) => (
+        <CommunityCard key={key} profile={profile} />
       ))}
     </motion.div>
   );
@@ -274,35 +284,35 @@ function CommunityCard({ profile }: { profile: TeamMember }) {
           </AvatarFallback>
         </Avatar>
         <div className="min-w-0 flex-1">
-          <h4 className="font-bold text-foreground text-xs md:text-base truncate leading-tight">
+          <h3 className="font-bold text-foreground text-xs md:text-base truncate leading-tight">
             {profile.name}
-          </h4>
+          </h3>
           <div className="flex items-center gap-1.5 md:gap-2 mt-0.5 md:mt-1">
             {profile.type === "mentor" ? (
               <Badge
                 variant="default"
-                className="bg-primary/20 text-primary border-primary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
+                className="bg-primary text-primary-foreground border-primary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 MENTOR
               </Badge>
             ) : profile.type === "builder" ? (
               <Badge
                 variant="secondary"
-                className="bg-secondary/20 text-secondary border-secondary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
+                className="bg-secondary text-secondary-foreground border-secondary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 BUILDER
               </Badge>
             ) : profile.type === "marketer" ? (
               <Badge
                 variant="secondary"
-                className="bg-secondary/20 text-secondary border-secondary/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
+                className="bg-secondary text-secondary-foreground border-secondary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 MARKETER
               </Badge>
             ) : (
               <Badge
                 variant="outline"
-                className="bg-accent/20 text-accent border-accent/20 text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
+                className="bg-accent text-accent-foreground border-accent text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
               >
                 MENTEE
               </Badge>

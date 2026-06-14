@@ -157,6 +157,7 @@ export function FilterControls({
         />
         {debouncedQuery && (
           <button
+            type="button"
             onClick={() => {
               setDebouncedQuery("");
               onSearchChange("");
@@ -178,6 +179,7 @@ export function FilterControls({
               {tagLabel}
             </span>
             <button
+              type="button"
               onClick={onClearTags}
               className={cn(
                 "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
@@ -193,6 +195,7 @@ export function FilterControls({
             {allTags.map((tag) => (
               <button
                 key={tag}
+                type="button"
                 onClick={() => onTagToggle(tag)}
                 className={cn(
                   "px-4 py-2 text-sm rounded-lg border transition-colors shrink-0",
@@ -252,6 +255,7 @@ export function FilterControls({
             {/* Sort Dropdown */}
             <div className="relative" ref={sortRef}>
               <button
+                type="button"
                 onClick={() => setSortOpen(!sortOpen)}
                 className="flex items-center gap-2 px-4 py-2.5 text-sm border border-border rounded-xl hover:border-secondary/50 hover:bg-muted/50 transition-all bg-background"
                 aria-expanded={sortOpen}
@@ -274,6 +278,7 @@ export function FilterControls({
                   {sortOptions.map((option) => (
                     <button
                       key={option.value}
+                      type="button"
                       onClick={() => {
                         onSortChange(option.value);
                         setSortOpen(false);
@@ -294,6 +299,7 @@ export function FilterControls({
             {/* View Mode Toggle */}
             <div className="hidden sm:flex items-center border border-border rounded-xl overflow-hidden">
               <button
+                type="button"
                 onClick={() => onViewModeChange("grid")}
                 className={cn(
                   "px-3 py-2 transition-colors",
@@ -307,6 +313,7 @@ export function FilterControls({
                 <SquaresFour className="h-4 w-4" aria-hidden="true" />
               </button>
               <button
+                type="button"
                 onClick={() => onViewModeChange("list")}
                 className={cn(
                   "px-3 py-2 transition-colors",

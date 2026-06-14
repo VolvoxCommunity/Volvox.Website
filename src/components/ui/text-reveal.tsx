@@ -46,13 +46,18 @@ export function TextReveal({
 
   const items =
     variant === "word" ? text.split(" ").filter(Boolean) : text.split("");
+  const keyedItems = items.map((item, itemIndex) => ({
+    id: `${item}-${itemIndex}`,
+    value: item,
+  }));
 
   const container: Variants = {
     hidden: { opacity: 0 },
     visible: (i = 1) => ({
       opacity: 1,
       transition: {
-        staggerChildren: items.length > 0 ? duration / items.length : 0,
+        staggerChildren:
+          keyedItems.length > 0 ? duration / keyedItems.length : 0,
         delayChildren: delay * i,
       },
     }),
@@ -67,16 +72,16 @@ export function TextReveal({
       animate={isInView ? "visible" : "hidden"}
       className={className}
     >
-      {items.map((item, index) => (
+      {keyedItems.map((item) => (
         <motion.span
           variants={childVariants}
           style={{
             display: "inline-block",
             marginRight: variant === "word" ? "0.25em" : "0",
           }}
-          key={index}
+          key={item.id}
         >
-          {item}
+          {item.value}
         </motion.span>
       ))}
     </motion.span>

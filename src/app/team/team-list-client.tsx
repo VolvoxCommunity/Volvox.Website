@@ -65,15 +65,16 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
               Team members grid
             </h2>
             {filteredMembers.length > 0 ? (
-              <div
+              <ul
                 className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
-                role="list"
                 aria-label={`${filteredMembers.length} team member${filteredMembers.length !== 1 ? "s" : ""}`}
               >
                 {filteredMembers.map((member) => (
-                  <TeamCard key={member.id} member={member} />
+                  <li key={member.id}>
+                    <TeamCard member={member} />
+                  </li>
                 ))}
-              </div>
+              </ul>
             ) : (
               <div className="text-center py-16" role="status">
                 <p className="text-muted-foreground">No team members found.</p>

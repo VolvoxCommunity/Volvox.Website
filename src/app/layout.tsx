@@ -1,3 +1,5 @@
+/* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
+
 import type { Metadata } from "next";
 import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
 import "./globals.css";
@@ -38,6 +40,9 @@ const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   display: "swap",
 });
+
+const deploymentEnvironment =
+  process.env.VERCEL_ENV ?? process.env.NEXT_PUBLIC_VERCEL_ENV ?? null;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -96,7 +101,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" type="image/png" href="/volvox-logo.png" />
+        <link rel="icon" type="image/png" href="/logo.png" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -117,7 +122,9 @@ export default function RootLayout({
               <CookieConsentBanner />
               <VolvoxAssistant />
             </ThemeProvider>
-            <ConditionalAnalytics />
+            <ConditionalAnalytics
+              deploymentEnvironment={deploymentEnvironment}
+            />
           </CookieConsentProvider>
         </SmoothScroll>
       </body>

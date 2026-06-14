@@ -1,3 +1,5 @@
+/* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
+
 import type { Metadata } from "next";
 import Script from "next/script";
 import { safeJsonLdSerialize } from "@/lib/constants";
