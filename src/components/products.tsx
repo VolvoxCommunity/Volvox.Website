@@ -185,7 +185,7 @@ function ProductCard({ product }: ProductCardProps) {
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
               {product.features?.slice(0, 4).map((feature, idx) => (
                 <motion.div
-                  key={feature}
+                  key={`${feature}-${idx}`}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * idx }}
