@@ -37,6 +37,11 @@
   --radius-lg: var(--radius);
   --radius-md: calc(var(--radius) - 2px);
   --radius-sm: calc(var(--radius) - 4px);
+  --radius-xl: calc(var(--radius) + 0.25rem);
+  --radius-2xl: calc(var(--radius) + 0.75rem);
+  --radius-3xl: calc(var(--radius) + 1.25rem);
+  --radius-4xl: calc(var(--radius) + 2rem);
+  --radius-5xl: calc(var(--radius) + 3rem);
 
   /* Animations */
   --ease-*: initial;
