@@ -1,21 +1,11 @@
 import { expect, test } from "@playwright/test";
 
 import { getAllExtendedProducts } from "../src/lib/content";
-
-function getProductTimestamp(product: { updatedAt?: string }): number {
-  if (!product.updatedAt) return 0;
-
-  const timestamp = Date.parse(product.updatedAt);
-  return Number.isFinite(timestamp) ? timestamp : 0;
-}
+import { sortProductsByNewest } from "../src/lib/product-sorting";
 
 function getExpectedNewestProductNames(): string[] {
   return getAllExtendedProducts()
-    .sort(
-      (a, b) =>
-        getProductTimestamp(b) - getProductTimestamp(a) ||
-        a.name.localeCompare(b.name),
-    )
+    .sort(sortProductsByNewest)
     .map((product) => product.name);
 }
 

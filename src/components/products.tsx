@@ -23,6 +23,7 @@ import {
   type ViewMode,
 } from "@/components/ui/filter-controls";
 import { resolveProductImagePath } from "@/lib/image-utils";
+import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -42,23 +43,6 @@ interface ProductsProps {
 
 interface ProductCardProps {
   product: ExtendedProduct;
-}
-
-function getProductTimestamp(product: ExtendedProduct): number {
-  if (!product.updatedAt) return 0;
-
-  const timestamp = Date.parse(product.updatedAt);
-  return Number.isFinite(timestamp) ? timestamp : 0;
-}
-
-function sortProductsByNewest(
-  productA: ExtendedProduct,
-  productB: ExtendedProduct,
-): number {
-  return (
-    getProductTimestamp(productB) - getProductTimestamp(productA) ||
-    productA.name.localeCompare(productB.name)
-  );
 }
 
 function ProductCard({ product }: ProductCardProps) {

@@ -14,10 +14,22 @@ import type {
   ViewMode,
 } from "@/components/ui/filter-controls";
 import { resolveProductImagePath } from "@/lib/image-utils";
+import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
 
 interface ProductsListClientProps {
   products: ExtendedProduct[];
+}
+
+interface ProductSearchParams {
+  get(name: string): string | null;
+}
+
+interface ProductFilterOptions {
+  products: ExtendedProduct[];
+  searchQuery: string;
+  selectedTech: string[];
+  sortOption: ProductSortOption;
 }
 
 const STORAGE_KEY = "volvox-products-view";
@@ -32,11 +44,92 @@ function isProductSortOption(value: string | null): value is ProductSortOption {
   return PRODUCT_SORT_OPTIONS.includes(value as ProductSortOption);
 }
 
-function getProductTimestamp(product: ExtendedProduct): number {
-  if (!product.updatedAt) return 0;
+function isViewMode(value: string | null): value is ViewMode {
+  return value === "grid" || value === "list";
+}
 
-  const timestamp = Date.parse(product.updatedAt);
-  return Number.isFinite(timestamp) ? timestamp : 0;
+function getInitialSelectedTech(searchParams: ProductSearchParams): string[] {
+  const tech = searchParams.get("tech");
+  return tech ? tech.split(",").filter(Boolean) : [];
+}
+
+function getInitialSortOption(
+  searchParams: ProductSearchParams,
+): ProductSortOption {
+  const sort = searchParams.get("sort");
+  return isProductSortOption(sort) ? sort : DEFAULT_PRODUCT_SORT_OPTION;
+}
+
+function getInitialViewMode(searchParams: ProductSearchParams): ViewMode {
+  const view = searchParams.get("view");
+  if (isViewMode(view)) return view;
+
+  if (typeof window === "undefined") return "grid";
+
+  const storedViewMode = localStorage.getItem(STORAGE_KEY);
+  return isViewMode(storedViewMode) ? storedViewMode : "grid";
+}
+
+function getAvailableTechStack(products: ExtendedProduct[]): string[] {
+  const techSet = new Set<string>();
+  products.forEach((product) =>
+    product.techStack.forEach((tech) => techSet.add(tech)),
+  );
+  return Array.from(techSet).sort();
+}
+
+function productMatchesSearch(
+  product: ExtendedProduct,
+  normalizedSearchQuery: string,
+): boolean {
+  if (!normalizedSearchQuery) return true;
+
+  return (
+    product.name.toLowerCase().includes(normalizedSearchQuery) ||
+    product.description.toLowerCase().includes(normalizedSearchQuery) ||
+    product.tagline.toLowerCase().includes(normalizedSearchQuery) ||
+    product.techStack.some((tech) =>
+      tech.toLowerCase().includes(normalizedSearchQuery),
+    )
+  );
+}
+
+function productMatchesSelectedTech(
+  product: ExtendedProduct,
+  selectedTech: string[],
+): boolean {
+  if (selectedTech.length === 0) return true;
+  return selectedTech.some((tech) => product.techStack.includes(tech));
+}
+
+function sortProducts(
+  productA: ExtendedProduct,
+  productB: ExtendedProduct,
+  sortOption: ProductSortOption,
+): number {
+  if (sortOption === "newest") {
+    return sortProductsByNewest(productA, productB);
+  }
+
+  if (sortOption === "z-a") {
+    return productB.name.localeCompare(productA.name);
+  }
+
+  return productA.name.localeCompare(productB.name);
+}
+
+function getFilteredProducts({
+  products,
+  searchQuery,
+  selectedTech,
+  sortOption,
+}: ProductFilterOptions): ExtendedProduct[] {
+  const normalizedSearchQuery = searchQuery.toLowerCase();
+
+  return products
+    .filter((product) => productMatchesSearch(product, normalizedSearchQuery))
+    .filter((product) => productMatchesSelectedTech(product, selectedTech))
+    .sort((productA, productB) => sortProducts(productA, productB, sortOption));
 }
 
 /**
@@ -49,76 +142,33 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
   // Initialize state from URL params
   const [searchQuery, setSearchQuery] = useState(searchParams.get("q") || "");
-  const [selectedTech, setSelectedTech] = useState<string[]>(() => {
-    const tech = searchParams.get("tech");
-    return tech ? tech.split(",").filter(Boolean) : [];
-  });
-  const [sortOption, setSortOption] = useState<ProductSortOption>(() => {
-    const sort = searchParams.get("sort");
-    return isProductSortOption(sort) ? sort : DEFAULT_PRODUCT_SORT_OPTION;
-  });
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    const view = searchParams.get("view");
-    if (view === "grid" || view === "list") return view;
-    // Check localStorage only on client
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "grid" || stored === "list") return stored;
-    }
-    return "grid";
-  });
+  const [selectedTech, setSelectedTech] = useState<string[]>(() =>
+    getInitialSelectedTech(searchParams),
+  );
+  const [sortOption, setSortOption] = useState<ProductSortOption>(() =>
+    getInitialSortOption(searchParams),
+  );
+  const [viewMode, setViewMode] = useState<ViewMode>(() =>
+    getInitialViewMode(searchParams),
+  );
 
   // Extract all unique tech stack items from products
-  const allTechStack = useMemo(() => {
-    const techSet = new Set<string>();
-    products.forEach((product) =>
-      product.techStack.forEach((tech) => techSet.add(tech)),
-    );
-    return Array.from(techSet).sort();
-  }, [products]);
+  const allTechStack = useMemo(
+    () => getAvailableTechStack(products),
+    [products],
+  );
 
   // Filter and sort products
-  const filteredProducts = useMemo(() => {
-    let result = [...products];
-
-    // Search filter (name, description, tagline)
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      result = result.filter(
-        (product) =>
-          product.name.toLowerCase().includes(query) ||
-          product.description.toLowerCase().includes(query) ||
-          product.tagline.toLowerCase().includes(query) ||
-          product.techStack.some((tech) => tech.toLowerCase().includes(query)),
-      );
-    }
-
-    // Tech stack filter (OR logic)
-    if (selectedTech.length > 0) {
-      result = result.filter((product) =>
-        selectedTech.some((tech) => product.techStack.includes(tech)),
-      );
-    }
-
-    // Sort
-    result.sort((a, b) => {
-      switch (sortOption) {
-        case "newest":
-          return (
-            getProductTimestamp(b) - getProductTimestamp(a) ||
-            a.name.localeCompare(b.name)
-          );
-        case "a-z":
-          return a.name.localeCompare(b.name);
-        case "z-a":
-          return b.name.localeCompare(a.name);
-        default:
-          return 0;
-      }
-    });
-
-    return result;
-  }, [products, searchQuery, selectedTech, sortOption]);
+  const filteredProducts = useMemo(
+    () =>
+      getFilteredProducts({
+        products,
+        searchQuery,
+        selectedTech,
+        sortOption,
+      }),
+    [products, searchQuery, selectedTech, sortOption],
+  );
 
   // Update URL params
   const updateUrl = useCallback(
