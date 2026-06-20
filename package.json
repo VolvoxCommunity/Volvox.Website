@@ -82,7 +82,7 @@
     "postcss": "^8.5.8",
     "postcss-load-config": "^6.0.1",
     "ts-node": "^10.9.2",
-    "tsx": "^4.21.0",
+    "tsx": "^4.22.4",
     "typescript": "^6.0.3"
   }
 }
