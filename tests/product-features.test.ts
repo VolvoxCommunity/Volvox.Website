@@ -1,6 +1,6 @@
 import assert from "node:assert/strict";
 import test from "node:test";
-import { buildFeatureItems } from "@/lib/feature-items";
+import { buildFeatureItems } from "../src/lib/feature-items";
 
 test("buildFeatureItems creates unique keys for duplicate feature text", () => {
   const items = buildFeatureItems([
