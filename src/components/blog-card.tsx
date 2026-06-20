@@ -135,9 +135,9 @@ export function BlogCard({ post, viewMode }: BlogCardProps) {
             {/* Footer - Tags & Date */}
             <div className="flex items-center justify-between mt-auto gap-4">
               <div className="flex items-center gap-1.5 overflow-hidden">
-                {post.tags.slice(0, 2).map((tag, index) => (
+                {post.tags.slice(0, 2).map((tag) => (
                   <Badge
-                    key={index}
+                    key={tag}
                     variant="secondary"
                     className="rounded-lg bg-secondary hover:bg-secondary/90 text-secondary-foreground font-medium border-none px-2.5 py-0.5 text-[10px] whitespace-nowrap"
                   >

@@ -37,13 +37,13 @@ export function Spotlight({
   };
 
   return (
+    // biome-ignore lint/a11y/noStaticElementInteractions: Pointer tracking only moves the decorative spotlight effect.
     <div
       ref={divRef}
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
       className={cn("relative overflow-hidden", className)}
-      role="presentation"
     >
       <div
         className="pointer-events-none absolute -inset-px transition-opacity duration-300"

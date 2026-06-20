@@ -22,13 +22,16 @@ function getRedisClient(): Redis | null {
     return redis;
   }
 
-  if (!isRedisConfigured()) {
+  const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+  const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+  if (!redisUrl || !redisToken) {
     return null;
   }
 
   redis = new Redis({
-    url: process.env.UPSTASH_REDIS_REST_URL!,
-    token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+    url: redisUrl,
+    token: redisToken,
   });
 
   return redis;
@@ -42,17 +45,6 @@ function getRedisClient(): Redis | null {
  */
 function getViewKey(slug: string): string {
   return `${VIEW_KEY_PREFIX}${slug}`;
-}
-
-/**
- * Checks if Upstash Redis is configured and available.
- *
- * @returns true if UPSTASH_REDIS_REST_URL and UPSTASH_REDIS_REST_TOKEN are set
- */
-function isRedisConfigured(): boolean {
-  return !!(
-    process.env.UPSTASH_REDIS_REST_URL && process.env.UPSTASH_REDIS_REST_TOKEN
-  );
 }
 
 /**

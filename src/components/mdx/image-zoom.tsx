@@ -10,6 +10,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { canUseNextImageOptimization } from "@/lib/image-utils";
 
 interface ImageZoomProps {
   src: string;
@@ -17,6 +18,44 @@ interface ImageZoomProps {
   width?: number;
   height?: number;
   caption?: string;
+}
+
+const FALLBACK_IMAGE_WIDTH = 1200;
+const FALLBACK_IMAGE_HEIGHT = 675;
+
+interface ZoomImageProps {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  className: string;
+}
+
+function ZoomImage({ src, alt, width, height, className }: ZoomImageProps) {
+  if (canUseNextImageOptimization(src)) {
+    return (
+      <Image
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        className={className}
+      />
+    );
+  }
+
+  return (
+    // biome-ignore lint/performance/noImgElement: Unconfigured remote MDX URLs cannot be passed to next/image without broken renders.
+    <img
+      src={src}
+      alt={alt}
+      width={width}
+      height={height}
+      className={className}
+      loading="lazy"
+      decoding="async"
+    />
+  );
 }
 
 /**
@@ -53,7 +92,7 @@ export function ImageZoom({
           aria-label={`Expand image: ${alt}`}
         >
           {width && height ? (
-            <Image
+            <ZoomImage
               src={src}
               alt={alt}
               width={width}
@@ -61,7 +100,13 @@ export function ImageZoom({
               className="w-full h-auto"
             />
           ) : (
-            <img src={src} alt={alt} className="w-full h-auto" />
+            <ZoomImage
+              src={src}
+              alt={alt}
+              width={FALLBACK_IMAGE_WIDTH}
+              height={FALLBACK_IMAGE_HEIGHT}
+              className="w-full h-auto"
+            />
           )}
         </button>
         {(caption || alt) && (
@@ -91,7 +136,7 @@ export function ImageZoom({
           </button>
           <div className="relative flex items-center justify-center w-full h-full p-8">
             {width && height ? (
-              <Image
+              <ZoomImage
                 src={src}
                 alt={alt}
                 width={width}
@@ -99,9 +144,11 @@ export function ImageZoom({
                 className="max-w-full max-h-full object-contain"
               />
             ) : (
-              <img
+              <ZoomImage
                 src={src}
                 alt={alt}
+                width={FALLBACK_IMAGE_WIDTH}
+                height={FALLBACK_IMAGE_HEIGHT}
                 className="max-w-full max-h-full object-contain"
               />
             )}

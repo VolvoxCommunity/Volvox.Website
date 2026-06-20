@@ -28,7 +28,7 @@ export function ProductTestimonials({
         <div className="grid gap-6 md:grid-cols-2">
           {testimonials.map((testimonial, idx) => (
             <motion.div
-              key={idx}
+              key={`${testimonial.name}-${testimonial.quote}`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

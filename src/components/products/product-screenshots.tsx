@@ -99,8 +99,9 @@ export function ProductScreenshots({
         <h2 className="text-3xl md:text-4xl font-bold mb-8">Screenshots</h2>
 
         {/* Carousel Container */}
-        <div
+        <section
           className="relative"
+          aria-label={`${productName} screenshots carousel`}
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
@@ -184,9 +185,9 @@ export function ProductScreenshots({
           {/* Dot Indicators */}
           {galleryImages.length > 1 && (
             <div className="flex justify-center gap-2 mt-4">
-              {galleryImages.map((_, idx) => (
+              {galleryImages.map((image, idx) => (
                 <button
-                  key={idx}
+                  key={image}
                   type="button"
                   onClick={() => goToSlide(idx)}
                   className={cn(
@@ -201,7 +202,7 @@ export function ProductScreenshots({
               ))}
             </div>
           )}
-        </div>
+        </section>
 
         {/* Thumbnail Strip */}
         {galleryImages.length > 1 && (

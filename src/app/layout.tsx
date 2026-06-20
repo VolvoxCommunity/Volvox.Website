@@ -39,6 +39,9 @@ const spaceGrotesk = Space_Grotesk({
   display: "swap",
 });
 
+const deploymentEnvironment =
+  process.env.VERCEL_ENV ?? process.env.NEXT_PUBLIC_VERCEL_ENV ?? null;
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
@@ -96,9 +99,10 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        <link rel="icon" type="image/png" href="/volvox-logo.png" />
+        <link rel="icon" type="image/png" href="/logo.png" />
         <script
           type="application/ld+json"
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering.
           dangerouslySetInnerHTML={{
             __html: safeJsonLdSerialize(generateOrganizationSchema()),
           }}
@@ -117,7 +121,9 @@ export default function RootLayout({
               <CookieConsentBanner />
               <VolvoxAssistant />
             </ThemeProvider>
-            <ConditionalAnalytics />
+            <ConditionalAnalytics
+              deploymentEnvironment={deploymentEnvironment}
+            />
           </CookieConsentProvider>
         </SmoothScroll>
       </body>

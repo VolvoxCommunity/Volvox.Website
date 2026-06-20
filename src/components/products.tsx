@@ -22,6 +22,7 @@ import {
   type ProductSortOption,
   type ViewMode,
 } from "@/components/ui/filter-controls";
+import { buildFeatureItems } from "@/lib/feature-items";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
@@ -51,6 +52,9 @@ function ProductCard({ product }: ProductCardProps) {
 
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
+  const previewFeatureItems = buildFeatureItems(
+    product.features?.slice(0, 4) ?? [],
+  );
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -182,9 +186,9 @@ function ProductCard({ product }: ProductCardProps) {
 
             {/* Features Preview */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-              {product.features?.slice(0, 4).map((feature, idx) => (
+              {previewFeatureItems.map(({ feature, key }, idx) => (
                 <motion.div
-                  key={idx}
+                  key={key}
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * idx }}

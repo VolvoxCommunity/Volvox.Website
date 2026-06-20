@@ -15,7 +15,7 @@ export function generateOrganizationSchema() {
     "@type": "Organization",
     name: SITE_NAME,
     url: SITE_URL,
-    logo: `${SITE_URL}/volvox-logo.png`,
+    logo: `${SITE_URL}/logo.png`,
     description: SITE_DESCRIPTION,
     sameAs: [TWITTER_URL],
   };
@@ -59,7 +59,7 @@ export function generateArticleSchema(post: ArticleSchemaInput, slug: string) {
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/volvox-logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     mainEntityOfPage: {
@@ -102,7 +102,7 @@ export function generateWebPageSchema(
       name: SITE_NAME,
       logo: {
         "@type": "ImageObject",
-        url: `${SITE_URL}/volvox-logo.png`,
+        url: `${SITE_URL}/logo.png`,
       },
     },
     datePublished: datePublished,

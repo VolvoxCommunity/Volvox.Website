@@ -89,7 +89,7 @@ const useMaterialRipple = (disabled = false) => {
       y: (height - initialSizeRef.current) / 2,
     };
 
-    let startPoint;
+    let startPoint: { x: number; y: number };
     if (event) {
       startPoint = {
         x: event.clientX - left,

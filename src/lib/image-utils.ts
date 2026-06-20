@@ -1,3 +1,26 @@
+const NEXT_IMAGE_REMOTE_HOSTS = new Set(["github.com"]);
+
+/**
+ * Checks whether a source can be passed to `next/image` with the current config.
+ *
+ * @param source - Image source path or URL.
+ * @returns True when Next.js can optimize the source without remotePatterns errors.
+ */
+export function canUseNextImageOptimization(source: string): boolean {
+  if (source.startsWith("/")) {
+    return true;
+  }
+
+  try {
+    const url = new URL(source);
+    return (
+      url.protocol === "https:" && NEXT_IMAGE_REMOTE_HOSTS.has(url.hostname)
+    );
+  } catch {
+    return false;
+  }
+}
+
 /**
  * Resolves a screenshot path to a valid image URL.
  * Handles:

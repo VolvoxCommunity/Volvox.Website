@@ -72,9 +72,11 @@ function getInitialViewMode(searchParams: ProductSearchParams): ViewMode {
 
 function getAvailableTechStack(products: ExtendedProduct[]): string[] {
   const techSet = new Set<string>();
-  products.forEach((product) =>
-    product.techStack.forEach((tech) => techSet.add(tech)),
-  );
+  products.forEach((product) => {
+    product.techStack.forEach((tech) => {
+      techSet.add(tech);
+    });
+  });
   return Array.from(techSet).sort();
 }
 
@@ -152,7 +154,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     getInitialViewMode(searchParams),
   );
 
-  // Extract all unique tech stack items from products
   const allTechStack = useMemo(
     () => getAvailableTechStack(products),
     [products],
@@ -314,6 +315,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
                 {filteredProducts.length === 1 ? "product" : "products"}
               </p>
               <button
+                type="button"
                 onClick={handleClearAll}
                 className="text-sm font-medium text-primary hover:text-primary/80 transition-colors"
               >

@@ -1,3 +1,5 @@
+/* biome-ignore-all lint/performance/noImgElement: Satori ImageResponse markup requires plain img elements. */
+
 import * as fs from "node:fs";
 import * as path from "node:path";
 import { ImageResponse } from "next/og";
