@@ -10,7 +10,7 @@
     "lint": "biome check",
     "lint:fix": "biome check --fix",
     "typecheck": "tsc --noEmit",
-    "test": "tsx --test tests/**/*.test.ts",
+    "test": "tsx --test --import ./tests/setup-globals.ts tests/**/*.test.ts",
     "format": "biome format --write .",
     "format:check": "biome format .",
     "prepare": "husky"
@@ -75,6 +75,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "dotenv": "^17.4.2",
+    "expect": "30.4.1",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.5",
     "playwright": "^1.60.0",

@@ -17,12 +17,14 @@ import { useEffect, useMemo, useRef } from "react";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
+  type BlogSortOption,
   FilterControls,
   type ProductSortOption,
   type ViewMode,
 } from "@/components/ui/filter-controls";
 import { buildFeatureItems } from "@/lib/feature-items";
 import { resolveProductImagePath } from "@/lib/image-utils";
+import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -32,9 +34,7 @@ interface ProductsProps {
   searchQuery?: string;
   onSearchChange?: (value: string) => void;
   sortOption?: ProductSortOption;
-  onSortChange?: (
-    value: ProductSortOption | "newest" | "oldest" | "views",
-  ) => void;
+  onSortChange?: (value: ProductSortOption | BlogSortOption) => void;
   viewMode?: ViewMode;
   onViewModeChange?: (value: ViewMode) => void;
   enableFilters?: boolean;
@@ -47,7 +47,6 @@ interface ProductCardProps {
 }
 
 function ProductCard({ product }: ProductCardProps) {
-  const router = useRouter();
   const cardRef = useRef<HTMLDivElement>(null);
   const imageRef = useRef<HTMLDivElement>(null);
 
@@ -193,15 +192,15 @@ function ProductCard({ product }: ProductCardProps) {
                   initial={{ opacity: 0, x: -10 }}
                   whileInView={{ opacity: 1, x: 0 }}
                   transition={{ delay: 0.1 * idx }}
-                  className="flex items-center gap-3 text-sm font-medium text-foreground/70"
+                  className="flex items-start gap-3 text-sm font-medium text-foreground/70"
                 >
-                  <div className="w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
+                  <div className="mt-0.5 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
                     <CheckCircle
                       weight="fill"
                       className="w-4 h-4 text-primary"
                     />
                   </div>
-                  <span className="truncate">{feature}</span>
+                  <span className="min-w-0 leading-snug">{feature}</span>
                 </motion.div>
               ))}
             </div>
@@ -230,9 +229,9 @@ function ProductCard({ product }: ProductCardProps) {
                 <Button
                   variant="ghost"
                   className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest border border-border hover:bg-muted"
-                  onClick={() => router.push(`/products/${product.slug}`)}
+                  asChild
                 >
-                  Overview
+                  <Link href={`/products/${product.slug}`}>Overview</Link>
                 </Button>
                 {product.links?.demo && (
                   <Button
@@ -262,7 +261,7 @@ export function Products({
   products: allProducts,
   searchQuery = "",
   onSearchChange,
-  sortOption = "a-z",
+  sortOption = "newest",
   onSortChange,
   viewMode = "grid",
   onViewModeChange,
@@ -323,11 +322,7 @@ export function Products({
 
   const filteredProducts = useMemo(() => {
     // First sort by updatedAt (latest first) to get "latest"
-    let result = [...allProducts].sort((a, b) => {
-      const dateA = a.updatedAt ? new Date(a.updatedAt).getTime() : 0;
-      const dateB = b.updatedAt ? new Date(b.updatedAt).getTime() : 0;
-      return dateB - dateA;
-    });
+    let result = [...allProducts].sort(sortProductsByNewest);
 
     // Apply limit if provided (for homepage)
     if (limit && !enableFilters && !searchQuery) {
