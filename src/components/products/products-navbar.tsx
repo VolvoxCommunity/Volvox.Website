@@ -244,6 +244,7 @@ export function ProductsNavbar({
 
             <div className="flex bg-muted/30 p-1 rounded-full border border-border/30">
               {[
+                { value: "newest", label: "Newest" },
                 { value: "a-z", label: "A-Z" },
                 { value: "z-a", label: "Z-A" },
               ].map((opt) => (
@@ -309,7 +310,7 @@ export function ProductsNavbar({
                   <Funnel
                     className={cn(
                       "h-4 w-4",
-                      (selectedTech.length > 0 || sortOption !== "a-z") &&
+                      (selectedTech.length > 0 || sortOption !== "newest") &&
                         "text-primary",
                     )}
                     weight={selectedTech.length > 0 ? "fill" : "regular"}
@@ -331,6 +332,7 @@ export function ProductsNavbar({
                     </span>
                     <div className="flex bg-muted/30 p-1.5 rounded-[2rem] border border-border/30 w-full overflow-hidden">
                       {[
+                        { value: "newest", label: "Newest" },
                         { value: "a-z", label: "Name (A-Z)" },
                         { value: "z-a", label: "Name (Z-A)" },
                       ].map((opt) => (
