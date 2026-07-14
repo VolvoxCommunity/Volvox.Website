@@ -370,13 +370,13 @@ export function HowWeWork() {
       <div ref={pinRef} className="h-screen w-full overflow-hidden relative">
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
         <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50">
-          <h1 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter flex gap-[0.2em] overflow-hidden p-4">
+          <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter flex gap-[0.2em] overflow-hidden p-4">
             {"How we work".split(" ").map((w, i) => (
               <span key={i} className="hww-title-word block">
                 {w}
               </span>
             ))}
-          </h1>
+          </h2>
         </div>
 
         {/* Headline (Phase 2, centered, hidden initially) */}
