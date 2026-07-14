@@ -40,7 +40,6 @@ export function BackToPostsButton() {
         >
           <Button
             variant="outline"
-            className="shadow-lg backdrop-blur-sm bg-background/80 hover:bg-background border-border/50 flex items-center gap-2"
             data-testid="back-to-posts"
             onClick={() => router.push("/#blog", { scroll: false })}
           >

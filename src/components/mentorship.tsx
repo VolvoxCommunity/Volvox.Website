@@ -89,7 +89,6 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
             <Button
               variant="accent"
               size="lg"
-              className="h-14 px-8 text-base gap-3"
               onClick={handleDiscordClick}
               aria-label="Join Us - opens Discord community in a new tab"
             >
@@ -106,7 +105,6 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
             <Button
               size="lg"
               variant="ghost"
-              className="h-14 px-8 text-base gap-3 bg-white/5 hover:bg-white/10 hover:text-white border border-white/10 backdrop-blur-md"
               onClick={handleTeamClick}
               aria-label="Meet the Team - view team members page"
             >

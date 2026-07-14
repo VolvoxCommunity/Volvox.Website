@@ -355,11 +355,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
                   Try adjusting your search or filters to find what you&apos;re
                   looking for.
                 </p>
-                <Button
-                  onClick={handleClearAll}
-                  variant="outline"
-                  className="rounded-full"
-                >
+                <Button onClick={handleClearAll} variant="outline">
                   Clear all filters
                 </Button>
               </div>

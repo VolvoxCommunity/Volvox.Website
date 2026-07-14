@@ -226,17 +226,12 @@ function ProductCard({ product }: ProductCardProps) {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-4 w-full md:w-auto">
-                <Button
-                  variant="ghost"
-                  className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest border border-border hover:bg-muted"
-                  asChild
-                >
+                <Button variant="ghost" size="sm" asChild>
                   <Link href={`/products/${product.slug}`}>Overview</Link>
                 </Button>
                 {product.links?.demo && (
                   <Button
                     variant="default"
-                    className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest gap-2 shadow-[0_15px_30px_-5px_oklch(from_var(--primary)_l_c_h_/_0.3)] hover:scale-105 active:scale-95 transition-all"
                     onClick={() =>
                       window.open(
                         product.links.demo,
@@ -405,7 +400,7 @@ export function Products({
             <Button
               variant="outline"
               size="lg"
-              className="rounded-full h-16 px-10 border-foreground/10 hover:border-primary/50 hover:bg-primary/5 transition-all group overflow-hidden relative"
+              className="group"
               onClick={() => router.push("/products")}
             >
               <span className="relative z-10 font-black text-sm uppercase tracking-widest flex items-center">
@@ -473,12 +468,7 @@ export function Products({
             Our ecosystem is constantly evolving. Visit the products page for
             detailed documentation and open-source contributions.
           </p>
-          <Button
-            variant="default"
-            size="lg"
-            className="rounded-full h-14 px-12 font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-            asChild
-          >
+          <Button variant="default" size="lg" asChild>
             <Link href="/products" onClick={() => window.scrollTo(0, 0)}>
               All Products
             </Link>

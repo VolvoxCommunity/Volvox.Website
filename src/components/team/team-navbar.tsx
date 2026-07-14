@@ -40,7 +40,7 @@ export function TeamNavbar({
               size="sm"
               onClick={() => router.push("/")}
               aria-label="Back to Home"
-              className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
+              className="shrink-0"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>

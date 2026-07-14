@@ -120,11 +120,7 @@ export function TeamMemberDetailClient({
               <div className="flex flex-col sm:flex-row gap-4 justify-center md:justify-start">
                 {member.email && (
                   <MagneticButton strength={0.2}>
-                    <Button
-                      size="lg"
-                      className="gap-3 rounded-full h-14 px-8 text-base font-bold shadow-lg shadow-primary/20"
-                      onClick={handleContact}
-                    >
+                    <Button size="lg" onClick={handleContact}>
                       <Envelope weight="bold" className="h-5 w-5" />
                       Get in touch
                     </Button>
@@ -132,12 +128,7 @@ export function TeamMemberDetailClient({
                 )}
                 {member.linkedinUrl && member.isHireable && (
                   <MagneticButton strength={0.2}>
-                    <Button
-                      size="lg"
-                      variant="outline"
-                      className="gap-3 rounded-full h-14 px-8 text-base font-bold border-border/60 hover:bg-white/5"
-                      onClick={handleHire}
-                    >
+                    <Button size="lg" variant="outline" onClick={handleHire}>
                       <Briefcase weight="bold" className="h-5 w-5" />
                       Hire Member
                     </Button>
@@ -261,8 +252,7 @@ export function TeamMemberDetailClient({
                 <MagneticButton strength={0.4}>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-full w-12 h-12 border-border/60"
+                    size="icon-lg"
                     data-testid="github-button"
                     aria-label={`Visit ${member.name}'s GitHub profile`}
                     onClick={() =>
@@ -281,8 +271,7 @@ export function TeamMemberDetailClient({
                 <MagneticButton strength={0.4}>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-full w-12 h-12 border-border/60"
+                    size="icon-lg"
                     data-testid="linkedin-button"
                     aria-label={`Visit ${member.name}'s LinkedIn profile`}
                     onClick={() =>
@@ -301,8 +290,7 @@ export function TeamMemberDetailClient({
                 <MagneticButton strength={0.4}>
                   <Button
                     variant="outline"
-                    size="icon"
-                    className="rounded-full w-12 h-12 border-border/60"
+                    size="icon-lg"
                     data-testid="email-button"
                     aria-label={`Send email to ${member.name}`}
                     onClick={() =>

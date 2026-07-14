@@ -7,16 +7,24 @@ import { AnimatedBackground } from "@/components/animated-background";
 import { Blog } from "@/components/blog";
 import { Footer } from "@/components/footer";
 import { Hero } from "@/components/hero";
+import { HowWeWork } from "@/components/how-we-work";
 import { Mentorship } from "@/components/mentorship";
 import { Navigation } from "@/components/navigation";
 import { Products } from "@/components/products";
+import { Reviews } from "@/components/reviews";
 import { Toaster } from "@/components/ui/sonner";
-import type { BlogPost, ExtendedProduct, TeamMember } from "@/lib/types";
+import type {
+  BlogPost,
+  ExtendedProduct,
+  ReviewsContent,
+  TeamMember,
+} from "@/lib/types";
 
 interface HomepageClientProps {
   blogPosts: BlogPost[];
   teamMembers: TeamMember[];
   products: ExtendedProduct[];
+  reviewsContent: ReviewsContent | null;
 }
 
 /**
@@ -30,12 +38,14 @@ interface HomepageClientProps {
  * @param blogPosts - Prefetched blog posts to display in the Blog section.
  * @param teamMembers - Prefetched team members to display in the Mentorship section.
  * @param products - Prefetched products to display in the Products section.
+ * @param reviewsContent - Prefetched reviews content for the Reviews section.
  * @returns The rendered homepage JSX element.
  */
 export function HomepageClient({
   blogPosts,
   teamMembers,
   products,
+  reviewsContent,
 }: HomepageClientProps) {
   const [currentSection, setCurrentSection] = useState("home");
 
@@ -99,7 +109,7 @@ export function HomepageClient({
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["products", "blog", "mentorship", "about"];
+      const sections = ["products", "reviews", "blog", "mentorship", "about"];
       const scrollPosition = window.scrollY + 200;
 
       if (window.scrollY < 300) {
@@ -141,8 +151,10 @@ export function HomepageClient({
         <main id="main-content">
           <Hero onNavigate={handleNavigate} />
           <Products products={products || []} />
+          <Reviews content={reviewsContent} />
           <Blog posts={blogPosts || []} />
           <Mentorship teamMembers={teamMembers || []} />
+          <HowWeWork />
           <About />
         </main>
 

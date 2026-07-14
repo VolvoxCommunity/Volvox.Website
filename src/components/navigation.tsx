@@ -238,7 +238,6 @@ export function Navigation(props: NavigationProps) {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full"
               aria-label="Toggle theme"
               data-testid="nav-theme-toggle"
             >
@@ -250,7 +249,9 @@ export function Navigation(props: NavigationProps) {
             </Button>
 
             <Button
-              className="hidden lg:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none"
+              variant="ghost"
+              size="default"
+              className="hidden lg:flex bg-[#5865F2] hover:bg-[#4752c4] text-white"
               onClick={(e) => {
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
@@ -265,7 +266,7 @@ export function Navigation(props: NavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden rounded-full"
+              className="lg:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
               data-testid="nav-mobile-open"
@@ -304,7 +305,6 @@ export function Navigation(props: NavigationProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileOpen(false)}
-                className="rounded-full"
                 aria-label="Close menu"
               >
                 <X weight="bold" className="w-6 h-6" />

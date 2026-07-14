@@ -199,3 +199,48 @@ export type FaqItem = z.infer<typeof faqItemSchema>;
 export type Testimonial = z.infer<typeof testimonialSchema>;
 export type ProductLinks = z.infer<typeof productLinksSchema>;
 export type TeamMemberProject = z.infer<typeof TeamMemberProjectSchema>;
+
+/**
+ * Homepage review sources (maps to icons/labels in the UI).
+ */
+export const reviewSourceSchema = z.enum(["product-hunt", "app-store", "x"]);
+
+/**
+ * Single community / product review for the homepage reviews section.
+ */
+export const homepageReviewSchema = z.object({
+  id: z.string().min(1),
+  quote: z.string().min(1),
+  name: z.string().min(1),
+  role: z.string().min(1),
+  rating: z.number().int().min(1).max(5),
+  source: reviewSourceSchema,
+  product: z.string().optional(),
+  featured: z.boolean().optional(),
+  profilePicUrl: z.string().optional(),
+});
+
+/**
+ * Trust badge shown under the reviews carousel.
+ */
+export const reviewTrustBadgeSchema = z.object({
+  id: z.string().min(1),
+  label: z.string().min(1),
+  rating: z.string().min(1),
+  source: reviewSourceSchema,
+});
+
+/**
+ * Full homepage reviews content file (`content/review.json`).
+ */
+export const reviewsContentSchema = z.object({
+  eyebrow: z.string().min(1),
+  headline: z.string().min(1),
+  trustBadges: z.array(reviewTrustBadgeSchema).default([]),
+  reviews: z.array(homepageReviewSchema).min(1),
+});
+
+export type ReviewSource = z.infer<typeof reviewSourceSchema>;
+export type HomepageReview = z.infer<typeof homepageReviewSchema>;
+export type ReviewTrustBadge = z.infer<typeof reviewTrustBadgeSchema>;
+export type ReviewsContent = z.infer<typeof reviewsContentSchema>;

@@ -57,7 +57,6 @@ export function ChatHeader({
             variant="text"
             size="icon"
             shape="square"
-            className="text-muted-foreground hover:text-foreground"
             title="Open full page"
             asChild
           >
@@ -72,7 +71,6 @@ export function ChatHeader({
           shape="square"
           onClick={onClear}
           title="Clear conversation"
-          className="text-muted-foreground hover:text-foreground"
         >
           <Trash className="h-4 w-4" />
         </Button>
@@ -83,7 +81,6 @@ export function ChatHeader({
             shape="square"
             onClick={onClose}
             title="Close assistant"
-            className="text-muted-foreground hover:text-foreground"
           >
             <X className="h-4 w-4" />
           </Button>

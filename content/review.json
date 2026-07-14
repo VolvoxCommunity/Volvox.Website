@@ -1,0 +1,71 @@
+{
+  "eyebrow": "Loved by our community",
+  "headline": "What people say after actually using what we build.",
+  "trustBadges": [
+    {
+      "id": "product-hunt",
+      "label": "Product Hunt",
+      "rating": "5.0",
+      "source": "product-hunt"
+    },
+    {
+      "id": "app-store",
+      "label": "App Store",
+      "rating": "5.0",
+      "source": "app-store"
+    }
+  ],
+  "reviews": [
+    {
+      "id": "muhammad-yasir",
+      "quote": "I've been part of the Volvox community for a while, and I also had the chance to be one of the beta testers for Volvox Bot. Watching it evolve from the early builds to what it is now has been genuinely exciting. What stood out to me during testing wasn't just the moderation features themselves, but how much the team actually listened to feedback. If you manage a Discord server, you know that good moderation tools need to be reliable first — and that's something Volvox Bot has consistently focused on.",
+      "name": "Muhammad Yasir",
+      "role": "Beta tester, Volvox Bot",
+      "rating": 5,
+      "source": "product-hunt",
+      "product": "Volvox Bot",
+      "featured": true,
+      "profilePicUrl": "https://i.pravatar.cc/150?img=12"
+    },
+    {
+      "id": "great-game-202",
+      "quote": "Decision Jar is an absolute game-changer AI decision maker app that instantly eliminates decision fatigue for couples. It's the 'why didn't this exist sooner' tool we've been missing.",
+      "name": "Great game 202",
+      "role": "Verified App Store Review",
+      "rating": 5,
+      "source": "app-store",
+      "product": "Decision Jar",
+      "profilePicUrl": "https://i.pravatar.cc/150?img=33"
+    },
+    {
+      "id": "kathy-mchugh",
+      "quote": "Finally an app that reduces my headaches instead of adds to them. This app helps me and my partner decide dinner every night — the AI suggestions brought up ideas we would've never thought of.",
+      "name": "KathyMcHugh",
+      "role": "Verified App Store Review",
+      "rating": 5,
+      "source": "app-store",
+      "product": "Decision Jar",
+      "profilePicUrl": "https://i.pravatar.cc/150?img=47"
+    },
+    {
+      "id": "thebapes",
+      "quote": "This app helped me and my girlfriend finally decide what we're going to do for dinner. And it even suggested ideas we didn't even think of.",
+      "name": "TheBapes",
+      "role": "Verified App Store Review",
+      "rating": 5,
+      "source": "app-store",
+      "product": "Decision Jar",
+      "profilePicUrl": "https://i.pravatar.cc/150?img=60"
+    },
+    {
+      "id": "chimemaram1",
+      "quote": "Volvox the best bot ever",
+      "name": "@Chimemaram1",
+      "role": "on X",
+      "rating": 5,
+      "source": "x",
+      "product": "Volvox Bot",
+      "profilePicUrl": "https://i.pravatar.cc/150?img=68"
+    }
+  ]
+}

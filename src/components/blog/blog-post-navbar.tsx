@@ -26,7 +26,7 @@ export function BlogPostNavbar() {
               size="sm"
               onClick={() => router.push("/#blog")}
               aria-label="Back to Blog"
-              className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
+              className="shrink-0"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -81,7 +81,7 @@ export function BlogPostNavbar() {
             variant="outline"
             size="sm"
             onClick={() => router.push("/#blog")}
-            className="hidden md:flex rounded-full gap-2 border-border/60"
+            className="hidden md:flex"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
             <span>Back to Articles</span>

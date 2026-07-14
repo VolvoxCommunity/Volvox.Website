@@ -197,11 +197,7 @@ export function Blog({
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true }}
             >
-              <Button
-                variant="ghost"
-                asChild
-                className="rounded-full hover:bg-muted transition-colors flex items-center gap-2 group"
-              >
+              <Button variant="ghost" asChild className="group">
                 <Link href="/blog">
                   View Blogs
                   <ChevronRight
@@ -259,7 +255,6 @@ export function Blog({
                     onSearchChange?.("");
                     onSortChange?.("newest");
                   }}
-                  className="text-primary"
                 >
                   Clear all filters
                 </Button>
@@ -301,12 +296,7 @@ export function Blog({
               Dive deeper into our articles, tutorials, and stories from the
               team. New posts added regularly.
             </p>
-            <Button
-              variant="default"
-              size="lg"
-              className="rounded-full h-14 px-12 font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-              asChild
-            >
+            <Button variant="default" size="lg" asChild>
               <Link href="/blog" onClick={() => window.scrollTo(0, 0)}>
                 All Blog Posts
               </Link>

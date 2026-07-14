@@ -78,7 +78,7 @@ export function BlogNavbar({
               size="sm"
               onClick={() => router.push("/")}
               aria-label="Back to Home"
-              className="shrink-0 rounded-full hover:bg-muted/50 w-8 h-8 p-0"
+              className="shrink-0"
             >
               <ArrowLeft className="h-4 w-4" />
             </Button>
@@ -181,8 +181,8 @@ export function BlogNavbar({
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
+                  size="default"
                   className={cn(
-                    "h-10 gap-2 rounded-full border-border/60",
                     selectedTags.length > 0 &&
                       "bg-secondary/10 border-secondary/50 text-primary",
                   )}
@@ -242,10 +242,7 @@ export function BlogNavbar({
             {/* Sort Dropdown (Desktop) */}
             <Popover>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="h-10 gap-2 rounded-full border-border/60"
-                >
+                <Button variant="outline" size="default">
                   <span className="text-muted-foreground">Sort:</span>
                   <span className="font-medium">
                     {sortOption === "newest"
@@ -324,9 +321,8 @@ export function BlogNavbar({
               <DialogTrigger asChild>
                 <Button
                   variant="ghost"
-                  size="sm"
+                  size="icon-sm"
                   aria-label="Open filters"
-                  className="rounded-full w-8 h-8 sm:w-9 sm:h-9 p-0"
                 >
                   <Funnel
                     className={cn(
@@ -416,7 +412,7 @@ export function BlogNavbar({
                 <div className="mt-2 text-center flex flex-col items-center">
                   <Button
                     size="lg"
-                    className="w-full rounded-[2rem] h-12 text-base font-semibold shadow-lg shadow-primary/20"
+                    className="w-full"
                     onClick={() => setFilterMenuOpen(false)}
                   >
                     Apply Filters ({resultCount})
