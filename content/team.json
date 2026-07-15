@@ -103,6 +103,12 @@
     ],
     "projects": [
       {
+        "name": "EaseMize UI",
+        "description": "A collection of 60+ high-fidelity reusable UI components with millions of monthly views and thousands of users.",
+        "role": "Frontend Developer",
+        "url": "https://easemize.21st.dev/"
+      },
+      {
         "name": "Volvox Website",
         "description": "Company website built with Next.js 15, React 19, and Tailwind CSS v4, framer motion and gsap",
         "role": "Frontend Developer",
@@ -115,40 +121,40 @@
         "url": "https://img2m3.vercel.app"
       },
       {
-        "name": "AVE Engineers",
-        "description": "Professional engineering services for MEP, HVAC, and civil engineering benchmarks.",
-        "role": "Frontend Developer",
-        "url": "https://ave-engineers.vercel.app/"
-      },
-      {
-        "name": "ChintaPoradh",
-        "description": "Offline-capable platform for thought-provoking articles and literature.",
-        "role": "Frontend Developer",
-        "url": "https://chintaporadh-delta.vercel.app/"
-      },
-      {
         "name": "Elegant Signature",
         "description": "Web utility for creating beautiful animated digital signatures.",
         "role": "Frontend Developer",
         "url": "https://signtature.vercel.app/"
       },
       {
-        "name": "webcodeir",
-        "description": "Modern Web development platform for Static HTML/CSS/Javascript Site development.",
+        "name": "Volvox Bot",
+        "description": "Landing page and app UI for an AI-powered Discord bot with AI chat, auto-moderation, leveling, tickets, and a web dashboard.",
         "role": "Frontend Developer",
-        "url": "https://webcodeir.vercel.app/"
+        "url": "https://volvox.bot/"
       },
       {
-        "name": "grochatt",
-        "description": "Dark-themed AI chat interface and prompt box UI component.",
+        "name": "Sobers",
+        "description": "Landing page for a cross-platform recovery app connecting sponsors and sponsees in 12-step programs with sobriety tracking and progress timelines.",
         "role": "Frontend Developer",
-        "url": "https://grochatt.vercel.app/"
+        "url": "https://sobers.app/"
       },
       {
-        "name": "EaseMize UI",
-        "description": "A collection of modern reusable UI components hosted on 21st.dev.",
+        "name": "The Muslim Businesses",
+        "description": "Landing page for a movement building an independent Muslim trading bloc across tech, finance, energy, and manufacturing.",
         "role": "Frontend Developer",
-        "url": "https://21st.dev/easemize"
+        "url": "https://themuslimbusinesses.com/"
+      },
+      {
+        "name": "Fifth Season",
+        "description": "Landing page for Fifth Season, Vivaldi Group's proprietary AI platform for building systems that compound business value.",
+        "role": "Frontend Developer",
+        "url": "https://5thseason.vercel.app/"
+      },
+      {
+        "name": "Hone Compose",
+        "description": "Open-source Grammarly-alternative Chrome extension that fixes grammar and tone and paraphrases text in any field using your own LLM API.",
+        "role": "Frontend Developer",
+        "url": "https://github.com/rabden/hone-compose"
       }
     ],
     "type": "builder",

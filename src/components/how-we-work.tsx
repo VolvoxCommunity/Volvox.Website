@@ -1,10 +1,12 @@
+"use client";
+
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
+import { type JSX, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 const steps = [
   {
@@ -40,13 +42,54 @@ const steps = [
   },
 ];
 
-export function HowWeWork() {
+export function HowWeWork(): JSX.Element {
   const containerRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
+  // staticMode: small screens or reduced-motion users get a plain, non-pinned,
+  // fully-visible vertical layout instead of the scroll-scrubbed experience.
+  const [staticMode, setStaticMode] = useState(false);
+  const [reducedMotion, setReducedMotion] = useState(false);
+
+  useEffect(() => {
+    const motionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const mobileQuery = window.matchMedia("(max-width: 767px)");
+    const sync = () => {
+      setReducedMotion(motionQuery.matches);
+      setStaticMode(motionQuery.matches || mobileQuery.matches);
+    };
+    sync();
+    motionQuery.addEventListener("change", sync);
+    mobileQuery.addEventListener("change", sync);
+    return () => {
+      motionQuery.removeEventListener("change", sync);
+      mobileQuery.removeEventListener("change", sync);
+    };
+  }, []);
+
+  // Freeze the decorative SMIL SVG animations for reduced-motion users.
+  useEffect(() => {
+    if (!reducedMotion) return;
+    const svgs = containerRef.current?.querySelectorAll("svg");
+    svgs?.forEach((svg) => (svg as SVGSVGElement).pauseAnimations());
+  }, [reducedMotion]);
 
   useGSAP(
     () => {
-      if (!pinRef.current) return;
+      if (staticMode || !pinRef.current) return;
+
+      // Gate each overlapping phase from the a11y tree + tab order until revealed
+      // (autoAlpha toggles visibility alongside opacity).
+      gsap.set(
+        [
+          ".hww-headline",
+          ".hww-subtext",
+          ".hww-steps-wrapper",
+          ".hww-info-wrapper",
+          ".hww-values-wrapper",
+          ".hww-cta-wrapper",
+        ],
+        { autoAlpha: 0 },
+      );
 
       // Pinned timeline with substantial depth for choreographing all phases
       const tl = gsap.timeline({
@@ -82,7 +125,7 @@ export function HowWeWork() {
 
       // Title exit: clean fade + scale out to make space for headline (no top-left move)
       tl.to(".hww-title-container", {
-        opacity: 0,
+        autoAlpha: 0,
         scale: 0.8,
         y: -30,
         duration: 0.8,
@@ -92,15 +135,15 @@ export function HowWeWork() {
       // --- PHASE 2: Headline Entrance & Exit ---
       tl.fromTo(
         ".hww-headline",
-        { opacity: 0, y: 50, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" },
+        { autoAlpha: 0, y: 50, scale: 0.95 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 1, ease: "power2.out" },
         "-=0.4",
       );
 
       tl.to({}, { duration: 0.6 });
 
       tl.to(".hww-headline", {
-        opacity: 0,
+        autoAlpha: 0,
         y: -50,
         scale: 1.05,
         duration: 0.8,
@@ -109,7 +152,7 @@ export function HowWeWork() {
 
       // --- PHASE 3: Subtext Word-by-Word Pull-up (Opacity Fix Applied!) ---
       // Force parent container opacity to 1 so the word-by-word reveal actually renders!
-      tl.to(".hww-subtext", { opacity: 1, duration: 0.1 });
+      tl.to(".hww-subtext", { autoAlpha: 1, duration: 0.1 });
       tl.fromTo(
         ".hww-subtext-word-inner",
         { opacity: 0, y: "100%" },
@@ -126,7 +169,7 @@ export function HowWeWork() {
       tl.to({}, { duration: 0.8 });
 
       tl.to(".hww-subtext", {
-        opacity: 0,
+        autoAlpha: 0,
         y: -40,
         duration: 0.8,
         ease: "power2.in",
@@ -149,7 +192,7 @@ export function HowWeWork() {
       // Bring steps container into focus
       tl.to(
         ".hww-steps-wrapper",
-        { opacity: 1, pointerEvents: "auto", duration: 0.5 },
+        { autoAlpha: 1, pointerEvents: "auto", duration: 0.5 },
         "-=0.3",
       );
 
@@ -260,7 +303,7 @@ export function HowWeWork() {
 
       // Fade out steps stage
       tl.to(".hww-steps-wrapper", {
-        opacity: 0,
+        autoAlpha: 0,
         y: -40,
         pointerEvents: "none",
         duration: 0.8,
@@ -279,7 +322,7 @@ export function HowWeWork() {
 
       tl.to(
         ".hww-info-wrapper",
-        { opacity: 1, pointerEvents: "auto", duration: 0.5 },
+        { autoAlpha: 1, pointerEvents: "auto", duration: 0.5 },
         "-=0.2",
       );
       tl.to(
@@ -300,7 +343,7 @@ export function HowWeWork() {
 
       // Fade out info wrapper
       tl.to(".hww-info-wrapper", {
-        opacity: 0,
+        autoAlpha: 0,
         scale: 1.05,
         y: -30,
         pointerEvents: "none",
@@ -311,7 +354,7 @@ export function HowWeWork() {
       // --- PHASE 6: Values Stack (Editorial rows - Dedicated phase) ---
       tl.to(
         ".hww-values-wrapper",
-        { opacity: 1, pointerEvents: "auto", duration: 0.5 },
+        { autoAlpha: 1, pointerEvents: "auto", duration: 0.5 },
         "-=0.2",
       );
 
@@ -333,7 +376,7 @@ export function HowWeWork() {
 
       // Fade out values wrapper
       tl.to(".hww-values-wrapper", {
-        opacity: 0,
+        autoAlpha: 0,
         scale: 0.95,
         y: -30,
         pointerEvents: "none",
@@ -344,7 +387,7 @@ export function HowWeWork() {
       // --- PHASE 7: Closing CTA (Unified Crescendo - Dedicated phase) ---
       tl.to(
         ".hww-cta-wrapper",
-        { opacity: 1, pointerEvents: "auto", duration: 0.5 },
+        { autoAlpha: 1, pointerEvents: "auto", duration: 0.5 },
         "-=0.2",
       );
 
@@ -358,7 +401,7 @@ export function HowWeWork() {
 
       tl.to({}, { duration: 1.5 }); // lingering pause on final CTA before unpinning
     },
-    { scope: containerRef },
+    { scope: containerRef, dependencies: [staticMode], revertOnUpdate: true },
   );
 
   return (
@@ -367,7 +410,48 @@ export function HowWeWork() {
       className="relative w-full bg-background"
       ref={containerRef}
     >
-      <div ref={pinRef} className="h-screen w-full overflow-hidden relative">
+      <style>{`
+        .hww-static > div {
+          position: relative !important;
+          inset: auto !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+          pointer-events: auto !important;
+        }
+        .hww-static .hww-headline,
+        .hww-static .hww-subtext,
+        .hww-static .hww-subtext-word-inner {
+          opacity: 1 !important;
+          visibility: visible !important;
+        }
+        .hww-static .hww-steps-wrapper {
+          flex-direction: column;
+          height: auto;
+          gap: 2rem;
+        }
+        .hww-static .hww-steps-wrapper > div {
+          width: 100% !important;
+          height: auto !important;
+        }
+        .hww-static .hww-card,
+        .hww-static .hww-text {
+          position: relative !important;
+          inset: auto !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          transform: none !important;
+          margin-bottom: 1.5rem;
+        }
+      `}</style>
+      <div
+        ref={pinRef}
+        className={
+          staticMode
+            ? "hww-static w-full relative flex flex-col gap-16 py-20"
+            : "h-screen w-full overflow-hidden relative"
+        }
+      >
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
         <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50">
           <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter flex gap-[0.2em] overflow-hidden p-4">

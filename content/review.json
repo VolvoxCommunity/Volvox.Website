@@ -24,8 +24,7 @@
       "rating": 5,
       "source": "product-hunt",
       "product": "Volvox Bot",
-      "featured": true,
-      "profilePicUrl": "https://i.pravatar.cc/150?img=12"
+      "featured": true
     },
     {
       "id": "great-game-202",
@@ -34,8 +33,7 @@
       "role": "Verified App Store Review",
       "rating": 5,
       "source": "app-store",
-      "product": "Decision Jar",
-      "profilePicUrl": "https://i.pravatar.cc/150?img=33"
+      "product": "Decision Jar"
     },
     {
       "id": "kathy-mchugh",
@@ -44,8 +42,7 @@
       "role": "Verified App Store Review",
       "rating": 5,
       "source": "app-store",
-      "product": "Decision Jar",
-      "profilePicUrl": "https://i.pravatar.cc/150?img=47"
+      "product": "Decision Jar"
     },
     {
       "id": "thebapes",
@@ -54,8 +51,7 @@
       "role": "Verified App Store Review",
       "rating": 5,
       "source": "app-store",
-      "product": "Decision Jar",
-      "profilePicUrl": "https://i.pravatar.cc/150?img=60"
+      "product": "Decision Jar"
     },
     {
       "id": "chimemaram1",
@@ -64,8 +60,7 @@
       "role": "on X",
       "rating": 5,
       "source": "x",
-      "product": "Volvox Bot",
-      "profilePicUrl": "https://i.pravatar.cc/150?img=68"
+      "product": "Volvox Bot"
     }
   ]
 }

@@ -109,7 +109,14 @@ export function HomepageClient({
 
   useEffect(() => {
     const handleScroll = () => {
-      const sections = ["products", "reviews", "blog", "mentorship", "about"];
+      const sections = [
+        "how-we-work",
+        "products",
+        "reviews",
+        "blog",
+        "mentorship",
+        "about",
+      ];
       const scrollPosition = window.scrollY + 200;
 
       if (window.scrollY < 300) {
@@ -150,11 +157,11 @@ export function HomepageClient({
 
         <main id="main-content">
           <Hero onNavigate={handleNavigate} />
+          <HowWeWork />
           <Products products={products || []} />
           <Reviews content={reviewsContent} />
           <Blog posts={blogPosts || []} />
           <Mentorship teamMembers={teamMembers || []} />
-          <HowWeWork />
           <About />
         </main>
 

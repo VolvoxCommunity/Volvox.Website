@@ -54,6 +54,8 @@ function getInitials(name: string): string {
 /**
  * Build initial reviews list ordered so the featured review sits in the center slot.
  */
+const EMPTY_REVIEWS: HomepageReview[] = [];
+
 function buildInitialReviews(
   reviews: HomepageReview[],
 ): (HomepageReview & { tempId: string })[] {
@@ -315,11 +317,11 @@ export function Reviews({ content }: ReviewsProps) {
   const headingId = useId();
   const reducedMotion = useReducedMotion() ?? false;
   const [cardSize, setCardSize] = useState(340);
+  const reviews = content?.reviews ?? EMPTY_REVIEWS;
   const [orderedReviews, setOrderedReviews] = useState<
     (HomepageReview & { tempId: string })[]
-  >([]);
+  >(() => buildInitialReviews(reviews));
 
-  const reviews = content?.reviews ?? [];
   const trustBadges = content?.trustBadges ?? [];
   const headline =
     content?.headline ?? "What people say after actually using what we build.";

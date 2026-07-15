@@ -1,3 +1,5 @@
+"use client";
+
 import { Slot } from "@radix-ui/react-slot";
 import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
@@ -45,6 +47,11 @@ const playTactilePopSound = () => {
 
     osc.start(now);
     osc.stop(now + 0.05);
+
+    // Release the AudioContext once playback finishes to avoid leaking contexts per click
+    osc.onended = () => {
+      void ctx.close().catch(() => {});
+    };
   } catch {
     // Silently fail if audio context is restricted by the browser (e.g. before user interaction)
   }
@@ -535,14 +542,35 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     const { surfaceRef, rippleEffectRef, hovered, pressed, events } =
       useMaterialRipple(isRippleLogicDisabled);
 
+    const {
+      onPointerDown,
+      onPointerUp,
+      onPointerEnter,
+      onPointerLeave,
+      ...restProps
+    } = props;
+
     const componentProps = {
       className: cn(buttonVariants({ variant, size, shape, className })),
       style: style,
       "data-pressed": noMorph ? undefined : pressed,
-      onPointerDown: events.onPointerDown,
-      onPointerUp: events.onPointerUp,
-      onPointerEnter: events.onPointerEnter,
-      onPointerLeave: events.onPointerLeave,
+      ...restProps,
+      onPointerDown: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerDown(e);
+        onPointerDown?.(e);
+      },
+      onPointerUp: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerUp(e);
+        onPointerUp?.(e);
+      },
+      onPointerEnter: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerEnter(e);
+        onPointerEnter?.(e);
+      },
+      onPointerLeave: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerLeave(e);
+        onPointerLeave?.(e);
+      },
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         events.onClick();
 
@@ -552,7 +580,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
         onClick?.(e);
       },
-      ...props,
     };
 
     if (asChild) {
@@ -634,7 +661,7 @@ const SplitButton = React.forwardRef<
             className: cn(
               (child as React.ReactElement<Record<string, unknown>>).props
                 .className as string | undefined,
-              "!h-auto self-stretch",
+              "h-auto! self-stretch",
             ),
           },
         );

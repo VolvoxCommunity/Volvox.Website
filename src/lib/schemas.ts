@@ -217,7 +217,7 @@ export const homepageReviewSchema = z.object({
   source: reviewSourceSchema,
   product: z.string().optional(),
   featured: z.boolean().optional(),
-  profilePicUrl: z.string().optional(),
+  profilePicUrl: z.string().url().optional(),
 });
 
 /**
@@ -237,7 +237,13 @@ export const reviewsContentSchema = z.object({
   eyebrow: z.string().min(1),
   headline: z.string().min(1),
   trustBadges: z.array(reviewTrustBadgeSchema).default([]),
-  reviews: z.array(homepageReviewSchema).min(1),
+  reviews: z
+    .array(homepageReviewSchema)
+    .min(1)
+    .refine(
+      (reviews) => new Set(reviews.map((r) => r.id)).size === reviews.length,
+      { message: "Review ids must be unique" },
+    ),
 });
 
 export type ReviewSource = z.infer<typeof reviewSourceSchema>;
