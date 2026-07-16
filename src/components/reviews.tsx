@@ -215,7 +215,7 @@ function ReviewCard({
           ) : (
             <div
               className={cn(
-                "flex h-12 w-11 shrink-0 items-center justify-center text-sm font-bold",
+                "flex h-12 w-11 shrink-0 items-center justify-center",
                 isCenter
                   ? "bg-primary-foreground/15 text-primary-foreground"
                   : "bg-muted text-foreground",
@@ -226,7 +226,13 @@ function ReviewCard({
                   : "3px 3px 0px oklch(from var(--background) l c h / 0.9)",
               }}
             >
-              {getInitials(review.name)}
+              {review.source ? (
+                <SourceIcon source={review.source} className="h-5 w-5" />
+              ) : (
+                <span className="text-sm font-bold">
+                  {getInitials(review.name)}
+                </span>
+              )}
             </div>
           )}
 

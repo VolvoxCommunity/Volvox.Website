@@ -3,6 +3,7 @@
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { type JSX, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 
@@ -179,15 +180,16 @@ export function HowWeWork(): JSX.Element {
       const cardNodes = gsap.utils.toArray(".hww-card");
       const textNodes = gsap.utils.toArray(".hww-text");
 
-      // Set initial states for steps
+      // Set initial states for steps (with slight random rotation offsets)
       gsap.set(cardNodes, {
         opacity: 0,
         scale: 0.3,
         y: 200,
         x: 200,
+        rotation: 10,
         zIndex: 1,
       });
-      gsap.set(textNodes, { opacity: 0, y: 50 });
+      gsap.set(textNodes, { opacity: 0, y: 50, filter: "blur(10px)" });
 
       // Bring steps container into focus
       tl.to(
@@ -196,7 +198,7 @@ export function HowWeWork(): JSX.Element {
         "-=0.3",
       );
 
-      // Card 0 entry & Text 0 entry
+      // Card 0 entry & Text 0 entry (Z-Axis tilt)
       tl.to(
         cardNodes[0] as HTMLElement,
         {
@@ -204,19 +206,27 @@ export function HowWeWork(): JSX.Element {
           scale: 1,
           y: 0,
           x: 0,
+          rotation: -2,
           zIndex: 10,
           duration: 1,
           ease: "power2.out",
         },
         "<",
       );
-      tl.to(
+      tl.fromTo(
         textNodes[0] as HTMLElement,
-        { opacity: 1, y: 0, duration: 1, ease: "power2.out" },
+        { opacity: 0, y: 50, filter: "blur(10px)" },
+        {
+          opacity: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 1,
+          ease: "power3.out",
+        },
         "<",
       );
 
-      // Card 1 Standby (bottom right)
+      // Card 1 Standby (bottom right, tilted)
       tl.to(
         cardNodes[1] as HTMLElement,
         {
@@ -224,6 +234,7 @@ export function HowWeWork(): JSX.Element {
           scale: 0.4,
           y: 250,
           x: 150,
+          rotation: 8,
           zIndex: 5,
           duration: 1,
           ease: "power2.out",
@@ -235,7 +246,7 @@ export function HowWeWork(): JSX.Element {
       for (let i = 0; i < steps.length; i++) {
         // Active image parallax zoom
         const img = (cardNodes[i] as HTMLElement).querySelector("img");
-        tl.to(img, { scale: 1.15, duration: 1.5, ease: "none" });
+        tl.to(img, { scale: 1.08, duration: 1.5, ease: "none" });
 
         if (i < steps.length - 1) {
           const label = `stepTrans${i}`;
@@ -248,36 +259,51 @@ export function HowWeWork(): JSX.Element {
               scale: 0.3,
               x: -300,
               y: -300,
+              rotation: -12,
               duration: 1,
               ease: "power2.inOut",
             },
             label,
           );
-          // Old text fades out/up
+          // Old text fades out/up with blur
           tl.to(
             textNodes[i] as HTMLElement,
-            { opacity: 0, y: -50, duration: 0.8, ease: "power2.in" },
+            {
+              opacity: 0,
+              y: -40,
+              filter: "blur(10px)",
+              duration: 0.7,
+              ease: "power2.in",
+            },
             label,
           );
 
-          // Standby card moves to center (scale up)
+          // Standby card moves to center (scale up, dynamic rotation)
           tl.to(
             cardNodes[i + 1] as HTMLElement,
             {
               scale: 1,
               x: 0,
               y: 0,
+              rotation: i % 2 === 0 ? 2 : -2,
               zIndex: 10,
               duration: 1,
               ease: "power2.inOut",
             },
             label,
           );
-          // New text fades in
-          tl.to(
+          // New text fades in from blur (crossfade overlap)
+          tl.fromTo(
             textNodes[i + 1] as HTMLElement,
-            { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" },
-            `${label}+=0.3`,
+            { opacity: 0, y: 40, filter: "blur(10px)" },
+            {
+              opacity: 1,
+              y: 0,
+              filter: "blur(0px)",
+              duration: 0.9,
+              ease: "power3.out",
+            },
+            `${label}+=0.25`,
           );
 
           // Next standby enters bottom-right
@@ -289,6 +315,7 @@ export function HowWeWork(): JSX.Element {
                 scale: 0.4,
                 y: 250,
                 x: 150,
+                rotation: i % 2 === 0 ? 8 : -8,
                 zIndex: 5,
                 duration: 1,
                 ease: "power2.out",
@@ -315,8 +342,8 @@ export function HowWeWork(): JSX.Element {
       gsap.set(infoCards, {
         opacity: 0,
         y: 80,
-        scale: 0.9,
-        rotationX: -15,
+        scale: 0.95,
+        rotationX: -10,
         transformOrigin: "50% 50%",
       });
 
@@ -332,9 +359,9 @@ export function HowWeWork(): JSX.Element {
           y: 0,
           scale: 1,
           rotationX: 0,
-          stagger: 0.2,
+          stagger: 0.15,
           duration: 1.2,
-          ease: "back.out(1.2)",
+          ease: "back.out(1.1)",
         },
         "<0.2",
       );
@@ -407,9 +434,17 @@ export function HowWeWork(): JSX.Element {
   return (
     <section
       id="how-we-work"
-      className="relative w-full bg-background"
+      className="relative w-full bg-background overflow-hidden"
       ref={containerRef}
     >
+      {/* Cinematic Ambient Radial Orbs (Ethereal Glass Vibe) */}
+      {!staticMode && (
+        <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 opacity-30">
+          <div className="absolute top-[20%] left-[10%] w-[40vw] h-[40vw] rounded-full bg-primary/10 blur-[120px] transform-gpu" />
+          <div className="absolute bottom-[20%] right-[10%] w-[50vw] h-[50vw] rounded-full bg-secondary/5 blur-[150px] transform-gpu" />
+        </div>
+      )}
+
       <style>{`
         .hww-static > div {
           position: relative !important;
@@ -453,7 +488,7 @@ export function HowWeWork(): JSX.Element {
         }
       >
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
-        <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50">
+        <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50 perspective-[1000px] transform-style-3d">
           <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter flex gap-[0.2em] overflow-hidden p-4">
             {"How we work".split(" ").map((w, i) => (
               <span key={i} className="hww-title-word block">
@@ -466,7 +501,11 @@ export function HowWeWork(): JSX.Element {
         {/* Headline (Phase 2, centered, hidden initially) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
           <h2 className="hww-headline opacity-0 text-4xl md:text-6xl lg:text-7xl font-bold text-center max-w-5xl px-4 tracking-tight leading-tight">
-            No black box. Just how we actually build.
+            No black box. Just how we{" "}
+            <span className="inline-flex items-center justify-center px-6 py-2 mx-2 text-2xl md:text-4xl lg:text-5xl font-mono uppercase tracking-[0.05em] font-bold bg-primary/10 border border-primary/30 text-primary rounded-full align-middle transform -rotate-1">
+              actually
+            </span>{" "}
+            build.
           </h2>
         </div>
 
@@ -488,18 +527,20 @@ export function HowWeWork(): JSX.Element {
 
         {/* Steps Wrapper (Phase 4, hidden initially) */}
         <div className="hww-steps-wrapper opacity-0 absolute inset-0 flex items-center justify-center w-full max-w-7xl mx-auto px-4 md:px-8 z-30 pointer-events-none">
-          {/* Left Area: Cards */}
+          {/* Left Area: Cards with Double-Bezel Architecture */}
           <div className="w-1/2 h-[60vh] relative flex items-center justify-center">
             {steps.map((step, i) => (
               <div
                 key={i}
-                className="hww-card absolute w-full max-w-md aspect-[4/3] rounded-2xl overflow-hidden border border-border bg-card shadow-2xl flex-shrink-0 origin-center"
+                className="hww-card absolute w-full max-w-md aspect-[4/3] p-2 rounded-[2.5rem] bg-card/25 border border-border/30 shadow-2xl flex-shrink-0 origin-center"
               >
-                <img
-                  src={step.img}
-                  alt={step.step}
-                  className="w-full h-full object-contain p-8 origin-center"
-                />
+                <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] overflow-hidden bg-card border border-border/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center">
+                  <img
+                    src={step.img}
+                    alt={step.title}
+                    className="w-full h-full object-contain p-8 origin-center transition-transform duration-700 ease-out hover:scale-105"
+                  />
+                </div>
               </div>
             ))}
           </div>
@@ -511,631 +552,638 @@ export function HowWeWork(): JSX.Element {
                 key={i}
                 className="hww-text absolute inset-0 flex flex-col justify-center pr-8 lg:pr-16"
               >
-                <p className="text-sm font-semibold tracking-widest uppercase text-muted-foreground mb-4">
-                  {step.step}
-                </p>
-                <h3 className="text-3xl md:text-4xl font-bold mb-6 tracking-tight">
+                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 tracking-tight text-foreground leading-[1.1]">
                   {step.title}
                 </h3>
-                <p className="text-lg md:text-xl text-muted-foreground leading-relaxed">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
                   {step.desc}
                 </p>
                 {step.tag && (
-                  <div className="mt-8">
-                    <span className="inline-block px-4 py-2 rounded-full border border-primary/30 bg-primary/10 text-primary text-sm font-medium">
-                      {step.tag}
-                    </span>
-                  </div>
+                  <p className="mt-6 text-sm font-medium text-primary">
+                    {step.tag}
+                  </p>
                 )}
               </div>
             ))}
           </div>
         </div>
 
-        {/* Info Cards Wrapper (Phase 5, hidden initially + SVG animations!) */}
+        {/* Info Cards Wrapper (Phase 5, Asymmetrical Bento Grid with Double-Bezel Architecture) */}
         <div className="hww-info-wrapper absolute inset-0 flex flex-col justify-center items-center w-full max-w-7xl mx-auto px-4 md:px-8 z-30 pointer-events-none opacity-0">
           <h3 className="text-sm font-semibold tracking-widest uppercase text-muted-foreground mb-12 text-center hww-info-title">
             What powers our process
           </h3>
-          <div className="grid md:grid-cols-3 gap-8 w-full">
-            {/* CARD 1: Our Stack */}
-            <div className="hww-info-card p-8 border border-border bg-card rounded-2xl flex flex-col items-center text-center transform-gpu relative overflow-hidden group">
-              {/* Tech Orbit SVG Animation */}
-              <div className="w-full h-32 flex items-center justify-center mb-6 relative overflow-hidden">
-                <svg
-                  viewBox="0 0 200 150"
-                  className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ maxWidth: "180px" }}
-                  aria-hidden
-                >
-                  <title>Tech Stack Orbit Animation</title>
-                  <defs>
-                    <linearGradient
-                      id="stackGrad"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor="#007AFF"
-                        stopOpacity="0.85"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="#9b3fca"
-                        stopOpacity="0.15"
-                      />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Outer Orbit Path */}
-                  <ellipse
-                    cx="100"
-                    cy="75"
-                    rx="60"
-                    ry="22"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.08)"
-                    strokeWidth="1"
-                    transform="rotate(-15 100 75)"
-                  />
-                  {/* Inner Orbit Path */}
-                  <ellipse
-                    cx="100"
-                    cy="75"
-                    rx="42"
-                    ry="42"
-                    fill="none"
-                    stroke="rgba(255,255,255,0.05)"
-                    strokeWidth="1"
-                  />
-
-                  {/* Pulsing Core Node */}
-                  <circle cx="100" cy="75" r="9" fill="url(#stackGrad)" />
-                  <circle
-                    cx="100"
-                    cy="75"
-                    r="12"
-                    fill="none"
-                    stroke="#007AFF"
-                    strokeWidth="0.5"
-                    opacity="0.3"
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 w-full">
+            {/* CARD 1: Our Stack (col-span-2 horizontal split) */}
+            <div className="md:col-span-2 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
+              <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col md:flex-row items-center gap-8 justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                <div className="flex flex-col text-left max-w-sm">
+                  <h4 className="text-2xl font-bold mb-4">Our stack</h4>
+                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                    No fixed template — we choose what's right for the project.
+                    Most commonly:
+                  </p>
+                  <p className="font-semibold text-primary text-sm mt-auto">
+                    React, Next.js, TypeScript, .NET / C#
+                  </p>
+                </div>
+                <div className="w-full md:w-1/2 h-32 flex items-center justify-center relative overflow-hidden">
+                  <svg
+                    viewBox="0 0 200 150"
+                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ maxWidth: "180px" }}
+                    aria-hidden
                   >
-                    <animate
-                      attributeName="r"
-                      values="9;24;9"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0.4;0;0.4"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
+                    <title>Tech Stack Orbit Animation</title>
+                    <defs>
+                      <linearGradient
+                        id="stackGrad"
+                        x1="0%"
+                        y1="0%"
+                        x2="100%"
+                        y2="100%"
+                      >
+                        <stop
+                          offset="0%"
+                          stopColor="#007AFF"
+                          stopOpacity="0.85"
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="#9b3fca"
+                          stopOpacity="0.15"
+                        />
+                      </linearGradient>
+                    </defs>
 
-                  {/* Backend Flow Channel Guidelines */}
-                  <line
-                    x1="58"
-                    y1="20"
-                    x2="58"
-                    y2="130"
-                    stroke="rgba(255,255,255,0.04)"
-                    strokeWidth="1"
-                    strokeDasharray="3 3"
-                  />
-                  <line
-                    x1="142"
-                    y1="20"
-                    x2="142"
-                    y2="130"
-                    stroke="rgba(255,255,255,0.04)"
-                    strokeWidth="1"
-                    strokeDasharray="3 3"
-                  />
-
-                  {/* React orbit particle */}
-                  <circle
-                    r="3.5"
-                    fill="#007AFF"
-                    style={{ filter: "drop-shadow(0 0 5px #007AFF)" }}
-                  >
-                    <animateMotion
-                      dur="4s"
-                      repeatCount="indefinite"
-                      path="M 40,75 A 60,22 0 1,0 160,75 A 60,22 0 1,0 40,75"
-                    />
-                  </circle>
-                  {/* TS orbit particle */}
-                  <circle
-                    r="3"
-                    fill="#9b3fca"
-                    style={{ filter: "drop-shadow(0 0 4px #9b3fca)" }}
-                  >
-                    <animateMotion
-                      dur="3.2s"
-                      repeatCount="indefinite"
-                      path="M 100,33 A 42,42 0 1,0 100,117 A 42,42 0 1,0 100,33"
-                    />
-                  </circle>
-
-                  {/* Backend flow signals */}
-                  <circle r="2" fill="#fff">
-                    <animate
-                      attributeName="cy"
-                      values="20;130"
-                      dur="2.4s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="cx"
-                      values="58;58"
-                      dur="2.4s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      dur="2.4s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle r="2" fill="#fff">
-                    <animate
-                      attributeName="cy"
-                      values="130;20"
-                      dur="1.9s"
-                      begin="0.6s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="cx"
-                      values="142;142"
-                      dur="1.9s"
-                      begin="0.6s"
-                      repeatCount="indefinite"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      dur="1.9s"
-                      begin="0.6s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                </svg>
-              </div>
-              <h4 className="text-xl font-bold mb-4">Our stack</h4>
-              <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                No fixed template — we choose what's right for the project. Most
-                commonly:
-              </p>
-              <p className="font-semibold text-primary mt-auto text-sm">
-                React, Next.js, TypeScript, .NET / C#
-              </p>
-            </div>
-
-            {/* CARD 2: Our Team */}
-            <div className="hww-info-card p-8 border border-border bg-card rounded-2xl flex flex-col items-center text-center transform-gpu relative overflow-hidden group">
-              {/* Flexible Network Graph SVG Animation */}
-              <div className="w-full h-32 flex items-center justify-center mb-6 relative overflow-hidden">
-                <svg
-                  viewBox="0 0 200 150"
-                  className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ maxWidth: "180px" }}
-                  aria-hidden
-                >
-                  <title>Flexible Team Network Graph Animation</title>
-                  {/* Connections Guidelines */}
-                  <g
-                    stroke="rgba(255,255,255,0.06)"
-                    strokeWidth="1"
-                    fill="none"
-                  >
-                    <path id="team-p1" d="M 40,45 L 100,105" />
-                    <path id="team-p2" d="M 160,45 L 100,105" />
-                    <path id="team-p3" d="M 100,22 L 100,105" />
-                    <path id="team-p4" d="M 40,45 L 160,45" />
-                  </g>
-
-                  {/* Glowing dynamic connecting pulses */}
-                  <path
-                    d="M 40,45 L 100,105"
-                    stroke="#9b3fca"
-                    strokeWidth="1.5"
-                    opacity="0.3"
-                    fill="none"
-                  >
-                    <animate
-                      attributeName="stroke-dasharray"
-                      values="0 100; 100 0"
-                      dur="3s"
-                      repeatCount="indefinite"
-                    />
-                  </path>
-                  <path
-                    d="M 160,45 L 100,105"
-                    stroke="#007AFF"
-                    strokeWidth="1.5"
-                    opacity="0.3"
-                    fill="none"
-                  >
-                    <animate
-                      attributeName="stroke-dasharray"
-                      values="100 0; 0 100"
-                      dur="3.4s"
-                      repeatCount="indefinite"
-                    />
-                  </path>
-
-                  {/* Role Nodes */}
-                  {/* Dev Node */}
-                  <g transform="translate(40, 45)">
-                    <circle
-                      r="14"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.12)"
-                      strokeWidth="1.5"
-                    />
-                    <circle
-                      r="14"
+                    {/* Outer Orbit Path */}
+                    <ellipse
+                      cx="100"
+                      cy="75"
+                      rx="60"
+                      ry="22"
                       fill="none"
-                      stroke="#007AFF"
-                      strokeWidth="1.5"
-                      opacity="0.3"
-                    >
-                      <animate
-                        attributeName="r"
-                        values="14;18;14"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0.3;0;0.3"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <text
-                      y="4"
-                      textAnchor="middle"
-                      fill="#fff"
-                      fontSize="8"
-                      fontFamily="monospace"
-                      fontWeight="bold"
-                    >
-                      &lt;/&gt;
-                    </text>
-                  </g>
-
-                  {/* Designer Node */}
-                  <g transform="translate(160, 45)">
-                    <circle
-                      r="14"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.12)"
-                      strokeWidth="1.5"
+                      stroke="rgba(255,255,255,0.08)"
+                      strokeWidth="1"
+                      transform="rotate(-15 100 75)"
                     />
-                    <circle
-                      r="14"
+                    {/* Inner Orbit Path */}
+                    <ellipse
+                      cx="100"
+                      cy="75"
+                      rx="42"
+                      ry="42"
                       fill="none"
-                      stroke="#9b3fca"
-                      strokeWidth="1.5"
-                      opacity="0.3"
-                    >
-                      <animate
-                        attributeName="r"
-                        values="14;18;14"
-                        dur="3.4s"
-                        begin="0.6s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0.3;0;0.3"
-                        dur="3.4s"
-                        begin="0.6s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <text
-                      y="3"
-                      textAnchor="middle"
-                      fill="#fff"
-                      fontSize="9"
-                      fontFamily="monospace"
-                      fontWeight="bold"
-                    >
-                      ✎
-                    </text>
-                  </g>
+                      stroke="rgba(255,255,255,0.05)"
+                      strokeWidth="1"
+                    />
 
-                  {/* Central Hub */}
-                  <g transform="translate(100, 105)">
+                    {/* Pulsing Core Node */}
+                    <circle cx="100" cy="75" r="9" fill="url(#stackGrad)" />
                     <circle
-                      r="17"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.18)"
-                      strokeWidth="1.5"
-                    />
-                    <circle r="17" fill="rgba(0,122,255,0.03)" />
-                    <text
-                      y="4"
-                      textAnchor="middle"
-                      fill="#007AFF"
-                      fontSize="7"
-                      fontFamily="monospace"
-                      fontWeight="bold"
-                    >
-                      VOLVOX
-                    </text>
-                  </g>
-
-                  {/* Signals sliding down connection routes */}
-                  <circle
-                    r="2.5"
-                    fill="#fff"
-                    style={{ filter: "drop-shadow(0 0 3px #fff)" }}
-                  >
-                    <animateMotion
-                      dur="3s"
-                      repeatCount="indefinite"
-                      path="M 40,45 L 100,105"
-                    />
-                  </circle>
-                  <circle
-                    r="2.5"
-                    fill="#9b3fca"
-                    style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
-                  >
-                    <animateMotion
-                      dur="2.5s"
-                      begin="0.8s"
-                      repeatCount="indefinite"
-                      path="M 160,45 L 100,105"
-                    />
-                  </circle>
-                </svg>
-              </div>
-              <h4 className="text-xl font-bold mb-4">Our team</h4>
-              <p className="text-muted-foreground text-sm leading-relaxed">
-                Volvox isn't a rigid org chart. The team flexes based on what a
-                project actually needs — developers, designers, and project
-                support brought in as the work calls for it.
-              </p>
-            </div>
-
-            {/* CARD 3: How we communicate */}
-            <div className="hww-info-card p-8 border border-border bg-card rounded-2xl flex flex-col items-center text-center transform-gpu relative overflow-hidden group">
-              {/* Communication Radial Wave SVG Animation */}
-              <div className="w-full h-32 flex items-center justify-center mb-6 relative overflow-hidden">
-                <svg
-                  viewBox="0 0 200 150"
-                  className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                  style={{ maxWidth: "180px" }}
-                  aria-hidden
-                >
-                  <title>Communication Channels Radial Wave Animation</title>
-                  {/* Concentric expanding wave rings */}
-                  <g transform="translate(100, 75)">
-                    <circle
+                      cx="100"
+                      cy="75"
                       r="12"
                       fill="none"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      r="26"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      r="42"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.02)"
-                      strokeWidth="1"
-                    />
-
-                    <circle
-                      r="8"
-                      fill="none"
                       stroke="#007AFF"
+                      strokeWidth="0.5"
+                      opacity="0.3"
+                    >
+                      <animate
+                        attributeName="r"
+                        values="9;24;9"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0.4;0;0.4"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Backend Flow Channel Guidelines */}
+                    <line
+                      x1="58"
+                      y1="20"
+                      x2="58"
+                      y2="130"
+                      stroke="rgba(255,255,255,0.04)"
                       strokeWidth="1"
-                      opacity="0.8"
+                      strokeDasharray="3 3"
+                    />
+                    <line
+                      x1="142"
+                      y1="20"
+                      x2="142"
+                      y2="130"
+                      stroke="rgba(255,255,255,0.04)"
+                      strokeWidth="1"
+                      strokeDasharray="3 3"
+                    />
+
+                    {/* React orbit particle */}
+                    <circle
+                      r="3.5"
+                      fill="#007AFF"
+                      style={{ filter: "drop-shadow(0 0 5px #007AFF)" }}
                     >
+                      <animateMotion
+                        dur="4s"
+                        repeatCount="indefinite"
+                        path="M 40,75 A 60,22 0 1,0 160,75 A 60,22 0 1,0 40,75"
+                      />
+                    </circle>
+                    {/* TS orbit particle */}
+                    <circle
+                      r="3"
+                      fill="#9b3fca"
+                      style={{ filter: "drop-shadow(0 0 4px #9b3fca)" }}
+                    >
+                      <animateMotion
+                        dur="3.2s"
+                        repeatCount="indefinite"
+                        path="M 100,33 A 42,42 0 1,0 100,117 A 42,42 0 1,0 100,33"
+                      />
+                    </circle>
+
+                    {/* Backend flow signals */}
+                    <circle r="2" fill="#fff">
                       <animate
-                        attributeName="r"
-                        values="5;55"
-                        dur="3s"
+                        attributeName="cy"
+                        values="20;130"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="cx"
+                        values="58;58"
+                        dur="2.4s"
                         repeatCount="indefinite"
                       />
                       <animate
                         attributeName="opacity"
-                        values="0.8;0"
-                        dur="3s"
+                        values="0;1;0"
+                        dur="2.4s"
                         repeatCount="indefinite"
                       />
                     </circle>
-                    <circle
-                      r="8"
-                      fill="none"
-                      stroke="#9b3fca"
-                      strokeWidth="0.75"
-                      opacity="0.8"
-                    >
+                    <circle r="2" fill="#fff">
                       <animate
-                        attributeName="r"
-                        values="5;45"
-                        dur="3s"
-                        begin="1.5s"
+                        attributeName="cy"
+                        values="130;20"
+                        dur="1.9s"
+                        begin="0.6s"
+                        repeatCount="indefinite"
+                      />
+                      <animate
+                        attributeName="cx"
+                        values="142;142"
+                        dur="1.9s"
+                        begin="0.6s"
                         repeatCount="indefinite"
                       />
                       <animate
                         attributeName="opacity"
-                        values="0.8;0"
-                        dur="3s"
-                        begin="1.5s"
+                        values="0;1;0"
+                        dur="1.9s"
+                        begin="0.6s"
                         repeatCount="indefinite"
                       />
                     </circle>
-
-                    {/* Central core hub */}
-                    <circle
-                      r="8"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.15)"
-                      strokeWidth="1.5"
-                    />
-                    <circle r="3.5" fill="#007AFF">
-                      <animate
-                        attributeName="r"
-                        values="2.5;4.5;2.5"
-                        dur="2s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                  </g>
-
-                  {/* Channel Lines */}
-                  <g
-                    stroke="rgba(255,255,255,0.04)"
-                    strokeWidth="1"
-                    fill="none"
-                  >
-                    <path id="comm-p1" d="M 100,75 L 30,38" />
-                    <path id="comm-p2" d="M 100,75 L 30,112" />
-                    <path id="comm-p3" d="M 100,75 L 170,38" />
-                    <path id="comm-p4" d="M 100,75 L 170,112" />
-                  </g>
-
-                  {/* Moving message signals */}
-                  <circle
-                    r="2"
-                    fill="#5865F2"
-                    style={{ filter: "drop-shadow(0 0 3px #5865F2)" }}
-                  >
-                    <animateMotion
-                      dur="2.4s"
-                      repeatCount="indefinite"
-                      path="M 100,75 L 30,38"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      keyTimes="0;0.1;1"
-                      dur="2.4s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle
-                    r="2"
-                    fill="#9b3fca"
-                    style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
-                  >
-                    <animateMotion
-                      dur="2.9s"
-                      begin="0.4s"
-                      repeatCount="indefinite"
-                      path="M 100,75 L 30,112"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      keyTimes="0;0.1;1"
-                      dur="2.9s"
-                      begin="0.4s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle
-                    r="2"
-                    fill="#fff"
-                    style={{ filter: "drop-shadow(0 0 3px #fff)" }}
-                  >
-                    <animateMotion
-                      dur="2.1s"
-                      begin="1.1s"
-                      repeatCount="indefinite"
-                      path="M 100,75 L 170,38"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      keyTimes="0;0.1;1"
-                      dur="2.1s"
-                      begin="1.1s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-                  <circle
-                    r="2"
-                    fill="#007AFF"
-                    style={{ filter: "drop-shadow(0 0 3px #007AFF)" }}
-                  >
-                    <animateMotion
-                      dur="2.7s"
-                      begin="0.7s"
-                      repeatCount="indefinite"
-                      path="M 100,75 L 170,112"
-                    />
-                    <animate
-                      attributeName="opacity"
-                      values="0;1;0"
-                      keyTimes="0;0.1;1"
-                      dur="2.7s"
-                      begin="0.7s"
-                      repeatCount="indefinite"
-                    />
-                  </circle>
-
-                  {/* Guideline endpoints */}
-                  <circle
-                    cx="30"
-                    cy="38"
-                    r="3"
-                    fill="#09090b"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="1"
-                  />
-                  <circle
-                    cx="30"
-                    cy="112"
-                    r="3"
-                    fill="#09090b"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="1"
-                  />
-                  <circle
-                    cx="170"
-                    cy="38"
-                    r="3"
-                    fill="#09090b"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="1"
-                  />
-                  <circle
-                    cx="170"
-                    cy="112"
-                    r="3"
-                    fill="#09090b"
-                    stroke="rgba(255,255,255,0.1)"
-                    strokeWidth="1"
-                  />
-                </svg>
+                  </svg>
+                </div>
               </div>
-              <h4 className="text-xl font-bold mb-4">How we communicate</h4>
-              <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
-                Discord is our default, but we meet clients wherever's easiest
-                for them.
-              </p>
-              <p className="font-semibold text-primary mt-auto text-sm">
-                Discord, Slack, Email, Calls
-              </p>
+            </div>
+
+            {/* CARD 2: Our Team (col-span-1 vertical layout) */}
+            <div className="md:col-span-1 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
+              <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col items-center justify-between text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                <div className="w-full h-32 flex items-center justify-center mb-6 relative overflow-hidden">
+                  <svg
+                    viewBox="0 0 200 150"
+                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ maxWidth: "180px" }}
+                    aria-hidden
+                  >
+                    <title>Flexible Team Network Graph Animation</title>
+                    {/* Connections Guidelines */}
+                    <g
+                      stroke="rgba(255,255,255,0.06)"
+                      strokeWidth="1"
+                      fill="none"
+                    >
+                      <path id="team-p1" d="M 40,45 L 100,105" />
+                      <path id="team-p2" d="M 160,45 L 100,105" />
+                      <path id="team-p3" d="M 100,22 L 100,105" />
+                      <path id="team-p4" d="M 40,45 L 160,45" />
+                    </g>
+
+                    {/* Glowing dynamic connecting pulses */}
+                    <path
+                      d="M 40,45 L 100,105"
+                      stroke="#9b3fca"
+                      strokeWidth="1.5"
+                      opacity="0.3"
+                      fill="none"
+                    >
+                      <animate
+                        attributeName="stroke-dasharray"
+                        values="0 100; 100 0"
+                        dur="3s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+                    <path
+                      d="M 160,45 L 100,105"
+                      stroke="#007AFF"
+                      strokeWidth="1.5"
+                      opacity="0.3"
+                      fill="none"
+                    >
+                      <animate
+                        attributeName="stroke-dasharray"
+                        values="100 0; 0 100"
+                        dur="3.4s"
+                        repeatCount="indefinite"
+                      />
+                    </path>
+
+                    {/* Role Nodes */}
+                    {/* Dev Node */}
+                    <g transform="translate(40, 45)">
+                      <circle
+                        r="14"
+                        fill="#09090b"
+                        stroke="rgba(255,255,255,0.12)"
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        r="14"
+                        fill="none"
+                        stroke="#007AFF"
+                        strokeWidth="1.5"
+                        opacity="0.3"
+                      >
+                        <animate
+                          attributeName="r"
+                          values="14;18;14"
+                          dur="3s"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="opacity"
+                          values="0.3;0;0.3"
+                          dur="3s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                      <text
+                        y="4"
+                        textAnchor="middle"
+                        fill="#fff"
+                        fontSize="8"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        &lt;/&gt;
+                      </text>
+                    </g>
+
+                    {/* Designer Node */}
+                    <g transform="translate(160, 45)">
+                      <circle
+                        r="14"
+                        fill="#09090b"
+                        stroke="rgba(255,255,255,0.12)"
+                        strokeWidth="1.5"
+                      />
+                      <circle
+                        r="14"
+                        fill="none"
+                        stroke="#9b3fca"
+                        strokeWidth="1.5"
+                        opacity="0.3"
+                      >
+                        <animate
+                          attributeName="r"
+                          values="14;18;14"
+                          dur="3.4s"
+                          begin="0.6s"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="opacity"
+                          values="0.3;0;0.3"
+                          dur="3.4s"
+                          begin="0.6s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                      <text
+                        y="3"
+                        textAnchor="middle"
+                        fill="#fff"
+                        fontSize="9"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        ✎
+                      </text>
+                    </g>
+
+                    {/* Central Hub */}
+                    <g transform="translate(100, 105)">
+                      <circle
+                        r="17"
+                        fill="#09090b"
+                        stroke="rgba(255,255,255,0.18)"
+                        strokeWidth="1.5"
+                      />
+                      <circle r="17" fill="rgba(0,122,255,0.03)" />
+                      <text
+                        y="4"
+                        textAnchor="middle"
+                        fill="#007AFF"
+                        fontSize="7"
+                        fontFamily="monospace"
+                        fontWeight="bold"
+                      >
+                        VOLVOX
+                      </text>
+                    </g>
+
+                    {/* Signals sliding down connection routes */}
+                    <circle
+                      r="2.5"
+                      fill="#fff"
+                      style={{ filter: "drop-shadow(0 0 3px #fff)" }}
+                    >
+                      <animateMotion
+                        dur="3s"
+                        repeatCount="indefinite"
+                        path="M 40,45 L 100,105"
+                      />
+                    </circle>
+                    <circle
+                      r="2.5"
+                      fill="#9b3fca"
+                      style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
+                    >
+                      <animateMotion
+                        dur="2.5s"
+                        begin="0.8s"
+                        repeatCount="indefinite"
+                        path="M 160,45 L 100,105"
+                      />
+                    </circle>
+                  </svg>
+                </div>
+                <div className="flex flex-col items-center">
+                  <h4 className="text-xl font-bold mb-4">Our team</h4>
+                  <p className="text-muted-foreground text-sm leading-relaxed">
+                    Volvox isn't a rigid org chart. The team flexes based on
+                    what a project actually needs — developers, designers, and
+                    project support brought in as the work calls for it.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* CARD 3: How we communicate (col-span-3 horizontal split) */}
+            <div className="md:col-span-3 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
+              <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col md:flex-row items-center gap-8 justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+                <div className="flex flex-col text-left max-w-lg">
+                  <h4 className="text-2xl font-bold mb-4">
+                    How we communicate
+                  </h4>
+                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                    Discord is our default hub where you can watch us build in
+                    real-time, but we adapt our communication to whatever works
+                    best for your team.
+                  </p>
+                  <p className="font-semibold text-primary text-sm mt-auto">
+                    Discord, Slack, Email, Calls
+                  </p>
+                </div>
+                <div className="w-full md:w-1/2 h-32 flex items-center justify-center relative overflow-hidden">
+                  <svg
+                    viewBox="0 0 200 150"
+                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{ maxWidth: "180px" }}
+                    aria-hidden
+                  >
+                    <title>Communication Channels Radial Wave Animation</title>
+                    {/* Concentric expanding wave rings */}
+                    <g transform="translate(100, 75)">
+                      <circle
+                        r="12"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.04)"
+                        strokeWidth="1"
+                      />
+                      <circle
+                        r="26"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.04)"
+                        strokeWidth="1"
+                      />
+                      <circle
+                        r="42"
+                        fill="none"
+                        stroke="rgba(255,255,255,0.02)"
+                        strokeWidth="1"
+                      />
+
+                      <circle
+                        r="8"
+                        fill="none"
+                        stroke="#007AFF"
+                        strokeWidth="1"
+                        opacity="0.8"
+                      >
+                        <animate
+                          attributeName="r"
+                          values="5;55"
+                          dur="3s"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="opacity"
+                          values="0.8;0"
+                          dur="3s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                      <circle
+                        r="8"
+                        fill="none"
+                        stroke="#9b3fca"
+                        strokeWidth="0.75"
+                        opacity="0.8"
+                      >
+                        <animate
+                          attributeName="r"
+                          values="5;45"
+                          dur="3s"
+                          begin="1.5s"
+                          repeatCount="indefinite"
+                        />
+                        <animate
+                          attributeName="opacity"
+                          values="0.8;0"
+                          dur="3s"
+                          begin="1.5s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+
+                      {/* Central core hub */}
+                      <circle
+                        r="8"
+                        fill="#09090b"
+                        stroke="rgba(255,255,255,0.15)"
+                        strokeWidth="1.5"
+                      />
+                      <circle r="3.5" fill="#007AFF">
+                        <animate
+                          attributeName="r"
+                          values="2.5;4.5;2.5"
+                          dur="2s"
+                          repeatCount="indefinite"
+                        />
+                      </circle>
+                    </g>
+
+                    {/* Channel Lines */}
+                    <g
+                      stroke="rgba(255,255,255,0.04)"
+                      strokeWidth="1"
+                      fill="none"
+                    >
+                      <path id="comm-p1" d="M 100,75 L 30,38" />
+                      <path id="comm-p2" d="M 100,75 L 30,112" />
+                      <path id="comm-p3" d="M 100,75 L 170,38" />
+                      <path id="comm-p4" d="M 100,75 L 170,112" />
+                    </g>
+
+                    {/* Moving message signals */}
+                    <circle
+                      r="2"
+                      fill="#5865F2"
+                      style={{ filter: "drop-shadow(0 0 3px #5865F2)" }}
+                    >
+                      <animateMotion
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                        path="M 100,75 L 30,38"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0;1;0"
+                        keyTimes="0;0.1;1"
+                        dur="2.4s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      r="2"
+                      fill="#9b3fca"
+                      style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
+                    >
+                      <animateMotion
+                        dur="2.9s"
+                        begin="0.4s"
+                        repeatCount="indefinite"
+                        path="M 100,75 L 30,112"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0;1;0"
+                        keyTimes="0;0.1;1"
+                        dur="2.9s"
+                        begin="0.4s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      r="2"
+                      fill="#fff"
+                      style={{ filter: "drop-shadow(0 0 3px #fff)" }}
+                    >
+                      <animateMotion
+                        dur="2.1s"
+                        begin="1.1s"
+                        repeatCount="indefinite"
+                        path="M 100,75 L 170,38"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0;1;0"
+                        keyTimes="0;0.1;1"
+                        dur="2.1s"
+                        begin="1.1s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+                    <circle
+                      r="2"
+                      fill="#007AFF"
+                      style={{ filter: "drop-shadow(0 0 3px #007AFF)" }}
+                    >
+                      <animateMotion
+                        dur="2.7s"
+                        begin="0.7s"
+                        repeatCount="indefinite"
+                        path="M 100,75 L 170,112"
+                      />
+                      <animate
+                        attributeName="opacity"
+                        values="0;1;0"
+                        keyTimes="0;0.1;1"
+                        dur="2.7s"
+                        begin="0.7s"
+                        repeatCount="indefinite"
+                      />
+                    </circle>
+
+                    {/* Guideline endpoints */}
+                    <circle
+                      cx="30"
+                      cy="38"
+                      r="3"
+                      fill="#09090b"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="1"
+                    />
+                    <circle
+                      cx="30"
+                      cy="112"
+                      r="3"
+                      fill="#09090b"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="1"
+                    />
+                    <circle
+                      cx="170"
+                      cy="38"
+                      r="3"
+                      fill="#09090b"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="1"
+                    />
+                    <circle
+                      cx="170"
+                      cy="112"
+                      r="3"
+                      fill="#09090b"
+                      stroke="rgba(255,255,255,0.1)"
+                      strokeWidth="1"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1147,27 +1195,27 @@ export function HowWeWork(): JSX.Element {
           </h3>
           {/* Editorial Values Stack (Premium Minimal Layout) */}
           <div className="hww-values-stack flex flex-col w-full max-w-4xl mx-auto border-t border-border/20">
-            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-6 border-b border-border/20 items-center text-left">
-              <span className="font-mono text-xs text-primary/75 tracking-widest font-bold">
+            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-8 border-b border-border/20 items-center text-left group transition-colors duration-300 hover:bg-card-deep/10">
+              <span className="font-mono text-xs text-primary/70 tracking-widest font-bold transition-transform duration-300 group-hover:translate-x-1">
                 01 — SOURCE
               </span>
-              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight">
+              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                 Everything built in-house — no outsourcing, no black boxes
               </span>
             </div>
-            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-6 border-b border-border/20 items-center text-left">
-              <span className="font-mono text-xs text-primary/75 tracking-widest font-bold">
+            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-8 border-b border-border/20 items-center text-left group transition-colors duration-300 hover:bg-card-deep/10">
+              <span className="font-mono text-xs text-primary/70 tracking-widest font-bold transition-transform duration-300 group-hover:translate-x-1">
                 02 — STANDARDS
               </span>
-              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight">
+              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                 Quality and care in every single line of code
               </span>
             </div>
-            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-6 border-b border-border/20 items-center text-left">
-              <span className="font-mono text-xs text-primary/75 tracking-widest font-bold">
+            <div className="hww-value-item grid grid-cols-[140px_1fr] gap-8 py-8 border-b border-border/20 items-center text-left group transition-colors duration-300 hover:bg-card-deep/10">
+              <span className="font-mono text-xs text-primary/70 tracking-widest font-bold transition-transform duration-300 group-hover:translate-x-1">
                 03 — ETHOS
               </span>
-              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight">
+              <span className="text-sm md:text-base lg:text-lg font-medium tracking-tight text-foreground transition-colors duration-300 group-hover:text-primary">
                 No gatekeeping, no ego, just building what you need
               </span>
             </div>
@@ -1178,20 +1226,53 @@ export function HowWeWork(): JSX.Element {
         <div className="hww-cta-wrapper absolute inset-0 flex flex-col justify-center items-center w-full max-w-4xl mx-auto px-4 z-30 pointer-events-none opacity-0">
           {/* CTA Content */}
           <div className="hww-cta-content text-center max-w-3xl">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-              Have a project in mind?
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 tracking-tight leading-[1.05]">
+              Have a{" "}
+              <span className="inline-flex items-center justify-center gap-3 px-6 py-2 mx-2 text-4xl md:text-5xl lg:text-6xl font-mono uppercase tracking-[0.05em] font-bold bg-accent/10 border border-accent/30 text-accent rounded-full align-middle transform -rotate-1">
+                <Image
+                  src="/logo.png"
+                  alt="Volvox"
+                  width={48}
+                  height={48}
+                  className="w-10 h-10 md:w-12 md:h-12 object-contain rounded-md"
+                />
+                Volvox
+              </span>{" "}
+              project in mind?
             </h2>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-10 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
               It starts with a call — no forms, no gatekeeping, just a
               conversation about what you're trying to build.
             </p>
             <Button
-              variant="default"
+              variant="accent"
               size="lg"
+              noMorph
               asChild
-              className="pointer-events-auto"
+              className="pointer-events-auto rounded-full pl-8 pr-3 py-3 h-auto group transition-all duration-300 hover:shadow-[0_4px_20px_oklch(from_var(--accent)_l_c_h_/_0.4)]"
             >
-              <a href="mailto:bill@volvox.dev">Start a conversation</a>
+              <a
+                href="mailto:bill@volvox.dev"
+                className="flex items-center gap-4 text-accent-foreground font-semibold"
+              >
+                <span>Start a conversation</span>
+                <span className="w-10 h-10 rounded-full bg-accent-foreground/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
+                  <svg
+                    className="w-5 h-5 text-accent-foreground"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                    />
+                  </svg>
+                </span>
+              </a>
             </Button>
           </div>
         </div>
