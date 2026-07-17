@@ -92,3 +92,6 @@ worktrees/
 .impeccable/
 DESIGN.md
 PRODUCT.md
+
+# cortexkit tool artifacts
+.cortexkit/
