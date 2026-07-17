@@ -1,6 +1,11 @@
 "use client";
 
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import {
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useSpring,
+} from "framer-motion";
 import { type ReactNode, useRef } from "react";
 import { cn } from "@/lib/utils";
 
@@ -18,6 +23,7 @@ export function MagneticButton({
   onClick,
 }: MagneticButtonProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const prefersReducedMotion = useReducedMotion();
 
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -27,8 +33,7 @@ export function MagneticButton({
   const mouseY = useSpring(y, { stiffness: 150, damping: 15, mass: 0.1 });
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (!ref.current) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    if (!ref.current || prefersReducedMotion) return;
     const { clientX, clientY } = e;
     const { height, width, left, top } = ref.current.getBoundingClientRect();
     const middleX = clientX - (left + width / 2);
