@@ -52,8 +52,6 @@ const playTactilePopSound = () => {
     osc.onended = () => {
       void ctx.close().catch(() => {});
     };
-  } catch {
-    // Silently fail if audio context is restricted by the browser (e.g. before user interaction)
   } catch (error) {
     // Silently ignore expected browser restrictions (e.g. before user gesture)
     if (error instanceof Error && error.name === "NotAllowedError") return;
