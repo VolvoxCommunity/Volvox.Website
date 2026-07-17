@@ -45,6 +45,9 @@ export function TeamMemberDetailClient({
 
   useGSAP(
     () => {
+      // Respect reduced-motion: skip entrance animations, keep final states.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
       // Smooth staggering entrance on scroll for hero section
       gsap.fromTo(
         [
@@ -196,7 +199,7 @@ export function TeamMemberDetailClient({
               {member.isHireable && (
                 <span className="inline-flex items-center gap-2 rounded-full px-3 py-1 text-[10px] tracking-[0.15em] font-mono font-bold uppercase border border-emerald-500/20 bg-emerald-500/5 text-emerald-400">
                   <span className="relative flex h-1.5 w-1.5">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
+                    <span className="animate-ping motion-reduce:hidden absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
                     <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
                   </span>
                   Available For Hire

@@ -27,6 +27,9 @@ export function About(): JSX.Element {
 
   useGSAP(
     () => {
+      // Respect reduced-motion: skip entrance animations, keep final states.
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
       // Reveal header elements on scroll
       gsap.fromTo(
         [".about-header", ".about-subtext"],
@@ -73,6 +76,7 @@ export function About(): JSX.Element {
     <section
       ref={containerRef}
       id="about"
+      data-testid="about-section"
       aria-label="About Volvox"
       className="py-32 md:py-48 px-4 bg-background relative overflow-hidden"
     >
