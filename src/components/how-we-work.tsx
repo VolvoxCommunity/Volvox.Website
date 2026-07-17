@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { type JSX, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -67,11 +68,17 @@ export function HowWeWork(): JSX.Element {
     };
   }, []);
 
-  // Freeze the decorative SMIL SVG animations for reduced-motion users.
+  // Freeze or resume decorative SMIL SVG animations based on reduced-motion preference.
   useEffect(() => {
-    if (!reducedMotion) return;
     const svgs = containerRef.current?.querySelectorAll("svg");
-    svgs?.forEach((svg) => (svg as SVGSVGElement).pauseAnimations());
+    svgs?.forEach((svg) => {
+      const svgEl = svg as SVGSVGElement;
+      if (reducedMotion) {
+        svgEl.pauseAnimations();
+      } else {
+        svgEl.unpauseAnimations();
+      }
+    });
   }, [reducedMotion]);
 
   useGSAP(
@@ -434,6 +441,8 @@ export function HowWeWork(): JSX.Element {
   return (
     <section
       id="how-we-work"
+      data-testid="how-we-work-section"
+      aria-label="How We Work"
       className="relative w-full bg-background overflow-hidden"
       ref={containerRef}
     >
@@ -481,11 +490,12 @@ export function HowWeWork(): JSX.Element {
       `}</style>
       <div
         ref={pinRef}
-        className={
+        className={cn(
+          "w-full relative",
           staticMode
-            ? "hww-static w-full relative flex flex-col gap-16 py-20"
-            : "h-screen w-full overflow-hidden relative"
-        }
+            ? "hww-static flex flex-col gap-16 py-20"
+            : "h-screen overflow-hidden",
+        )}
       >
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
         <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50 perspective-[1000px] transform-style-3d">
