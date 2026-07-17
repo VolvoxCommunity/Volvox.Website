@@ -77,7 +77,9 @@ export function safeJsonLdSerialize(data: object): string {
 /** Navigation items used across all navbar components */
 export const NAV_ITEMS = [
   { id: "home", label: "Home", href: "/" },
+  { id: "how-we-work", label: "How We Work", href: "/#how-we-work" },
   { id: "products", label: "Products", href: "/products" },
+  { id: "reviews", label: "Reviews", href: "/#reviews" },
   { id: "blog", label: "Blog", href: "/#blog" },
   { id: "mentorship", label: "Community", href: "/#mentorship" },
   { id: "about", label: "About", href: "/#about" },
