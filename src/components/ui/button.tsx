@@ -54,6 +54,11 @@ const playTactilePopSound = () => {
     };
   } catch {
     // Silently fail if audio context is restricted by the browser (e.g. before user interaction)
+  } catch (error) {
+    // Silently ignore expected browser restrictions (e.g. before user gesture)
+    if (error instanceof Error && error.name === "NotAllowedError") return;
+    // Forward unexpected errors for debugging
+    console.error("Unexpected audio error:", error);
   }
 };
 
