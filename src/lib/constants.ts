@@ -75,14 +75,25 @@ export function safeJsonLdSerialize(data: object): string {
 }
 
 /** Navigation items used across all navbar components */
-export const NAV_ITEMS = [
+export interface NavItem {
+  id: string;
+  label: string;
+  href: string;
+  /** When true, the item is hidden on narrower desktop widths (below xl) to avoid overflow. */
+  optional?: boolean;
+}
+
+export const NAV_ITEMS: NavItem[] = [
   { id: "home", label: "Home", href: "/" },
   { id: "how-we-work", label: "How We Work", href: "/#how-we-work" },
   { id: "products", label: "Products", href: "/products" },
   { id: "reviews", label: "Reviews", href: "/#reviews" },
   { id: "blog", label: "Blog", href: "/#blog" },
-  { id: "mentorship", label: "Community", href: "/#mentorship" },
-  { id: "about", label: "About", href: "/#about" },
-] as const;
-
-export type NavItem = (typeof NAV_ITEMS)[number];
+  {
+    id: "mentorship",
+    label: "Community",
+    href: "/#mentorship",
+    optional: true,
+  },
+  { id: "about", label: "About", href: "/#about", optional: true },
+];
