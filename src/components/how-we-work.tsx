@@ -6,7 +6,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { type JSX, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -454,48 +453,10 @@ export function HowWeWork(): JSX.Element {
         </div>
       )}
 
-      <style>{`
-        .hww-static > div {
-          position: relative !important;
-          inset: auto !important;
-          opacity: 1 !important;
-          visibility: visible !important;
-          transform: none !important;
-          pointer-events: auto !important;
-        }
-        .hww-static .hww-headline,
-        .hww-static .hww-subtext,
-        .hww-static .hww-subtext-word-inner {
-          opacity: 1 !important;
-          visibility: visible !important;
-        }
-        .hww-static .hww-steps-wrapper {
-          flex-direction: column;
-          height: auto;
-          gap: 2rem;
-        }
-        .hww-static .hww-steps-wrapper > div {
-          width: 100% !important;
-          height: auto !important;
-        }
-        .hww-static .hww-card,
-        .hww-static .hww-text {
-          position: relative !important;
-          inset: auto !important;
-          opacity: 1 !important;
-          visibility: visible !important;
-          transform: none !important;
-          margin-bottom: 1.5rem;
-        }
-      `}</style>
+      {/* DESKTOP VIEW (hidden on mobile, uses pinned animations) */}
       <div
         ref={pinRef}
-        className={cn(
-          "w-full relative",
-          staticMode
-            ? "hww-static flex flex-col gap-16 py-20"
-            : "h-screen overflow-hidden",
-        )}
+        className="w-full relative h-screen overflow-hidden hidden md:block"
       >
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
         <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50 perspective-[1000px] transform-style-3d">
@@ -1285,6 +1246,195 @@ export function HowWeWork(): JSX.Element {
               </a>
             </Button>
           </div>
+        </div>
+      </div>
+
+      {/* MOBILE VIEW (static, clean, linear scrollable layout matching the design aesthetic) */}
+      <div className="md:hidden w-full flex flex-col px-6 py-16 gap-16 relative z-20">
+        {/* Phase 1: Header */}
+        <div className="text-center flex flex-col gap-4">
+          <span className="font-mono text-xs text-primary tracking-widest uppercase font-bold">
+            Our Process
+          </span>
+          <h2 className="text-4xl font-extrabold uppercase tracking-tight text-foreground">
+            How we work
+          </h2>
+          <p className="text-lg text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
+            No black box. Just an honest look at how a project with Volvox
+            actually goes, from the first call to long after launch.
+          </p>
+        </div>
+
+        {/* Phase 2: Steps vertical flow */}
+        <div className="flex flex-col gap-12 relative">
+          {/* Subtle timeline track indicator line */}
+          <div className="absolute left-[20px] top-4 bottom-4 w-[1px] bg-border/25 z-0" />
+
+          {steps.map((step, i) => (
+            <div key={i} className="flex gap-6 relative z-10 items-start">
+              {/* Step number marker */}
+              <div className="flex-shrink-0 w-10 h-10 rounded-full bg-card border border-border/30 shadow-md flex items-center justify-center font-mono text-xs font-bold text-primary">
+                {String(i + 1).padStart(2, "0")}
+              </div>
+
+              {/* Step card detail with Double-Bezel Architecture */}
+              <div className="flex-grow flex flex-col gap-4">
+                <div className="w-full aspect-[4/3] p-1.5 rounded-[1.5rem] bg-card/25 border border-border/20 shadow-lg relative overflow-hidden">
+                  <div className="w-full h-full rounded-[calc(1.5rem-0.375rem)] overflow-hidden bg-card border border-border/10 flex items-center justify-center">
+                    <img
+                      src={step.img}
+                      alt={step.title}
+                      className="w-full h-full object-contain p-6"
+                    />
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2">
+                  <span className="font-mono text-[10.5px] uppercase tracking-wider text-primary/75 font-semibold">
+                    {step.step}
+                  </span>
+                  <h3 className="text-xl font-bold text-foreground leading-tight">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">
+                    {step.desc}
+                  </p>
+                  {step.tag && (
+                    <span className="text-xs font-semibold text-primary mt-1">
+                      {step.tag}
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {/* Phase 3: What powers our process (Bento layout) */}
+        <div className="flex flex-col gap-8">
+          <div className="text-center flex flex-col gap-2">
+            <span className="font-mono text-xs text-primary tracking-widest uppercase font-bold">
+              Engineering Hub
+            </span>
+            <h3 className="text-2xl font-bold text-foreground">
+              What powers our process
+            </h3>
+          </div>
+
+          <div className="flex flex-col gap-6">
+            {/* Bento Card 1: Our Stack */}
+            <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
+              <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
+                <h4 className="text-lg font-bold">Our stack</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  No fixed template — we choose what's right for the project.
+                  Most commonly:
+                </p>
+                <p className="font-mono text-xs font-bold text-primary">
+                  React, Next.js, TypeScript, .NET / C#
+                </p>
+              </div>
+            </div>
+
+            {/* Bento Card 2: Our Team */}
+            <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
+              <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
+                <h4 className="text-lg font-bold">Our team</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Volvox is a flexible group. The team dynamically flexes based
+                  on what a project actually needs — developers, designers, and
+                  support.
+                </p>
+              </div>
+            </div>
+
+            {/* Bento Card 3: Communication */}
+            <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
+              <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
+                <h4 className="text-lg font-bold">How we communicate</h4>
+                <p className="text-muted-foreground text-sm leading-relaxed">
+                  Discord is our default hub where you can watch us build in
+                  real-time, but we adapt our communication to whatever works
+                  best for your team.
+                </p>
+                <p className="font-mono text-xs font-bold text-primary">
+                  Discord, Slack, Email, Calls
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Phase 4: Values Stack */}
+        <div className="flex flex-col gap-6 border-t border-border/20 pt-12">
+          <h3 className="text-sm font-semibold tracking-wider uppercase text-muted-foreground text-center">
+            How we protect quality
+          </h3>
+          <div className="flex flex-col divide-y divide-border/20">
+            <div className="py-4 text-left">
+              <span className="font-mono text-[10px] text-primary/70 tracking-widest font-bold block mb-1">
+                01 — SOURCE
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                Everything built in-house — no outsourcing, no black boxes
+              </span>
+            </div>
+            <div className="py-4 text-left">
+              <span className="font-mono text-[10px] text-primary/70 tracking-widest font-bold block mb-1">
+                02 — STANDARDS
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                Quality and care in every single line of code
+              </span>
+            </div>
+            <div className="py-4 text-left">
+              <span className="font-mono text-[10px] text-primary/70 tracking-widest font-bold block mb-1">
+                03 — ETHOS
+              </span>
+              <span className="text-sm font-medium text-foreground">
+                No gatekeeping, no ego, just building what you need
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Phase 5: CTA */}
+        <div className="text-center flex flex-col gap-6 pt-8">
+          <h2 className="text-3xl font-bold tracking-tight text-foreground leading-tight">
+            Have a project in mind?
+          </h2>
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
+            It starts with a call — no forms, no gatekeeping, just a
+            conversation about what you're trying to build.
+          </p>
+          <Button
+            variant="accent"
+            size="lg"
+            noMorph
+            asChild
+            className="rounded-full w-full py-3 h-auto justify-center"
+          >
+            <a
+              href="mailto:bill@volvox.dev"
+              className="flex items-center gap-3 justify-center text-accent-foreground font-semibold"
+            >
+              <span>Start a conversation</span>
+              <svg
+                className="w-4 h-4 text-accent-foreground"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
+                />
+              </svg>
+            </a>
+          </Button>
         </div>
       </div>
     </section>
