@@ -144,7 +144,7 @@ export function Navigation(props: NavigationProps) {
             "pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
             "w-full py-2 px-3 bg-transparent",
             isIsland
-              ? "group lg:w-[90%] lg:max-w-[850px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+              ? "group lg:w-[95%] lg:max-w-[1000px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
               : "lg:w-full lg:max-w-full lg:py-6 lg:px-10 lg:border-b lg:border-border/5",
           )}
         >
@@ -195,7 +195,10 @@ export function Navigation(props: NavigationProps) {
             )}
           >
             {navItems.map((item) => (
-              <li key={item.id}>
+              <li
+                key={item.id}
+                className={cn(item.optional && "hidden xl:block")}
+              >
                 {linkMode ? (
                   <Link
                     href={item.href}
@@ -238,7 +241,6 @@ export function Navigation(props: NavigationProps) {
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
-              className="rounded-full"
               aria-label="Toggle theme"
               data-testid="nav-theme-toggle"
             >
@@ -250,7 +252,9 @@ export function Navigation(props: NavigationProps) {
             </Button>
 
             <Button
-              className="hidden lg:flex items-center gap-2 bg-[#5865F2] hover:bg-[#4752c4] text-white py-2.5 px-5 font-semibold text-sm cursor-pointer transition-transform duration-300 no-underline border-none"
+              variant="ghost"
+              size="default"
+              className="hidden lg:flex bg-[#5865F2] hover:bg-[#4752c4] text-white"
               onClick={(e) => {
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
@@ -265,7 +269,7 @@ export function Navigation(props: NavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden rounded-full"
+              className="lg:hidden"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
               data-testid="nav-mobile-open"
@@ -304,7 +308,6 @@ export function Navigation(props: NavigationProps) {
                 variant="ghost"
                 size="icon"
                 onClick={() => setMobileOpen(false)}
-                className="rounded-full"
                 aria-label="Close menu"
               >
                 <X weight="bold" className="w-6 h-6" />

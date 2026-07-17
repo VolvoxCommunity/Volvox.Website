@@ -111,7 +111,6 @@ export default function RootLayout({
       <body
         className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased font-sans`}
       >
-        <div className="noise" />
         <SmoothScroll>
           <SkipLink />
           <CookieConsentProvider>

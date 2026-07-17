@@ -71,10 +71,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
 
         <div className="hero-cta-group flex flex-col md:flex-row gap-4 justify-center mb-20 w-full md:w-auto">
           <MagneticButton>
-            <Button
-              onClick={() => router.push("/products")}
-              className="py-6 px-8 text-base font-semibold"
-            >
+            <Button onClick={() => router.push("/products")} size="lg">
               Explore Products
             </Button>
           </MagneticButton>
@@ -82,7 +79,7 @@ export function HeroSection({ onNavigate }: HeroSectionProps) {
             <Button
               variant="accent"
               onClick={() => onNavigate("mentorship")}
-              className="py-6 px-8 text-base font-semibold min-w-[200px]"
+              size="lg"
               data-testid="join-button"
               aria-labelledby="join-button-live"
             >

@@ -103,7 +103,6 @@ export function ProductHero({ product }: ProductHeroProps) {
                     <Button
                       variant="accent"
                       size="lg"
-                      className="gap-2 shadow-lg shadow-accent/20"
                       onClick={() =>
                         window.open(
                           product.links.demo,
@@ -120,7 +119,6 @@ export function ProductHero({ product }: ProductHeroProps) {
                     <Button
                       variant="outline"
                       size="lg"
-                      className="gap-2"
                       onClick={() =>
                         window.open(
                           product.links.github,

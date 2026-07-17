@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import * as React from "react";
 import { cn } from "@/lib/utils";
 
-// --- 1. TUNED CONSTANTS (Physics Configuration) ---
+// --- 1. TUNED CONSTANTS (MD3 Physics Configuration) ---
 const PRESS_GROW_MS = 450;
 const MINIMUM_PRESS_MS = 300;
 const INITIAL_ORIGIN_SCALE = 0.2;
@@ -14,18 +14,61 @@ const SOFT_EDGE_MINIMUM_SIZE = 75;
 const SOFT_EDGE_CONTAINER_RATIO = 0.35;
 const ANIMATION_FILL = "forwards";
 const TOUCH_DELAY_MS = 150;
-
 const EASING_STANDARD = "cubic-bezier(0.2, 0, 0, 1)";
 
-// --- 2. TYPES & STATE MACHINE ---
-enum RippleState {
-  INACTIVE,
-  TOUCH_DELAY,
-  HOLDING,
-  WAITING_FOR_CLICK,
-}
+// --- 2. DYNAMIC AUDIO GENERATOR (For XL/2XL Buttons) ---
+const playTactilePopSound = () => {
+  try {
+    // Safely initialize Web Audio API
+    const AudioContext: typeof window.AudioContext | undefined =
+      window.AudioContext ||
+      (window as { webkitAudioContext?: typeof window.AudioContext })
+        .webkitAudioContext;
+    if (!AudioContext) return;
 
-// --- 3. THE HOOK (FIXED) ---
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    osc.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    // Create a pleasant, snappy "pop" sound using a sine wave
+    osc.type = "sine";
+    const now = ctx.currentTime;
+
+    // Pitch drops rapidly to simulate a physical click
+    osc.frequency.setValueAtTime(600, now);
+    osc.frequency.exponentialRampToValueAtTime(100, now + 0.05);
+
+    // Volume fades out cleanly over 50ms
+    gainNode.gain.setValueAtTime(0.15, now);
+    gainNode.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+
+    osc.start(now);
+    osc.stop(now + 0.05);
+
+    // Release the AudioContext once playback finishes to avoid leaking contexts per click
+    osc.onended = () => {
+      void ctx.close().catch(() => {});
+    };
+  } catch (error) {
+    // Silently ignore expected browser restrictions (e.g. before user gesture)
+    if (error instanceof Error && error.name === "NotAllowedError") return;
+    // Forward unexpected errors for debugging
+    console.error("Unexpected audio error:", error);
+  }
+};
+
+// --- 3. TYPES & STATE MACHINE ---
+const RippleState = {
+  INACTIVE: "INACTIVE",
+  TOUCH_DELAY: "TOUCH_DELAY",
+  HOLDING: "HOLDING",
+  WAITING_FOR_CLICK: "WAITING_FOR_CLICK",
+} as const;
+
+// --- 4. MATERIAL RIPPLE HOOK ---
 const useMaterialRipple = (disabled = false) => {
   const [hovered, setHovered] = React.useState(false);
   const [pressed, setPressed] = React.useState(false);
@@ -33,7 +76,7 @@ const useMaterialRipple = (disabled = false) => {
   const surfaceRef = React.useRef<HTMLDivElement>(null);
   const rippleEffectRef = React.useRef<HTMLDivElement>(null);
 
-  const stateRef = React.useRef(RippleState.INACTIVE);
+  const stateRef = React.useRef<string>(RippleState.INACTIVE);
   const rippleStartEventRef = React.useRef<React.PointerEvent | null>(null);
   const growAnimationRef = React.useRef<Animation | null>(null);
 
@@ -111,10 +154,7 @@ const useMaterialRipple = (disabled = false) => {
   };
 
   const startPressAnimation = (event?: React.PointerEvent) => {
-    // FIXED: Always set pressed state first, regardless of refs
     setPressed(true);
-
-    // Only run animation if refs are available (for ripple effect)
     if (!rippleEffectRef.current) return;
 
     growAnimationRef.current?.cancel();
@@ -158,11 +198,8 @@ const useMaterialRipple = (disabled = false) => {
       });
     }
 
-    if (growAnimationRef.current !== animation) {
-      return;
-    }
+    if (growAnimationRef.current !== animation) return;
 
-    // Always clear pressed state
     setPressed(false);
   };
 
@@ -177,11 +214,9 @@ const useMaterialRipple = (disabled = false) => {
     }
 
     stateRef.current = RippleState.TOUCH_DELAY;
-    void (await new Promise((resolve) => setTimeout(resolve, TOUCH_DELAY_MS)));
+    await new Promise((resolve) => setTimeout(resolve, TOUCH_DELAY_MS));
 
-    if (stateRef.current !== RippleState.TOUCH_DELAY) {
-      return;
-    }
+    if (stateRef.current !== RippleState.TOUCH_DELAY) return;
 
     stateRef.current = RippleState.HOLDING;
     startPressAnimation(event);
@@ -209,19 +244,19 @@ const useMaterialRipple = (disabled = false) => {
     if (!shouldReactToEvent(event)) return;
     setHovered(false);
     if (stateRef.current !== RippleState.INACTIVE) {
-      void endPressAnimation();
+      endPressAnimation();
     }
   };
 
   const handleClick = () => {
     if (disabled) return;
     if (stateRef.current === RippleState.WAITING_FOR_CLICK) {
-      void endPressAnimation();
+      endPressAnimation();
       return;
     }
     if (stateRef.current === RippleState.INACTIVE) {
       startPressAnimation();
-      void endPressAnimation();
+      endPressAnimation();
     }
   };
 
@@ -236,96 +271,251 @@ const useMaterialRipple = (disabled = false) => {
       onPointerEnter: handlePointerEnter,
       onPointerLeave: handlePointerLeave,
       onClick: handleClick,
-      onKeyDown: (e: React.KeyboardEvent) => {
-        if (e.key === "Enter" || e.key === " ") void handleClick();
-      },
     },
   };
 };
 
-// --- 4. RIPPLE COMPONENT ---
-const Ripple = React.forwardRef<
-  HTMLDivElement,
-  {
-    hovered: boolean;
-    pressed: boolean;
-    rippleEffectRef: React.RefObject<HTMLDivElement | null>;
-  }
->(({ hovered, pressed, rippleEffectRef }, ref) => {
-  return (
-    <div
-      ref={ref}
-      className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0 surface"
-      aria-hidden="true"
-    >
+// --- 5. RIPPLE COMPONENT ---
+interface RippleProps {
+  hovered: boolean;
+  pressed: boolean;
+  rippleEffectRef: React.RefObject<HTMLDivElement | null>;
+}
+
+const Ripple = React.forwardRef<HTMLDivElement, RippleProps>(
+  ({ hovered, pressed, rippleEffectRef }, ref) => {
+    return (
       <div
-        className={cn(
-          "absolute inset-0 bg-current transition-opacity duration-[15ms] linear",
-          hovered ? "opacity-[0.08]" : "opacity-0",
-        )}
-      />
-      <div
-        ref={rippleEffectRef}
-        className="absolute rounded-full opacity-0 bg-current"
-        style={{
-          background:
-            "radial-gradient(closest-side, currentColor max(calc(100% - 70px), 65%), transparent 100%)",
-          transition: "opacity 375ms linear",
-          opacity: pressed ? "0.12" : "0",
-          transitionDuration: pressed ? "105ms" : "375ms",
-        }}
-      />
-    </div>
-  );
-});
+        ref={ref}
+        className="absolute inset-0 overflow-hidden rounded-[inherit] pointer-events-none z-0 surface"
+        aria-hidden="true"
+      >
+        <div
+          className={cn(
+            "absolute inset-0 bg-current transition-opacity duration-200 linear",
+            hovered ? "opacity-[0.08]" : "opacity-0",
+            pressed && "opacity-[0.12]",
+          )}
+        />
+        <div
+          ref={rippleEffectRef}
+          className="absolute rounded-full opacity-0 bg-current"
+          style={{
+            background:
+              "radial-gradient(closest-side, currentColor max(calc(100% - 70px), 65%), transparent 100%)",
+            transition: "opacity 375ms linear",
+            opacity: pressed ? "0.25" : "0",
+            transitionDuration: pressed ? "105ms" : "375ms",
+          }}
+        />
+      </div>
+    );
+  },
+);
 Ripple.displayName = "Ripple";
 
-// --- 5. BUTTON COMPONENT ---
+// --- 6. MD3 EXPRESSIVE BUTTON VARIANTS (SHADCN API ALIGNED) ---
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center whitespace-nowrap text-sm font-medium tracking-[0.01em] cursor-pointer transition-all duration-600 delay-50 ease-[cubic-bezier(0.2,0,0,1)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-38 disabled:shadow-none",
+  "group relative inline-flex items-center justify-center whitespace-nowrap font-medium tracking-[0.01em] transition-[background-color,color,box-shadow,border-radius,transform] duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1.2)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-[0.38] disabled:shadow-none overflow-hidden select-none [&_svg]:transition-[transform,filter] [&_svg]:duration-300 [&_svg]:ease-[cubic-bezier(0.2,0.8,0.2,1.2)] data-[pressed=true]:[&_svg]:scale-[0.90]",
   {
     variants: {
       variant: {
-        // MATERIAL VARIANTS
+        default: "bg-primary text-primary-foreground shadow-sm hover:shadow",
         filled: "bg-primary text-primary-foreground shadow-sm",
-        elevated:
-          "bg-card text-primary shadow-md data-[pressed=true]:shadow-none",
-        tonal: "bg-secondary text-secondary-foreground shadow-none",
-        outlined:
-          "border border-border bg-transparent text-primary shadow-none",
-        text: "bg-transparent text-primary shadow-none",
-        destructive: "bg-destructive text-destructive-foreground shadow-sm",
-
-        // LEGACY MAPPINGS
-        default: "bg-primary text-primary-foreground shadow-sm",
-        outline: "border border-border bg-transparent text-primary shadow-none",
-        secondary: "bg-secondary text-secondary-foreground shadow-none",
-        ghost: "bg-transparent text-primary shadow-none",
-        link: "bg-transparent text-primary shadow-none underline hover:underline",
         accent: "bg-accent text-accent-foreground shadow-sm",
+        tonal: "bg-secondary text-secondary-foreground shadow-none",
+        text: "bg-transparent text-primary shadow-none",
+        destructive:
+          "bg-destructive text-destructive-foreground shadow-sm hover:shadow",
+        outline:
+          "bg-transparent text-foreground shadow-none border border-border hover:bg-secondary/20",
+        secondary:
+          "bg-secondary/50 text-secondary-foreground shadow-none hover:bg-secondary/70",
+        ghost: "bg-transparent text-primary shadow-none hover:bg-primary/10",
+        link: "text-primary underline-offset-4 hover:underline",
+        elevated:
+          "bg-card text-card-foreground shadow-md hover:shadow-lg data-[pressed=true]:shadow-sm",
       },
       size: {
-        default: "h-10 px-6",
-        sm: "h-8 px-4 text-xs",
-        lg: "h-12 px-8 text-base",
-        icon: "h-10 w-10",
-        fab: "h-14 w-14 text-base",
+        // Core Sizes
+        default: "py-[10px] px-[16px] gap-[8px] text-sm",
+        sm: "py-[6px] px-[12px] gap-[8px] text-sm",
+        lg: "py-[16px] px-[24px] gap-[8px] text-base",
+        icon: "p-[8px] w-[40px] h-[40px]",
+        // Expressive Scales
+        xl: "py-[32px] px-[48px] gap-[12px] text-2xl",
+        "2xl": "py-[48px] px-[64px] gap-[16px] text-3xl",
+        "icon-sm": "p-[6px] w-[32px] h-[32px]",
+        "icon-lg": "p-[16px] w-[56px] h-[56px]",
+        "icon-xl": "p-[32px] w-[96px] h-[96px]",
+        "icon-2xl": "p-[48px] w-[136px] h-[136px]",
       },
       shape: {
-        round:
-          "rounded-full data-[pressed=true]:rounded-xl data-[pressed=true]:duration-0 data-[pressed=true]:delay-0",
-        square:
-          "rounded-xl data-[pressed=true]:rounded-xl data-[pressed=true]:duration-0 data-[pressed=true]:delay-0",
+        round: "",
+        square: "",
+        "split-left": "", // Automatically injected by SplitButton
+        "split-right": "", // Automatically injected by SplitButton
       },
     },
+    compoundVariants: [
+      // Nullify borders on non-outline variants to prevent stroke artifacts
+      {
+        variant: [
+          "default",
+          "filled",
+          "accent",
+          "tonal",
+          "text",
+          "destructive",
+          "secondary",
+          "ghost",
+          "link",
+          "elevated",
+        ],
+        className: "border-transparent",
+      },
+      // Expressive outlined dynamic border-widths
+      { variant: "outline", size: ["xl", "icon-xl"], className: "border-2" },
+      {
+        variant: "outline",
+        size: ["2xl", "icon-2xl"],
+        className: "border-[3px]",
+      },
+
+      // SHAPE PHYSICS: Standard "Round" Morphing (Pill -> Squish)
+      {
+        shape: "round",
+        size: ["sm", "icon-sm"],
+        className: "rounded-[16px] data-[pressed=true]:rounded-[8px]",
+      },
+      {
+        shape: "round",
+        size: ["default", "icon"],
+        className: "rounded-[20px] data-[pressed=true]:rounded-[8px]",
+      },
+      {
+        shape: "round",
+        size: ["lg", "icon-lg"],
+        className: "rounded-[28px] data-[pressed=true]:rounded-[12px]",
+      },
+      {
+        shape: "round",
+        size: ["xl", "icon-xl"],
+        className: "rounded-[48px] data-[pressed=true]:rounded-[16px]",
+      },
+      {
+        shape: "round",
+        size: ["2xl", "icon-2xl"],
+        className: "rounded-[68px] data-[pressed=true]:rounded-[16px]",
+      },
+
+      // SHAPE PHYSICS: Standard "Square" Morphing (Squish -> Pill)
+      {
+        shape: "square",
+        size: ["sm", "icon-sm"],
+        className: "rounded-[12px] data-[pressed=true]:rounded-[16px]",
+      },
+      {
+        shape: "square",
+        size: ["default", "icon"],
+        className: "rounded-[12px] data-[pressed=true]:rounded-[20px]",
+      },
+      {
+        shape: "square",
+        size: ["lg", "icon-lg"],
+        className: "rounded-[16px] data-[pressed=true]:rounded-[28px]",
+      },
+      {
+        shape: "square",
+        size: ["xl", "icon-xl"],
+        className: "rounded-[28px] data-[pressed=true]:rounded-[48px]",
+      },
+      {
+        shape: "square",
+        size: ["2xl", "icon-2xl"],
+        className: "rounded-[28px] data-[pressed=true]:rounded-[68px]",
+      },
+
+      // SPLIT-LEFT PHYSICS (Your custom tweaks implemented)
+      {
+        shape: "split-left",
+        size: ["sm", "icon-sm"],
+        className:
+          "rounded-l-[16px] rounded-r-[4px] data-[pressed=true]:rounded-l-[16px] data-[pressed=true]:rounded-r-[16px]",
+      },
+      {
+        shape: "split-left",
+        size: ["default", "icon"],
+        className:
+          "rounded-l-[24px] rounded-r-[4px] data-[pressed=true]:rounded-l-[24px] data-[pressed=true]:rounded-r-[24px]",
+      },
+      {
+        shape: "split-left",
+        size: ["lg", "icon-lg"],
+        className:
+          "rounded-l-[28px] rounded-r-[4px] data-[pressed=true]:rounded-l-[28px] data-[pressed=true]:rounded-r-[28px]",
+      },
+      {
+        shape: "split-left",
+        size: ["xl", "icon-xl"],
+        className:
+          "rounded-l-[46px] rounded-r-[6px] data-[pressed=true]:rounded-l-[46px] data-[pressed=true]:rounded-r-[46px]",
+      },
+      {
+        shape: "split-left",
+        size: ["2xl", "icon-2xl"],
+        className:
+          "rounded-l-[62px] rounded-r-[12px] data-[pressed=true]:rounded-l-[62px] data-[pressed=true]:rounded-r-[62px]",
+      },
+
+      // SPLIT-RIGHT PHYSICS (Your custom tweaks mirrored for right)
+      {
+        shape: "split-right",
+        size: ["sm", "icon-sm"],
+        className:
+          "rounded-r-[16px] rounded-l-[4px] data-[pressed=true]:rounded-r-[16px] data-[pressed=true]:rounded-l-[16px]",
+      },
+      {
+        shape: "split-right",
+        size: ["default", "icon"],
+        className:
+          "rounded-r-[24px] rounded-l-[4px] data-[pressed=true]:rounded-r-[24px] data-[pressed=true]:rounded-l-[24px]",
+      },
+      {
+        shape: "split-right",
+        size: ["lg", "icon-lg"],
+        className:
+          "rounded-r-[28px] rounded-l-[4px] data-[pressed=true]:rounded-r-[28px] data-[pressed=true]:rounded-l-[28px]",
+      },
+      {
+        shape: "split-right",
+        size: ["xl", "icon-xl"],
+        className:
+          "rounded-r-[46px] rounded-l-[6px] data-[pressed=true]:rounded-r-[46px] data-[pressed=true]:rounded-l-[46px]",
+      },
+      {
+        shape: "split-right",
+        size: ["2xl", "icon-2xl"],
+        className:
+          "rounded-r-[62px] rounded-l-[12px] data-[pressed=true]:rounded-r-[62px] data-[pressed=true]:rounded-l-[62px]",
+      },
+
+      // ICON VARIANT PHYSICS: subtle whole-button depress + soft icon blur
+      {
+        size: ["icon", "icon-sm", "icon-lg", "icon-xl", "icon-2xl"],
+        className:
+          "data-[pressed=true]:scale-[0.97] data-[pressed=true]:[&_svg]:blur-[0.5px]",
+      },
+    ],
     defaultVariants: {
-      variant: "filled",
+      variant: "default",
       size: "default",
       shape: "round",
     },
   },
 );
 
+// --- 7. CORE BUTTON COMPONENT ---
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -351,41 +541,53 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref,
   ) => {
-    // Optimization: If both visual effects are disabled, disable the hook logic
     const isRippleLogicDisabled = props.disabled || (noRipple && noMorph);
     const { surfaceRef, rippleEffectRef, hovered, pressed, events } =
       useMaterialRipple(isRippleLogicDisabled);
 
-    // Common props for both Button and Slot
+    const {
+      onPointerDown,
+      onPointerUp,
+      onPointerEnter,
+      onPointerLeave,
+      ...restProps
+    } = props;
+
     const componentProps = {
       className: cn(buttonVariants({ variant, size, shape, className })),
       style: style,
       "data-pressed": noMorph ? undefined : pressed,
-      ...events,
+      ...restProps,
+      onPointerDown: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerDown(e);
+        onPointerDown?.(e);
+      },
+      onPointerUp: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerUp(e);
+        onPointerUp?.(e);
+      },
+      onPointerEnter: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerEnter(e);
+        onPointerEnter?.(e);
+      },
+      onPointerLeave: (e: React.PointerEvent<HTMLButtonElement>) => {
+        events.onPointerLeave(e);
+        onPointerLeave?.(e);
+      },
       onClick: (e: React.MouseEvent<HTMLButtonElement>) => {
         events.onClick();
+
+        if (size && ["xl", "2xl", "icon-xl", "icon-2xl"].includes(size)) {
+          playTactilePopSound();
+        }
+
         onClick?.(e);
       },
-      ...props,
     };
 
-    // RENDER LOGIC:
     if (asChild) {
-      // IMPORTANT: When using asChild, the child component MUST:
-      // 1. Accept a `children` prop and render it in its output
-      // 2. Forward all props (className, style, event handlers, etc.) to its root element
-      //
-      // This is because React.cloneElement replaces the child's children prop with our
-      // wrapped content (Ripple + original children). Icon-only components or components
-      // that don't forward/render their children prop will NOT work correctly.
-      //
-      // Example of a compatible component:
-      //   const MyLink = ({ children, ...props }) => <a {...props}>{children}</a>
-      //
-      // Example of an INCOMPATIBLE component (won't render ripple or content):
-      //   const IconButton = () => <svg>...</svg>  // No children prop
       const child = React.Children.only(children) as React.ReactElement<{
-        children: React.ReactNode;
+        children?: React.ReactNode;
       }>;
 
       return (
@@ -393,8 +595,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           {React.cloneElement(child, {
             children: (
               <>
-                {/* Inject Ripple inside the custom child */}
-                {!noRipple && (
+                {!noRipple && variant !== "link" && (
                   <Ripple
                     ref={surfaceRef}
                     rippleEffectRef={rippleEffectRef}
@@ -402,8 +603,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
                     pressed={pressed}
                   />
                 )}
-                {/* Wrap content to ensure z-index layering above ripple */}
-                <span className="relative z-10 flex items-center gap-2 pointer-events-none">
+                <span className="relative z-10 flex items-center justify-center gap-[inherit] pointer-events-none">
                   {child.props.children}
                 </span>
               </>
@@ -415,7 +615,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 
     return (
       <button ref={ref} {...componentProps}>
-        {!noRipple && (
+        {!noRipple && variant !== "link" && (
           <Ripple
             ref={surfaceRef}
             rippleEffectRef={rippleEffectRef}
@@ -423,7 +623,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
             pressed={pressed}
           />
         )}
-        <span className="relative z-10 flex items-center gap-2 pointer-events-none">
+        <span className="relative z-10 flex items-center justify-center gap-[inherit] pointer-events-none">
           {children}
         </span>
       </button>
@@ -432,4 +632,47 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
 );
 Button.displayName = "Button";
 
-export { Button, buttonVariants };
+// --- 8. MD3 SPLIT BUTTON / CONNECTED BUTTON GROUP ---
+const SplitButton = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLAttributes<HTMLDivElement>
+>(({ className, children, ...props }, ref) => {
+  const childrenArray = React.Children.toArray(children);
+
+  return (
+    <div
+      ref={ref}
+      // Flex items-stretch guarantees the child buttons evaluate to perfectly identical heights
+      className={cn(
+        "inline-flex items-stretch justify-center gap-[2px]",
+        className,
+      )}
+      {...props}
+    >
+      {childrenArray.map((child, index) => {
+        if (!React.isValidElement(child)) return child;
+
+        const isFirst = index === 0;
+        const isLast = index === childrenArray.length - 1;
+
+        return React.cloneElement(
+          child as React.ReactElement<Record<string, unknown>>,
+          {
+            // Automatically inject the isolated Split Button physics
+            shape: isFirst ? "split-left" : isLast ? "split-right" : "square",
+            // Allow the button to naturally stretch to the identical container height
+            className: cn(
+              (child as React.ReactElement<Record<string, unknown>>).props
+                .className as string | undefined,
+              "h-auto! self-stretch",
+            ),
+          },
+        );
+      })}
+    </div>
+  );
+});
+SplitButton.displayName = "SplitButton";
+
+// eslint-disable-next-line react-refresh/only-export-components
+export { Button, buttonVariants, SplitButton };

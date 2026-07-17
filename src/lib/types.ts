@@ -48,7 +48,11 @@ export interface Product {
 export type {
   ExtendedProduct,
   FaqItem,
+  HomepageReview,
   ProductLinks,
+  ReviewSource,
+  ReviewsContent,
+  ReviewTrustBadge,
   TeamMemberProject,
   Testimonial,
 } from "./schemas";

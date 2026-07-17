@@ -5,7 +5,6 @@ import {
   ArrowUpRight,
   CheckCircle,
   Globe,
-  Tag,
 } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
@@ -137,8 +136,8 @@ function ProductCard({ product }: ProductCardProps) {
               {/* Floating Badge */}
               <div className="absolute top-6 left-6 z-10">
                 <Badge
-                  variant="secondary"
-                  className="bg-background/30 backdrop-blur-md border-border border-2 text-[10px] uppercase tracking-widest font-black py-1.5 px-3"
+                  variant="outline"
+                  className="bg-background border-border border-2 text-[10px] uppercase tracking-widest font-black py-1.5 px-3"
                 >
                   {product.type || "Software"}
                 </Badge>
@@ -226,17 +225,12 @@ function ProductCard({ product }: ProductCardProps) {
 
               {/* Action Buttons */}
               <div className="flex items-center gap-4 w-full md:w-auto">
-                <Button
-                  variant="ghost"
-                  className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest border border-border hover:bg-muted"
-                  asChild
-                >
+                <Button variant="ghost" size="sm" asChild>
                   <Link href={`/products/${product.slug}`}>Overview</Link>
                 </Button>
                 {product.links?.demo && (
                   <Button
                     variant="default"
-                    className="rounded-full px-8 h-12 font-black text-xs uppercase tracking-widest gap-2 shadow-[0_15px_30px_-5px_oklch(from_var(--primary)_l_c_h_/_0.3)] hover:scale-105 active:scale-95 transition-all"
                     onClick={() =>
                       window.open(
                         product.links.demo,
@@ -380,14 +374,6 @@ export function Products({
           className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-10"
         >
           <div className="max-w-3xl">
-            <motion.div
-              initial={{ scale: 0.9, opacity: 0 }}
-              whileInView={{ scale: 1, opacity: 1 }}
-              className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.2em] mb-6 border border-primary/10 backdrop-blur-sm"
-            >
-              <Tag weight="bold" className="w-3.5 h-3.5" />
-              Innovation Pipeline
-            </motion.div>
             <h2 className="text-6xl md:text-8xl font-black tracking-tighter text-foreground mb-8 leading-[0.9]">
               Crafting Digital <br />
               <span className="text-primary italic">Excellence.</span>
@@ -405,7 +391,7 @@ export function Products({
             <Button
               variant="outline"
               size="lg"
-              className="rounded-full h-16 px-10 border-foreground/10 hover:border-primary/50 hover:bg-primary/5 transition-all group overflow-hidden relative"
+              className="group"
               onClick={() => router.push("/products")}
             >
               <span className="relative z-10 font-black text-sm uppercase tracking-widest flex items-center">
@@ -415,7 +401,6 @@ export function Products({
                   className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform duration-500"
                 />
               </span>
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
             </Button>
           </div>
         </div>
@@ -473,12 +458,7 @@ export function Products({
             Our ecosystem is constantly evolving. Visit the products page for
             detailed documentation and open-source contributions.
           </p>
-          <Button
-            variant="default"
-            size="lg"
-            className="rounded-full h-14 px-12 font-bold text-sm tracking-widest uppercase hover:scale-105 transition-transform"
-            asChild
-          >
+          <Button variant="default" size="lg" asChild>
             <Link href="/products" onClick={() => window.scrollTo(0, 0)}>
               All Products
             </Link>

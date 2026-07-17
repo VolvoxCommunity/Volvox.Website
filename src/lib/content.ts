@@ -5,9 +5,16 @@ import {
   AuthorsArraySchema,
   extendedProductSchema,
   ProductsArraySchema,
+  reviewsContentSchema,
   TeamMembersArraySchema,
 } from "./schemas";
-import type { Author, ExtendedProduct, Product, TeamMember } from "./types";
+import type {
+  Author,
+  ExtendedProduct,
+  Product,
+  ReviewsContent,
+  TeamMember,
+} from "./types";
 
 const CONTENT_DIR = path.join(process.cwd(), "content");
 const PRODUCTS_DIR = path.join(CONTENT_DIR, "products");
@@ -93,6 +100,23 @@ export function getAllTeamMembers(): TeamMember[] {
   } catch (error) {
     reportError("Failed to read team.json", error);
     return [];
+  }
+}
+
+/**
+ * Reads and validates homepage reviews from content/review.json.
+ *
+ * @returns Validated ReviewsContent, or null when the file is missing/invalid
+ */
+export function getReviewsContent(): ReviewsContent | null {
+  try {
+    const filePath = path.join(CONTENT_DIR, "review.json");
+    const fileContents = fs.readFileSync(filePath, "utf8");
+    const json: unknown = JSON.parse(fileContents);
+    return reviewsContentSchema.parse(json);
+  } catch (error) {
+    reportError("Failed to read review.json", error);
+    return null;
   }
 }
 

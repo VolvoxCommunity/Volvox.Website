@@ -30,11 +30,7 @@ export function BlogPostHeader() {
     >
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="flex items-center justify-between h-16">
-          <Button
-            variant="ghost"
-            className="flex items-center gap-2"
-            onClick={() => router.push("/")}
-          >
+          <Button variant="ghost" onClick={() => router.push("/")}>
             <ArrowLeft className="h-4 w-4" />
             Back to Home
           </Button>
@@ -62,7 +58,6 @@ export function BlogPostHeader() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                className="rounded-full hover:bg-muted"
                 aria-label={
                   resolvedTheme === "light"
                     ? "Switch to dark mode"
@@ -81,7 +76,7 @@ export function BlogPostHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full hidden md:inline-flex hover:bg-muted"
+                className="hidden md:inline-flex"
                 onClick={() =>
                   window.open(GITHUB_URL, "_blank", "noopener,noreferrer")
                 }
@@ -94,7 +89,7 @@ export function BlogPostHeader() {
               <Button
                 variant="ghost"
                 size="icon"
-                className="rounded-full hidden md:inline-flex hover:bg-muted"
+                className="hidden md:inline-flex"
                 onClick={() =>
                   window.open(DISCORD_URL, "_blank", "noopener,noreferrer")
                 }

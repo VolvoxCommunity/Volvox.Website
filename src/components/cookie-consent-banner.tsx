@@ -164,15 +164,11 @@ export function CookieConsentBanner() {
                     size="sm"
                     variant="outline"
                     onClick={handleOpenSettings}
-                    className="h-7 text-xs px-3 flex-1"
+                    className="flex-1"
                   >
                     Customize
                   </Button>
-                  <Button
-                    size="sm"
-                    onClick={acceptAll}
-                    className="h-7 text-xs px-3 flex-1"
-                  >
+                  <Button size="sm" onClick={acceptAll} className="flex-1">
                     Accept
                   </Button>
                 </div>
