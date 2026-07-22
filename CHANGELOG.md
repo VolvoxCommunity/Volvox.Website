@@ -11,6 +11,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 
 - Homepage **Reviews** section with testimonial cards (Product Hunt, App Store, and X quotes), trust badges, and prev/next navigation
 - Content-driven reviews via `content/review.json` with Zod validation
+- Meta Pixel ad conversion tracking, loaded only on production deploys with advertising cookie consent (via `ConditionalAnalytics`)
+- Meta Pixel `Lead` event on the "Start a conversation" CTAs in the How We Work section
 
 ## [v1.2.0] - 2026-03-11
 

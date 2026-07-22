@@ -36,7 +36,7 @@ const DEFAULT_CONSENT: CookieConsent = {
 };
 
 /** LocalStorage key for storing cookie consent */
-const COOKIE_CONSENT_KEY = "volvox-cookie-consent";
+export const COOKIE_CONSENT_KEY = "volvox-cookie-consent";
 
 /**
  * Cached consent snapshot to prevent infinite loops with useSyncExternalStore.
@@ -71,6 +71,20 @@ function getStoredConsent(): CookieConsent {
     // If parsing fails, return cached or default
     return cachedConsent;
   }
+}
+
+/**
+ * Read the current cookie-consent snapshot outside of React.
+ *
+ * Imperative code paths (e.g. analytics event helpers) must respect the
+ * visitor's latest decision even after the consent-gated components have
+ * mounted or unmounted, so they re-read the stored consent on every call
+ * instead of subscribing to the provider.
+ *
+ * @returns The stored consent preferences, or the default (all denied) state
+ */
+export function getStoredCookieConsent(): CookieConsent {
+  return getStoredConsent();
 }
 
 /**

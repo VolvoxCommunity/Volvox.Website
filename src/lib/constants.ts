@@ -36,6 +36,15 @@ export const INSTAGRAM_URL = "https://www.instagram.com/volvox_llc";
 /** TikTok profile URL */
 export const TIKTOK_URL = "https://www.tiktok.com/@volvox_llc";
 
+/**
+ * Meta (Facebook) Pixel ID for ad conversion tracking.
+ * Pixel IDs are public identifiers (visible to every visitor in page source),
+ * so this is safe to keep in code. The pixel only loads on production deploys
+ * after the user grants advertising cookie consent (see
+ * `src/components/conditional-analytics.tsx`).
+ */
+export const META_PIXEL_ID = "4277433129168323";
+
 /** Spline 3D background scene URL */
 export const SPLINE_IFRAME_URL =
   "https://my.spline.design/aidatamodelinteraction-mdTL3FktFVHgDvFr5TKtnYDV";

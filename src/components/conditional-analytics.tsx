@@ -3,12 +3,16 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { MetaPixel } from "@/components/meta-pixel";
 import {
   type CookieConsent,
   useCookieConsent,
 } from "@/components/providers/cookie-consent-provider";
 
-type AnalyticsConsent = Pick<CookieConsent, "analytics" | "performance">;
+type AnalyticsConsent = Pick<
+  CookieConsent,
+  "advertising" | "analytics" | "performance"
+>;
 
 interface AnalyticsIntegrationOptions {
   consent: AnalyticsConsent;
@@ -19,6 +23,7 @@ interface AnalyticsIntegrationOptions {
 
 interface EnabledAnalyticsIntegrations {
   googleAnalytics: boolean;
+  metaPixel: boolean;
   speedInsights: boolean;
   vercelAnalytics: boolean;
 }
@@ -38,6 +43,7 @@ export function getEnabledAnalyticsIntegrations({
 
   return {
     googleAnalytics: Boolean(isDeployedProduction && consent.analytics && gaId),
+    metaPixel: Boolean(isDeployedProduction && consent.advertising),
     speedInsights: Boolean(isDeployedProduction && consent.performance),
     vercelAnalytics: Boolean(isDeployedProduction && consent.analytics),
   };
@@ -47,6 +53,7 @@ export function getEnabledAnalyticsIntegrations({
  * Conditionally renders analytics components based on user's cookie consent preferences.
  * Only loads Google Analytics and Vercel Analytics if the user has consented to analytics cookies.
  * Only loads SpeedInsights/Sentry if the user has consented to performance cookies.
+ * Only loads the Meta Pixel if the user has consented to advertising cookies.
  *
  * @returns Analytics components if consent is given, null otherwise
  */
@@ -73,6 +80,9 @@ export function ConditionalAnalytics({
       {enabledIntegrations.googleAnalytics && gaId && (
         <GoogleAnalytics gaId={gaId} />
       )}
+
+      {/* Meta Pixel - only in production with advertising consent */}
+      {enabledIntegrations.metaPixel && <MetaPixel />}
     </>
   );
 }
