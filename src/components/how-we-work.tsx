@@ -6,6 +6,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { type JSX, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
+import { trackMetaPixelEvent } from "@/lib/meta-pixel";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -1225,6 +1226,7 @@ export function HowWeWork(): JSX.Element {
               <a
                 href="mailto:bill@volvox.dev"
                 className="flex items-center gap-4 text-accent-foreground font-semibold"
+                onClick={() => trackMetaPixelEvent("Lead")}
               >
                 <span>Start a conversation</span>
                 <span className="w-10 h-10 rounded-full bg-accent-foreground/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
@@ -1417,6 +1419,7 @@ export function HowWeWork(): JSX.Element {
             <a
               href="mailto:bill@volvox.dev"
               className="flex items-center gap-3 justify-center text-accent-foreground font-semibold"
+              onClick={() => trackMetaPixelEvent("Lead")}
             >
               <span>Start a conversation</span>
               <svg
