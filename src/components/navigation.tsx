@@ -43,8 +43,8 @@ export function Navigation(props: NavigationProps) {
         action: () => (onNavigate ? onNavigate("blog") : router.push("/#blog")),
       },
       {
-        key: "c",
-        description: "Go to Community",
+        key: "t",
+        description: "Go to Team",
         action: () =>
           onNavigate ? onNavigate("mentorship") : router.push("/#mentorship"),
       },
@@ -136,12 +136,19 @@ export function Navigation(props: NavigationProps) {
         )}
       >
         {/* Nav Container */}
-        <nav
+        <motion.nav
           ref={navRef}
           onMouseMove={handleMouseMove}
           aria-label="Main navigation"
+          layout
+          transition={{
+            type: "spring",
+            stiffness: 280,
+            damping: 28,
+            mass: 0.8,
+          }}
           className={cn(
-            "pointer-events-auto relative flex items-center justify-between overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]",
+            "pointer-events-auto relative flex items-center justify-between overflow-hidden",
             "w-full py-2 px-3 bg-transparent",
             isIsland
               ? "group lg:w-[95%] lg:max-w-[1000px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
@@ -182,7 +189,7 @@ export function Navigation(props: NavigationProps) {
               priority
             />
             {/* Logo Text Hidden on Mobile */}
-            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground hidden lg:block">
+            <span className="font-mono font-bold text-lg text-foreground hidden lg:block">
               Volvox
             </span>
           </Link>
@@ -190,49 +197,59 @@ export function Navigation(props: NavigationProps) {
           {/* Desktop Links */}
           <ul
             className={cn(
-              "hidden lg:flex z-[2] list-none",
-              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-8",
+              "hidden lg:flex z-[2] list-none transition-all duration-300",
+              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-2",
             )}
           >
-            {navItems.map((item) => (
-              <li
-                key={item.id}
-                className={cn(item.optional && "hidden xl:block")}
-              >
-                {linkMode ? (
-                  <Link
-                    href={item.href}
-                    aria-current={
-                      currentSection === item.id ? "page" : undefined
-                    }
-                    className={cn(
-                      "inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-all duration-300",
-                      currentSection === item.id
-                        ? "opacity-100 bg-foreground/5 text-foreground"
-                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
-                    )}
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <button
-                    type="button"
-                    aria-current={
-                      currentSection === item.id ? "page" : undefined
-                    }
-                    onClick={() => handleNavigate(item.id)}
-                    className={cn(
-                      "inline-block text-sm font-medium py-2 px-4 rounded-full transition-all duration-300 cursor-pointer bg-transparent border-none",
-                      currentSection === item.id
-                        ? "opacity-100 bg-foreground/5 text-foreground"
-                        : "opacity-60 text-foreground hover:opacity-100 hover:bg-foreground/5",
-                    )}
-                  >
-                    {item.label}
-                  </button>
-                )}
-              </li>
-            ))}
+            {navItems.map((item) => {
+              const isActive = currentSection === item.id;
+              return (
+                <li
+                  key={item.id}
+                  className={cn("relative", item.optional && "hidden xl:block")}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeNavPill"
+                      className="absolute inset-0 bg-foreground/10 rounded-full"
+                      transition={{
+                        type: "spring",
+                        stiffness: 400,
+                        damping: 30,
+                      }}
+                    />
+                  )}
+                  {linkMode ? (
+                    <Link
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      className={cn(
+                        "relative z-[1] inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-colors duration-200",
+                        isActive
+                          ? "text-foreground font-semibold"
+                          : "opacity-60 text-foreground hover:opacity-100",
+                      )}
+                    >
+                      {item.label}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={() => handleNavigate(item.id)}
+                      className={cn(
+                        "relative z-[1] inline-block text-sm font-medium py-2 px-4 rounded-full transition-colors duration-200 cursor-pointer bg-transparent border-none",
+                        isActive
+                          ? "text-foreground font-semibold"
+                          : "opacity-60 text-foreground hover:opacity-100",
+                      )}
+                    >
+                      {item.label}
+                    </button>
+                  )}
+                </li>
+              );
+            })}
           </ul>
 
           {/* Actions */}
@@ -277,7 +294,7 @@ export function Navigation(props: NavigationProps) {
               <List className="h-6 w-6" />
             </Button>
           </div>
-        </nav>
+        </motion.nav>
       </header>
 
       {/* Custom Animated Mobile Menu Overlay */}
@@ -300,7 +317,7 @@ export function Navigation(props: NavigationProps) {
                   height={32}
                   className="w-8 h-8 object-contain rounded-md"
                 />
-                <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-lg text-foreground">
+                <span className="font-mono font-bold text-lg text-foreground">
                   Volvox
                 </span>
               </div>

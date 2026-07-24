@@ -28,7 +28,7 @@ import { version } from "../../package.json";
 const footerLinks = {
   product: [
     { label: "Blog", href: "/blog" },
-    { label: "Community", href: "/#mentorship" },
+    { label: "Team", href: "/#mentorship" },
     { label: "About", href: "/#about" },
   ],
   resources: [
@@ -145,7 +145,7 @@ export function Footer() {
                 height={40}
                 className="w-10 h-10 rounded-lg"
               />
-              <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-2xl text-foreground group-hover:text-primary transition-colors">
+              <span className="font-mono font-bold text-2xl text-foreground group-hover:text-primary transition-colors">
                 Volvox
               </span>
             </Link>

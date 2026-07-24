@@ -5,19 +5,13 @@ import { useCallback, useMemo, useState } from "react";
 import { BlogNavbar } from "@/components/blog/blog-navbar";
 import { BlogCard } from "@/components/blog-card";
 import { Footer } from "@/components/footer";
-import type {
-  BlogSortOption,
-  ProductSortOption,
-  ViewMode,
-} from "@/components/ui/filter-controls";
+import type { BlogSortOption } from "@/components/ui/filter-controls";
 import { SITE_NAME } from "@/lib/constants";
 import type { BlogPost } from "@/lib/types";
 
 interface BlogListClientProps {
   posts: BlogPost[];
 }
-
-const STORAGE_KEY = "volvox-blog-view";
 
 /**
  * Client component for the blog landing page.
@@ -36,16 +30,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   const [sortOption, setSortOption] = useState<BlogSortOption>(() => {
     const sort = searchParams.get("sort");
     return (sort as BlogSortOption) || "newest";
-  });
-  const [viewMode, setViewMode] = useState<ViewMode>(() => {
-    const view = searchParams.get("view");
-    if (view === "grid" || view === "list") return view;
-    // Check localStorage only on client
-    if (typeof window !== "undefined") {
-      const stored = localStorage.getItem(STORAGE_KEY);
-      if (stored === "grid" || stored === "list") return stored;
-    }
-    return "grid";
   });
 
   // Extract all unique tags from posts
@@ -100,12 +84,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
 
   // Update URL params (debounced for search)
   const updateUrl = useCallback(
-    (params: {
-      q?: string;
-      tags?: string[];
-      sort?: BlogSortOption;
-      view?: ViewMode;
-    }) => {
+    (params: { q?: string; tags?: string[]; sort?: BlogSortOption }) => {
       const newParams = new URLSearchParams(searchParams.toString());
 
       if (params.q !== undefined) {
@@ -124,11 +103,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
         else newParams.delete("sort");
       }
 
-      if (params.view !== undefined) {
-        if (params.view !== "grid") newParams.set("view", params.view);
-        else newParams.delete("view");
-      }
-
       const queryString = newParams.toString();
       router.replace(queryString ? `?${queryString}` : "/blog", {
         scroll: false,
@@ -138,14 +112,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   );
 
   // Handlers
-  const handleSearchChange = useCallback(
-    (value: string) => {
-      setSearchQuery(value);
-      updateUrl({ q: value });
-    },
-    [updateUrl],
-  );
-
   const handleTagToggle = useCallback(
     (tag: string) => {
       setSelectedTags((prev) => {
@@ -164,23 +130,6 @@ export function BlogListClient({ posts }: BlogListClientProps) {
     updateUrl({ tags: [] });
   }, [updateUrl]);
 
-  const handleSortChange = useCallback(
-    (value: BlogSortOption | ProductSortOption) => {
-      setSortOption(value as BlogSortOption);
-      updateUrl({ sort: value as BlogSortOption });
-    },
-    [updateUrl],
-  );
-
-  const handleViewModeChange = useCallback(
-    (value: ViewMode) => {
-      setViewMode(value);
-      localStorage.setItem(STORAGE_KEY, value);
-      updateUrl({ view: value });
-    },
-    [updateUrl],
-  );
-
   const handleClearAll = useCallback(() => {
     setSearchQuery("");
     setSelectedTags([]);
@@ -197,15 +146,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       <div className="relative z-10 flex-1">
         <BlogNavbar
           searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
+          onSearchChange={setSearchQuery}
           selectedTags={selectedTags}
           allTags={allTags}
           onTagToggle={handleTagToggle}
           onClearTags={handleClearTags}
           sortOption={sortOption}
-          onSortChange={handleSortChange}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
+          onSortChange={setSortOption}
           resultCount={filteredPosts.length}
         />
 
@@ -218,7 +165,7 @@ export function BlogListClient({ posts }: BlogListClientProps) {
           <header className="text-center mb-12">
             <h1
               id="blog-page-heading"
-              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+              className="text-5xl md:text-7xl font-editorial italic font-medium mb-4 text-balance"
             >
               Our Blog
             </h1>
@@ -240,18 +187,12 @@ export function BlogListClient({ posts }: BlogListClientProps) {
             </div>
           )}
 
-          {/* Posts Grid/List */}
+          {/* Posts Grid */}
           <section aria-label="Blog posts">
             {filteredPosts.length > 0 ? (
-              <div
-                className={
-                  viewMode === "grid"
-                    ? "relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
-                    : "relative z-0 flex flex-col gap-4"
-                }
-              >
+              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 {filteredPosts.map((post) => (
-                  <BlogCard key={post.id} post={post} viewMode={viewMode} />
+                  <BlogCard key={post.id} post={post} />
                 ))}
               </div>
             ) : (

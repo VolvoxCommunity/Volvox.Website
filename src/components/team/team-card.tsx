@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
@@ -77,12 +78,14 @@ export function TeamCard({ member }: TeamCardProps) {
 
         {/* Bottom Actions: Profile Button */}
         <div className="flex items-center gap-3 h-8 mt-auto">
-          <span
-            className="flex-1 rounded-full h-8 text-xs font-bold inline-flex items-center justify-center bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          <Button
+            size="sm"
+            variant="secondary"
+            className="flex-1 rounded-full h-8 text-xs font-bold pointer-events-none"
             data-testid={`profile-button-${member.slug}`}
           >
             Profile
-          </span>
+          </Button>
         </div>
       </div>
     </Link>

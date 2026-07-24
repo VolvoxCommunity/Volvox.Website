@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { JetBrains_Mono, Manrope, Space_Grotesk } from "next/font/google";
+import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
 import { VolvoxAssistant } from "@/components/ai/volvox-assistant";
@@ -18,24 +18,21 @@ import {
 } from "@/lib/constants";
 import { generateOrganizationSchema } from "@/lib/structured-data";
 
-const jetbrainsMono = JetBrains_Mono({
+const geistSans = Geist({
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-jetbrains-mono",
+  variable: "--font-geist-sans",
   display: "swap",
 });
 
-const manrope = Manrope({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
-  weight: ["300", "400", "600", "800"],
-  variable: "--font-manrope",
+  variable: "--font-geist-mono",
   display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
+const playfair = Playfair_Display({
   subsets: ["latin"],
-  weight: ["300", "500", "700"],
-  variable: "--font-space-grotesk",
+  variable: "--font-playfair",
   display: "swap",
 });
 
@@ -109,7 +106,7 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${jetbrainsMono.variable} ${manrope.variable} ${spaceGrotesk.variable} antialiased font-sans`}
+        className={`${geistSans.variable} ${geistMono.variable} ${playfair.variable} antialiased font-sans`}
       >
         <SmoothScroll>
           <SkipLink />

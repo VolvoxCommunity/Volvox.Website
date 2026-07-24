@@ -4,9 +4,7 @@ import {
   ArrowLeft,
   CaretDown,
   Funnel,
-  List,
   MagnifyingGlass,
-  SquaresFour,
   X,
 } from "@phosphor-icons/react";
 import { motion } from "framer-motion";
@@ -23,16 +21,13 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import type {
-  ProductSortOption,
-  ViewMode,
-} from "@/components/ui/filter-controls";
+import type { ProductSortOption } from "@/components/ui/filter-controls";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { NAV_ITEMS } from "@/lib/constants";
+import { PAGE_NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 interface ProductsNavbarProps {
@@ -44,8 +39,6 @@ interface ProductsNavbarProps {
   onClearTech: () => void;
   sortOption: ProductSortOption;
   onSortChange: (value: ProductSortOption) => void;
-  viewMode: ViewMode;
-  onViewModeChange: (value: ViewMode) => void;
   resultCount: number;
 }
 
@@ -58,8 +51,6 @@ export function ProductsNavbar({
   onClearTech,
   sortOption,
   onSortChange,
-  viewMode,
-  onViewModeChange,
   resultCount,
 }: ProductsNavbarProps) {
   const router = useRouter();
@@ -100,7 +91,7 @@ export function ProductsNavbar({
               className="w-7 h-7 object-contain rounded-md"
               priority
             />
-            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-base text-foreground">
+            <span className="font-mono font-bold text-base text-foreground">
               Volvox
             </span>
           </Link>
@@ -109,7 +100,7 @@ export function ProductsNavbar({
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
           >
-            {NAV_ITEMS.map((item) => {
+            {PAGE_NAV_ITEMS.map((item) => {
               const isActive = item.id === "products";
               return (
                 <Link
@@ -155,7 +146,7 @@ export function ProductsNavbar({
                 onFocus={() => setIsSearchFocused(true)}
                 onBlur={() => setIsSearchFocused(false)}
                 className={cn(
-                  "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-[10px] sm:text-xs md:text-sm no-ring",
+                  "w-full h-8 sm:h-9 md:h-11 pl-8 sm:pl-10 md:pl-12 pr-8 bg-muted/40 backdrop-blur-sm border border-border/20 rounded-full text-base sm:text-sm md:text-sm no-ring",
                   "focus:bg-background focus:border-border transition-all",
                   "placeholder:text-muted-foreground/50",
                   !isSearchFocused &&
@@ -202,21 +193,26 @@ export function ProductsNavbar({
                   <CaretDown className="h-3.5 w-3.5 opacity-50" />
                 </Button>
               </PopoverTrigger>
-              <PopoverContent className="w-[300px] p-4" align="end">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="font-medium text-sm">Filter by Tech</h4>
+              <PopoverContent
+                className="w-[320px] p-4 rounded-2xl border-border/60 bg-card/95 backdrop-blur-xl shadow-2xl"
+                align="end"
+              >
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between pb-1 border-b border-border/30">
+                    <h4 className="font-bold text-xs uppercase tracking-wider font-mono text-foreground">
+                      Filter by Tech
+                    </h4>
                     {selectedTech.length > 0 && (
                       <button
                         type="button"
                         onClick={onClearTech}
-                        className="text-xs text-muted-foreground hover:text-primary transition-colors"
+                        className="text-xs text-primary hover:text-primary/80 transition-colors font-medium"
                       >
                         Clear all
                       </button>
                     )}
                   </div>
-                  <div className="flex flex-wrap gap-2 max-h-[200px] overflow-y-auto pr-1">
+                  <div className="flex flex-wrap gap-1.5 max-h-[220px] overflow-y-auto pr-1">
                     {allTech.map((tech) => {
                       const isSelected = selectedTech.includes(tech);
                       return (
@@ -225,10 +221,10 @@ export function ProductsNavbar({
                           key={tech}
                           onClick={() => onTechToggle(tech)}
                           className={cn(
-                            "px-3 py-1.5 rounded-full text-xs transition-all border",
+                            "px-2.5 py-1 rounded-full text-xs transition-all border font-medium",
                             isSelected
-                              ? "bg-primary text-primary-foreground border-primary"
-                              : "bg-muted/30 text-muted-foreground border-transparent hover:bg-muted hover:text-foreground",
+                              ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                              : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted hover:border-border hover:text-foreground",
                           )}
                         >
                           {tech}
@@ -263,38 +259,6 @@ export function ProductsNavbar({
                 </button>
               ))}
             </div>
-
-            <fieldset className="flex bg-muted/30 p-1 rounded-full border border-border/30 m-0">
-              <legend className="sr-only">View mode</legend>
-              <button
-                type="button"
-                aria-label="Grid view"
-                aria-pressed={viewMode === "grid"}
-                onClick={() => onViewModeChange("grid")}
-                className={cn(
-                  "p-2 rounded-full transition-all",
-                  viewMode === "grid"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <SquaresFour className="h-4 w-4" />
-              </button>
-              <button
-                type="button"
-                aria-label="List view"
-                aria-pressed={viewMode === "list"}
-                onClick={() => onViewModeChange("list")}
-                className={cn(
-                  "p-2 rounded-full transition-all",
-                  viewMode === "list"
-                    ? "bg-background text-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground",
-                )}
-              >
-                <List className="h-4 w-4" />
-              </button>
-            </fieldset>
           </div>
 
           {/* Mobile Filter Trigger */}

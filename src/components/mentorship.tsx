@@ -1,41 +1,23 @@
 "use client";
 
-import { DiscordLogo, Users } from "@phosphor-icons/react";
-import confettiLib from "canvas-confetti";
-
-// Third-party imports
-import {
-  animate,
-  motion,
-  useAnimationFrame,
-  useMotionValue,
-  useTransform,
-} from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import { ArrowRight } from "@phosphor-icons/react";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useRouter } from "next/navigation";
-// Framework imports
-import { useEffect, useMemo, useRef, useState } from "react";
-
-// Local imports
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Badge } from "@/components/ui/badge";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { MagneticButton } from "@/components/ui/magnetic-button";
-import { DISCORD_URL } from "@/lib/constants";
 import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-// Custom wrap function to replace @motionone/utils dependency
-const wrap = (min: number, max: number, v: number) => {
-  const rangeSize = max - min;
-  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
-};
+gsap.registerPlugin(useGSAP, ScrollTrigger);
 
-/**
- * Converts pixel drag distance to percentage movement in the marquee coordinate space.
- * The marquee uses percentage-based positioning (0-25% range for seamless looping),
- * so this factor maps raw pixel deltas to that coordinate system.
- */
-const DRAG_PIXEL_TO_PERCENT = 0.015;
+// Row sizes form an upside-down pyramid: 3 -> 2 -> 1 (== 6 members).
+const ROW_LAYOUT = [3, 2, 1];
+
+// Critically-damped spring (no overshoot) for the shared-element morph.
+const MORPH_SPRING = { type: "spring", stiffness: 320, damping: 34 } as const;
 
 interface MentorshipProps {
   teamMembers: TeamMember[];
@@ -43,314 +25,230 @@ interface MentorshipProps {
 
 export function Mentorship({ teamMembers }: MentorshipProps) {
   const router = useRouter();
-  const containerRef = useRef<HTMLDivElement>(null);
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const active = teamMembers.find((m) => m.id === activeId) ?? null;
+  const sectionRef = useRef<HTMLElement>(null);
 
-  const handleDiscordClick = (e: React.MouseEvent) => {
-    const x = e.clientX / window.innerWidth;
-    const y = e.clientY / window.innerHeight;
+  // Escape to close.
+  useEffect(() => {
+    if (!activeId) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setActiveId(null);
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [activeId]);
 
-    void confettiLib({
-      particleCount: 150,
-      spread: 70,
-      origin: { x, y },
-      colors: ["#007AFF", "#AF58DA", "#FF9500"],
-      shapes: ["circle", "square"],
-    });
-    window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
-  };
+  // GSAP scroll-based entrance animations (autoAlpha keeps hidden cards out of a11y tree).
+  useGSAP(
+    () => {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
-  const handleTeamClick = () => {
-    router.push("/team");
-  };
+      gsap.fromTo(
+        ".mentorship-headline",
+        { autoAlpha: 0, y: 30, filter: "blur(10px)" },
+        {
+          scrollTrigger: {
+            trigger: ".mentorship-headline",
+            start: "top 85%",
+            once: true,
+          },
+          autoAlpha: 1,
+          y: 0,
+          filter: "blur(0px)",
+          duration: 0.8,
+          ease: "power3.out",
+          clearProps: "all",
+        },
+      );
 
-  return (
-    <section
-      id="mentorship"
-      ref={containerRef}
-      aria-label="Community"
-      data-testid="mentorship-section"
-      className="relative min-h-[600px] w-full overflow-hidden bg-background flex flex-col items-center justify-center py-16 md:py-24"
-    >
-      {/* Background layer */}
-
-      {/* Header Content */}
-      <div className="relative z-10 container mx-auto px-6 text-center mb-12 md:mb-16">
-        <h2 className="text-4xl md:text-6xl lg:text-7xl font-[family-name:var(--font-jetbrains-mono)] font-bold tracking-tight mb-6">
-          Our <span className="text-aurora">Community</span>
-        </h2>
-
-        <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-          Meet the mentors, builders, and marketers who make up the Volvox
-          ecosystem. Join our community to learn, grow, and build together.
-        </p>
-
-        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-          <MagneticButton strength={0.3}>
-            <Button
-              variant="accent"
-              size="lg"
-              onClick={handleDiscordClick}
-              aria-label="Join Us - opens Discord community in a new tab"
-            >
-              <DiscordLogo
-                weight="fill"
-                className="h-6 w-6"
-                aria-hidden="true"
-              />
-              Join Us
-            </Button>
-          </MagneticButton>
-
-          <MagneticButton strength={0.2}>
-            <Button
-              size="lg"
-              variant="ghost"
-              onClick={handleTeamClick}
-              aria-label="Meet the Team - view team members page"
-            >
-              <Users weight="fill" className="h-6 w-6" aria-hidden="true" />
-              Meet the Team
-            </Button>
-          </MagneticButton>
-        </div>
-      </div>
-
-      {/* Draggable Velocity Marquee */}
-      <div className="relative z-10 w-full overflow-hidden cursor-grab active:cursor-grabbing">
-        {/* Left/Right Fade Gradients */}
-        <div className="absolute top-0 left-0 w-20 md:w-40 h-full bg-gradient-to-r from-background to-transparent z-20 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-20 md:w-40 h-full bg-gradient-to-l from-background to-transparent z-20 pointer-events-none" />
-
-        <ParallaxText baseVelocity={-1} teamMembers={teamMembers} />
-      </div>
-
-      {/* Top/Bottom Fade Gradients */}
-      <div className="absolute top-0 left-0 w-full h-20 bg-gradient-to-b from-background to-transparent z-10 pointer-events-none" />
-      <div className="absolute bottom-0 left-0 w-full h-20 bg-gradient-to-t from-background to-transparent z-10 pointer-events-none" />
-    </section>
+      gsap.fromTo(
+        ".mentorship-card",
+        { autoAlpha: 0, y: 40, filter: "blur(8px)" },
+        {
+          scrollTrigger: {
+            trigger: ".mentorship-pyramid",
+            start: "top 80%",
+            once: true,
+          },
+          autoAlpha: 1,
+          y: 0,
+          filter: "blur(0px)",
+          stagger: 0.08,
+          duration: 0.7,
+          ease: "power3.out",
+          clearProps: "all",
+        },
+      );
+    },
+    { scope: sectionRef },
   );
-}
 
-// --- Internal Components ---
-
-interface ParallaxTextProps {
-  baseVelocity: number;
-  teamMembers: TeamMember[];
-}
-
-interface MarqueeProfile {
-  key: string;
-  profile: TeamMember;
-}
-
-function ParallaxText({ baseVelocity, teamMembers }: ParallaxTextProps) {
-  const baseX = useMotionValue(0);
-  const speedFactor = useMotionValue(1);
-
-  const [isHovered, setIsHovered] = useState(false);
-  const [isDragging, setIsDragging] = useState(false);
-  const [isToggledPause, setIsToggledPause] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const lastTapTimeRef = useRef<number>(0);
-
-  // Detect mobile
-  useEffect(() => {
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Smoothly animate speed factor based on hover/drag/toggle state
-  useEffect(() => {
-    const isPaused = isDragging || (isMobile ? isToggledPause : isHovered);
-    const controls = animate(speedFactor, isPaused ? 0 : 1, {
-      type: "spring",
-      stiffness: 100,
-      damping: 20,
-      restDelta: 0.001,
-    });
-
-    return () => controls.stop();
-  }, [isHovered, isDragging, isToggledPause, isMobile, speedFactor]);
-
-  // Duplicate data multiple times for a truly infinite feel
-  const marqueeData = useMemo<MarqueeProfile[]>(() => {
-    return Array.from({ length: 4 }, (_, groupIndex) =>
-      teamMembers.map((profile) => ({
-        key: `${groupIndex}-${profile.id}`,
-        profile,
-      })),
-    ).flat();
-  }, [teamMembers]);
-
-  /**
-   * We wrap between 0 and -25% (since we have 4 copies, 25% represents one full set)
-   * This ensures a seamless loop.
-   */
-  const x = useTransform(baseX, (v) => `${wrap(-25, 0, v)}%`);
-
-  const prevT = useRef<number>(0);
-
-  useAnimationFrame((t) => {
-    if (!prevT.current) {
-      prevT.current = t;
-      return;
-    }
-
-    const timeDelta = t - prevT.current;
-    prevT.current = t;
-
-    // baseVelocity is -1.
-    // We want slow, steady movement.
-    // Adjusted velocity: slower overall, even slower on mobile.
-    // Desktop: 0.002 multiplier, Mobile: 0.001 multiplier
-    const velocityFactor = isMobile ? 0.001 : 0.002;
-    const moveBy =
-      baseVelocity * (timeDelta * velocityFactor) * speedFactor.get();
-
-    baseX.set(baseX.get() + moveBy);
+  // Slice the flat list into centered pyramid rows.
+  let cursor = 0;
+  const rows = ROW_LAYOUT.map((count) => {
+    const slice = teamMembers.slice(cursor, cursor + count);
+    cursor += count;
+    return slice;
   });
 
-  const handleDragEnd = () => {
-    setIsDragging(false);
-    // Reset prevT to avoid jump when resuming
-    prevT.current = 0;
-  };
-
   return (
-    <motion.div
-      className="flex gap-4 md:gap-6 w-max py-4"
-      style={{ x }}
-      onHoverStart={() => !isMobile && setIsHovered(true)}
-      onHoverEnd={() => !isMobile && setIsHovered(false)}
-      onTap={() => {
-        if (!isMobile) return;
-        const now = Date.now();
-        const DOUBLE_TAP_DELAY = 300; // ms
+    <MotionConfig reducedMotion="user">
+      <section
+        ref={sectionRef}
+        id="mentorship"
+        aria-label="Team of Experts"
+        data-testid="mentorship-section"
+        className="relative w-full bg-background py-24 md:py-32 antialiased"
+      >
+        <div className="container mx-auto px-4 md:px-6">
+          {/* Centered headline */}
+          <div className="mentorship-headline flex items-center justify-center text-center mb-12 md:mb-16">
+            <h2 className="text-4xl md:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
+              Team
+            </h2>
+          </div>
 
-        if (isToggledPause) {
-          // If already paused, require double tap to resume
-          if (now - lastTapTimeRef.current < DOUBLE_TAP_DELAY) {
-            setIsToggledPause(false);
-            lastTapTimeRef.current = 0;
-          } else {
-            lastTapTimeRef.current = now;
-          }
-        } else {
-          // If running, single tap to pause
-          setIsToggledPause(true);
-          lastTapTimeRef.current = now;
-        }
-      }}
-      drag="x"
-      // Large constraints to allow free sliding
-      dragConstraints={{ left: -5000, right: 5000 }}
-      onDragStart={() => setIsDragging(true)}
-      onDragEnd={handleDragEnd}
-      onDrag={(_, info) => {
-        // Update baseX directly based on drag delta
-        baseX.set(baseX.get() + info.delta.x * DRAG_PIXEL_TO_PERCENT);
-      }}
-      dragElastic={0}
-      dragMomentum={false}
-    >
-      {marqueeData.map(({ key, profile }) => (
-        <CommunityCard key={key} profile={profile} />
-      ))}
-    </motion.div>
+          {/* Upside-down pyramid: 3 / 2 / 1, each row centered */}
+          <div className="mentorship-pyramid flex flex-col items-center gap-6 md:gap-8">
+            {rows.map((row, ri) => (
+              <div
+                key={ri}
+                className="flex flex-wrap items-start justify-center gap-4 sm:gap-5 md:gap-7"
+              >
+                {row.map((member) => (
+                  <div key={member.id} className="mentorship-card">
+                    <ProfileCard
+                      member={member}
+                      onOpen={() => setActiveId(member.id)}
+                    />
+                  </div>
+                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Shared-element morph dialog */}
+        <AnimatePresence>
+          {active && (
+            <motion.div
+              key="overlay"
+              className="fixed inset-0 z-50 flex items-center justify-center p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onWheel={(e) => e.stopPropagation()}
+              onTouchMove={(e) => e.stopPropagation()}
+            >
+              <div
+                className="absolute inset-0 bg-black/70 backdrop-blur-sm"
+                onClick={() => setActiveId(null)}
+                aria-hidden="true"
+              />
+              {/* Double-bezel shell morphs from the card */}
+              <motion.div
+                layoutId={`card-${active.id}`}
+                transition={MORPH_SPRING}
+                role="dialog"
+                aria-modal="true"
+                aria-label={active.name}
+                className="relative z-10 w-full max-w-lg rounded-[2.5rem] border border-border/30 bg-card-deep/20 p-1.5 shadow-2xl"
+              >
+                <div className="flex flex-col gap-5 rounded-[calc(2.5rem-0.375rem)] border border-border/10 bg-card p-6 md:p-8 text-left shadow-[inset_0_1px_1px_rgba(255,255,255,0.06)] relative overflow-hidden">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
+
+                  {/* Row 1: PFP + Name + Title */}
+                  <div className="flex items-center gap-4 z-10 w-full">
+                    <motion.span
+                      layoutId={`img-${active.id}`}
+                      transition={MORPH_SPRING}
+                      className="block h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl bg-card-deep shadow-md"
+                    >
+                      <img
+                        src={active.avatar}
+                        alt={active.name}
+                        draggable={false}
+                        className="h-full w-full object-cover"
+                      />
+                    </motion.span>
+
+                    <div className="space-y-1 min-w-0 flex-1">
+                      <h3 className="text-balance text-2xl sm:text-3xl font-editorial italic font-medium tracking-tight text-foreground leading-tight">
+                        {active.name}
+                      </h3>
+                      <p className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-muted-foreground font-mono">
+                        {"role" in active ? active.role : ""}
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Row 2: Description left-aligned */}
+                  <div className="z-10 w-full">
+                    <p className="text-pretty text-sm leading-relaxed text-muted-foreground line-clamp-4">
+                      {("bio" in active ? active.bio : "") ?? active.tagline}
+                    </p>
+                  </div>
+
+                  {/* Row 3: Button right-aligned */}
+                  <div className="z-10 w-full flex justify-end pt-1">
+                    <Button
+                      size="sm"
+                      variant="secondary"
+                      className="group/btn gap-2 rounded-full px-5 py-2 text-xs font-bold bg-secondary hover:bg-foreground hover:text-background transition-colors border-none"
+                      onClick={() => router.push(`/team/${active.slug}`)}
+                    >
+                      View profile
+                      <ArrowRight
+                        weight="bold"
+                        className="h-3 w-3 transition-transform duration-300 group-hover/btn:translate-x-0.5"
+                      />
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </section>
+    </MotionConfig>
   );
 }
 
-function CommunityCard({ profile }: { profile: TeamMember }) {
+interface ProfileCardProps {
+  member: TeamMember;
+  onOpen: () => void;
+}
+
+function ProfileCard({ member, onOpen }: ProfileCardProps) {
   return (
-    <div
+    <motion.button
+      layoutId={`card-${member.id}`}
+      transition={MORPH_SPRING}
+      onClick={onOpen}
+      aria-label={`${member.name}, ${"role" in member ? member.role : ""}`}
       className={cn(
-        "shrink-0 w-[240px] md:w-[400px] rounded-[16px] md:rounded-[24px] border bg-card/80 backdrop-blur-sm p-3 md:p-6 transition-all duration-300",
-        "border-border/50 hover:border-primary/30 hover:shadow-lg hover:shadow-primary/5 select-none",
+        "group flex w-32 sm:w-40 flex-col items-center gap-3 rounded-3xl p-3 sm:gap-3.5 cursor-pointer",
+        "transition-colors duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-background",
       )}
     >
-      <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
-        <Avatar className="h-8 w-8 md:h-12 md:w-12 border-2 border-border shadow-md">
-          <AvatarImage
-            src={profile.avatar}
-            alt={profile.name}
-            draggable={false}
-          />
-          <AvatarFallback className="bg-primary/10 text-primary font-semibold text-[10px] md:text-sm">
-            {profile.name.charAt(0)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="min-w-0 flex-1">
-          <h3 className="font-bold text-foreground text-xs md:text-base truncate leading-tight">
-            {profile.name}
-          </h3>
-          <div className="flex items-center gap-1.5 md:gap-2 mt-0.5 md:mt-1">
-            {profile.type === "mentor" ? (
-              <Badge
-                variant="default"
-                className="bg-primary text-primary-foreground border-primary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
-              >
-                MENTOR
-              </Badge>
-            ) : profile.type === "builder" ? (
-              <Badge
-                variant="secondary"
-                className="bg-secondary text-secondary-foreground border-secondary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
-              >
-                BUILDER
-              </Badge>
-            ) : profile.type === "marketer" ? (
-              <Badge
-                variant="secondary"
-                className="bg-secondary text-secondary-foreground border-secondary text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
-              >
-                MARKETER
-              </Badge>
-            ) : (
-              <Badge
-                variant="outline"
-                className="bg-accent text-accent-foreground border-accent text-[8px] md:text-[10px] px-1.5 md:px-2 h-3.5 md:h-5"
-              >
-                MENTEE
-              </Badge>
-            )}
-            {profile.type !== "mentee" && (
-              <span className="text-[8px] md:text-[10px] text-muted-foreground truncate max-w-[80px] md:max-w-[120px]">
-                {profile.role}
-              </span>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="space-y-2 md:space-y-3">
-        {/* Bio / Goal Snippet */}
-        <p className="text-[10px] md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-4 min-h-[2.5em] md:min-h-[4em] leading-relaxed">
-          {profile.type === "mentee" ? profile.goals : profile.bio}
-        </p>
-
-        {/* Tech Stack / Progress Mini-bar */}
-        {profile.type === "mentee" ? (
-          <div className="w-full h-1 bg-muted rounded-full mt-2 overflow-hidden">
-            <div
-              className="h-full bg-gradient-to-r from-secondary to-purple-500"
-              style={{ width: profile.progress }}
-            />
-          </div>
-        ) : (
-          <div className="flex flex-wrap gap-1">
-            {profile.expertise?.slice(0, 3).map((tech) => (
-              <span
-                key={tech}
-                className="text-[8px] md:text-[10px] px-1.5 py-0.5 rounded-[4px] bg-muted text-muted-foreground border border-border"
-              >
-                {tech}
-              </span>
-            ))}
-          </div>
-        )}
-      </div>
-    </div>
+      <motion.span
+        layoutId={`img-${member.id}`}
+        transition={MORPH_SPRING}
+        className="block h-20 w-20 overflow-hidden rounded-xl bg-card-deep shadow-[0_4px_16px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.3)] sm:h-24 sm:w-24"
+      >
+        <img
+          src={member.avatar}
+          alt={member.name}
+          draggable={false}
+          className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
+        />
+      </motion.span>
+      {/* Title only (role); one line, full value reachable in the dialog. */}
+      <span className="w-full truncate text-center text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 group-hover:text-foreground font-mono">
+        {"role" in member ? member.role : ""}
+      </span>
+    </motion.button>
   );
 }

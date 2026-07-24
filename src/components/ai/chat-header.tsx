@@ -35,13 +35,13 @@ export function ChatHeader({
               className="h-6 w-6 rounded-md object-contain"
               priority
             />
-            <h2 className="font-[family-name:var(--font-jetbrains-mono)] text-sm font-bold tracking-tight sm:text-[15px]">
+            <h2 className="font-mono text-sm font-bold tracking-tight sm:text-[15px]">
               VOLVOX.BOT
             </h2>
           </Link>
         ) : (
           <>
-            <h2 className="font-[family-name:var(--font-jetbrains-mono)] text-sm font-bold tracking-tight sm:text-[15px]">
+            <h2 className="font-mono text-sm font-bold tracking-tight sm:text-[15px]">
               VOLVOX.BOT
             </h2>
             {isStreaming && (

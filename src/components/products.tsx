@@ -1,27 +1,18 @@
 "use client";
 
-import {
-  ArrowRight,
-  ArrowUpRight,
-  CheckCircle,
-  Globe,
-} from "@phosphor-icons/react";
+import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
 import { AnimatePresence, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
-import { useEffect, useMemo, useRef } from "react";
-import { Badge } from "@/components/ui/badge";
+import { type JSX, useEffect, useMemo, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import {
   type BlogSortOption,
   FilterControls,
   type ProductSortOption,
-  type ViewMode,
 } from "@/components/ui/filter-controls";
-import { buildFeatureItems } from "@/lib/feature-items";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
@@ -34,8 +25,6 @@ interface ProductsProps {
   onSearchChange?: (value: string) => void;
   sortOption?: ProductSortOption;
   onSortChange?: (value: ProductSortOption | BlogSortOption) => void;
-  viewMode?: ViewMode;
-  onViewModeChange?: (value: ViewMode) => void;
   enableFilters?: boolean;
   /** Maximum number of products to display (defaults to 3 on homepage) */
   limit?: number;
@@ -47,13 +36,8 @@ interface ProductCardProps {
 
 function ProductCard({ product }: ProductCardProps) {
   const cardRef = useRef<HTMLDivElement>(null);
-  const imageRef = useRef<HTMLDivElement>(null);
-
   const heroImage = product.screenshots[0];
   const imagePath = resolveProductImagePath(heroImage, product.slug);
-  const previewFeatureItems = buildFeatureItems(
-    product.features?.slice(0, 4) ?? [],
-  );
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -61,37 +45,23 @@ function ProductCard({ product }: ProductCardProps) {
       gsap.fromTo(
         cardRef.current,
         {
-          y: 100,
+          y: 40,
           opacity: 0,
-          scale: 0.95,
-          filter: "blur(10px)",
+          filter: "blur(8px)",
         },
         {
           scrollTrigger: {
             trigger: cardRef.current,
             start: "top 90%",
-            end: "top 60%",
-            scrub: 1,
+            once: true,
           },
           y: 0,
           opacity: 1,
-          scale: 1,
           filter: "blur(0px)",
-          ease: "power2.out",
+          duration: 0.7,
+          ease: "power3.out",
         },
       );
-
-      // Parallax effect for the image
-      gsap.to(imageRef.current, {
-        scrollTrigger: {
-          trigger: cardRef.current,
-          start: "top bottom",
-          end: "bottom top",
-          scrub: true,
-        },
-        y: -30,
-        ease: "none",
-      });
     });
 
     return () => {
@@ -100,153 +70,75 @@ function ProductCard({ product }: ProductCardProps) {
   }, []);
 
   return (
-    <div ref={cardRef} className="group relative">
-      <div className="relative h-full bg-card/60 backdrop-blur-xl rounded-[2.5rem] border border-border/40 p-3 transition-all duration-500 hover:shadow-2xl hover:shadow-primary/10 hover:border-primary/30">
-        <div className="flex flex-col lg:flex-row h-full gap-6">
-          {/* Image Sidebar */}
-          <div className="relative w-full lg:w-[45%] aspect-[16/10] lg:aspect-auto min-h-[350px] rounded-[2.2rem] overflow-hidden bg-muted/30">
-            <Link
-              href={`/products/${product.slug}`}
-              className="block h-full relative cursor-pointer group/image"
-            >
-              <div
-                ref={imageRef}
-                className="absolute inset-0 w-full h-[120%] -top-[10%]"
-              >
+    <div ref={cardRef} className="group h-full">
+      <Link
+        href={`/products/${product.slug}`}
+        className="block h-full outline-none"
+      >
+        {/* Double-Bezel Card Container */}
+        <div className="h-full rounded-[2rem] bg-card-deep/20 border border-border/30 p-1.5 transition-all duration-300 hover:border-border/60 hover:shadow-2xl hover:shadow-primary/5">
+          <div className="w-full h-full rounded-[calc(2rem-0.375rem)] bg-card border border-border/10 p-3 flex flex-col shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+            {/* Image Container with Overlaid Pills */}
+            <div className="relative overflow-hidden bg-muted/30 mb-3 rounded-2xl aspect-[16/10] w-full shrink-0">
+              <div className="w-full h-full relative overflow-hidden">
                 {imagePath ? (
-                  <Image
-                    src={imagePath}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 1024px) 100vw, 45vw"
-                    className="object-cover transition-transform duration-1000 group-hover/image:scale-110"
-                  />
+                  <motion.div
+                    className="w-full h-full relative"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
+                  >
+                    <Image
+                      src={imagePath}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary/10 via-accent/5 to-secondary/10">
-                    <span className="text-8xl font-bold text-foreground/5">
+                  <div className="w-full h-full flex items-center justify-center bg-secondary/5">
+                    <span className="text-6xl font-editorial font-medium text-muted-foreground/10 select-none">
                       {product.name.charAt(0)}
                     </span>
                   </div>
                 )}
               </div>
 
-              {/* Overlays */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover/image:opacity-100 transition-opacity duration-500" />
-
-              {/* Floating Badge */}
-              <div className="absolute top-6 left-6 z-10">
-                <Badge
-                  variant="outline"
-                  className="bg-background border-border border-2 text-[10px] uppercase tracking-widest font-black py-1.5 px-3"
-                >
+              {/* Bottom-left: Product Type Pill */}
+              <div className="absolute bottom-2.5 left-2.5 z-10">
+                <div className="rounded-full bg-background/90 backdrop-blur-md border border-border/40 px-2.5 py-1 text-[9px] font-mono font-bold uppercase tracking-wider text-foreground shadow-sm">
                   {product.type || "Software"}
-                </Badge>
-              </div>
-
-              {/* View Indicator */}
-              <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover/image:opacity-100 transition-all duration-500 transform translate-y-4 group-hover/image:translate-y-0">
-                <div className="bg-background border-2 border-border rounded-full px-6 py-2 text-foreground font-bold text-sm tracking-wide">
-                  Explore Project
                 </div>
               </div>
-            </Link>
-          </div>
+            </div>
 
-          {/* Content Area */}
-          <div className="flex-1 flex flex-col p-4 md:p-6 lg:py-10 lg:pr-10">
-            <div className="flex justify-between items-start mb-6">
-              <div>
-                <Link
-                  href={`/products/${product.slug}`}
-                  className="inline-block group/title"
-                >
-                  <h3 className="text-4xl md:text-5xl font-black tracking-tighter text-foreground group-hover/title:text-primary transition-colors duration-300">
-                    {product.name}
-                  </h3>
-                </Link>
-                <div className="flex items-center gap-2 mt-2">
-                  <div className="h-1 w-8 bg-primary rounded-full" />
-                  <p className="text-primary/90 font-bold text-sm md:text-md tracking-tight uppercase">
-                    {product.tagline}
-                  </p>
+            {/* Content Area */}
+            <div className="flex flex-col flex-1 min-w-0 px-1 py-1">
+              {/* Single line title with Arrow */}
+              <div className="flex justify-between items-center gap-2 mb-1">
+                <h3 className="text-base font-bold tracking-tight text-foreground group-hover:text-primary transition-colors truncate">
+                  {product.name}
+                </h3>
+                <div className="text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0">
+                  <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={2.5} />
                 </div>
               </div>
-              <motion.div
-                whileHover={{ rotate: 45, scale: 1.2 }}
-                className="p-3 rounded-full bg-primary/10 text-primary border border-primary/20"
-              >
-                <ArrowUpRight weight="bold" className="w-6 h-6" />
-              </motion.div>
-            </div>
 
-            <p className="text-muted-foreground leading-relaxed mb-10 text-lg line-clamp-3">
-              {product.description}
-            </p>
+              {/* Subtitle / Tagline */}
+              {product.tagline && (
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary/70 mb-1.5 truncate">
+                  {product.tagline}
+                </p>
+              )}
 
-            {/* Features Preview */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-10">
-              {previewFeatureItems.map(({ feature, key }, idx) => (
-                <motion.div
-                  key={key}
-                  initial={{ opacity: 0, x: -10 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.1 * idx }}
-                  className="flex items-start gap-3 text-sm font-medium text-foreground/70"
-                >
-                  <div className="mt-0.5 w-6 h-6 rounded-lg bg-primary/10 flex items-center justify-center flex-shrink-0">
-                    <CheckCircle
-                      weight="fill"
-                      className="w-4 h-4 text-primary"
-                    />
-                  </div>
-                  <span className="min-w-0 leading-snug">{feature}</span>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="mt-auto flex flex-col md:flex-row items-center gap-6 pt-8 border-t border-border/20">
-              {/* Tech Stack */}
-              <div className="flex flex-wrap gap-2 flex-1 w-full">
-                {product.techStack?.slice(0, 4).map((tech) => (
-                  <Badge
-                    key={tech}
-                    variant="outline"
-                    className="rounded-full px-3 py-1.5 text-[11px] font-bold bg-secondary border-secondary text-secondary-foreground hover:bg-secondary/90 transition-colors"
-                  >
-                    {tech}
-                  </Badge>
-                ))}
-                {(product.techStack?.length || 0) > 4 && (
-                  <div className="text-[11px] text-muted-foreground font-bold flex items-center ml-1">
-                    +{(product.techStack?.length || 0) - 4} MORE
-                  </div>
-                )}
-              </div>
-
-              {/* Action Buttons */}
-              <div className="flex items-center gap-4 w-full md:w-auto">
-                <Button variant="ghost" size="sm" asChild>
-                  <Link href={`/products/${product.slug}`}>Overview</Link>
-                </Button>
-                {product.links?.demo && (
-                  <Button
-                    variant="default"
-                    onClick={() =>
-                      window.open(
-                        product.links.demo,
-                        "_blank",
-                        "noopener,noreferrer",
-                      )
-                    }
-                  >
-                    Launch <Globe weight="bold" className="w-4 h-4" />
-                  </Button>
-                )}
-              </div>
+              {/* Description */}
+              <p className="text-muted-foreground text-xs leading-relaxed text-pretty line-clamp-2">
+                {product.description}
+              </p>
             </div>
           </div>
         </div>
-      </div>
+      </Link>
     </div>
   );
 }
@@ -257,14 +149,10 @@ export function Products({
   onSearchChange,
   sortOption = "newest",
   onSortChange,
-  viewMode = "grid",
-  onViewModeChange,
   enableFilters = false,
   limit = 3,
-}: ProductsProps) {
-  const router = useRouter();
+}: ProductsProps): JSX.Element | null {
   const sectionRef = useRef<HTMLElement>(null);
-  const headerRef = useRef<HTMLDivElement>(null);
   const glow1Ref = useRef<HTMLDivElement>(null);
   const glow2Ref = useRef<HTMLDivElement>(null);
 
@@ -289,24 +177,6 @@ export function Products({
         yoyo: true,
         ease: "sine.inOut",
       });
-
-      // Header reveal
-      gsap.fromTo(
-        headerRef.current,
-        { y: 50, opacity: 0, filter: "blur(20px)" },
-        {
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 90%",
-            end: "top 60%",
-            scrub: 1,
-          },
-          y: 0,
-          opacity: 1,
-          filter: "blur(0px)",
-          ease: "power3.out",
-        },
-      );
     }, sectionRef);
 
     return () => {
@@ -315,15 +185,12 @@ export function Products({
   }, []);
 
   const filteredProducts = useMemo(() => {
-    // First sort by updatedAt (latest first) to get "latest"
     let result = [...allProducts].sort(sortProductsByNewest);
 
-    // Apply limit if provided (for homepage)
     if (limit && !enableFilters && !searchQuery) {
       result = result.slice(0, limit);
     }
 
-    // Then apply search filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       result = result.filter(
@@ -335,8 +202,6 @@ export function Products({
       );
     }
 
-    // Apply explicit sort option only when filters are enabled (products page)
-    // Homepage keeps updatedAt order (latest first)
     if (enableFilters) {
       if (sortOption === "z-a") {
         result.sort((a, b) => b.name.localeCompare(a.name));
@@ -354,77 +219,55 @@ export function Products({
     <section
       ref={sectionRef}
       id="products"
-      className="py-32 md:py-48 px-4 relative overflow-hidden bg-background"
+      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background"
       data-testid="products-section"
     >
       {/* Dynamic Trance Backgrounds */}
       <div
         ref={glow1Ref}
-        className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10 mix-blend-soft-light"
+        className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
       />
       <div
         ref={glow2Ref}
-        className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-secondary/10 blur-[180px] rounded-full -z-10 mix-blend-soft-light"
+        className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-secondary/10 blur-[180px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
       />
       <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] pointer-events-none -z-10" />
 
-      <div className="container mx-auto max-w-7xl">
-        <div
-          ref={headerRef}
-          className="flex flex-col md:flex-row md:items-end justify-between mb-24 gap-10"
-        >
-          <div className="max-w-3xl">
-            <h2 className="text-6xl md:text-8xl font-black tracking-tighter text-foreground mb-8 leading-[0.9]">
-              Crafting Digital <br />
-              <span className="text-primary italic">Excellence.</span>
-            </h2>
-            <p className="text-xl md:text-2xl text-muted-foreground leading-relaxed max-w-2xl">
-              We engineer scalable, high-impact solutions that redefine the
-              boundaries of modern technology.
-            </p>
-          </div>
+      <div className="container mx-auto max-w-7xl relative z-10">
+        {/* Header */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
+          <h2 className="text-4xl md:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
+            Our Products
+          </h2>
 
-          <div className="flex flex-col gap-4">
-            <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest text-center md:text-right mb-2">
-              Explore Our Full Catalog
-            </p>
-            <Button
-              variant="outline"
-              size="lg"
-              className="group"
-              onClick={() => router.push("/products")}
-            >
-              <span className="relative z-10 font-black text-sm uppercase tracking-widest flex items-center">
-                Marketplace
+          {!enableFilters && (
+            <Button variant="ghost" asChild className="group">
+              <Link href="/products">
+                View Products
                 <ArrowRight
+                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform ml-1"
                   weight="bold"
-                  className="ml-3 w-5 h-5 group-hover:translate-x-2 transition-transform duration-500"
                 />
-              </span>
+              </Link>
             </Button>
-          </div>
+          )}
         </div>
 
-        {/* Filter Controls */}
-        {enableFilters &&
-          onSearchChange &&
-          onSortChange &&
-          onViewModeChange && (
-            <div className="mb-16">
-              <FilterControls
-                variant="homepage-product"
-                searchQuery={searchQuery}
-                onSearchChange={onSearchChange}
-                sortOption={sortOption}
-                onSortChange={onSortChange}
-                viewMode={viewMode}
-                onViewModeChange={onViewModeChange}
-                searchPlaceholder="Search innovation..."
-                resultCount={filteredProducts.length}
-                totalCount={allProducts.length}
-              />
-            </div>
-          )}
+        {/* Filter Controls (for product catalog page) */}
+        {enableFilters && onSearchChange && onSortChange && (
+          <div className="mb-16">
+            <FilterControls
+              variant="homepage-product"
+              searchQuery={searchQuery}
+              onSearchChange={onSearchChange}
+              sortOption={sortOption}
+              onSortChange={onSortChange}
+              searchPlaceholder="Search innovation..."
+              resultCount={filteredProducts.length}
+              totalCount={allProducts.length}
+            />
+          </div>
+        )}
 
         {/* Products Grid */}
         <AnimatePresence mode="wait">
@@ -440,30 +283,13 @@ export function Products({
               </p>
             </motion.div>
           ) : (
-            <div className="space-y-20 md:space-y-32">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {filteredProducts.map((product) => (
                 <ProductCard key={product.id} product={product} />
               ))}
             </div>
           )}
         </AnimatePresence>
-
-        {/* Footer CTA */}
-        <div className="mt-32 p-12 md:p-20 rounded-[4rem] bg-gradient-to-br from-primary/5 via-background to-secondary/5 border border-primary/10 flex flex-col items-center text-center relative overflow-hidden group">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-primary/10 blur-[100px] rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-          <h3 className="text-3xl md:text-5xl font-black tracking-tight mb-6">
-            Want to see more?
-          </h3>
-          <p className="text-muted-foreground text-lg mb-10 max-w-xl">
-            Our ecosystem is constantly evolving. Visit the products page for
-            detailed documentation and open-source contributions.
-          </p>
-          <Button variant="default" size="lg" asChild>
-            <Link href="/products" onClick={() => window.scrollTo(0, 0)}>
-              All Products
-            </Link>
-          </Button>
-        </div>
       </div>
     </section>
   );

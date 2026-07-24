@@ -217,7 +217,16 @@ export const homepageReviewSchema = z.object({
   source: reviewSourceSchema,
   product: z.string().optional(),
   featured: z.boolean().optional(),
-  profilePicUrl: z.string().url().optional(),
+  profilePicUrl: z
+    .string()
+    .refine((val) => {
+      try {
+        return !!new URL(val);
+      } catch {
+        return val.startsWith("/");
+      }
+    }, "Must be a valid URL or absolute path (e.g. /images/foo.png)")
+    .optional(),
 });
 
 /**

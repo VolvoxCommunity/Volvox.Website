@@ -5,7 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { NAV_ITEMS } from "@/lib/constants";
+import { PAGE_NAV_ITEMS } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 type FilterMode = "all" | "mentors";
@@ -59,7 +59,7 @@ export function TeamNavbar({
               className="w-7 h-7 object-contain rounded-md"
               priority
             />
-            <span className="font-[family-name:var(--font-jetbrains-mono)] font-bold text-base text-foreground">
+            <span className="font-mono font-bold text-base text-foreground">
               Volvox
             </span>
           </Link>
@@ -68,7 +68,7 @@ export function TeamNavbar({
             aria-label="Main navigation"
             className="hidden md:flex items-center gap-1"
           >
-            {NAV_ITEMS.map((item) => {
+            {PAGE_NAV_ITEMS.map((item) => {
               const isActive = (item.id as string) === "team";
               return (
                 <Link

@@ -1,19 +1,12 @@
 "use client";
 
 import { useGSAP } from "@gsap/react";
-import {
-  ArrowRight,
-  Code,
-  GithubLogo,
-  Heart,
-  Lightbulb,
-  Sparkle,
-  Target,
-} from "@phosphor-icons/react";
+import { ArrowRight, Code, GithubLogo, Heart } from "@phosphor-icons/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { type JSX, useRef } from "react";
-import { Spotlight } from "@/components/ui/spotlight";
+
 import { GITHUB_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
@@ -32,7 +25,7 @@ export function About(): JSX.Element {
 
       // Reveal header elements on scroll
       gsap.fromTo(
-        [".about-header", ".about-subtext"],
+        ".about-header",
         { opacity: 0, y: 30, filter: "blur(8px)" },
         {
           scrollTrigger: {
@@ -44,7 +37,6 @@ export function About(): JSX.Element {
           opacity: 1,
           y: 0,
           filter: "blur(0px)",
-          stagger: 0.08,
           ease: "power2.out",
         },
       );
@@ -52,12 +44,12 @@ export function About(): JSX.Element {
       // Reveal bento cards on scroll with staggered delays and slight scales
       gsap.fromTo(
         ".about-bento-card",
-        { opacity: 0, y: 60, scale: 0.96, filter: "blur(8px)" },
+        { opacity: 0, y: 40, scale: 0.97, filter: "blur(8px)" },
         {
           scrollTrigger: {
             trigger: ".about-bento-grid",
             start: "top 90%",
-            end: "top 62%",
+            end: "top 65%",
             scrub: 1,
           },
           opacity: 1,
@@ -78,196 +70,187 @@ export function About(): JSX.Element {
       id="about"
       data-testid="about-section"
       aria-label="About Volvox"
-      className="py-32 md:py-48 px-4 bg-background relative overflow-hidden"
+      className="py-16 md:py-24 px-4 bg-background relative overflow-hidden"
     >
-      {/* Ambient Radial Glowing Orbs (Ethereal Glass Vibe) */}
-      <div className="absolute inset-0 pointer-events-none overflow-hidden z-10 opacity-30">
-        <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-primary/10 rounded-full blur-[130px] transform-gpu" />
-        <div className="absolute bottom-[-10%] left-[-5%] w-[500px] h-[500px] bg-secondary/5 rounded-full blur-[120px] transform-gpu" />
-      </div>
-
       <div className="container mx-auto max-w-6xl relative z-20">
-        <div className="text-center mb-24">
-          <h2 className="about-header text-5xl md:text-6xl lg:text-7xl font-black uppercase tracking-tighter text-foreground mb-6 leading-[0.95]">
+        <div className="text-center mb-10 md:mb-12">
+          <h2 className="about-header text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
             About Volvox
           </h2>
-          <p className="about-subtext text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-            A community-driven company building the future of software
-            development through mentorship and open source.
-          </p>
         </div>
 
-        <div className="about-bento-grid grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(190px,auto)]">
-          {/* Item 1: Our Story (Large) */}
-          <BentoCard
-            className="md:col-span-2 md:row-span-2"
-            title="Our Story"
-            icon={<Sparkle weight="fill" />}
-            description={
-              <>
-                <p className="mb-4">
-                  Founded in 2020 by{" "}
-                  <span className="text-foreground font-semibold">
-                    Bill Chirico
-                  </span>
-                  , Volvox began with a simple mission: build exceptional
-                  software while empowering the next generation of engineers.
-                </p>
-                <p>
-                  Today, we stand at the intersection of professional
-                  development and education. We prove daily that building great,
-                  production-ready products and fostering active, community-wide
-                  learning are complementary forces that drive real digital
-                  innovation.
-                </p>
-              </>
-            }
-            illustration={
-              <div className="absolute right-4 bottom-4 opacity-5 group-hover:opacity-10 group-hover:scale-105 group-hover:rotate-[15deg] transition-all duration-1000 ease-out text-primary">
-                <Sparkle size={180} weight="fill" />
+        {/* Compact 12-Column Bento Grid */}
+        <div className="about-bento-grid grid grid-cols-1 md:grid-cols-12 gap-4">
+          {/* 1. Our Story (8 Cols) */}
+          <BentoCard className="md:col-span-8">
+            <span className="text-muted-foreground text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
+              Our Story
+            </span>
+            <h3 className="font-editorial italic font-medium text-foreground text-xl md:text-2xl mb-2 leading-tight flex items-center gap-2 flex-wrap">
+              <span>Founded in 2020 by Bill Chirico</span>
+              <Image
+                src="https://github.com/BillChirico.png"
+                alt="Bill Chirico"
+                width={24}
+                height={24}
+                className="w-6 h-6 rounded-full inline-block object-cover ring-1 ring-border"
+              />
+              <span>.</span>
+            </h3>
+            <p className="text-muted-foreground text-xs md:text-sm leading-relaxed text-pretty max-w-2xl">
+              What began as a mission to build exceptional software has evolved
+              into a vibrant ecosystem. We stand at the intersection of
+              professional engineering and open-source education, proving that
+              production-ready products and community learning are complementary
+              forces.
+            </p>
+            <div className="mt-4 flex items-center gap-3">
+              <div className="flex -space-x-2">
+                <Image
+                  src="https://github.com/EleftheriaBatsou.png"
+                  alt="Eleftheria"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded-full object-cover ring-2 ring-background"
+                />
+                <Image
+                  src="https://github.com/rabden.png"
+                  alt="Hossain Jahed"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded-full object-cover ring-2 ring-background"
+                />
+                <Image
+                  src="https://github.com/MohsinCoding.png"
+                  alt="Mohsin"
+                  width={24}
+                  height={24}
+                  className="w-6 h-6 rounded-full object-cover ring-2 ring-background"
+                />
               </div>
-            }
-          />
+              <span className="text-muted-foreground text-xs font-mono font-medium">
+                Growing since 2020
+              </span>
+            </div>
+          </BentoCard>
 
-          {/* Item 2: Mission */}
-          <BentoCard
-            className="md:col-span-1"
-            title="Our Mission"
-            icon={<Target weight="fill" />}
-            description="To create world-class software solutions while cultivating a new generation of talented developers."
-            gradient="from-primary/10 to-transparent"
-          />
+          {/* 2. Mission (4 Cols - Primary Tinted) */}
+          <BentoCard className="md:col-span-4 bg-primary/10 border-primary/20">
+            <span className="text-primary/70 text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
+              The Mission
+            </span>
+            <h3 className="font-editorial italic font-medium text-foreground text-lg md:text-xl mb-3 leading-tight text-balance">
+              Cultivating talent while building world-class solutions.
+            </h3>
+            <div className="mt-auto pt-2">
+              <div className="h-1 w-full bg-primary/10 rounded-full overflow-hidden">
+                <div className="h-full w-2/3 bg-primary" />
+              </div>
+              <span className="text-muted-foreground text-[10px] font-mono mt-1.5 block">
+                Active Mentorship Phase
+              </span>
+            </div>
+          </BentoCard>
 
-          {/* Item 3: Values */}
-          <BentoCard
-            className="md:col-span-1"
-            title="Our Values"
-            icon={<Heart weight="fill" />}
-            description="Excellence in craft, generosity in teaching, and a commitment to open source."
-            gradient="from-secondary/10 to-transparent"
-          />
+          {/* 3. Values (5 Cols) */}
+          <BentoCard className="md:col-span-5">
+            <span className="text-muted-foreground text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-3 block">
+              Our Values
+            </span>
+            <ul className="space-y-3">
+              <li className="flex gap-3 items-start">
+                <Heart
+                  weight="fill"
+                  className="w-4 h-4 text-primary shrink-0 mt-0.5"
+                />
+                <div>
+                  <span className="text-foreground block text-xs font-bold">
+                    Generosity in Teaching
+                  </span>
+                  <span className="text-muted-foreground block text-[11px] leading-snug">
+                    Knowledge is the only resource that grows when shared.
+                  </span>
+                </div>
+              </li>
+              <li className="flex gap-3 items-start">
+                <Code
+                  weight="fill"
+                  className="w-4 h-4 text-primary shrink-0 mt-0.5"
+                />
+                <div>
+                  <span className="text-foreground block text-xs font-bold">
+                    Open Source Commitment
+                  </span>
+                  <span className="text-muted-foreground block text-[11px] leading-snug">
+                    Our best work belongs to the global community.
+                  </span>
+                </div>
+              </li>
+            </ul>
+          </BentoCard>
 
-          {/* Item 4: Dev */}
-          <BentoCard
-            className="md:col-span-1"
-            title="Development"
-            icon={<Code weight="fill" />}
-            description="Building innovative products from web apps to developer tools."
-          />
+          {/* 4. Community (3 Cols) */}
+          <BentoCard className="md:col-span-3 items-center text-center justify-center">
+            <span className="font-editorial italic font-medium text-foreground text-3xl sm:text-4xl">
+              ∞
+            </span>
+            <span className="text-foreground text-xs font-bold mt-1">
+              Community Driven
+            </span>
+            <p className="text-muted-foreground text-[11px] leading-tight mt-0.5">
+              Peer-to-peer growth model
+            </p>
+          </BentoCard>
 
-          {/* Item 5: Community */}
-          <BentoCard
-            className="md:col-span-1"
-            title="Community"
-            icon={<Lightbulb weight="fill" />}
-            description="Pairing aspiring developers with experienced engineers."
-          />
-
-          {/* Item 6: CTA */}
-          <BentoCard
-            className="md:col-span-1 border-primary/20"
-            title="Join Us"
-            icon={<GithubLogo weight="fill" />}
-            description="Check out our open source projects on GitHub."
-            href={GITHUB_URL}
-            cta="View GitHub"
-          />
+          {/* 5. Join Us / GitHub CTA (4 Cols) */}
+          <BentoCard className="md:col-span-4 border-primary/30 bg-card-deep/40 hover:border-primary/50 transition-colors">
+            <span className="text-primary text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
+              Open Future
+            </span>
+            <h3 className="font-editorial italic font-medium text-foreground text-base mb-2">
+              Ready to build together?
+            </h3>
+            <p className="text-muted-foreground text-xs leading-relaxed mb-4">
+              Join our community on GitHub and start contributing to real-world
+              projects.
+            </p>
+            <a
+              href={GITHUB_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="mt-auto inline-flex items-center gap-2 rounded-full bg-secondary hover:bg-foreground hover:text-background text-secondary-foreground px-4 py-1.5 text-xs font-bold transition-all duration-300 w-fit group"
+            >
+              <GithubLogo weight="fill" className="w-3.5 h-3.5" />
+              <span>View GitHub</span>
+              <ArrowRight
+                weight="bold"
+                className="w-3 h-3 transition-transform group-hover:translate-x-0.5"
+              />
+            </a>
+          </BentoCard>
         </div>
       </div>
     </section>
   );
 }
 
-interface BentoCardProps {
-  className?: string;
-  title: string;
-  description: React.ReactNode;
-  icon?: React.ReactNode;
-  illustration?: React.ReactNode;
-  gradient?: string;
-  href?: string;
-  cta?: string;
-}
-
 function BentoCard({
   className,
-  title,
-  description,
-  icon,
-  illustration,
-  gradient,
-  href,
-  cta,
-}: BentoCardProps) {
-  const Content = (
-    <div className="relative z-10 h-full flex flex-col justify-between">
-      <div className="flex flex-col">
-        <div className="flex items-center gap-4 mb-5">
-          {icon && (
-            <div className="p-2.5 rounded-xl bg-card border border-border/20 text-foreground shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] transition-colors group-hover:border-primary/30 group-hover:text-primary">
-              {icon}
-            </div>
-          )}
-          <h3 className="text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
-            {title}
-          </h3>
-        </div>
-
-        <div className="text-muted-foreground text-sm leading-relaxed max-w-xl">
-          {description}
-        </div>
-      </div>
-
-      {cta && (
-        <div className="mt-8 flex items-center justify-between text-primary font-mono text-xs uppercase tracking-widest font-semibold transition-colors group-hover:text-primary-deep">
-          <span>{cta}</span>
-          <span className="w-8 h-8 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center transition-all duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:bg-primary/25">
-            <ArrowRight weight="bold" className="w-4 h-4 text-primary" />
-          </span>
-        </div>
-      )}
-    </div>
-  );
-
-  const Container = href ? "a" : "div";
-  const props = href
-    ? { href, target: "_blank", rel: "noopener noreferrer" }
-    : {};
-
+  children,
+}: {
+  className?: string;
+  children: React.ReactNode;
+}) {
   return (
-    <Container
-      {...props}
+    <div
       className={cn(
+        "about-bento-card rounded-[1.8rem] bg-card-deep/20 border border-border/30 p-1 transition-all duration-300 hover:border-border/60 hover:shadow-xl hover:shadow-primary/5",
         className,
-        "about-bento-card block h-full active:scale-[0.985] transition-all duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)]",
       )}
     >
-      <div className="h-full p-1.5 rounded-[2.2rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 hover:border-primary/20 transition-all duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] shadow-2xl group">
-        <Spotlight
-          className="relative h-full flex flex-col justify-between rounded-[calc(2.2rem-0.375rem)] border border-border/10 bg-card p-6 overflow-hidden transition-all duration-500 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]"
-          fill="oklch(from var(--primary) l c h / 0.12)"
-        >
-          {/* Background Gradient overlay */}
-          {gradient && (
-            <div
-              className={cn(
-                "absolute inset-0 bg-gradient-to-br opacity-20 pointer-events-none transition-opacity duration-500 group-hover:opacity-30",
-                gradient,
-              )}
-            />
-          )}
-
-          {/* Background Decorative Illustration */}
-          {illustration && (
-            <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-              {illustration}
-            </div>
-          )}
-
-          {/* Inner Content wrapper */}
-          {Content}
-        </Spotlight>
+      <div className="w-full h-full rounded-[calc(1.8rem-0.25rem)] bg-card border border-border/10 p-5 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+        {children}
       </div>
-    </Container>
+    </div>
   );
 }
