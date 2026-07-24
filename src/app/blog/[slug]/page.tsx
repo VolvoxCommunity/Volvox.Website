@@ -100,13 +100,14 @@ export default async function BlogPostPage({
   const readingTime = Math.max(1, Math.round(post.readingTime));
 
   const allPosts = (await getAllPosts()).map(
-    ({ slug, title, excerpt, banner, tags, date }) => ({
+    ({ slug, title, excerpt, banner, tags, date, author }) => ({
       slug,
       title,
       excerpt,
       banner,
       tags,
       date,
+      author,
     }),
   );
 

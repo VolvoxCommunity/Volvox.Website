@@ -5,7 +5,10 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { type JSX, useEffect, useRef, useState } from "react";
+import { CommunicateCanvas } from "@/components/communicate-canvas";
+import { TeamFluidCanvas } from "@/components/team-fluid-canvas";
 import { Button } from "@/components/ui/button";
+import { StackCanvas } from "@/components/ui/stack-canvas";
 import { trackMetaPixelEvent } from "@/lib/meta-pixel";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
@@ -189,14 +192,14 @@ export function HowWeWork(): JSX.Element {
 
       // Set initial states for steps (with slight random rotation offsets)
       gsap.set(cardNodes, {
-        opacity: 0,
+        autoAlpha: 0,
         scale: 0.3,
         y: 200,
         x: 200,
         rotation: 10,
         zIndex: 1,
       });
-      gsap.set(textNodes, { opacity: 0, y: 50, filter: "blur(10px)" });
+      gsap.set(textNodes, { autoAlpha: 0, y: 50, filter: "blur(10px)" });
 
       // Bring steps container into focus
       tl.to(
@@ -209,22 +212,22 @@ export function HowWeWork(): JSX.Element {
       tl.to(
         cardNodes[0] as HTMLElement,
         {
-          opacity: 1,
+          autoAlpha: 1,
           scale: 1,
           y: 0,
           x: 0,
           rotation: -2,
           zIndex: 10,
           duration: 1,
-          ease: "power2.out",
+          ease: "power3.out",
         },
         "<",
       );
       tl.fromTo(
         textNodes[0] as HTMLElement,
-        { opacity: 0, y: 50, filter: "blur(10px)" },
+        { autoAlpha: 0, y: 50, filter: "blur(10px)" },
         {
-          opacity: 1,
+          autoAlpha: 1,
           y: 0,
           filter: "blur(0px)",
           duration: 1,
@@ -237,14 +240,14 @@ export function HowWeWork(): JSX.Element {
       tl.to(
         cardNodes[1] as HTMLElement,
         {
-          opacity: 1,
+          autoAlpha: 1,
           scale: 0.4,
           y: 250,
           x: 150,
           rotation: 8,
           zIndex: 5,
           duration: 1,
-          ease: "power2.out",
+          ease: "power3.out",
         },
         "<0.2",
       );
@@ -262,7 +265,7 @@ export function HowWeWork(): JSX.Element {
           tl.to(
             cardNodes[i] as HTMLElement,
             {
-              opacity: 0,
+              autoAlpha: 0,
               scale: 0.3,
               x: -300,
               y: -300,
@@ -276,7 +279,7 @@ export function HowWeWork(): JSX.Element {
           tl.to(
             textNodes[i] as HTMLElement,
             {
-              opacity: 0,
+              autoAlpha: 0,
               y: -40,
               filter: "blur(10px)",
               duration: 0.7,
@@ -302,9 +305,9 @@ export function HowWeWork(): JSX.Element {
           // New text fades in from blur (crossfade overlap)
           tl.fromTo(
             textNodes[i + 1] as HTMLElement,
-            { opacity: 0, y: 40, filter: "blur(10px)" },
+            { autoAlpha: 0, y: 40, filter: "blur(10px)" },
             {
-              opacity: 1,
+              autoAlpha: 1,
               y: 0,
               filter: "blur(0px)",
               duration: 0.9,
@@ -318,14 +321,14 @@ export function HowWeWork(): JSX.Element {
             tl.to(
               cardNodes[i + 2] as HTMLElement,
               {
-                opacity: 1,
+                autoAlpha: 1,
                 scale: 0.4,
                 y: 250,
                 x: 150,
                 rotation: i % 2 === 0 ? 8 : -8,
                 zIndex: 5,
                 duration: 1,
-                ease: "power2.out",
+                ease: "power3.out",
               },
               `${label}+=0.2`,
             );
@@ -347,7 +350,7 @@ export function HowWeWork(): JSX.Element {
       // --- PHASE 5: Info Cards (3D staggered fly-in + SVG animations) ---
       const infoCards = gsap.utils.toArray(".hww-info-card");
       gsap.set(infoCards, {
-        opacity: 0,
+        autoAlpha: 0,
         y: 80,
         scale: 0.95,
         rotationX: -10,
@@ -362,7 +365,7 @@ export function HowWeWork(): JSX.Element {
       tl.to(
         infoCards,
         {
-          opacity: 1,
+          autoAlpha: 1,
           y: 0,
           scale: 1,
           rotationX: 0,
@@ -395,9 +398,9 @@ export function HowWeWork(): JSX.Element {
       // Staggered value items entrance (Editorial Stack)
       tl.fromTo(
         ".hww-value-item",
-        { opacity: 0, y: 30 },
+        { autoAlpha: 0, y: 30 },
         {
-          opacity: 1,
+          autoAlpha: 1,
           y: 0,
           stagger: 0.18,
           duration: 0.9,
@@ -428,8 +431,8 @@ export function HowWeWork(): JSX.Element {
       // CTA content float and scale up
       tl.fromTo(
         ".hww-cta-content",
-        { opacity: 0, y: 50, scale: 0.95 },
-        { opacity: 1, y: 0, scale: 1, duration: 1.2, ease: "power2.out" },
+        { autoAlpha: 0, y: 50, scale: 0.95 },
+        { autoAlpha: 1, y: 0, scale: 1, duration: 1.2, ease: "power2.out" },
         "<0.1",
       );
 
@@ -461,7 +464,7 @@ export function HowWeWork(): JSX.Element {
       >
         {/* The "How we work" Title (Phase 1, full screen center, then fades) */}
         <div className="hww-title-container absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-50 perspective-[1000px] transform-style-3d">
-          <h2 className="text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter flex gap-[0.2em] overflow-hidden p-4">
+          <h2 className="text-6xl md:text-8xl lg:text-[10rem] font-editorial font-medium italic tracking-tight flex gap-[0.2em] overflow-hidden p-4">
             {"How we work".split(" ").map((w, i) => (
               <span key={i} className="hww-title-word block">
                 {w}
@@ -472,9 +475,9 @@ export function HowWeWork(): JSX.Element {
 
         {/* Headline (Phase 2, centered, hidden initially) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-          <h2 className="hww-headline opacity-0 text-4xl md:text-6xl lg:text-7xl font-bold text-center max-w-5xl px-4 tracking-tight leading-tight">
+          <h2 className="hww-headline opacity-0 text-4xl md:text-6xl lg:text-7xl font-editorial font-medium text-center max-w-5xl px-4 tracking-tight leading-[1.08] text-balance">
             No black box. Just how we{" "}
-            <span className="inline-flex items-center justify-center px-6 py-2 mx-2 text-2xl md:text-4xl lg:text-5xl font-mono uppercase tracking-[0.05em] font-bold bg-primary/10 border border-primary/30 text-primary rounded-full align-middle transform -rotate-1">
+            <span className="inline-flex items-center justify-center px-6 py-2 mx-2 text-3xl md:text-5xl lg:text-6xl font-editorial italic tracking-tight font-medium bg-primary/10 border border-primary/30 text-primary rounded-full align-middle transform -rotate-2">
               actually
             </span>{" "}
             build.
@@ -483,7 +486,7 @@ export function HowWeWork(): JSX.Element {
 
         {/* Subtext (Phase 3, centered, hidden initially) */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none z-40">
-          <p className="hww-subtext opacity-0 text-2xl md:text-3xl text-center max-w-4xl px-4 leading-relaxed font-medium text-muted-foreground flex flex-wrap justify-center gap-x-2 gap-y-1">
+          <p className="hww-subtext opacity-0 text-xl md:text-2xl lg:text-3xl text-center max-w-4xl px-4 leading-[1.5] font-medium text-muted-foreground flex flex-wrap justify-center gap-x-2 gap-y-1 text-pretty">
             {"We don't have a stack of client case studies to point to yet — so here's the next best thing: an honest look at how a project with Volvox actually goes, from the first call to long after launch."
               .split(" ")
               .map((w, i) => (
@@ -507,9 +510,11 @@ export function HowWeWork(): JSX.Element {
                 className="hww-card absolute w-full max-w-md aspect-[4/3] p-2 rounded-[2.5rem] bg-card/25 border border-border/30 shadow-2xl flex-shrink-0 origin-center"
               >
                 <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] overflow-hidden bg-card border border-border/10 shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)] flex items-center justify-center">
-                  <img
+                  <Image
                     src={step.img}
                     alt={step.title}
+                    width={400}
+                    height={400}
                     className="w-full h-full object-contain p-8 origin-center transition-transform duration-700 ease-out hover:scale-105"
                   />
                 </div>
@@ -524,10 +529,10 @@ export function HowWeWork(): JSX.Element {
                 key={i}
                 className="hww-text absolute inset-0 flex flex-col justify-center pr-8 lg:pr-16"
               >
-                <h3 className="text-2xl md:text-3xl lg:text-4xl font-bold mb-6 tracking-tight text-foreground leading-[1.1]">
+                <h3 className="text-3xl md:text-4xl lg:text-5xl font-editorial italic font-medium mb-6 tracking-tight text-foreground leading-[1.1] text-balance">
                   {step.title}
                 </h3>
-                <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-2xl text-pretty">
                   {step.desc}
                 </p>
                 {step.tag && (
@@ -550,8 +555,10 @@ export function HowWeWork(): JSX.Element {
             <div className="md:col-span-2 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
               <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col md:flex-row items-center gap-8 justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                 <div className="flex flex-col text-left max-w-sm">
-                  <h4 className="text-2xl font-bold mb-4">Our stack</h4>
-                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                  <h4 className="text-3xl font-editorial italic font-medium mb-4">
+                    Our stack
+                  </h4>
+                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed text-pretty">
                     No fixed template — we choose what's right for the project.
                     Most commonly:
                   </p>
@@ -559,172 +566,8 @@ export function HowWeWork(): JSX.Element {
                     React, Next.js, TypeScript, .NET / C#
                   </p>
                 </div>
-                <div className="w-full md:w-1/2 h-32 flex items-center justify-center relative overflow-hidden">
-                  <svg
-                    viewBox="0 0 200 150"
-                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ maxWidth: "180px" }}
-                    aria-hidden
-                  >
-                    <title>Tech Stack Orbit Animation</title>
-                    <defs>
-                      <linearGradient
-                        id="stackGrad"
-                        x1="0%"
-                        y1="0%"
-                        x2="100%"
-                        y2="100%"
-                      >
-                        <stop
-                          offset="0%"
-                          stopColor="#007AFF"
-                          stopOpacity="0.85"
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor="#9b3fca"
-                          stopOpacity="0.15"
-                        />
-                      </linearGradient>
-                    </defs>
-
-                    {/* Outer Orbit Path */}
-                    <ellipse
-                      cx="100"
-                      cy="75"
-                      rx="60"
-                      ry="22"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.08)"
-                      strokeWidth="1"
-                      transform="rotate(-15 100 75)"
-                    />
-                    {/* Inner Orbit Path */}
-                    <ellipse
-                      cx="100"
-                      cy="75"
-                      rx="42"
-                      ry="42"
-                      fill="none"
-                      stroke="rgba(255,255,255,0.05)"
-                      strokeWidth="1"
-                    />
-
-                    {/* Pulsing Core Node */}
-                    <circle cx="100" cy="75" r="9" fill="url(#stackGrad)" />
-                    <circle
-                      cx="100"
-                      cy="75"
-                      r="12"
-                      fill="none"
-                      stroke="#007AFF"
-                      strokeWidth="0.5"
-                      opacity="0.3"
-                    >
-                      <animate
-                        attributeName="r"
-                        values="9;24;9"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0.4;0;0.4"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-
-                    {/* Backend Flow Channel Guidelines */}
-                    <line
-                      x1="58"
-                      y1="20"
-                      x2="58"
-                      y2="130"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                      strokeDasharray="3 3"
-                    />
-                    <line
-                      x1="142"
-                      y1="20"
-                      x2="142"
-                      y2="130"
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                      strokeDasharray="3 3"
-                    />
-
-                    {/* React orbit particle */}
-                    <circle
-                      r="3.5"
-                      fill="#007AFF"
-                      style={{ filter: "drop-shadow(0 0 5px #007AFF)" }}
-                    >
-                      <animateMotion
-                        dur="4s"
-                        repeatCount="indefinite"
-                        path="M 40,75 A 60,22 0 1,0 160,75 A 60,22 0 1,0 40,75"
-                      />
-                    </circle>
-                    {/* TS orbit particle */}
-                    <circle
-                      r="3"
-                      fill="#9b3fca"
-                      style={{ filter: "drop-shadow(0 0 4px #9b3fca)" }}
-                    >
-                      <animateMotion
-                        dur="3.2s"
-                        repeatCount="indefinite"
-                        path="M 100,33 A 42,42 0 1,0 100,117 A 42,42 0 1,0 100,33"
-                      />
-                    </circle>
-
-                    {/* Backend flow signals */}
-                    <circle r="2" fill="#fff">
-                      <animate
-                        attributeName="cy"
-                        values="20;130"
-                        dur="2.4s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="cx"
-                        values="58;58"
-                        dur="2.4s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        dur="2.4s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <circle r="2" fill="#fff">
-                      <animate
-                        attributeName="cy"
-                        values="130;20"
-                        dur="1.9s"
-                        begin="0.6s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="cx"
-                        values="142;142"
-                        dur="1.9s"
-                        begin="0.6s"
-                        repeatCount="indefinite"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        dur="1.9s"
-                        begin="0.6s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                  </svg>
+                <div className="w-full md:w-1/2 h-36 flex items-center justify-center relative overflow-hidden">
+                  <StackCanvas />
                 </div>
               </div>
             </div>
@@ -733,188 +576,13 @@ export function HowWeWork(): JSX.Element {
             <div className="md:col-span-1 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
               <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col items-center justify-between text-center shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                 <div className="w-full h-32 flex items-center justify-center mb-6 relative overflow-hidden">
-                  <svg
-                    viewBox="0 0 200 150"
-                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ maxWidth: "180px" }}
-                    aria-hidden
-                  >
-                    <title>Flexible Team Network Graph Animation</title>
-                    {/* Connections Guidelines */}
-                    <g
-                      stroke="rgba(255,255,255,0.06)"
-                      strokeWidth="1"
-                      fill="none"
-                    >
-                      <path id="team-p1" d="M 40,45 L 100,105" />
-                      <path id="team-p2" d="M 160,45 L 100,105" />
-                      <path id="team-p3" d="M 100,22 L 100,105" />
-                      <path id="team-p4" d="M 40,45 L 160,45" />
-                    </g>
-
-                    {/* Glowing dynamic connecting pulses */}
-                    <path
-                      d="M 40,45 L 100,105"
-                      stroke="#9b3fca"
-                      strokeWidth="1.5"
-                      opacity="0.3"
-                      fill="none"
-                    >
-                      <animate
-                        attributeName="stroke-dasharray"
-                        values="0 100; 100 0"
-                        dur="3s"
-                        repeatCount="indefinite"
-                      />
-                    </path>
-                    <path
-                      d="M 160,45 L 100,105"
-                      stroke="#007AFF"
-                      strokeWidth="1.5"
-                      opacity="0.3"
-                      fill="none"
-                    >
-                      <animate
-                        attributeName="stroke-dasharray"
-                        values="100 0; 0 100"
-                        dur="3.4s"
-                        repeatCount="indefinite"
-                      />
-                    </path>
-
-                    {/* Role Nodes */}
-                    {/* Dev Node */}
-                    <g transform="translate(40, 45)">
-                      <circle
-                        r="14"
-                        fill="#09090b"
-                        stroke="rgba(255,255,255,0.12)"
-                        strokeWidth="1.5"
-                      />
-                      <circle
-                        r="14"
-                        fill="none"
-                        stroke="#007AFF"
-                        strokeWidth="1.5"
-                        opacity="0.3"
-                      >
-                        <animate
-                          attributeName="r"
-                          values="14;18;14"
-                          dur="3s"
-                          repeatCount="indefinite"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0.3;0;0.3"
-                          dur="3s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                      <text
-                        y="4"
-                        textAnchor="middle"
-                        fill="#fff"
-                        fontSize="8"
-                        fontFamily="monospace"
-                        fontWeight="bold"
-                      >
-                        &lt;/&gt;
-                      </text>
-                    </g>
-
-                    {/* Designer Node */}
-                    <g transform="translate(160, 45)">
-                      <circle
-                        r="14"
-                        fill="#09090b"
-                        stroke="rgba(255,255,255,0.12)"
-                        strokeWidth="1.5"
-                      />
-                      <circle
-                        r="14"
-                        fill="none"
-                        stroke="#9b3fca"
-                        strokeWidth="1.5"
-                        opacity="0.3"
-                      >
-                        <animate
-                          attributeName="r"
-                          values="14;18;14"
-                          dur="3.4s"
-                          begin="0.6s"
-                          repeatCount="indefinite"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0.3;0;0.3"
-                          dur="3.4s"
-                          begin="0.6s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                      <text
-                        y="3"
-                        textAnchor="middle"
-                        fill="#fff"
-                        fontSize="9"
-                        fontFamily="monospace"
-                        fontWeight="bold"
-                      >
-                        ✎
-                      </text>
-                    </g>
-
-                    {/* Central Hub */}
-                    <g transform="translate(100, 105)">
-                      <circle
-                        r="17"
-                        fill="#09090b"
-                        stroke="rgba(255,255,255,0.18)"
-                        strokeWidth="1.5"
-                      />
-                      <circle r="17" fill="rgba(0,122,255,0.03)" />
-                      <text
-                        y="4"
-                        textAnchor="middle"
-                        fill="#007AFF"
-                        fontSize="7"
-                        fontFamily="monospace"
-                        fontWeight="bold"
-                      >
-                        VOLVOX
-                      </text>
-                    </g>
-
-                    {/* Signals sliding down connection routes */}
-                    <circle
-                      r="2.5"
-                      fill="#fff"
-                      style={{ filter: "drop-shadow(0 0 3px #fff)" }}
-                    >
-                      <animateMotion
-                        dur="3s"
-                        repeatCount="indefinite"
-                        path="M 40,45 L 100,105"
-                      />
-                    </circle>
-                    <circle
-                      r="2.5"
-                      fill="#9b3fca"
-                      style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
-                    >
-                      <animateMotion
-                        dur="2.5s"
-                        begin="0.8s"
-                        repeatCount="indefinite"
-                        path="M 160,45 L 100,105"
-                      />
-                    </circle>
-                  </svg>
+                  <TeamFluidCanvas />
                 </div>
                 <div className="flex flex-col items-center">
-                  <h4 className="text-xl font-bold mb-4">Our team</h4>
-                  <p className="text-muted-foreground text-sm leading-relaxed">
+                  <h4 className="text-2xl font-editorial italic font-medium mb-4">
+                    Our team
+                  </h4>
+                  <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                     Volvox isn't a rigid org chart. The team flexes based on
                     what a project actually needs — developers, designers, and
                     project support brought in as the work calls for it.
@@ -927,10 +595,10 @@ export function HowWeWork(): JSX.Element {
             <div className="md:col-span-3 hww-info-card p-2 rounded-[2.5rem] bg-card-deep/30 dark:bg-card-deep/10 border border-border/30 transform-gpu relative overflow-hidden group">
               <div className="w-full h-full rounded-[calc(2.5rem-0.5rem)] bg-card border border-border/10 p-8 flex flex-col md:flex-row items-center gap-8 justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
                 <div className="flex flex-col text-left max-w-lg">
-                  <h4 className="text-2xl font-bold mb-4">
+                  <h4 className="text-3xl font-editorial italic font-medium mb-4">
                     How we communicate
                   </h4>
-                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed">
+                  <p className="text-muted-foreground mb-6 text-sm leading-relaxed text-pretty">
                     Discord is our default hub where you can watch us build in
                     real-time, but we adapt our communication to whatever works
                     best for your team.
@@ -940,220 +608,7 @@ export function HowWeWork(): JSX.Element {
                   </p>
                 </div>
                 <div className="w-full md:w-1/2 h-32 flex items-center justify-center relative overflow-hidden">
-                  <svg
-                    viewBox="0 0 200 150"
-                    className="w-full h-full opacity-85 group-hover:opacity-100 transition-opacity duration-500"
-                    style={{ maxWidth: "180px" }}
-                    aria-hidden
-                  >
-                    <title>Communication Channels Radial Wave Animation</title>
-                    {/* Concentric expanding wave rings */}
-                    <g transform="translate(100, 75)">
-                      <circle
-                        r="12"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.04)"
-                        strokeWidth="1"
-                      />
-                      <circle
-                        r="26"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.04)"
-                        strokeWidth="1"
-                      />
-                      <circle
-                        r="42"
-                        fill="none"
-                        stroke="rgba(255,255,255,0.02)"
-                        strokeWidth="1"
-                      />
-
-                      <circle
-                        r="8"
-                        fill="none"
-                        stroke="#007AFF"
-                        strokeWidth="1"
-                        opacity="0.8"
-                      >
-                        <animate
-                          attributeName="r"
-                          values="5;55"
-                          dur="3s"
-                          repeatCount="indefinite"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0.8;0"
-                          dur="3s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                      <circle
-                        r="8"
-                        fill="none"
-                        stroke="#9b3fca"
-                        strokeWidth="0.75"
-                        opacity="0.8"
-                      >
-                        <animate
-                          attributeName="r"
-                          values="5;45"
-                          dur="3s"
-                          begin="1.5s"
-                          repeatCount="indefinite"
-                        />
-                        <animate
-                          attributeName="opacity"
-                          values="0.8;0"
-                          dur="3s"
-                          begin="1.5s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-
-                      {/* Central core hub */}
-                      <circle
-                        r="8"
-                        fill="#09090b"
-                        stroke="rgba(255,255,255,0.15)"
-                        strokeWidth="1.5"
-                      />
-                      <circle r="3.5" fill="#007AFF">
-                        <animate
-                          attributeName="r"
-                          values="2.5;4.5;2.5"
-                          dur="2s"
-                          repeatCount="indefinite"
-                        />
-                      </circle>
-                    </g>
-
-                    {/* Channel Lines */}
-                    <g
-                      stroke="rgba(255,255,255,0.04)"
-                      strokeWidth="1"
-                      fill="none"
-                    >
-                      <path id="comm-p1" d="M 100,75 L 30,38" />
-                      <path id="comm-p2" d="M 100,75 L 30,112" />
-                      <path id="comm-p3" d="M 100,75 L 170,38" />
-                      <path id="comm-p4" d="M 100,75 L 170,112" />
-                    </g>
-
-                    {/* Moving message signals */}
-                    <circle
-                      r="2"
-                      fill="#5865F2"
-                      style={{ filter: "drop-shadow(0 0 3px #5865F2)" }}
-                    >
-                      <animateMotion
-                        dur="2.4s"
-                        repeatCount="indefinite"
-                        path="M 100,75 L 30,38"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        keyTimes="0;0.1;1"
-                        dur="2.4s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <circle
-                      r="2"
-                      fill="#9b3fca"
-                      style={{ filter: "drop-shadow(0 0 3px #9b3fca)" }}
-                    >
-                      <animateMotion
-                        dur="2.9s"
-                        begin="0.4s"
-                        repeatCount="indefinite"
-                        path="M 100,75 L 30,112"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        keyTimes="0;0.1;1"
-                        dur="2.9s"
-                        begin="0.4s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <circle
-                      r="2"
-                      fill="#fff"
-                      style={{ filter: "drop-shadow(0 0 3px #fff)" }}
-                    >
-                      <animateMotion
-                        dur="2.1s"
-                        begin="1.1s"
-                        repeatCount="indefinite"
-                        path="M 100,75 L 170,38"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        keyTimes="0;0.1;1"
-                        dur="2.1s"
-                        begin="1.1s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-                    <circle
-                      r="2"
-                      fill="#007AFF"
-                      style={{ filter: "drop-shadow(0 0 3px #007AFF)" }}
-                    >
-                      <animateMotion
-                        dur="2.7s"
-                        begin="0.7s"
-                        repeatCount="indefinite"
-                        path="M 100,75 L 170,112"
-                      />
-                      <animate
-                        attributeName="opacity"
-                        values="0;1;0"
-                        keyTimes="0;0.1;1"
-                        dur="2.7s"
-                        begin="0.7s"
-                        repeatCount="indefinite"
-                      />
-                    </circle>
-
-                    {/* Guideline endpoints */}
-                    <circle
-                      cx="30"
-                      cy="38"
-                      r="3"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx="30"
-                      cy="112"
-                      r="3"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx="170"
-                      cy="38"
-                      r="3"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth="1"
-                    />
-                    <circle
-                      cx="170"
-                      cy="112"
-                      r="3"
-                      fill="#09090b"
-                      stroke="rgba(255,255,255,0.1)"
-                      strokeWidth="1"
-                    />
-                  </svg>
+                  <CommunicateCanvas />
                 </div>
               </div>
             </div>
@@ -1198,7 +653,7 @@ export function HowWeWork(): JSX.Element {
         <div className="hww-cta-wrapper absolute inset-0 flex flex-col justify-center items-center w-full max-w-4xl mx-auto px-4 z-30 pointer-events-none opacity-0">
           {/* CTA Content */}
           <div className="hww-cta-content text-center max-w-3xl">
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-8 tracking-tight leading-[1.05]">
+            <h2 className="text-5xl md:text-6xl lg:text-7xl font-editorial italic font-medium mb-8 tracking-tight leading-[1.05] text-balance">
               Have a{" "}
               <span className="inline-flex items-center justify-center gap-3 px-6 py-2 mx-2 text-4xl md:text-5xl lg:text-6xl font-mono uppercase tracking-[0.05em] font-bold bg-accent/10 border border-accent/30 text-accent rounded-full align-middle transform -rotate-1">
                 <Image
@@ -1212,7 +667,7 @@ export function HowWeWork(): JSX.Element {
               </span>{" "}
               project in mind?
             </h2>
-            <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto">
+            <p className="text-base md:text-lg lg:text-xl text-muted-foreground mb-12 leading-relaxed max-w-2xl mx-auto text-pretty">
               It starts with a call — no forms, no gatekeeping, just a
               conversation about what you're trying to build.
             </p>
@@ -1258,7 +713,7 @@ export function HowWeWork(): JSX.Element {
           <span className="font-mono text-xs text-primary tracking-widest uppercase font-bold">
             Our Process
           </span>
-          <h2 className="text-4xl font-extrabold uppercase tracking-tight text-foreground">
+          <h2 className="text-5xl font-editorial italic font-medium tracking-tight text-foreground">
             How we work
           </h2>
           <p className="text-lg text-muted-foreground mt-2 max-w-md mx-auto leading-relaxed">
@@ -1283,9 +738,11 @@ export function HowWeWork(): JSX.Element {
               <div className="flex-grow flex flex-col gap-4">
                 <div className="w-full aspect-[4/3] p-1.5 rounded-[1.5rem] bg-card/25 border border-border/20 shadow-lg relative overflow-hidden">
                   <div className="w-full h-full rounded-[calc(1.5rem-0.375rem)] overflow-hidden bg-card border border-border/10 flex items-center justify-center">
-                    <img
+                    <Image
                       src={step.img}
                       alt={step.title}
+                      width={400}
+                      height={400}
                       className="w-full h-full object-contain p-6"
                     />
                   </div>
@@ -1295,10 +752,10 @@ export function HowWeWork(): JSX.Element {
                   <span className="font-mono text-[10.5px] uppercase tracking-wider text-primary/75 font-semibold">
                     {step.step}
                   </span>
-                  <h3 className="text-xl font-bold text-foreground leading-tight">
+                  <h3 className="text-2xl font-editorial italic font-medium text-foreground leading-tight text-balance">
                     {step.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">
+                  <p className="text-sm text-muted-foreground leading-relaxed text-pretty">
                     {step.desc}
                   </p>
                   {step.tag && (
@@ -1318,7 +775,7 @@ export function HowWeWork(): JSX.Element {
             <span className="font-mono text-xs text-primary tracking-widest uppercase font-bold">
               Engineering Hub
             </span>
-            <h3 className="text-2xl font-bold text-foreground">
+            <h3 className="text-3xl font-editorial italic font-medium text-foreground text-balance">
               What powers our process
             </h3>
           </div>
@@ -1327,8 +784,10 @@ export function HowWeWork(): JSX.Element {
             {/* Bento Card 1: Our Stack */}
             <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
               <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
-                <h4 className="text-lg font-bold">Our stack</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <h4 className="text-xl font-editorial italic font-medium">
+                  Our stack
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                   No fixed template — we choose what's right for the project.
                   Most commonly:
                 </p>
@@ -1341,8 +800,10 @@ export function HowWeWork(): JSX.Element {
             {/* Bento Card 2: Our Team */}
             <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
               <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
-                <h4 className="text-lg font-bold">Our team</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <h4 className="text-xl font-editorial italic font-medium">
+                  Our team
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                   Volvox is a flexible group. The team dynamically flexes based
                   on what a project actually needs — developers, designers, and
                   support.
@@ -1353,8 +814,10 @@ export function HowWeWork(): JSX.Element {
             {/* Bento Card 3: Communication */}
             <div className="p-1.5 rounded-[1.5rem] bg-card-deep/20 border border-border/20">
               <div className="rounded-[calc(1.5rem-0.375rem)] bg-card border border-border/10 p-6 flex flex-col gap-4 shadow-sm">
-                <h4 className="text-lg font-bold">How we communicate</h4>
-                <p className="text-muted-foreground text-sm leading-relaxed">
+                <h4 className="text-xl font-editorial italic font-medium">
+                  How we communicate
+                </h4>
+                <p className="text-muted-foreground text-sm leading-relaxed text-pretty">
                   Discord is our default hub where you can watch us build in
                   real-time, but we adapt our communication to whatever works
                   best for your team.
@@ -1402,10 +865,10 @@ export function HowWeWork(): JSX.Element {
 
         {/* Phase 5: CTA */}
         <div className="text-center flex flex-col gap-6 pt-8">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground leading-tight">
+          <h2 className="text-4xl font-editorial italic font-medium tracking-tight text-foreground leading-tight text-balance">
             Have a project in mind?
           </h2>
-          <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground leading-relaxed max-w-sm mx-auto text-pretty">
             It starts with a call — no forms, no gatekeeping, just a
             conversation about what you're trying to build.
           </p>

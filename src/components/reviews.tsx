@@ -263,9 +263,9 @@ function ReviewCard({
 
         <p
           className={cn(
-            "min-h-0 flex-1 text-sm sm:text-base font-medium leading-relaxed",
+            "min-h-0 flex-1 text-xs sm:text-sm font-medium leading-relaxed text-pretty",
             isCenter
-              ? "line-clamp-6 sm:line-clamp-[8] text-primary-foreground"
+              ? "line-clamp-6 sm:line-clamp-[8] text-primary-foreground font-editorial italic text-base sm:text-lg"
               : "line-clamp-4 text-foreground",
           )}
         >
@@ -401,7 +401,7 @@ export function Reviews({ content }: ReviewsProps) {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-          className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-foreground mb-6 md:mb-8 max-w-2xl"
+          className="text-3xl md:text-4xl lg:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight mb-6 md:mb-8 max-w-2xl"
         >
           {headline}
         </motion.h2>
@@ -468,7 +468,7 @@ export function Reviews({ content }: ReviewsProps) {
               <TrustBadge key={badge.id} badge={badge} />
             ))}
           </div>
-          <p className="text-xs sm:text-sm font-medium tracking-wide text-muted-foreground sm:text-right">
+          <p className="text-xs sm:text-sm font-medium tracking-wide text-muted-foreground sm:text-right text-pretty">
             {eyebrow}
           </p>
         </motion.div>

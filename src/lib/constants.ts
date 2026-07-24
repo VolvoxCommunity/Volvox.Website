@@ -97,12 +97,20 @@ export const NAV_ITEMS: NavItem[] = [
   { id: "how-we-work", label: "How We Work", href: "/#how-we-work" },
   { id: "products", label: "Products", href: "/products" },
   { id: "reviews", label: "Reviews", href: "/#reviews" },
-  { id: "blog", label: "Blog", href: "/#blog" },
+  { id: "blog", label: "Blog", href: "/blog" },
   {
     id: "mentorship",
-    label: "Community",
+    label: "Team",
     href: "/#mentorship",
     optional: true,
   },
   { id: "about", label: "About", href: "/#about", optional: true },
+];
+
+/** Subpage navigation items (used on subpages like /blog, /products, /team) */
+export const PAGE_NAV_ITEMS: NavItem[] = [
+  { id: "home", label: "Home", href: "/" },
+  { id: "products", label: "Products", href: "/products" },
+  { id: "blog", label: "Blog", href: "/blog" },
+  { id: "team", label: "Team", href: "/team" },
 ];

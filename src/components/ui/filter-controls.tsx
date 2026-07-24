@@ -2,10 +2,8 @@
 
 import {
   CaretDown,
-  List,
   MagnifyingGlass,
   SortAscending,
-  SquaresFour,
   X,
 } from "@phosphor-icons/react";
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -60,8 +58,8 @@ export interface FilterControlsProps {
   totalCount?: number;
   sortOption: BlogSortOption | ProductSortOption;
   onSortChange: (value: BlogSortOption | ProductSortOption) => void;
-  viewMode: ViewMode;
-  onViewModeChange: (value: ViewMode) => void;
+  viewMode?: ViewMode;
+  onViewModeChange?: (value: ViewMode) => void;
   // Tag filtering (only used by blog/product variants)
   allTags?: string[];
   selectedTags?: string[];
@@ -79,8 +77,6 @@ export function FilterControls({
   totalCount = 0,
   sortOption,
   onSortChange,
-  viewMode,
-  onViewModeChange,
   // Tag filtering props (optional, only for blog/product variants)
   allTags = [],
   selectedTags = [],
@@ -295,38 +291,6 @@ export function FilterControls({
                   ))}
                 </div>
               )}
-            </div>
-
-            {/* View Mode Toggle */}
-            <div className="hidden sm:flex items-center border border-border rounded-xl overflow-hidden">
-              <button
-                type="button"
-                onClick={() => onViewModeChange("grid")}
-                className={cn(
-                  "px-3 py-2 transition-colors",
-                  viewMode === "grid"
-                    ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                )}
-                aria-label="Grid view"
-                aria-pressed={viewMode === "grid"}
-              >
-                <SquaresFour className="h-4 w-4" aria-hidden="true" />
-              </button>
-              <button
-                type="button"
-                onClick={() => onViewModeChange("list")}
-                className={cn(
-                  "px-3 py-2 transition-colors",
-                  viewMode === "list"
-                    ? "bg-secondary text-secondary-foreground"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50",
-                )}
-                aria-label="List view"
-                aria-pressed={viewMode === "list"}
-              >
-                <List className="h-4 w-4" aria-hidden="true" />
-              </button>
             </div>
           </div>
         </div>

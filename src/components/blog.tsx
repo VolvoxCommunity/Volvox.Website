@@ -156,40 +156,28 @@ export function Blog({
         className="absolute inset-0 pointer-events-none"
         style={{ opacity: backgroundOpacity }}
       >
-        <div className="absolute top-0 inset-x-0 h-px bg-gradient-to-r from-transparent via-foreground/10 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_0%,rgba(var(--primary-rgb),0.05),transparent_50%)]" />
+        <div className="absolute inset-0" />
         <motion.div
           style={{ y: backgroundY }}
-          className="absolute top-1/4 -right-64 w-[500px] h-[500px] bg-primary/5 rounded-full blur-[120px]"
+          className="absolute top-1/4 -right-64 w-[500px] h-[500px] rounded-full blur-[120px]"
         />
         <motion.div
           style={{ y: secondaryBlobY }}
-          className="absolute bottom-1/4 -left-64 w-[600px] h-[600px] bg-secondary/5 rounded-full blur-[140px]"
+          className="absolute bottom-1/4 -left-64 w-[600px] h-[600px] rounded-full blur-[140px]"
         />
       </motion.div>
 
       <div className="container mx-auto max-w-7xl relative z-10">
         {/* Header */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
-          <div className="space-y-2 md:space-y-4">
-            <motion.h2
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5 }}
-              className="text-3xl md:text-5xl font-bold tracking-tight text-foreground"
-            >
-              Blog Posts
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: 0.1 }}
-              className="text-base md:text-lg text-muted-foreground max-w-xl leading-relaxed"
-            >
-              Where we share what we&apos;ve learned (so you don&apos;t have to
-              learn it the hard way).
-            </motion.p>
-          </div>
+          <motion.h2
+            initial={{ opacity: 0, x: -10 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.5 }}
+            className="text-4xl md:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight"
+          >
+            Blog Posts
+          </motion.h2>
 
           {!enableFilters && (
             <motion.div
@@ -280,29 +268,10 @@ export function Blog({
                 !enableFilters && index === 2 && "hidden lg:block", // Hide 3rd item on mobile/tablet, show on lg+
               )}
             >
-              <BlogCard post={post} viewMode={viewMode} />
+              <BlogCard post={post} />
             </div>
           ))}
         </div>
-
-        {/* Footer CTA - homepage only */}
-        {!enableFilters && (
-          <div className="mt-32 p-12 md:p-20 rounded-[4rem] bg-gradient-to-br from-secondary/5 via-background to-primary/5 border border-secondary/10 flex flex-col items-center text-center relative overflow-hidden group">
-            <div className="absolute top-0 right-0 w-64 h-64 bg-secondary/10 blur-[100px] rounded-full -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
-            <h3 className="text-3xl md:text-5xl font-black tracking-tight mb-6">
-              Want to read more?
-            </h3>
-            <p className="text-muted-foreground text-lg mb-10 max-w-xl">
-              Dive deeper into our articles, tutorials, and stories from the
-              team. New posts added regularly.
-            </p>
-            <Button variant="default" size="lg" asChild>
-              <Link href="/blog" onClick={() => window.scrollTo(0, 0)}>
-                All Blog Posts
-              </Link>
-            </Button>
-          </div>
-        )}
       </div>
     </section>
   );

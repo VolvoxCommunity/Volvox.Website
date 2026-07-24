@@ -77,12 +77,14 @@ export function TeamCard({ member }: TeamCardProps) {
 
         {/* Bottom Actions: Profile Button */}
         <div className="flex items-center gap-3 h-8 mt-auto">
-          <span
-            className="flex-1 rounded-full h-8 text-xs font-bold inline-flex items-center justify-center bg-secondary text-secondary-foreground hover:bg-secondary/80 transition-colors"
+          <div
+            className={cn(
+              "flex-1 rounded-full h-8 text-xs font-bold inline-flex items-center justify-center bg-secondary text-secondary-foreground hover:bg-secondary/80 px-3 transition-colors",
+            )}
             data-testid={`profile-button-${member.slug}`}
           >
             Profile
-          </span>
+          </div>
         </div>
       </div>
     </Link>

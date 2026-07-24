@@ -9,10 +9,7 @@ import { useCallback, useMemo, useState } from "react";
 import { Footer } from "@/components/footer";
 import { ProductsNavbar } from "@/components/products/products-navbar";
 import { Button } from "@/components/ui/button";
-import type {
-  ProductSortOption,
-  ViewMode,
-} from "@/components/ui/filter-controls";
+import type { ProductSortOption } from "@/components/ui/filter-controls";
 import { resolveProductImagePath } from "@/lib/image-utils";
 import { sortProductsByNewest } from "@/lib/product-sorting";
 import type { ExtendedProduct } from "@/lib/types";
@@ -32,7 +29,6 @@ interface ProductFilterOptions {
   sortOption: ProductSortOption;
 }
 
-const STORAGE_KEY = "volvox-products-view";
 const DEFAULT_PRODUCT_SORT_OPTION: ProductSortOption = "newest";
 const PRODUCT_SORT_OPTIONS: readonly ProductSortOption[] = [
   "newest",
@@ -42,10 +38,6 @@ const PRODUCT_SORT_OPTIONS: readonly ProductSortOption[] = [
 
 function isProductSortOption(value: string | null): value is ProductSortOption {
   return PRODUCT_SORT_OPTIONS.includes(value as ProductSortOption);
-}
-
-function isViewMode(value: string | null): value is ViewMode {
-  return value === "grid" || value === "list";
 }
 
 function getInitialSelectedTech(searchParams: ProductSearchParams): string[] {
@@ -58,16 +50,6 @@ function getInitialSortOption(
 ): ProductSortOption {
   const sort = searchParams.get("sort");
   return isProductSortOption(sort) ? sort : DEFAULT_PRODUCT_SORT_OPTION;
-}
-
-function getInitialViewMode(searchParams: ProductSearchParams): ViewMode {
-  const view = searchParams.get("view");
-  if (isViewMode(view)) return view;
-
-  if (typeof window === "undefined") return "grid";
-
-  const storedViewMode = localStorage.getItem(STORAGE_KEY);
-  return isViewMode(storedViewMode) ? storedViewMode : "grid";
 }
 
 function getAvailableTechStack(products: ExtendedProduct[]): string[] {
@@ -150,9 +132,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   const [sortOption, setSortOption] = useState<ProductSortOption>(() =>
     getInitialSortOption(searchParams),
   );
-  const [viewMode, setViewMode] = useState<ViewMode>(() =>
-    getInitialViewMode(searchParams),
-  );
 
   const allTechStack = useMemo(
     () => getAvailableTechStack(products),
@@ -173,12 +152,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
 
   // Update URL params
   const updateUrl = useCallback(
-    (params: {
-      q?: string;
-      tech?: string[];
-      sort?: ProductSortOption;
-      view?: ViewMode;
-    }) => {
+    (params: { q?: string; tech?: string[]; sort?: ProductSortOption }) => {
       const newParams = new URLSearchParams(searchParams.toString());
 
       if (params.q !== undefined) {
@@ -198,11 +172,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         else newParams.delete("sort");
       }
 
-      if (params.view !== undefined) {
-        if (params.view !== "grid") newParams.set("view", params.view);
-        else newParams.delete("view");
-      }
-
       const queryString = newParams.toString();
       router.replace(queryString ? `?${queryString}` : "/products", {
         scroll: false,
@@ -212,11 +181,18 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   );
 
   // Handlers
-  // Note: FilterControls handles debouncing internally, so this is called after debounce
-  const handleSearchInput = useCallback(
-    (value: string) => {
-      setSearchQuery(value);
-      updateUrl({ q: value });
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      updateUrl({ q: query });
+    },
+    [updateUrl],
+  );
+
+  const handleSortChange = useCallback(
+    (sort: ProductSortOption) => {
+      setSortOption(sort);
+      updateUrl({ sort });
     },
     [updateUrl],
   );
@@ -239,23 +215,6 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
     updateUrl({ tech: [] });
   }, [updateUrl]);
 
-  const handleSortChange = useCallback(
-    (value: ProductSortOption) => {
-      setSortOption(value);
-      updateUrl({ sort: value });
-    },
-    [updateUrl],
-  );
-
-  const handleViewModeChange = useCallback(
-    (value: ViewMode) => {
-      setViewMode(value);
-      localStorage.setItem(STORAGE_KEY, value);
-      updateUrl({ view: value });
-    },
-    [updateUrl],
-  );
-
   const handleClearAll = useCallback(() => {
     setSearchQuery("");
     setSelectedTech([]);
@@ -275,15 +234,13 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         {/* Navbar with Search & Filters */}
         <ProductsNavbar
           searchQuery={searchQuery}
-          onSearchChange={handleSearchInput}
+          onSearchChange={handleSearchChange}
           selectedTech={selectedTech}
           allTech={allTechStack}
           onTechToggle={handleTechToggle}
           onClearTech={handleClearTech}
           sortOption={sortOption}
           onSortChange={handleSortChange}
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
           resultCount={filteredProducts.length}
         />
 
@@ -297,7 +254,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           <header className="text-center mb-12">
             <h1
               id="products-page-heading"
-              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+              className="text-5xl md:text-7xl font-editorial italic font-medium mb-4 text-balance"
             >
               Our Products
             </h1>
@@ -324,30 +281,18 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
             </div>
           )}
 
-          {/* Products Grid/List */}
+          {/* Products Grid */}
           <section aria-label="Products list">
             {filteredProducts.length > 0 ? (
-              viewMode === "grid" ? (
-                <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
-                  {filteredProducts.map((product, idx) => (
-                    <ProductCardGrid
-                      key={product.id}
-                      product={product}
-                      index={idx}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <div className="relative z-0 flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
-                  {filteredProducts.map((product, idx) => (
-                    <ProductCardList
-                      key={product.id}
-                      product={product}
-                      index={idx}
-                    />
-                  ))}
-                </div>
-              )
+              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+                {filteredProducts.map((product, idx) => (
+                  <ProductCardGrid
+                    key={product.id}
+                    product={product}
+                    index={idx}
+                  />
+                ))}
+              </div>
             ) : (
               <div className="text-center py-24 bg-muted/20 rounded-[2rem] border border-dashed border-border animate-in zoom-in-95 duration-300">
                 <p className="text-lg font-medium mb-2">No products found</p>
@@ -397,160 +342,66 @@ function ProductCardGrid({
         href={`/products/${product.slug}`}
         className="block h-full outline-none"
       >
-        <div className="h-full bg-card backdrop-blur-sm rounded-[2rem] p-4 transition-all duration-300 border border-border/40 hover:border-border/80 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col">
-          {/* Image Container */}
-          <div className="relative overflow-hidden bg-muted/50 mb-4 aspect-[4/3] w-full rounded-lg md:rounded-[2rem] group-hover:rounded-lg transition-[border-radius] duration-500">
-            <div className="w-full h-full relative overflow-hidden">
-              {imagePath ? (
-                <motion.div
-                  className="w-full h-full"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Image
-                    src={imagePath}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                    className="object-cover"
-                  />
-                </motion.div>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-secondary/5">
-                  <span className="text-6xl font-bold text-muted-foreground/10 select-none">
-                    {product.name.charAt(0)}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="px-1 flex flex-col flex-1">
-            {/* Title with Arrow */}
-            <div className="flex justify-between items-start gap-4 mb-2">
-              <div>
-                <h3 className="text-xl font-bold leading-tight text-foreground group-hover:text-primary transition-colors line-clamp-1">
-                  {product.name}
-                </h3>
-                <p className="text-xs font-medium text-muted-foreground mt-1 line-clamp-1">
-                  {product.tagline}
-                </p>
-              </div>
-              <div className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 flex-shrink-0 mt-1">
-                <ArrowUpRight weight="bold" className="w-5 h-5" />
-              </div>
-            </div>
-
-            <p className="text-muted-foreground/80 text-sm line-clamp-2 leading-relaxed mb-4 flex-1">
-              {product.description}
-            </p>
-
-            {/* Tech Stack Pills */}
-            <div className="flex flex-wrap gap-1.5 mt-auto">
-              {product.techStack.slice(0, 3).map((tech) => (
-                <span
-                  key={`${product.slug}:tech:${tech}`}
-                  className="inline-flex items-center px-2 py-0.5 rounded-lg bg-secondary text-secondary-foreground text-[10px] font-medium border border-transparent group-hover:border-secondary/20 transition-colors"
-                >
-                  {tech}
-                </span>
-              ))}
-              {product.techStack.length > 3 && (
-                <span className="text-[10px] text-muted-foreground py-0.5 px-1">
-                  +{product.techStack.length - 3}
-                </span>
-              )}
-            </div>
-          </div>
-        </div>
-      </Link>
-    </motion.div>
-  );
-}
-
-/**
- * List view card component for products.
- */
-function ProductCardList({
-  product,
-  index,
-}: {
-  product: ExtendedProduct;
-  index: number;
-}) {
-  const heroImage = product.screenshots[0];
-  const imagePath = resolveProductImagePath(heroImage, product.slug);
-
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ delay: index * 0.05 }}
-      whileHover="hover"
-      className="group"
-    >
-      <Link href={`/products/${product.slug}`} className="block outline-none">
-        <div className="bg-card backdrop-blur-sm rounded-[2rem] p-4 transition-all duration-300 border border-border/40 hover:border-border/80 shadow-sm hover:shadow-xl hover:shadow-primary/5 flex flex-col md:flex-row gap-6 items-center">
-          {/* Image Container */}
-          <div className="relative overflow-hidden bg-muted/50 w-full md:w-72 aspect-video md:aspect-[4/3] flex-shrink-0 rounded-lg md:rounded-[2rem] group-hover:rounded-lg transition-[border-radius] duration-500">
-            <div className="w-full h-full relative overflow-hidden">
-              {imagePath ? (
-                <motion.div
-                  className="w-full h-full"
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.6 }}
-                >
-                  <Image
-                    src={imagePath}
-                    alt={product.name}
-                    fill
-                    sizes="(max-width: 768px) 100vw, 300px"
-                    className="object-cover"
-                  />
-                </motion.div>
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-secondary/5">
-                  <span className="text-6xl font-bold text-muted-foreground/10 select-none">
-                    {product.name.charAt(0)}
-                  </span>
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Content */}
-          <div className="flex flex-col flex-1 w-full text-left">
-            <div className="flex justify-between items-start gap-4 mb-2">
-              <div>
-                <h3 className="text-2xl font-bold leading-tight text-foreground group-hover:text-primary transition-colors">
-                  {product.name}
-                </h3>
-                <p className="text-sm font-medium text-muted-foreground mt-1">
-                  {product.tagline}
-                </p>
-              </div>
-              <div className="text-muted-foreground group-hover:text-primary group-hover:translate-x-1 group-hover:-translate-y-1 transition-all duration-300 flex-shrink-0 mt-1">
-                <ArrowUpRight weight="bold" className="w-6 h-6" />
-              </div>
-            </div>
-
-            <p className="text-muted-foreground/80 text-base line-clamp-2 leading-relaxed mb-6">
-              {product.description}
-            </p>
-
-            {/* Tech Stack & Features */}
-            <div className="flex flex-wrap items-center justify-between gap-4 mt-auto">
-              <div className="flex flex-wrap gap-2">
-                {product.techStack.map((tech) => (
-                  <span
-                    key={`${product.slug}:tech:${tech}`}
-                    className="inline-flex items-center px-2.5 py-1 rounded-lg bg-secondary text-secondary-foreground text-xs font-medium"
+        {/* Double-Bezel Card Container */}
+        <div className="h-full rounded-[2rem] bg-card-deep/20 border border-border/30 p-1.5 transition-all duration-300 hover:border-border/60 hover:shadow-2xl hover:shadow-primary/5">
+          <div className="w-full h-full rounded-[calc(2rem-0.375rem)] bg-card border border-border/10 p-3 flex flex-col shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
+            {/* Image Container with Overlaid Pills */}
+            <div className="relative overflow-hidden bg-muted/30 mb-3 rounded-2xl aspect-[16/10] w-full shrink-0">
+              <div className="w-full h-full relative overflow-hidden">
+                {imagePath ? (
+                  <motion.div
+                    className="w-full h-full relative"
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
                   >
-                    {tech}
-                  </span>
-                ))}
+                    <Image
+                      src={imagePath}
+                      alt={product.name}
+                      fill
+                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      className="object-cover"
+                    />
+                  </motion.div>
+                ) : (
+                  <div className="w-full h-full flex items-center justify-center bg-secondary/5">
+                    <span className="text-6xl font-editorial font-medium text-muted-foreground/10 select-none">
+                      {product.name.charAt(0)}
+                    </span>
+                  </div>
+                )}
               </div>
+
+              {/* Bottom-left: Product Type Pill */}
+              <div className="absolute bottom-2.5 left-2.5 z-10">
+                <div className="rounded-full bg-background/90 backdrop-blur-md border border-border/40 px-2.5 py-1 text-[9px] font-mono font-bold uppercase tracking-wider text-foreground shadow-sm">
+                  {product.type || "Software"}
+                </div>
+              </div>
+            </div>
+
+            {/* Content Area */}
+            <div className="flex flex-col flex-1 min-w-0 px-1 py-1">
+              {/* Single line title with Arrow */}
+              <div className="flex justify-between items-center gap-2 mb-1">
+                <h3 className="text-base font-bold tracking-tight text-foreground group-hover:text-primary transition-colors truncate">
+                  {product.name}
+                </h3>
+                <div className="text-muted-foreground opacity-0 group-hover:opacity-100 group-hover:text-primary group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all duration-300 flex-shrink-0">
+                  <ArrowUpRight className="w-3.5 h-3.5" strokeWidth={2.5} />
+                </div>
+              </div>
+
+              {/* Subtitle / Tagline */}
+              {product.tagline && (
+                <p className="text-[10px] font-mono font-bold uppercase tracking-wider text-primary/70 mb-1.5 truncate">
+                  {product.tagline}
+                </p>
+              )}
+
+              {/* Description */}
+              <p className="text-muted-foreground text-xs leading-relaxed text-pretty line-clamp-2">
+                {product.description}
+              </p>
             </div>
           </div>
         </div>

@@ -80,7 +80,7 @@ export function ChatWelcome({ onPick, onPickPersona }: ChatWelcomeProps) {
             <HandWaving className="h-5 w-5" weight="fill" />
           </div>
           <div className="space-y-2">
-            <h3 className="max-w-[14ch] font-[family-name:var(--font-jetbrains-mono)] text-2xl font-extrabold leading-tight tracking-tight text-foreground">
+            <h3 className="max-w-[14ch] font-mono text-2xl font-extrabold leading-tight tracking-tight text-foreground">
               Start with your angle.
             </h3>
             <p className="max-w-[42ch] text-sm leading-relaxed text-muted-foreground">

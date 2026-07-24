@@ -49,7 +49,7 @@ export function TeamListClient({ teamMembers }: TeamListClientProps) {
           <header className="text-center mb-12">
             <h1
               id="team-page-heading"
-              className="text-4xl md:text-6xl font-[family-name:var(--font-jetbrains-mono)] font-bold mb-4"
+              className="text-5xl md:text-7xl font-editorial italic font-medium mb-4 text-balance"
             >
               Our Team
             </h1>

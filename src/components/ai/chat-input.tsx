@@ -66,7 +66,7 @@ export function ChatInput({ floating }: ChatInputProps) {
           disabled={isDisabled}
           onKeyDown={handleKeyDown}
           className={cn(
-            "no-ring min-h-[28px] flex-1 resize-none bg-transparent px-2 py-1.5 text-sm leading-relaxed text-foreground",
+            "no-ring min-h-[28px] flex-1 resize-none bg-transparent px-2 py-1.5 text-base sm:text-sm leading-relaxed text-foreground",
             "placeholder:text-muted-foreground/60",
             "disabled:cursor-not-allowed disabled:opacity-50",
           )}
