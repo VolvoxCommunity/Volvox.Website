@@ -179,11 +179,7 @@ export function HeroSection({ onNavigate, reviews = [] }: HeroSectionProps) {
           onMouseLeave={() => setIsPaused(false)}
         >
           {/* Avatar Row with negative spacing */}
-          <div
-            className="relative flex items-center justify-center -space-x-2.5 sm:-space-x-3"
-            role="tablist"
-            aria-label="Community reviews"
-          >
+          <div className="relative flex items-center justify-center -space-x-2.5 sm:-space-x-3">
             {reviews.map((review, idx) => {
               const isActive = idx === activeIndex;
               const hasError = failedImages[review.id];
@@ -248,8 +244,7 @@ export function HeroSection({ onNavigate, reviews = [] }: HeroSectionProps) {
 
                   <motion.button
                     type="button"
-                    role="tab"
-                    aria-selected={isActive}
+                    aria-pressed={isActive}
                     aria-label={`View review by ${review.name}`}
                     onClick={() => setActiveIndex(idx)}
                     animate={{

@@ -48,6 +48,9 @@ export function TeamFluidCanvas(): React.JSX.Element {
 
     const handleMotionChange = (e: MediaQueryListEvent) => {
       isReducedMotion = e.matches;
+      if (!isReducedMotion) {
+        animFrameId = requestAnimationFrame(render);
+      }
     };
     reducedMotionQuery.addEventListener("change", handleMotionChange);
 

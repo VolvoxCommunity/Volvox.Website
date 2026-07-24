@@ -181,6 +181,22 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
   );
 
   // Handlers
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      updateUrl({ q: query });
+    },
+    [updateUrl],
+  );
+
+  const handleSortChange = useCallback(
+    (sort: ProductSortOption) => {
+      setSortOption(sort);
+      updateUrl({ sort });
+    },
+    [updateUrl],
+  );
+
   const handleTechToggle = useCallback(
     (tech: string) => {
       setSelectedTech((prev) => {
@@ -218,13 +234,13 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
         {/* Navbar with Search & Filters */}
         <ProductsNavbar
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          onSearchChange={handleSearchChange}
           selectedTech={selectedTech}
           allTech={allTechStack}
           onTechToggle={handleTechToggle}
           onClearTech={handleClearTech}
           sortOption={sortOption}
-          onSortChange={setSortOption}
+          onSortChange={handleSortChange}
           resultCount={filteredProducts.length}
         />
 

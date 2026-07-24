@@ -5,6 +5,7 @@ import { ArrowRight } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -163,13 +164,15 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
                     <motion.span
                       layoutId={`img-${active.id}`}
                       transition={MORPH_SPRING}
-                      className="block h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl bg-card-deep shadow-md"
+                      className="block h-16 w-16 sm:h-20 sm:w-20 shrink-0 overflow-hidden rounded-2xl bg-card-deep shadow-md relative"
                     >
-                      <img
+                      <Image
                         src={active.avatar}
                         alt={active.name}
+                        fill
+                        sizes="(max-width: 640px) 64px, 80px"
                         draggable={false}
-                        className="h-full w-full object-cover"
+                        className="object-cover"
                       />
                     </motion.span>
 
@@ -236,13 +239,15 @@ function ProfileCard({ member, onOpen }: ProfileCardProps) {
       <motion.span
         layoutId={`img-${member.id}`}
         transition={MORPH_SPRING}
-        className="block h-20 w-20 overflow-hidden rounded-xl bg-card-deep shadow-[0_4px_16px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.3)] sm:h-24 sm:w-24"
+        className="block h-20 w-20 overflow-hidden rounded-xl bg-card-deep shadow-[0_4px_16px_-6px_rgba(0,0,0,0.25)] transition-shadow duration-300 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:shadow-[0_8px_24px_-8px_rgba(0,0,0,0.3)] sm:h-24 sm:w-24 relative"
       >
-        <img
+        <Image
           src={member.avatar}
           alt={member.name}
+          fill
+          sizes="(max-width: 640px) 80px, 96px"
           draggable={false}
-          className="h-full w-full object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
+          className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
         />
       </motion.span>
       {/* Title only (role); one line, full value reachable in the dialog. */}

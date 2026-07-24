@@ -112,6 +112,22 @@ export function BlogListClient({ posts }: BlogListClientProps) {
   );
 
   // Handlers
+  const handleSearchChange = useCallback(
+    (query: string) => {
+      setSearchQuery(query);
+      updateUrl({ q: query });
+    },
+    [updateUrl],
+  );
+
+  const handleSortChange = useCallback(
+    (sort: BlogSortOption) => {
+      setSortOption(sort);
+      updateUrl({ sort });
+    },
+    [updateUrl],
+  );
+
   const handleTagToggle = useCallback(
     (tag: string) => {
       setSelectedTags((prev) => {
@@ -146,13 +162,13 @@ export function BlogListClient({ posts }: BlogListClientProps) {
       <div className="relative z-10 flex-1">
         <BlogNavbar
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          onSearchChange={handleSearchChange}
           selectedTags={selectedTags}
           allTags={allTags}
           onTagToggle={handleTagToggle}
           onClearTags={handleClearTags}
           sortOption={sortOption}
-          onSortChange={setSortOption}
+          onSortChange={handleSortChange}
           resultCount={filteredPosts.length}
         />
 
