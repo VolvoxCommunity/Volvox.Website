@@ -248,13 +248,13 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
             </MagneticButton>
             <MagneticButton>
               <Button
+                asChild
                 variant="default"
                 size="default"
-                onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
                 className="text-xs sm:text-sm px-4 sm:px-5"
                 data-testid="hero-mail-us-cta"
               >
-                Mail Us
+                <a href="mailto:bill@volvox.dev">Mail Us</a>
               </Button>
             </MagneticButton>
           </motion.div>

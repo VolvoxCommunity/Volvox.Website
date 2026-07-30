@@ -58,9 +58,6 @@ export function HowWeWork(): JSX.Element {
     router.push("/bookameeting");
   };
 
-  const handleMailUs = () => {
-    window.open("mailto:bill@volvox.dev", "_self");
-  };
   const pinRef = useRef<HTMLDivElement>(null);
   // staticMode: small screens or reduced-motion users get a plain, non-pinned,
   // fully-visible vertical layout instead of the scroll-scrubbed experience.
@@ -697,13 +694,13 @@ export function HowWeWork(): JSX.Element {
               </MagneticButton>
               <MagneticButton>
                 <Button
+                  asChild
                   variant="default"
                   size="default"
-                  onClick={handleMailUs}
                   className="text-xs sm:text-base px-4 sm:px-6"
                   data-testid="hww-mail-us-cta"
                 >
-                  Mail Us
+                  <a href="mailto:bill@volvox.dev">Mail Us</a>
                 </Button>
               </MagneticButton>
             </div>
