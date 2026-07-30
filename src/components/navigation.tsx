@@ -259,7 +259,7 @@ export function Navigation(props: NavigationProps) {
               size="icon"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              data-testid="nav-theme-toggle"
+              data-testid="theme-toggle"
               className="h-8 w-8"
             >
               {resolvedTheme === "light" ? (
@@ -290,7 +290,7 @@ export function Navigation(props: NavigationProps) {
               className="lg:hidden h-8 w-8"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              data-testid="nav-mobile-open"
+              data-testid="mobile-menu-button"
             >
               <List className="h-5 w-5" />
             </Button>

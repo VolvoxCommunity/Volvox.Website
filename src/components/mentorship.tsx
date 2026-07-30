@@ -9,6 +9,20 @@ import { Button } from "@/components/ui/button";
 import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+const mentorshipContainerVariants = {
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const mentorshipCardVariants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: "easeOut" as const },
+  },
+};
+
 // Row sizes form an upside-down pyramid: 3 -> 2 -> 1 (== 6 members).
 const ROW_LAYOUT = [3, 2, 1];
 
@@ -71,28 +85,19 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}
-            variants={{
-              visible: { transition: { staggerChildren: 0.08 } },
-            }}
+            variants={mentorshipContainerVariants}
             className="mentorship-pyramid flex flex-col items-center gap-6 md:gap-8"
           >
             {rows.map((row, ri) => (
-              <div
+              <motion.div
                 key={ri}
+                variants={{}} // row wrapper so stagger propagates to children
                 className="flex flex-wrap items-start justify-center gap-4 sm:gap-5 md:gap-7"
               >
                 {row.map((member) => (
                   <motion.div
                     key={member.id}
-                    variants={{
-                      hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
-                      visible: {
-                        opacity: 1,
-                        y: 0,
-                        filter: "blur(0px)",
-                        transition: { duration: 0.7, ease: "easeOut" },
-                      },
-                    }}
+                    variants={mentorshipCardVariants}
                     className="mentorship-card"
                   >
                     <ProfileCard
@@ -101,7 +106,7 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
                     />
                   </motion.div>
                 ))}
-              </div>
+              </motion.div>
             ))}
           </motion.div>
         </div>

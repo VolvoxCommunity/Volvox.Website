@@ -19,6 +19,25 @@ import {
 import type { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
+const blogContainerVariants = {
+  visible: { transition: { staggerChildren: 0.1 } },
+};
+
+const blogCardVariants = {
+  hidden: { opacity: 0, y: 50, filter: "blur(10px)", scale: 0.95 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    scale: 1,
+    transition: {
+      type: "spring" as const,
+      stiffness: 100,
+      damping: 20,
+    },
+  },
+};
+
 interface BlogProps {
   posts: BlogPost[];
   searchQuery?: string;
@@ -201,9 +220,7 @@ export function Blog({
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: "-50px" }}
-          variants={{
-            visible: { transition: { staggerChildren: 0.1 } },
-          }}
+          variants={blogContainerVariants}
           className={cn(
             "grid gap-6",
             viewMode === "grid"
@@ -214,25 +231,7 @@ export function Blog({
           {filteredPosts.map((post, index) => (
             <motion.div
               key={post.id}
-              variants={{
-                hidden: {
-                  opacity: 0,
-                  y: 50,
-                  filter: "blur(10px)",
-                  scale: 0.95,
-                },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  filter: "blur(0px)",
-                  scale: 1,
-                  transition: {
-                    type: "spring",
-                    stiffness: 100,
-                    damping: 20,
-                  },
-                },
-              }}
+              variants={blogCardVariants}
               className={cn(
                 !enableFilters && index === 2 && "hidden lg:block", // Hide 3rd item on mobile/tablet, show on lg+
               )}

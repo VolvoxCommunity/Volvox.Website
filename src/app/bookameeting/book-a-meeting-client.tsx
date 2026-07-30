@@ -6,14 +6,16 @@ import { Navigation } from "@/components/navigation";
 
 declare global {
   interface Window {
-    Cal?: any;
+    /* biome-ignore lint/suspicious/noExplicitAny: vendored Cal.com embed snippet */ Cal?: any;
   }
 }
 
 export function BookAMeetingClient() {
   useEffect(() => {
     // Cal.com Official Embed Loader snippet
+    /* biome-ignore lint/suspicious/noExplicitAny: vendored Cal.com embed snippet */
     ((C: any, A: string, L: string) => {
+      /* biome-ignore lint/suspicious/noExplicitAny: vendored Cal.com embed snippet */
       const p = (a: any, ar: any) => {
         a.q.push(ar);
       };
@@ -22,6 +24,7 @@ export function BookAMeetingClient() {
         C.Cal ||
         function () {
           const cal = C.Cal;
+          // biome-ignore lint/complexity/noArguments: vendored Cal.com embed snippet
           const ar = arguments;
           if (!cal.loaded) {
             cal.ns = {};
@@ -32,7 +35,9 @@ export function BookAMeetingClient() {
             cal.loaded = true;
           }
           if (ar[0] === L) {
+            // biome-ignore lint/suspicious/noExplicitAny: vendored Cal.com embed snippet
             const api: any = function () {
+              // biome-ignore lint/complexity/noArguments: vendored Cal.com embed snippet
               p(api, arguments);
             };
             const namespace = ar[1];

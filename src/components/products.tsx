@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight, ArrowUpRight } from "@phosphor-icons/react";
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence, MotionConfig, motion } from "framer-motion";
 import Image from "next/image";
 import Link from "next/link";
 import { type JSX, useMemo } from "react";
@@ -155,96 +155,106 @@ export function Products({
   if (allProducts.length === 0) return null;
 
   return (
-    <section
-      id="products"
-      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background md:min-h-screen"
-      data-testid="products-section"
-    >
-      {/* Dynamic Trance Backgrounds */}
-      <motion.div
-        animate={{
-          x: ["0%", "30%", "0%"],
-          y: ["0%", "20%", "0%"],
-        }}
-        transition={{
-          duration: 30,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        }}
-        className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
-      />
-      <motion.div
-        animate={{
-          x: ["0%", "-20%", "0%"],
-          y: ["0%", "-30%", "0%"],
-        }}
-        transition={{
-          duration: 40,
-          repeat: Number.POSITIVE_INFINITY,
-          ease: "easeInOut",
-        }}
-        className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-secondary/10 blur-[180px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
-      />
-      <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] pointer-events-none -z-10" />
+    <MotionConfig reducedMotion="user">
+      <section
+        id="products"
+        className="py-24 md:py-32 px-4 relative overflow-hidden bg-background md:min-h-screen"
+        data-testid="products-section"
+      >
+        {/* Dynamic Trance Backgrounds */}
+        <motion.div
+          whileInView="animate"
+          viewport={{ once: true }}
+          variants={{
+            animate: {
+              x: ["0%", "30%", "0%"],
+              y: ["0%", "20%", "0%"],
+            },
+          }}
+          transition={{
+            duration: 30,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+          className="absolute top-1/4 left-0 w-[500px] h-[500px] bg-primary/10 blur-[150px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
+        />
+        <motion.div
+          whileInView="animate"
+          viewport={{ once: true }}
+          variants={{
+            animate: {
+              x: ["0%", "-20%", "0%"],
+              y: ["0%", "-30%", "0%"],
+            },
+          }}
+          transition={{
+            duration: 40,
+            repeat: Number.POSITIVE_INFINITY,
+            ease: "easeInOut",
+          }}
+          className="absolute bottom-1/4 right-0 w-[600px] h-[600px] bg-secondary/10 blur-[180px] rounded-full -z-10 mix-blend-soft-light pointer-events-none"
+        />
+        <div className="absolute inset-0 bg-[url('/noise.svg')] opacity-[0.03] pointer-events-none -z-10" />
 
-      <div className="container mx-auto max-w-7xl relative z-10">
-        {/* Header */}
-        <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
-          <h2 className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
-            Our Products
-          </h2>
+        <div className="container mx-auto max-w-7xl relative z-10">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row justify-between items-start md:items-end mb-10 md:mb-16 gap-6">
+            <h2 className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
+              Our Products
+            </h2>
 
-          {!enableFilters && (
-            <Button variant="ghost" asChild className="group">
-              <Link href="/products">
-                View Products
-                <ArrowRight
-                  className="w-4 h-4 group-hover:translate-x-0.5 transition-transform ml-1"
-                  weight="bold"
-                />
-              </Link>
-            </Button>
-          )}
-        </div>
-
-        {/* Filter Controls (for product catalog page) */}
-        {enableFilters && onSearchChange && onSortChange && (
-          <div className="mb-16">
-            <FilterControls
-              variant="homepage-product"
-              searchQuery={searchQuery}
-              onSearchChange={onSearchChange}
-              sortOption={sortOption}
-              onSortChange={onSortChange}
-              searchPlaceholder="Search innovation..."
-              resultCount={filteredProducts.length}
-              totalCount={allProducts.length}
-            />
+            {!enableFilters && (
+              <Button variant="ghost" asChild className="group">
+                <Link href="/products">
+                  View Products
+                  <ArrowRight
+                    className="w-4 h-4 group-hover:translate-x-0.5 transition-transform ml-1"
+                    weight="bold"
+                  />
+                </Link>
+              </Button>
+            )}
           </div>
-        )}
 
-        {/* Products Grid */}
-        <AnimatePresence mode="wait">
-          {filteredProducts.length === 0 ? (
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              className="text-center py-32 bg-muted/10 rounded-[3rem] border border-dashed border-border/40"
-            >
-              <p className="text-muted-foreground text-xl font-medium">
-                No projects match your current exploration.
-              </p>
-            </motion.div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+          {/* Filter Controls (for product catalog page) */}
+          {enableFilters && onSearchChange && onSortChange && (
+            <div className="mb-16">
+              <FilterControls
+                variant="homepage-product"
+                searchQuery={searchQuery}
+                onSearchChange={onSearchChange}
+                sortOption={sortOption}
+                onSortChange={onSortChange}
+                searchPlaceholder="Search innovation..."
+                resultCount={filteredProducts.length}
+                totalCount={allProducts.length}
+              />
             </div>
           )}
-        </AnimatePresence>
-      </div>
-    </section>
+
+          {/* Products Grid */}
+          <AnimatePresence mode="wait">
+            {filteredProducts.length === 0 ? (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                className="text-center py-32 bg-muted/10 rounded-[3rem] border border-dashed border-border/40"
+              >
+                <p className="text-muted-foreground text-xl font-medium">
+                  No projects match your current exploration.
+                </p>
+              </motion.div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                {filteredProducts.map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
+              </div>
+            )}
+          </AnimatePresence>
+        </div>
+      </section>
+    </MotionConfig>
   );
 }

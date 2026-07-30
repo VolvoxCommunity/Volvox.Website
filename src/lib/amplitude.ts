@@ -1,25 +1,32 @@
-import { add, init, track } from "@amplitude/analytics-browser";
+import { add, init, setOptOut, track } from "@amplitude/analytics-browser";
 import { SessionReplayPlugin } from "@amplitude/plugin-session-replay-browser";
 
 const AMPLITUDE_API_KEY = "7e4898973f18d766ff22eb9be4c92058";
 
-let initialized = false;
+let amplitudeReady = false;
 
-export function initAmplitude() {
-  if (initialized || typeof window === "undefined") return;
+export function initAmplitude(): void {
+  if (typeof window === "undefined") return;
 
-  init(AMPLITUDE_API_KEY, undefined, {
-    fetchRemoteConfig: true,
-  });
-  add(new SessionReplayPlugin());
+  if (!amplitudeReady) {
+    init(AMPLITUDE_API_KEY, undefined, {
+      fetchRemoteConfig: true,
+    });
+    add(new SessionReplayPlugin());
+    amplitudeReady = true;
+  }
 
-  initialized = true;
+  setOptOut(false);
+}
+
+export function disableAmplitude(): void {
+  setOptOut(true);
 }
 
 export function trackEvent(
   eventName: string,
   properties?: Record<string, unknown>,
-) {
-  if (typeof window === "undefined" || !initialized) return;
+): void {
+  if (typeof window === "undefined") return;
   track(eventName, properties);
 }

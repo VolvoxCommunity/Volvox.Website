@@ -9,7 +9,7 @@ import {
   type CookieConsent,
   useCookieConsent,
 } from "@/components/providers/cookie-consent-provider";
-import { initAmplitude } from "@/lib/amplitude";
+import { disableAmplitude, initAmplitude } from "@/lib/amplitude";
 
 type AnalyticsConsent = Pick<
   CookieConsent,
@@ -70,11 +70,15 @@ export function ConditionalAnalytics({
     gaId,
   });
 
+  const analyticsConsented = consent.analytics;
+
   useEffect(() => {
-    if (enabledIntegrations.googleAnalytics) {
+    if (analyticsConsented) {
       initAmplitude();
+    } else {
+      disableAmplitude();
     }
-  }, [enabledIntegrations.googleAnalytics]);
+  }, [analyticsConsented]);
 
   return (
     <>

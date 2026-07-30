@@ -4,11 +4,12 @@ import { AppleLogo, Star, TwitterLogo } from "@phosphor-icons/react";
 import {
   AnimatePresence,
   motion,
+  useReducedMotion,
   useScroll,
   useTransform,
 } from "framer-motion";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { MagneticButton } from "@/components/ui/magnetic-button";
 import type { HomepageReview, ReviewSource } from "@/lib/types";
@@ -99,7 +100,6 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
     e: React.MouseEvent<HTMLButtonElement>,
     src: string,
   ) => {
-    if (!isDesktop) return;
     const rect = e.currentTarget.getBoundingClientRect();
     setSelectedImage({ src, rect });
   };
@@ -128,6 +128,30 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
     window.addEventListener("resize", checkWidth);
     return () => window.removeEventListener("resize", checkWidth);
   }, []);
+
+  const [windowSize, setWindowSize] = useState({ w: 0, h: 0 });
+
+  useEffect(() => {
+    const handle = () =>
+      setWindowSize({ w: window.innerWidth, h: window.innerHeight });
+    handle();
+    window.addEventListener("resize", handle);
+    return () => window.removeEventListener("resize", handle);
+  }, []);
+
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  const handleOverlayClose = useCallback(() => setSelectedImage(null), []);
+
+  useEffect(() => {
+    if (!selectedImage) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setSelectedImage(null);
+    };
+    document.addEventListener("keydown", onKey);
+    overlayRef.current?.focus();
+    return () => document.removeEventListener("keydown", onKey);
+  }, [selectedImage]);
 
   // Scroll-driven transforms only apply on desktop
   const yScrollTransform = useTransform(
@@ -163,234 +187,242 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
   };
 
   return (
-    <motion.section
-      aria-label="Hero"
-      data-testid="hero-section"
-      className="hero-section relative min-h-screen pt-16 md:pt-20 pb-0 md:pb-1 flex flex-col items-center justify-between overflow-hidden"
-      style={{
-        y: yScrollTransform,
-        opacity: opacityScrollTransform,
-        filter: blurScrollTransform,
-      }}
-    >
-      {/* Hero Content */}
-      <motion.div
-        className="hero-content text-center max-w-[850px] px-4 z-[2] mt-0 md:mt-4 mb-auto"
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+    <>
+      <motion.section
+        aria-label="Hero"
+        data-testid="hero-section"
+        className="hero-section relative min-h-screen pt-16 md:pt-20 pb-0 md:pb-1 flex flex-col items-center justify-between overflow-hidden"
+        style={{
+          y: yScrollTransform,
+          opacity: opacityScrollTransform,
+          filter: blurScrollTransform,
+        }}
       >
+        {/* Hero Content */}
         <motion.div
-          variants={itemVariants}
-          className="hero-badge inline-flex items-center text-primary text-[0.5rem] sm:text-[0.59375rem] font-semibold mb-3 tracking-widest uppercase"
+          className="hero-content text-center max-w-[850px] px-4 z-[2] mt-0 md:mt-4 mb-auto"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
         >
-          Building the future of software development
+          <motion.div
+            variants={itemVariants}
+            className="hero-badge inline-flex items-center text-primary text-[0.5rem] sm:text-[0.59375rem] font-semibold mb-3 tracking-widest uppercase"
+          >
+            Building the future of software development
+          </motion.div>
+
+          <motion.h1
+            variants={itemVariants}
+            className="hero-headline text-[2rem] md:text-4xl lg:text-5xl leading-[1.1] font-bold tracking-tight mb-4 text-foreground font-editorial text-balance"
+          >
+            Building products. <br />
+            <span className="text-aurora tracking-tight whitespace-nowrap italic font-medium">
+              Empowering builders.
+            </span>
+          </motion.h1>
+
+          <motion.p
+            variants={itemVariants}
+            className="hero-subheadline text-[10px] md:text-[13px] text-foreground/70 leading-relaxed mb-6 max-w-[540px] mx-auto text-pretty"
+          >
+            A software development company and open-source learning community.
+            We build exceptional products while mentoring the next generation of
+            developers.
+          </motion.p>
+
+          <motion.div
+            variants={itemVariants}
+            className="hero-cta-group flex flex-row items-center gap-3 sm:gap-4 justify-center w-full sm:w-auto"
+          >
+            <MagneticButton>
+              <Button
+                onClick={() => router.push("/bookameeting")}
+                size="default"
+                variant="accent"
+                className="text-xs sm:text-sm px-4 sm:px-5"
+                data-testid="hero-book-meeting-cta"
+              >
+                Book a Meeting
+              </Button>
+            </MagneticButton>
+            <MagneticButton>
+              <Button
+                variant="default"
+                size="default"
+                onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
+                className="text-xs sm:text-sm px-4 sm:px-5"
+                data-testid="hero-mail-us-cta"
+              >
+                Mail Us
+              </Button>
+            </MagneticButton>
+          </motion.div>
         </motion.div>
 
-        <motion.h1
-          variants={itemVariants}
-          className="hero-headline text-[2rem] md:text-4xl lg:text-5xl leading-[1.1] font-bold tracking-tight mb-4 text-foreground font-editorial text-balance"
-        >
-          Building products. <br />
-          <span className="text-aurora tracking-tight whitespace-nowrap italic font-medium">
-            Empowering builders.
-          </span>
-        </motion.h1>
-
-        <motion.p
-          variants={itemVariants}
-          className="hero-subheadline text-[10px] md:text-[13px] text-foreground/70 leading-relaxed mb-6 max-w-[540px] mx-auto text-pretty"
-        >
-          A software development company and open-source learning community. We
-          build exceptional products while mentoring the next generation of
-          developers.
-        </motion.p>
-
-        <motion.div
-          variants={itemVariants}
-          className="hero-cta-group flex flex-row items-center gap-3 sm:gap-4 justify-center w-full sm:w-auto"
-        >
-          <MagneticButton>
-            <Button
-              onClick={() => router.push("/bookameeting")}
-              size="default"
-              variant="accent"
-              className="text-xs sm:text-sm px-4 sm:px-5"
-              data-testid="hero-book-meeting-cta"
-            >
-              Book a Meeting
-            </Button>
-          </MagneticButton>
-          <MagneticButton>
-            <Button
-              variant="default"
-              size="default"
-              onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
-              className="text-xs sm:text-sm px-4 sm:px-5"
-              data-testid="hero-mail-us-cta"
-            >
-              Mail Us
-            </Button>
-          </MagneticButton>
-        </motion.div>
-      </motion.div>
-
-      {/* Product Showcase Arc Gallery (Desktop) */}
-      <motion.div
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        className="hero-gallery z-[2] hidden md:flex items-center justify-center w-full -mt-16"
-      >
-        <HeroGallery onImageClick={handleImageClick} />
-      </motion.div>
-
-      {/* Product Showcase Marquee (Mobile) */}
-      <motion.div
-        variants={itemVariants}
-        initial="hidden"
-        animate="visible"
-        className="z-[2] flex md:hidden w-full mt-4 mb-auto"
-      >
-        <MobileGalleryMarquee onImageClick={handleImageClick} />
-      </motion.div>
-
-      {/* Reviews Avatar Bar & Tooltip - hidden on mobile */}
-      {reviews.length > 0 && (
+        {/* Product Showcase Arc Gallery (Desktop) */}
         <motion.div
           variants={itemVariants}
           initial="hidden"
           animate="visible"
-          className="hero-reviews-widget z-[2] w-full max-w-xl px-4 mt-auto pt-6 pb-0"
-          onMouseEnter={() => setIsPaused(true)}
-          onMouseLeave={() => setIsPaused(false)}
+          className="hero-gallery z-[2] hidden md:flex items-center justify-center w-full -mt-16"
         >
-          <div className="relative flex items-center justify-center -space-x-2">
-            {reviews.map((review, idx) => {
-              const isActive = idx === activeIndex;
-              const hasError = failedImages[review.id];
+          <HeroGallery onImageClick={handleImageClick} />
+        </motion.div>
 
-              return (
-                <div key={review.id} className="relative">
-                  {isActive && (
-                    <motion.div
-                      layoutId="hero-review-tooltip"
+        {/* Product Showcase Marquee (Mobile) */}
+        <motion.div
+          variants={itemVariants}
+          initial="hidden"
+          animate="visible"
+          className="z-[2] flex md:hidden w-full mt-4 mb-auto"
+        >
+          <MobileGalleryMarquee onImageClick={handleImageClick} />
+        </motion.div>
+
+        {/* Reviews Avatar Bar & Tooltip - hidden on mobile */}
+        {reviews.length > 0 && (
+          <motion.div
+            variants={itemVariants}
+            initial="hidden"
+            animate="visible"
+            className="hero-reviews-widget z-[2] w-full max-w-xl px-4 mt-auto pt-6 pb-0"
+            onMouseEnter={() => setIsPaused(true)}
+            onMouseLeave={() => setIsPaused(false)}
+          >
+            <div className="relative flex items-center justify-center -space-x-2">
+              {reviews.map((review, idx) => {
+                const isActive = idx === activeIndex;
+                const hasError = failedImages[review.id];
+
+                return (
+                  <div key={review.id} className="relative">
+                    {isActive && (
+                      <motion.div
+                        layoutId="hero-review-tooltip"
+                        transition={{
+                          type: "spring",
+                          stiffness: 380,
+                          damping: 28,
+                        }}
+                        className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-[260px] sm:w-[300px] bg-card shadow-2xl rounded-2xl p-3 text-left pointer-events-auto z-30"
+                      >
+                        <AnimatePresence mode="wait">
+                          <motion.div
+                            key={review.id}
+                            initial={{ opacity: 0, y: 4, filter: "blur(2px)" }}
+                            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+                            exit={{ opacity: 0, y: -4, filter: "blur(2px)" }}
+                            transition={{ duration: 0.15, ease: "easeOut" }}
+                          >
+                            <div className="flex items-center justify-between mb-1.5 gap-2">
+                              <div className="flex items-center gap-1.5 min-w-0">
+                                <span className="text-[10px] sm:text-xs font-bold truncate text-foreground">
+                                  {review.name}
+                                </span>
+                                <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
+                                  · {review.role}
+                                </span>
+                              </div>
+                              <div className="flex items-center gap-0.5 shrink-0">
+                                {Array.from({ length: 5 }).map((_, i) => (
+                                  <Star
+                                    key={i}
+                                    weight="fill"
+                                    className={cn(
+                                      "h-2.5 w-2.5 sm:h-3 sm:w-3",
+                                      i < review.rating
+                                        ? "text-accent"
+                                        : "text-muted-foreground/30",
+                                    )}
+                                  />
+                                ))}
+                              </div>
+                            </div>
+                            <p className="text-[10px] sm:text-xs text-foreground/90 font-medium leading-relaxed line-clamp-2 italic">
+                              &ldquo;{review.quote}&rdquo;
+                            </p>
+                          </motion.div>
+                        </AnimatePresence>
+                        <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-card rotate-45" />
+                      </motion.div>
+                    )}
+
+                    <motion.button
+                      type="button"
+                      aria-pressed={isActive}
+                      aria-label={`View review by ${review.name}`}
+                      onClick={() => setActiveIndex(idx)}
+                      animate={{
+                        y: isActive ? -8 : 0,
+                        scale: isActive ? 1.1 : 1,
+                      }}
                       transition={{
                         type: "spring",
-                        stiffness: 380,
-                        damping: 28,
+                        stiffness: 400,
+                        damping: 25,
                       }}
-                      className="absolute bottom-full mb-4 left-1/2 -translate-x-1/2 w-[260px] sm:w-[300px] bg-card shadow-2xl rounded-2xl p-3 text-left pointer-events-auto z-30"
+                      className={cn(
+                        "relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-[0.96]",
+                        isActive ? "z-20 shadow-lg" : "z-10",
+                      )}
                     >
-                      <AnimatePresence mode="wait">
-                        <motion.div
-                          key={review.id}
-                          initial={{ opacity: 0, y: 4, filter: "blur(2px)" }}
-                          animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-                          exit={{ opacity: 0, y: -4, filter: "blur(2px)" }}
-                          transition={{ duration: 0.15, ease: "easeOut" }}
+                      {review.profilePicUrl && !hasError ? (
+                        <img
+                          src={review.profilePicUrl}
+                          alt={review.name}
+                          onError={() => handleImageError(review.id)}
+                          className={cn(
+                            "h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover object-top ring-2 transition-all duration-200",
+                            isActive
+                              ? "ring-primary"
+                              : "ring-background hover:ring-primary/50",
+                          )}
+                        />
+                      ) : (
+                        <div
+                          className={cn(
+                            "h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-muted text-foreground font-bold text-[10px] flex items-center justify-center ring-2 transition-all duration-200",
+                            isActive
+                              ? "ring-primary"
+                              : "ring-background hover:ring-primary/50",
+                          )}
                         >
-                          <div className="flex items-center justify-between mb-1.5 gap-2">
-                            <div className="flex items-center gap-1.5 min-w-0">
-                              <span className="text-[10px] sm:text-xs font-bold truncate text-foreground">
-                                {review.name}
-                              </span>
-                              <span className="text-[9px] sm:text-[10px] text-muted-foreground truncate">
-                                · {review.role}
-                              </span>
-                            </div>
-                            <div className="flex items-center gap-0.5 shrink-0">
-                              {Array.from({ length: 5 }).map((_, i) => (
-                                <Star
-                                  key={i}
-                                  weight="fill"
-                                  className={cn(
-                                    "h-2.5 w-2.5 sm:h-3 sm:w-3",
-                                    i < review.rating
-                                      ? "text-accent"
-                                      : "text-muted-foreground/30",
-                                  )}
-                                />
-                              ))}
-                            </div>
-                          </div>
-                          <p className="text-[10px] sm:text-xs text-foreground/90 font-medium leading-relaxed line-clamp-2 italic">
-                            &ldquo;{review.quote}&rdquo;
-                          </p>
-                        </motion.div>
-                      </AnimatePresence>
-                      <div className="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-card rotate-45" />
-                    </motion.div>
-                  )}
+                          {review.source ? (
+                            <SourceIcon
+                              source={review.source}
+                              className="h-3 w-3"
+                            />
+                          ) : (
+                            getInitials(review.name)
+                          )}
+                        </div>
+                      )}
+                    </motion.button>
+                  </div>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </motion.section>
 
-                  <motion.button
-                    type="button"
-                    aria-pressed={isActive}
-                    aria-label={`View review by ${review.name}`}
-                    onClick={() => setActiveIndex(idx)}
-                    animate={{
-                      y: isActive ? -8 : 0,
-                      scale: isActive ? 1.1 : 1,
-                    }}
-                    transition={{ type: "spring", stiffness: 400, damping: 25 }}
-                    className={cn(
-                      "relative rounded-full focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 active:scale-[0.96]",
-                      isActive ? "z-20 shadow-lg" : "z-10",
-                    )}
-                  >
-                    {review.profilePicUrl && !hasError ? (
-                      <img
-                        src={review.profilePicUrl}
-                        alt={review.name}
-                        onError={() => handleImageError(review.id)}
-                        className={cn(
-                          "h-8 w-8 sm:h-9 sm:w-9 rounded-full object-cover object-top ring-2 transition-all duration-200",
-                          isActive
-                            ? "ring-primary"
-                            : "ring-background hover:ring-primary/50",
-                        )}
-                      />
-                    ) : (
-                      <div
-                        className={cn(
-                          "h-8 w-8 sm:h-9 sm:w-9 rounded-full bg-muted text-foreground font-bold text-[10px] flex items-center justify-center ring-2 transition-all duration-200",
-                          isActive
-                            ? "ring-primary"
-                            : "ring-background hover:ring-primary/50",
-                        )}
-                      >
-                        {review.source ? (
-                          <SourceIcon
-                            source={review.source}
-                            className="h-3 w-3"
-                          />
-                        ) : (
-                          getInitials(review.name)
-                        )}
-                      </div>
-                    )}
-                  </motion.button>
-                </div>
-              );
-            })}
-          </div>
-        </motion.div>
-      )}
-
-      {/* Image Fly-out Overlay */}
+      {/* Image Fly-out Overlay — outside section to avoid transform clipping */}
       <AnimatePresence>
         {selectedImage && (
           <motion.div
             key="image-overlay"
+            ref={overlayRef}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Enlarged product showcase"
+            tabIndex={-1}
             className="fixed inset-0 z-[200] flex items-center justify-center cursor-zoom-out"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             transition={{ duration: 0.2 }}
-            onClick={() => setSelectedImage(null)}
-            onKeyDown={(e) => {
-              if (e.key === "Escape") setSelectedImage(null);
-            }}
+            onClick={handleOverlayClose}
           >
             <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" />
             <motion.img
@@ -407,15 +439,15 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
               initial={{ scale: 1, x: 0, y: 0, borderRadius: 18 }}
               animate={{
                 scale: Math.max(
-                  (window.innerWidth * 0.85) / selectedImage.rect.width,
-                  (window.innerHeight * 0.85) / selectedImage.rect.height,
+                  (windowSize.w * 0.85) / selectedImage.rect.width,
+                  (windowSize.h * 0.85) / selectedImage.rect.height,
                 ),
                 x:
-                  window.innerWidth / 2 -
+                  windowSize.w / 2 -
                   selectedImage.rect.left -
                   selectedImage.rect.width / 2,
                 y:
-                  window.innerHeight / 2 -
+                  windowSize.h / 2 -
                   selectedImage.rect.top -
                   selectedImage.rect.height / 2,
                 borderRadius: 12,
@@ -426,7 +458,7 @@ export function HeroSection({ reviews = [] }: HeroSectionProps) {
           </motion.div>
         )}
       </AnimatePresence>
-    </motion.section>
+    </>
   );
 }
 
@@ -476,6 +508,7 @@ function HeroGallery({
 }: {
   onImageClick: (e: React.MouseEvent<HTMLButtonElement>, src: string) => void;
 }) {
+  const prefersReducedMotion = useReducedMotion();
   const [hovered, setHovered] = useState<number | null>(null);
   const s0 = GALLERY_SLOTS[0];
   const s4 = GALLERY_SLOTS[4];
@@ -489,48 +522,87 @@ function HeroGallery({
   return (
     <div className="relative w-full" style={{ height: 320 }}>
       {/* Lead card (index 0) — drops in, travels right, sweeps left */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{
-          x: [0, 0, s4.x, s0.x],
-          y: [160, 0, s4.y, s0.y],
-          rotate: [0, 0, s4.rotate, s0.rotate],
-          scale: [0.3, 1, s4.scale, s0.scale],
-          opacity: [0, 1, 1, 1],
-        }}
-        transition={{
-          duration: TOTAL_DUR,
-          delay: INTRO_DELAY,
-          times: [
-            0,
-            INTRO_DUR / TOTAL_DUR,
-            (INTRO_DUR + TRAVEL_DUR) / TOTAL_DUR,
-            1,
-          ],
-          ease: SMOOTH,
-        }}
-        style={{
-          position: "absolute",
-          top: "50%",
-          left: "50%",
-          translateX: "-50%",
-          translateY: "-50%",
-        }}
-        onMouseEnter={() => setHovered(0)}
-        onMouseLeave={() => setHovered(null)}
-      >
-        <GalleryCard
-          src={PRODUCT_GALLERY[0]}
-          z={s0.z}
-          hovered={hovered === 0}
-          onClick={(e) => onImageClick(e, PRODUCT_GALLERY[0])}
-        />
-      </motion.div>
+      {prefersReducedMotion ? (
+        <div
+          className="absolute"
+          style={{
+            top: `calc(50% + ${s0.y}px)`,
+            left: `calc(50% + ${s0.x}px)`,
+            transform: "translate(-50%, -50%)",
+          }}
+        >
+          <GalleryCard
+            src={PRODUCT_GALLERY[0]}
+            z={s0.z}
+            hovered={false}
+            onClick={(e) => onImageClick(e, PRODUCT_GALLERY[0])}
+          />
+        </div>
+      ) : (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{
+            x: [0, 0, s4.x, s0.x],
+            y: [160, 0, s4.y, s0.y],
+            rotate: [0, 0, s4.rotate, s0.rotate],
+            scale: [0.3, 1, s4.scale, s0.scale],
+            opacity: [0, 1, 1, 1],
+          }}
+          transition={{
+            duration: TOTAL_DUR,
+            delay: INTRO_DELAY,
+            times: [
+              0,
+              INTRO_DUR / TOTAL_DUR,
+              (INTRO_DUR + TRAVEL_DUR) / TOTAL_DUR,
+              1,
+            ],
+            ease: SMOOTH,
+          }}
+          style={{
+            position: "absolute",
+            top: "50%",
+            left: "50%",
+            translateX: "-50%",
+            translateY: "-50%",
+          }}
+          onMouseEnter={() => setHovered(0)}
+          onMouseLeave={() => setHovered(null)}
+        >
+          <GalleryCard
+            src={PRODUCT_GALLERY[0]}
+            z={s0.z}
+            hovered={hovered === 0}
+            onClick={(e) => onImageClick(e, PRODUCT_GALLERY[0])}
+          />
+        </motion.div>
+      )}
 
       {/* Cards 1-4 — fade in at their arc positions during the sweep */}
       {GALLERY_SLOTS.slice(1).map((slot, idx) => {
         const i = idx + 1;
-        return (
+        return prefersReducedMotion ? (
+          <div
+            key={i}
+            role="presentation"
+            className="absolute"
+            style={{
+              top: `calc(50% + ${slot.y}px)`,
+              left: `calc(50% + ${slot.x}px)`,
+              transform: `translate(-50%, -50%) rotate(${slot.rotate}deg) scale(${slot.scale})`,
+              opacity: 1,
+            }}
+            onMouseEnter={() => setHovered(i)}
+            onMouseLeave={() => setHovered(null)}
+          >
+            <GalleryCard
+              src={PRODUCT_GALLERY[i]}
+              z={slot.z}
+              hovered={hovered === i}
+              onClick={(e) => onImageClick(e, PRODUCT_GALLERY[i])}
+            />
+          </div>
+        ) : (
           <motion.div
             key={i}
             initial={{ opacity: 0 }}
@@ -580,18 +652,26 @@ function MobileGalleryMarquee({
 }: {
   onImageClick: (e: React.MouseEvent<HTMLButtonElement>, src: string) => void;
 }) {
+  const prefersReducedMotion = useReducedMotion();
+  const galleryItems = prefersReducedMotion
+    ? PRODUCT_GALLERY
+    : [...PRODUCT_GALLERY, ...PRODUCT_GALLERY];
   return (
     <div className="w-full overflow-hidden flex items-center relative py-2">
       <motion.div
         className="flex gap-3 px-3 w-max"
-        animate={{ x: ["0%", "-50%"] }}
-        transition={{
-          repeat: Infinity,
-          ease: "linear",
-          duration: 25,
-        }}
+        animate={prefersReducedMotion ? undefined : { x: ["0%", "-50%"] }}
+        transition={
+          prefersReducedMotion
+            ? undefined
+            : {
+                repeat: Infinity,
+                ease: "linear",
+                duration: 25,
+              }
+        }
       >
-        {[...PRODUCT_GALLERY, ...PRODUCT_GALLERY].map((src, idx) => (
+        {galleryItems.map((src, idx) => (
           <button
             key={idx}
             type="button"

@@ -52,6 +52,15 @@ const steps = [
 export function HowWeWork(): JSX.Element {
   const router = useRouter();
   const containerRef = useRef<HTMLElement>(null);
+
+  const handleBookMeeting = () => {
+    trackMetaPixelEvent("Lead");
+    router.push("/bookameeting");
+  };
+
+  const handleMailUs = () => {
+    window.open("mailto:bill@volvox.dev", "_self");
+  };
   const pinRef = useRef<HTMLDivElement>(null);
   // staticMode: small screens or reduced-motion users get a plain, non-pinned,
   // fully-visible vertical layout instead of the scroll-scrubbed experience.
@@ -677,10 +686,7 @@ export function HowWeWork(): JSX.Element {
             <div className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full sm:w-auto pointer-events-auto">
               <MagneticButton>
                 <Button
-                  onClick={() => {
-                    trackMetaPixelEvent("Lead");
-                    router.push("/bookameeting");
-                  }}
+                  onClick={handleBookMeeting}
                   size="default"
                   variant="accent"
                   className="text-xs sm:text-base px-4 sm:px-6"
@@ -693,7 +699,7 @@ export function HowWeWork(): JSX.Element {
                 <Button
                   variant="default"
                   size="default"
-                  onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
+                  onClick={handleMailUs}
                   className="text-xs sm:text-base px-4 sm:px-6"
                   data-testid="hww-mail-us-cta"
                 >
@@ -874,13 +880,11 @@ export function HowWeWork(): JSX.Element {
           <div className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full">
             <MagneticButton>
               <Button
-                onClick={() => {
-                  trackMetaPixelEvent("Lead");
-                  router.push("/bookameeting");
-                }}
+                onClick={handleBookMeeting}
                 size="default"
                 variant="accent"
                 className="text-xs sm:text-base px-4 sm:px-6"
+                data-testid="hww-book-meeting-cta"
               >
                 Book a Meeting
               </Button>
@@ -889,8 +893,9 @@ export function HowWeWork(): JSX.Element {
               <Button
                 variant="default"
                 size="default"
-                onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
+                onClick={handleMailUs}
                 className="text-xs sm:text-base px-4 sm:px-6"
+                data-testid="hww-mail-us-cta"
               >
                 Mail Us
               </Button>

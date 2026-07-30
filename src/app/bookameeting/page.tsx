@@ -42,7 +42,7 @@ export default function BookAMeetingPage() {
       <Script
         id="bookameeting-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
+        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(jsonLd),
         }}
