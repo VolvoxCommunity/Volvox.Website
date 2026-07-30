@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Playfair_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import "highlight.js/styles/github-dark.css";
 import { VolvoxAssistant } from "@/components/ai/volvox-assistant";
@@ -97,8 +98,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/logo.png" />
-        <script
+        <Script
+          id="organization-schema"
           type="application/ld+json"
+          strategy="beforeInteractive"
           // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering.
           dangerouslySetInnerHTML={{
             __html: safeJsonLdSerialize(generateOrganizationSchema()),

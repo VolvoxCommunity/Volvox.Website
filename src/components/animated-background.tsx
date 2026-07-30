@@ -47,10 +47,11 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     let themeObserver: MutationObserver | null = null;
 
     // Configuration
+    const isDesktop = window.innerWidth >= 768;
     const config = {
       maxParticles: 150,
-      spawnWidth: 800,
-      spawnHeight: 400,
+      spawnWidth: isDesktop ? 1200 : 800,
+      spawnHeight: isDesktop ? 600 : 400,
       size: 1.2,
       colorA: "rgb(50, 100, 255)",
       colorB: "rgb(255, 255, 255)",

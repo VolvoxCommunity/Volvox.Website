@@ -4,10 +4,12 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { type JSX, useEffect, useRef, useState } from "react";
 import { CommunicateCanvas } from "@/components/communicate-canvas";
 import { TeamFluidCanvas } from "@/components/team-fluid-canvas";
 import { Button } from "@/components/ui/button";
+import { MagneticButton } from "@/components/ui/magnetic-button";
 import { StackCanvas } from "@/components/ui/stack-canvas";
 import { trackMetaPixelEvent } from "@/lib/meta-pixel";
 
@@ -48,6 +50,7 @@ const steps = [
 ];
 
 export function HowWeWork(): JSX.Element {
+  const router = useRouter();
   const containerRef = useRef<HTMLElement>(null);
   const pinRef = useRef<HTMLDivElement>(null);
   // staticMode: small screens or reduced-motion users get a plain, non-pinned,
@@ -446,7 +449,7 @@ export function HowWeWork(): JSX.Element {
       id="how-we-work"
       data-testid="how-we-work-section"
       aria-label="How We Work"
-      className="relative w-full bg-background overflow-hidden"
+      className="relative w-full bg-background overflow-hidden md:min-h-screen"
       ref={containerRef}
     >
       {/* Cinematic Ambient Radial Orbs (Ethereal Glass Vibe) */}
@@ -671,37 +674,33 @@ export function HowWeWork(): JSX.Element {
               It starts with a call — no forms, no gatekeeping, just a
               conversation about what you're trying to build.
             </p>
-            <Button
-              variant="accent"
-              size="lg"
-              noMorph
-              asChild
-              className="pointer-events-auto rounded-full pl-8 pr-3 py-3 h-auto group transition-all duration-300 hover:shadow-[0_4px_20px_oklch(from_var(--accent)_l_c_h_/_0.4)]"
-            >
-              <a
-                href="mailto:bill@volvox.dev"
-                className="flex items-center gap-4 text-accent-foreground font-semibold"
-                onClick={() => trackMetaPixelEvent("Lead")}
-              >
-                <span>Start a conversation</span>
-                <span className="w-10 h-10 rounded-full bg-accent-foreground/10 flex items-center justify-center transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-1">
-                  <svg
-                    className="w-5 h-5 text-accent-foreground"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                    />
-                  </svg>
-                </span>
-              </a>
-            </Button>
+            <div className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full sm:w-auto pointer-events-auto">
+              <MagneticButton>
+                <Button
+                  onClick={() => {
+                    trackMetaPixelEvent("Lead");
+                    router.push("/bookameeting");
+                  }}
+                  size="default"
+                  variant="accent"
+                  className="text-xs sm:text-base px-4 sm:px-6"
+                  data-testid="hww-book-meeting-cta"
+                >
+                  Book a Meeting
+                </Button>
+              </MagneticButton>
+              <MagneticButton>
+                <Button
+                  variant="default"
+                  size="default"
+                  onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
+                  className="text-xs sm:text-base px-4 sm:px-6"
+                  data-testid="hww-mail-us-cta"
+                >
+                  Mail Us
+                </Button>
+              </MagneticButton>
+            </div>
           </div>
         </div>
       </div>
@@ -872,35 +871,31 @@ export function HowWeWork(): JSX.Element {
             It starts with a call — no forms, no gatekeeping, just a
             conversation about what you're trying to build.
           </p>
-          <Button
-            variant="accent"
-            size="lg"
-            noMorph
-            asChild
-            className="rounded-full w-full py-3 h-auto justify-center"
-          >
-            <a
-              href="mailto:bill@volvox.dev"
-              className="flex items-center gap-3 justify-center text-accent-foreground font-semibold"
-              onClick={() => trackMetaPixelEvent("Lead")}
-            >
-              <span>Start a conversation</span>
-              <svg
-                className="w-4 h-4 text-accent-foreground"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
+          <div className="flex flex-row items-center gap-3 sm:gap-4 justify-center w-full">
+            <MagneticButton>
+              <Button
+                onClick={() => {
+                  trackMetaPixelEvent("Lead");
+                  router.push("/bookameeting");
+                }}
+                size="default"
+                variant="accent"
+                className="text-xs sm:text-base px-4 sm:px-6"
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M4.5 19.5l15-15m0 0H8.25m11.25 0v11.25"
-                />
-              </svg>
-            </a>
-          </Button>
+                Book a Meeting
+              </Button>
+            </MagneticButton>
+            <MagneticButton>
+              <Button
+                variant="default"
+                size="default"
+                onClick={() => window.open("mailto:bill@volvox.dev", "_self")}
+                className="text-xs sm:text-base px-4 sm:px-6"
+              >
+                Mail Us
+              </Button>
+            </MagneticButton>
+          </div>
         </div>
       </div>
     </section>

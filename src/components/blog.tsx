@@ -6,11 +6,9 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronRight } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useMemo, useRef } from "react";
+import { useMemo, useRef } from "react";
 import { BlogCard } from "@/components/blog-card";
 import { Button } from "@/components/ui/button";
 import {
@@ -20,11 +18,6 @@ import {
 } from "@/components/ui/filter-controls";
 import type { BlogPost } from "@/lib/types";
 import { cn } from "@/lib/utils";
-
-// Register ScrollTrigger
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 interface BlogProps {
   posts: BlogPost[];
@@ -50,8 +43,6 @@ export function Blog({
   enableFilters = false,
 }: BlogProps) {
   const containerRef = useRef<HTMLDivElement>(null);
-  const cardsContainerRef = useRef<HTMLDivElement>(null);
-  const animationInitializedRef = useRef(false);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,
@@ -98,57 +89,12 @@ export function Blog({
     return result;
   }, [allPosts, searchQuery, sortOption, enableFilters]);
 
-  // GSAP Animation Effect - only run on initial mount
-  useEffect(() => {
-    // Only initialize animation once to prevent re-triggering on filter changes
-    if (animationInitializedRef.current) {
-      return;
-    }
-
-    const ctx = gsap.context(() => {
-      // Animate cards when they come into view
-      const cards =
-        cardsContainerRef.current?.querySelectorAll(".blog-card-item");
-
-      if (cards && cards.length > 0) {
-        animationInitializedRef.current = true;
-
-        cards.forEach((card) => {
-          gsap.fromTo(
-            card,
-            {
-              y: 100,
-              opacity: 0,
-              scale: 0.95,
-              filter: "blur(10px)",
-            },
-            {
-              scrollTrigger: {
-                trigger: card,
-                start: "top 95%",
-                end: "top 70%",
-                scrub: 1,
-              },
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              filter: "blur(0px)",
-              ease: "power2.out",
-            },
-          );
-        });
-      }
-    }, containerRef); // Scope to container
-
-    return () => ctx.revert(); // Cleanup
-  }, []); // Dependencies kept for initial render timing
-
   return (
     <section
       id="blog"
       ref={containerRef}
       aria-label="Blog posts"
-      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background"
+      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background md:min-h-screen"
       data-testid="blog-section"
     >
       {/* Modern Background Effect */}
@@ -174,7 +120,7 @@ export function Blog({
             initial={{ opacity: 0, x: -10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5 }}
-            className="text-4xl md:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight"
+            className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight"
           >
             Blog Posts
           </motion.h2>
@@ -251,8 +197,13 @@ export function Blog({
           )}
         </AnimatePresence>
 
-        <div
-          ref={cardsContainerRef}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          variants={{
+            visible: { transition: { staggerChildren: 0.1 } },
+          }}
           className={cn(
             "grid gap-6",
             viewMode === "grid"
@@ -261,17 +212,35 @@ export function Blog({
           )}
         >
           {filteredPosts.map((post, index) => (
-            <div
+            <motion.div
               key={post.id}
+              variants={{
+                hidden: {
+                  opacity: 0,
+                  y: 50,
+                  filter: "blur(10px)",
+                  scale: 0.95,
+                },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  filter: "blur(0px)",
+                  scale: 1,
+                  transition: {
+                    type: "spring",
+                    stiffness: 100,
+                    damping: 20,
+                  },
+                },
+              }}
               className={cn(
-                "blog-card-item gsap-will-animate",
                 !enableFilters && index === 2 && "hidden lg:block", // Hide 3rd item on mobile/tablet, show on lg+
               )}
             >
               <BlogCard post={post} />
-            </div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </div>
     </section>
   );

@@ -1,16 +1,13 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import { ArrowRight, Code, GithubLogo, Heart } from "@phosphor-icons/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { motion, type Variants } from "framer-motion";
 import Image from "next/image";
 import { type JSX, useRef } from "react";
+import { Button } from "@/components/ui/button";
 
 import { GITHUB_URL } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-
-gsap.registerPlugin(useGSAP, ScrollTrigger);
 
 /**
  * Renders the "About Volvox" section as a modern, high-end Bento Grid.
@@ -18,51 +15,26 @@ gsap.registerPlugin(useGSAP, ScrollTrigger);
 export function About(): JSX.Element {
   const containerRef = useRef<HTMLElement>(null);
 
-  useGSAP(
-    () => {
-      // Respect reduced-motion: skip entrance animations, keep final states.
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      // Reveal header elements on scroll
-      gsap.fromTo(
-        ".about-header",
-        { opacity: 0, y: 30, filter: "blur(8px)" },
-        {
-          scrollTrigger: {
-            trigger: ".about-header",
-            start: "top 92%",
-            end: "top 72%",
-            scrub: 1,
-          },
-          opacity: 1,
-          y: 0,
-          filter: "blur(0px)",
-          ease: "power2.out",
-        },
-      );
-
-      // Reveal bento cards on scroll with staggered delays and slight scales
-      gsap.fromTo(
-        ".about-bento-card",
-        { opacity: 0, y: 40, scale: 0.97, filter: "blur(8px)" },
-        {
-          scrollTrigger: {
-            trigger: ".about-bento-grid",
-            start: "top 90%",
-            end: "top 65%",
-            scrub: 1,
-          },
-          opacity: 1,
-          y: 0,
-          scale: 1,
-          filter: "blur(0px)",
-          stagger: 0.08,
-          ease: "power3.out",
-        },
-      );
+  // Stagger variants for the bento grid
+  const containerVariants = {
+    hidden: {},
+    visible: {
+      transition: {
+        staggerChildren: 0.08,
+      },
     },
-    { scope: containerRef },
-  );
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 40, filter: "blur(8px)", scale: 0.97 },
+    visible: {
+      opacity: 1,
+      y: 0,
+      filter: "blur(0px)",
+      scale: 1,
+      transition: { duration: 0.6, ease: "easeOut" as const },
+    },
+  };
 
   return (
     <section
@@ -70,19 +42,31 @@ export function About(): JSX.Element {
       id="about"
       data-testid="about-section"
       aria-label="About Volvox"
-      className="py-16 md:py-24 px-4 bg-background relative overflow-hidden"
+      className="py-16 md:py-24 px-4 bg-background relative overflow-hidden md:min-h-screen md:flex md:flex-col md:justify-center"
     >
       <div className="container mx-auto max-w-6xl relative z-20">
         <div className="text-center mb-10 md:mb-12">
-          <h2 className="about-header text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
+          <motion.h2
+            initial={{ opacity: 0, y: 30, filter: "blur(8px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-100px" }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight"
+          >
             About Volvox
-          </h2>
+          </motion.h2>
         </div>
 
         {/* Compact 12-Column Bento Grid */}
-        <div className="about-bento-grid grid grid-cols-1 md:grid-cols-12 gap-4">
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-100px" }}
+          className="about-bento-grid grid grid-cols-1 md:grid-cols-12 gap-4"
+        >
           {/* 1. Our Story (8 Cols) */}
-          <BentoCard className="md:col-span-8">
+          <BentoCard variants={itemVariants} className="md:col-span-8">
             <span className="text-muted-foreground text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
               Our Story
             </span>
@@ -135,7 +119,10 @@ export function About(): JSX.Element {
           </BentoCard>
 
           {/* 2. Mission (4 Cols - Primary Tinted) */}
-          <BentoCard className="md:col-span-4 bg-primary/10 border-primary/20">
+          <BentoCard
+            variants={itemVariants}
+            className="md:col-span-4 bg-primary/10 border-primary/20"
+          >
             <span className="text-primary/70 text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
               The Mission
             </span>
@@ -153,7 +140,7 @@ export function About(): JSX.Element {
           </BentoCard>
 
           {/* 3. Values (5 Cols) */}
-          <BentoCard className="md:col-span-5">
+          <BentoCard variants={itemVariants} className="md:col-span-5">
             <span className="text-muted-foreground text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-3 block">
               Our Values
             </span>
@@ -190,7 +177,10 @@ export function About(): JSX.Element {
           </BentoCard>
 
           {/* 4. Community (3 Cols) */}
-          <BentoCard className="md:col-span-3 items-center text-center justify-center">
+          <BentoCard
+            variants={itemVariants}
+            className="md:col-span-3 items-center text-center justify-center"
+          >
             <span className="font-editorial italic font-medium text-foreground text-3xl sm:text-4xl">
               ∞
             </span>
@@ -203,7 +193,10 @@ export function About(): JSX.Element {
           </BentoCard>
 
           {/* 5. Join Us / GitHub CTA (4 Cols) */}
-          <BentoCard className="md:col-span-4 border-primary/30 bg-card-deep/40 hover:border-primary/50 transition-colors">
+          <BentoCard
+            variants={itemVariants}
+            className="md:col-span-4 border-primary/30 bg-card-deep/40 hover:border-primary/50 transition-colors"
+          >
             <span className="text-primary text-[10px] font-mono font-bold uppercase tracking-[0.2em] mb-2 block">
               Open Future
             </span>
@@ -214,11 +207,13 @@ export function About(): JSX.Element {
               Join our community on GitHub and start contributing to real-world
               projects.
             </p>
-            <a
-              href={GITHUB_URL}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="mt-auto inline-flex items-center gap-2 rounded-full bg-secondary hover:bg-foreground hover:text-background text-secondary-foreground px-4 py-1.5 text-xs font-bold transition-all duration-300 w-fit group"
+            <Button
+              variant="secondary"
+              size="sm"
+              onClick={() =>
+                window.open(GITHUB_URL, "_blank", "noopener,noreferrer")
+              }
+              className="mt-auto gap-2 rounded-full px-4 py-1.5 text-xs font-bold w-fit group"
             >
               <GithubLogo weight="fill" className="w-3.5 h-3.5" />
               <span>View GitHub</span>
@@ -226,9 +221,9 @@ export function About(): JSX.Element {
                 weight="bold"
                 className="w-3 h-3 transition-transform group-hover:translate-x-0.5"
               />
-            </a>
+            </Button>
           </BentoCard>
-        </div>
+        </motion.div>
       </div>
     </section>
   );
@@ -237,12 +232,15 @@ export function About(): JSX.Element {
 function BentoCard({
   className,
   children,
+  variants,
 }: {
   className?: string;
   children: React.ReactNode;
+  variants?: Variants;
 }) {
   return (
-    <div
+    <motion.div
+      variants={variants}
       className={cn(
         "about-bento-card rounded-[1.8rem] bg-card-deep/20 border border-border/30 p-1 transition-all duration-300 hover:border-border/60 hover:shadow-xl hover:shadow-primary/5",
         className,
@@ -251,6 +249,6 @@ function BentoCard({
       <div className="w-full h-full rounded-[calc(1.8rem-0.25rem)] bg-card border border-border/10 p-5 flex flex-col justify-between shadow-[inset_0_1px_1px_rgba(255,255,255,0.05)]">
         {children}
       </div>
-    </div>
+    </motion.div>
   );
 }

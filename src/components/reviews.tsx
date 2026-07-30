@@ -387,7 +387,7 @@ export function Reviews({ content }: ReviewsProps) {
       id="reviews"
       aria-labelledby={headingId}
       data-testid="reviews-section"
-      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background"
+      className="py-24 md:py-32 px-4 relative overflow-hidden bg-background md:min-h-screen"
     >
       <div className="absolute inset-0 pointer-events-none" aria-hidden>
         <div className="absolute top-1/4 -left-48 w-[480px] h-[480px] bg-primary/5 rounded-full blur-[140px]" />
@@ -401,7 +401,7 @@ export function Reviews({ content }: ReviewsProps) {
           whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
           viewport={{ once: true, amount: 0.4 }}
           transition={{ duration: 0.6, ease: [0.25, 1, 0.5, 1] }}
-          className="text-3xl md:text-4xl lg:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight mb-6 md:mb-8 max-w-2xl"
+          className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight mb-6 md:mb-8 max-w-2xl"
         >
           {headline}
         </motion.h2>
