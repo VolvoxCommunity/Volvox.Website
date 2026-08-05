@@ -58,17 +58,12 @@ export function BlogPostHeader() {
                 variant="ghost"
                 size="icon"
                 onClick={toggleTheme}
-                aria-label={
-                  resolvedTheme === "light"
-                    ? "Switch to dark mode"
-                    : "Switch to light mode"
-                }
+                aria-label="Toggle theme"
               >
-                {resolvedTheme === "light" ? (
-                  <Moon weight="fill" className="h-5 w-5" />
-                ) : (
-                  <Sun weight="fill" className="h-5 w-5" />
-                )}
+                {/* Both icons render on the server; the `.dark` class decides
+                    which is visible, so SSR and hydration always match. */}
+                <Moon weight="fill" className="h-5 w-5 block dark:hidden" />
+                <Sun weight="fill" className="h-5 w-5 hidden dark:block" />
               </Button>
             </motion.div>
 

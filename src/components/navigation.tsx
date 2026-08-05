@@ -261,11 +261,10 @@ export function Navigation(props: NavigationProps) {
               aria-label="Toggle theme"
               data-testid="nav-theme-toggle"
             >
-              {resolvedTheme === "light" ? (
-                <Moon weight="fill" className="h-5 w-5" />
-              ) : (
-                <Sun weight="fill" className="h-5 w-5" />
-              )}
+              {/* Both icons render on the server; the `.dark` class decides
+                  which is visible, so SSR and hydration always match. */}
+              <Moon weight="fill" className="h-5 w-5 block dark:hidden" />
+              <Sun weight="fill" className="h-5 w-5 hidden dark:block" />
             </Button>
 
             <Button
