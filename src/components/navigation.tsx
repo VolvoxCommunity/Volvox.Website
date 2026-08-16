@@ -149,10 +149,10 @@ export function Navigation(props: NavigationProps) {
           }}
           className={cn(
             "pointer-events-auto relative flex items-center justify-between overflow-hidden",
-            "w-full py-2 px-3 bg-transparent",
+            "w-full py-1.5 px-2.5 bg-transparent",
             isIsland
-              ? "group lg:w-[95%] lg:max-w-[1000px] lg:mt-6 lg:py-3 lg:px-5 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
-              : "lg:w-full lg:max-w-full lg:py-6 lg:px-10 lg:border-b lg:border-border/5",
+              ? "group lg:w-[95%] lg:max-w-[900px] lg:mt-5 lg:py-2.5 lg:px-4 lg:rounded-full lg:bg-background/50 lg:backdrop-blur-xl lg:border lg:border-foreground/[0.08] lg:shadow-[0_10px_30px_-5px_rgba(0,0,0,0.1)]"
+              : "lg:w-full lg:max-w-full lg:py-4 lg:px-8 lg:border-b lg:border-border/5",
           )}
         >
           {/* Mobile Progressive Blur Background */}
@@ -179,17 +179,17 @@ export function Navigation(props: NavigationProps) {
           />
 
           {/* Brand */}
-          <Link href="/" className="flex items-center gap-3 z-[2] no-underline">
+          <Link href="/" className="flex items-center gap-2 z-[2] no-underline">
             <Image
               src="/logo.png"
               alt="Volvox Logo"
-              width={32}
-              height={32}
-              className="w-8 h-8 object-contain rounded-md"
+              width={28}
+              height={28}
+              className="w-7 h-7 object-contain rounded-md"
               priority
             />
             {/* Logo Text Hidden on Mobile */}
-            <span className="font-mono font-bold text-lg text-foreground hidden lg:block">
+            <span className="font-mono font-bold text-base text-foreground hidden lg:block">
               Volvox
             </span>
           </Link>
@@ -198,7 +198,7 @@ export function Navigation(props: NavigationProps) {
           <ul
             className={cn(
               "hidden lg:flex z-[2] list-none transition-all duration-300",
-              isIsland ? "gap-1 bg-foreground/5 p-1 rounded-full" : "gap-2",
+              isIsland ? "gap-0.5 bg-foreground/5 p-0.5 rounded-full" : "gap-1",
             )}
           >
             {navItems.map((item) => {
@@ -224,7 +224,7 @@ export function Navigation(props: NavigationProps) {
                       href={item.href}
                       aria-current={isActive ? "page" : undefined}
                       className={cn(
-                        "relative z-[1] inline-block no-underline text-sm font-medium py-2 px-4 rounded-full transition-colors duration-200",
+                        "relative z-[1] inline-block no-underline text-xs font-medium py-1.5 px-3 rounded-full transition-colors duration-200",
                         isActive
                           ? "text-foreground font-semibold"
                           : "opacity-60 text-foreground hover:opacity-100",
@@ -238,7 +238,7 @@ export function Navigation(props: NavigationProps) {
                       aria-current={isActive ? "page" : undefined}
                       onClick={() => handleNavigate(item.id)}
                       className={cn(
-                        "relative z-[1] inline-block text-sm font-medium py-2 px-4 rounded-full transition-colors duration-200 cursor-pointer bg-transparent border-none",
+                        "relative z-[1] inline-block text-xs font-medium py-1.5 px-3 rounded-full transition-colors duration-200 cursor-pointer bg-transparent border-none",
                         isActive
                           ? "text-foreground font-semibold"
                           : "opacity-60 text-foreground hover:opacity-100",
@@ -253,32 +253,33 @@ export function Navigation(props: NavigationProps) {
           </ul>
 
           {/* Actions */}
-          <div className="flex items-center gap-2 z-[2]">
+          <div className="flex items-center gap-1.5 z-[2]">
             <Button
               variant="ghost"
               size="icon"
               onClick={toggleTheme}
               aria-label="Toggle theme"
-              data-testid="nav-theme-toggle"
+              data-testid="theme-toggle"
+              className="h-8 w-8"
             >
               {resolvedTheme === "light" ? (
-                <Moon weight="fill" className="h-5 w-5" />
+                <Moon weight="fill" className="h-4 w-4" />
               ) : (
-                <Sun weight="fill" className="h-5 w-5" />
+                <Sun weight="fill" className="h-4 w-4" />
               )}
             </Button>
 
             <Button
               variant="ghost"
               size="default"
-              className="hidden lg:flex bg-[#5865F2] hover:bg-[#4752c4] text-white"
+              className="hidden lg:flex bg-[#5865F2] hover:bg-[#4752c4] text-white h-8 text-xs px-3"
               onClick={(e) => {
                 handleDiscordClick(e);
                 window.open(DISCORD_URL, "_blank", "noopener,noreferrer");
               }}
               data-testid="nav-discord-cta"
             >
-              <DiscordLogo weight="fill" className="h-5 w-5" />
+              <DiscordLogo weight="fill" className="h-4 w-4" />
               Join
             </Button>
 
@@ -286,12 +287,12 @@ export function Navigation(props: NavigationProps) {
             <Button
               variant="ghost"
               size="icon"
-              className="lg:hidden"
+              className="lg:hidden h-8 w-8"
               onClick={() => setMobileOpen(true)}
               aria-label="Open menu"
-              data-testid="nav-mobile-open"
+              data-testid="mobile-menu-button"
             >
-              <List className="h-6 w-6" />
+              <List className="h-5 w-5" />
             </Button>
           </div>
         </motion.nav>
@@ -308,16 +309,16 @@ export function Navigation(props: NavigationProps) {
             className="fixed inset-0 z-[2000] bg-background flex flex-col pointer-events-auto"
           >
             {/* Header */}
-            <div className="flex items-center justify-between p-5 border-b border-border/5">
-              <div className="flex items-center gap-3">
+            <div className="flex items-center justify-between p-4 border-b border-border/5">
+              <div className="flex items-center gap-2">
                 <Image
                   src="/logo.png"
                   alt="Volvox Logo"
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 object-contain rounded-md"
+                  width={28}
+                  height={28}
+                  className="w-7 h-7 object-contain rounded-md"
                 />
-                <span className="font-mono font-bold text-lg text-foreground">
+                <span className="font-mono font-bold text-base text-foreground">
                   Volvox
                 </span>
               </div>
@@ -326,13 +327,14 @@ export function Navigation(props: NavigationProps) {
                 size="icon"
                 onClick={() => setMobileOpen(false)}
                 aria-label="Close menu"
+                className="h-8 w-8"
               >
-                <X weight="bold" className="w-6 h-6" />
+                <X weight="bold" className="w-5 h-5" />
               </Button>
             </div>
 
             {/* Menu Items */}
-            <div className="flex flex-col p-6 gap-6 overflow-y-auto">
+            <div className="flex flex-col p-5 gap-5 overflow-y-auto">
               {navItems.map((item, i) => (
                 <motion.div
                   key={item.id}
@@ -347,7 +349,7 @@ export function Navigation(props: NavigationProps) {
                       aria-current={
                         currentSection === item.id ? "page" : undefined
                       }
-                      className="text-3xl font-bold tracking-tight block py-2"
+                      className="text-2xl font-bold tracking-tight block py-2"
                     >
                       {item.label}
                     </Link>
@@ -358,7 +360,7 @@ export function Navigation(props: NavigationProps) {
                       aria-current={
                         currentSection === item.id ? "page" : undefined
                       }
-                      className="text-left text-3xl font-bold tracking-tight block py-2 bg-transparent border-none cursor-pointer w-full"
+                      className="text-left text-2xl font-bold tracking-tight block py-2 bg-transparent border-none cursor-pointer w-full"
                     >
                       {item.label}
                     </button>
@@ -370,15 +372,15 @@ export function Navigation(props: NavigationProps) {
                 initial={{ opacity: 0, x: -20 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: 0.4 }}
-                className="mt-4 pt-6 border-t border-border/10"
+                className="mt-3 pt-5 border-t border-border/10"
               >
                 <a
                   href={DISCORD_URL}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-3 text-xl font-semibold text-[#5865F2]"
+                  className="flex items-center gap-2 text-lg font-semibold text-[#5865F2]"
                 >
-                  <DiscordLogo weight="fill" className="w-8 h-8" />
+                  <DiscordLogo weight="fill" className="w-5 h-5" />
                   Join Community
                 </a>
               </motion.div>

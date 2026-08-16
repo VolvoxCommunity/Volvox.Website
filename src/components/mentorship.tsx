@@ -1,10 +1,7 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import { ArrowRight } from "@phosphor-icons/react";
 import { AnimatePresence, MotionConfig, motion } from "framer-motion";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
@@ -12,7 +9,19 @@ import { Button } from "@/components/ui/button";
 import type { TeamMember } from "@/lib/types";
 import { cn } from "@/lib/utils";
 
-gsap.registerPlugin(useGSAP, ScrollTrigger);
+const mentorshipContainerVariants = {
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const mentorshipCardVariants = {
+  hidden: { opacity: 0, y: 40, filter: "blur(8px)" },
+  visible: {
+    opacity: 1,
+    y: 0,
+    filter: "blur(0px)",
+    transition: { duration: 0.7, ease: "easeOut" as const },
+  },
+};
 
 // Row sizes form an upside-down pyramid: 3 -> 2 -> 1 (== 6 members).
 const ROW_LAYOUT = [3, 2, 1];
@@ -40,51 +49,6 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
     return () => document.removeEventListener("keydown", onKey);
   }, [activeId]);
 
-  // GSAP scroll-based entrance animations (autoAlpha keeps hidden cards out of a11y tree).
-  useGSAP(
-    () => {
-      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-
-      gsap.fromTo(
-        ".mentorship-headline",
-        { autoAlpha: 0, y: 30, filter: "blur(10px)" },
-        {
-          scrollTrigger: {
-            trigger: ".mentorship-headline",
-            start: "top 85%",
-            once: true,
-          },
-          autoAlpha: 1,
-          y: 0,
-          filter: "blur(0px)",
-          duration: 0.8,
-          ease: "power3.out",
-          clearProps: "all",
-        },
-      );
-
-      gsap.fromTo(
-        ".mentorship-card",
-        { autoAlpha: 0, y: 40, filter: "blur(8px)" },
-        {
-          scrollTrigger: {
-            trigger: ".mentorship-pyramid",
-            start: "top 80%",
-            once: true,
-          },
-          autoAlpha: 1,
-          y: 0,
-          filter: "blur(0px)",
-          stagger: 0.08,
-          duration: 0.7,
-          ease: "power3.out",
-          clearProps: "all",
-        },
-      );
-    },
-    { scope: sectionRef },
-  );
-
   // Slice the flat list into centered pyramid rows.
   let cursor = 0;
   const rows = ROW_LAYOUT.map((count) => {
@@ -100,34 +64,51 @@ export function Mentorship({ teamMembers }: MentorshipProps) {
         id="mentorship"
         aria-label="Team of Experts"
         data-testid="mentorship-section"
-        className="relative w-full bg-background py-24 md:py-32 antialiased"
+        className="relative w-full bg-background py-24 md:py-32 antialiased md:min-h-screen"
       >
         <div className="container mx-auto px-4 md:px-6">
           {/* Centered headline */}
-          <div className="mentorship-headline flex items-center justify-center text-center mb-12 md:mb-16">
-            <h2 className="text-4xl md:text-5xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
+          <motion.div
+            initial={{ opacity: 0, y: 30, filter: "blur(10px)" }}
+            whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.8, ease: "easeOut" }}
+            className="mentorship-headline flex items-center justify-center text-center mb-12 md:mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-editorial italic font-medium tracking-tight text-foreground text-balance leading-tight">
               Team
             </h2>
-          </div>
+          </motion.div>
 
           {/* Upside-down pyramid: 3 / 2 / 1, each row centered */}
-          <div className="mentorship-pyramid flex flex-col items-center gap-6 md:gap-8">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={mentorshipContainerVariants}
+            className="mentorship-pyramid flex flex-col items-center gap-6 md:gap-8"
+          >
             {rows.map((row, ri) => (
-              <div
+              <motion.div
                 key={ri}
+                variants={{}} // row wrapper so stagger propagates to children
                 className="flex flex-wrap items-start justify-center gap-4 sm:gap-5 md:gap-7"
               >
                 {row.map((member) => (
-                  <div key={member.id} className="mentorship-card">
+                  <motion.div
+                    key={member.id}
+                    variants={mentorshipCardVariants}
+                    className="mentorship-card"
+                  >
                     <ProfileCard
                       member={member}
                       onOpen={() => setActiveId(member.id)}
                     />
-                  </div>
+                  </motion.div>
                 ))}
-              </div>
+              </motion.div>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Shared-element morph dialog */}

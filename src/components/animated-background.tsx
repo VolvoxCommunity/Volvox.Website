@@ -49,12 +49,20 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     // Configuration
     const config = {
       maxParticles: 150,
-      spawnWidth: 800,
-      spawnHeight: 400,
+      spawnWidth: 1200,
+      spawnHeight: 600,
       size: 1.2,
       colorA: "rgb(50, 100, 255)",
       colorB: "rgb(255, 255, 255)",
     };
+
+    const updateSpawnBounds = () => {
+      const isDesktop = window.innerWidth >= 768;
+      config.spawnWidth = isDesktop ? 1200 : 800;
+      config.spawnHeight = isDesktop ? 600 : 400;
+    };
+
+    updateSpawnBounds();
 
     // Helper to get CSS variable value
     const getCssVar = (name: string) => {
@@ -182,6 +190,7 @@ export function AnimatedBackground({ className = "" }: { className?: string }) {
     const handleResize = () => {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(() => {
+        updateSpawnBounds();
         resize();
         updateColors(); // Re-fetch colors
       }, 200);

@@ -62,6 +62,7 @@ export function ChatTrigger({
             animate={{ opacity: 1, x: 0, scale: 1 }}
             exit={{ opacity: 0, x: 8, scale: 0.95 }}
             transition={{ duration: 0.2 }}
+            className="hidden sm:block"
           >
             <div className="rounded-3xl bg-card p-3 shadow-xl">
               <div className="flex items-start gap-2">
@@ -105,15 +106,15 @@ export function ChatTrigger({
             whileTap={reduced ? undefined : { scale: 0.95 }}
             aria-label="Open Volvox Assistant"
             className={cn(
-              "group relative flex h-12 w-12 items-center justify-center rounded-full",
+              "group relative flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full",
               "bg-primary text-primary-foreground shadow-xl shadow-primary/30",
               "ring-2 ring-primary/20 ring-offset-2 ring-offset-background",
               "focus-visible:outline-none focus-visible:ring-4",
             )}
           >
-            <ChatsCircle className="h-5 w-5" weight="fill" />
+            <ChatsCircle className="h-4 w-4 sm:h-5 sm:w-5" weight="fill" />
             {hasUnread && (
-              <span className="absolute right-0.5 top-0.5 h-2 w-2 rounded-full bg-accent ring-2 ring-background" />
+              <span className="absolute right-[1px] top-[1px] sm:right-0.5 sm:top-0.5 h-2 w-2 rounded-full bg-accent ring-2 ring-background" />
             )}
             <span className="sr-only">Open Volvox Assistant</span>
           </motion.button>
@@ -124,9 +125,9 @@ export function ChatTrigger({
           type="button"
           onClick={onClose}
           aria-label="Close Volvox Assistant"
-          className="flex h-12 w-12 items-center justify-center rounded-full border border-border/60 bg-card text-foreground shadow-xl transition-colors hover:bg-card/80 sm:hidden"
+          className="flex h-10 w-10 items-center justify-center rounded-full border border-border/60 bg-card text-foreground shadow-xl transition-colors hover:bg-card/80 sm:hidden"
         >
-          <X className="h-5 w-5" />
+          <X className="h-4 w-4" />
         </button>
       )}
     </div>

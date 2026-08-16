@@ -27,6 +27,7 @@ import { version } from "../../package.json";
 
 const footerLinks = {
   product: [
+    { label: "Book a Meeting", href: "/bookameeting" },
     { label: "Blog", href: "/blog" },
     { label: "Team", href: "/#mentorship" },
     { label: "About", href: "/#about" },

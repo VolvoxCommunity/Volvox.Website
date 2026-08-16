@@ -97,9 +97,10 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head>
         <link rel="icon" type="image/png" href="/logo.png" />
+        {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */}
         <script
+          id="organization-schema"
           type="application/ld+json"
-          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering.
           dangerouslySetInnerHTML={{
             __html: safeJsonLdSerialize(generateOrganizationSchema()),
           }}

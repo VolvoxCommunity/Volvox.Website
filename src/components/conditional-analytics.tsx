@@ -3,11 +3,13 @@
 import { GoogleAnalytics } from "@next/third-parties/google";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { useEffect } from "react";
 import { MetaPixel } from "@/components/meta-pixel";
 import {
   type CookieConsent,
   useCookieConsent,
 } from "@/components/providers/cookie-consent-provider";
+import { disableAmplitude, initAmplitude } from "@/lib/amplitude";
 
 type AnalyticsConsent = Pick<
   CookieConsent,
@@ -67,6 +69,16 @@ export function ConditionalAnalytics({
     deploymentEnvironment,
     gaId,
   });
+
+  const analyticsConsented = consent.analytics;
+
+  useEffect(() => {
+    if (analyticsConsented) {
+      initAmplitude();
+    } else {
+      disableAmplitude();
+    }
+  }, [analyticsConsented]);
 
   return (
     <>

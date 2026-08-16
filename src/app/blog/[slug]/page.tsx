@@ -4,7 +4,6 @@ import { Calendar, Clock, Eye } from "lucide-react";
 import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
-import Script from "next/script";
 import { MDXRemote } from "next-mdx-remote/rsc";
 import rehypeHighlight from "rehype-highlight";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
@@ -116,11 +115,11 @@ export default async function BlogPostPage({
       {/* View Tracker - fires on mount to increment view count */}
       <ViewTracker slug={slug} />
 
-      {/* JSON-LD structured data for SEO - placed in head via Script component */}
-      <Script
+      {/* JSON-LD structured data for SEO, rendered as native script tag (React 19-safe) */}
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */}
+      <script
         id={`article-schema-${slug}`}
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(generateArticleSchema(frontmatter, slug)),
         }}

@@ -156,7 +156,7 @@ export function HomepageClient({
         />
 
         <main id="main-content">
-          <Hero onNavigate={handleNavigate} reviews={reviewsContent?.reviews} />
+          <Hero reviews={reviewsContent?.reviews} />
           <HowWeWork />
           <Products products={products || []} />
           <Reviews content={reviewsContent} />
