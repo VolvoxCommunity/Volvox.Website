@@ -1,7 +1,6 @@
 /* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
 
 import type { Metadata } from "next";
-import Script from "next/script";
 import { safeJsonLdSerialize } from "@/lib/constants";
 import { generateWebPageSchema } from "@/lib/structured-data";
 import { TermsClient } from "./terms-client";
@@ -41,10 +40,10 @@ export default function TermsPage() {
 
   return (
     <>
-      <Script
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */}
+      <script
         id="terms-schema"
         type="application/ld+json"
-        strategy="beforeInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(jsonLd),
         }}

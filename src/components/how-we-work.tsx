@@ -58,6 +58,11 @@ export function HowWeWork(): JSX.Element {
     router.push("/bookameeting");
   };
 
+  const handleMailUs = () => {
+    trackMetaPixelEvent("Contact");
+    window.location.href = "mailto:bill@volvox.dev";
+  };
+
   const pinRef = useRef<HTMLDivElement>(null);
   // staticMode: small screens or reduced-motion users get a plain, non-pinned,
   // fully-visible vertical layout instead of the scroll-scrubbed experience.

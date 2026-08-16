@@ -1,7 +1,6 @@
 /* biome-ignore-all lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */
 
 import type { Metadata } from "next";
-import Script from "next/script";
 import { safeJsonLdSerialize } from "@/lib/constants";
 import { generateWebPageSchema } from "@/lib/structured-data";
 import { BookAMeetingClient } from "./book-a-meeting-client";
@@ -39,10 +38,10 @@ export default function BookAMeetingPage() {
 
   return (
     <>
-      <Script
+      {/* biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialized with safeJsonLdSerialize before rendering. */}
+      <script
         id="bookameeting-schema"
         type="application/ld+json"
-        strategy="afterInteractive"
         dangerouslySetInnerHTML={{
           __html: safeJsonLdSerialize(jsonLd),
         }}

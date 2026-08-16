@@ -22,7 +22,7 @@ interface HeroSectionProps {
 const PRODUCT_GALLERY = [
   "/images/UI/hero/authfuse.png",
   "/images/UI/hero/decision-jar.png",
-  "/images/UI/hero/fith-season.png",
+  "/images/UI/hero/t3codes.png",
   "/images/UI/hero/sobers.png",
   "/images/UI/hero/volvox.png",
 ];
