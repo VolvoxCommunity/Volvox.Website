@@ -14,6 +14,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/).
 - Meta Pixel ad conversion tracking, loaded only on production deploys with advertising cookie consent (via `ConditionalAnalytics`)
 - Meta Pixel `Lead` event on the "Start a conversation" CTAs in the How We Work section
 
+### Changed
+
+- Team page subtitle now reads "Meet the mentors and builders who make up the Volvox community"
+
+### Removed
+
+- **Madhurima Gupta** and **Olivia H.** from the team listing (`content/team.json`); their profile pages no longer render
+
 ## [v1.2.0] - 2026-03-11
 
 ### Changed

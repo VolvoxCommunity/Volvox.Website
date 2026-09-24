@@ -33,8 +33,6 @@ Build great software while fostering the next generation of developers through m
 - **Eleftheria Batsou** — Developer Advocate. Public speaker, meetup co-organizer, community builder.
 - **Hossain Jahed (rabden)** — Frontend Developer. Next.js, React, TypeScript, Tailwind, Framer Motion, GSAP. Available for hire.
 - **Mohsin Mukhtar** — Developer. Node, React Native, system design, AI.
-- **Madhurima Gupta** — Digital Marketing Specialist. SEO, paid ads, brand building.
-- **Olivia Hart** — Digital Marketing Specialist. Content, social media, paid social.
 
 ### Community
 - **Discord** — ${DISCORD_URL}
