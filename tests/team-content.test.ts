@@ -3,12 +3,19 @@ import test from "node:test";
 
 import { getAllTeamMembers, isValidSlug } from "../src/lib/content";
 
-test("loads Madhurima from team content with a routable profile slug", () => {
+test("loads Rori and Naomi from team content with routable profile slugs", () => {
   const teamMembers = getAllTeamMembers();
-  const madhurima = teamMembers.find((member) => member.id === "madhurima");
+  const rori = teamMembers.find((member) => member.id === "rori");
 
-  assert.ok(madhurima, "Expected Madhurima to load from content/team.json");
-  assert.equal(madhurima.name, "Madhurima Gupta");
-  assert.equal(madhurima.type, "marketer");
-  assert.equal(isValidSlug(madhurima.slug), true);
+  assert.ok(rori, "Expected Rori to load from content/team.json");
+  assert.equal(rori.name, "Rori Alano");
+  assert.equal(rori.type, "marketer");
+  assert.equal(isValidSlug(rori.slug), true);
+
+  const naomi = teamMembers.find((member) => member.id === "naomi");
+
+  assert.ok(naomi, "Expected Naomi to load from content/team.json");
+  assert.equal(naomi.name, "Naomi Rosales");
+  assert.equal(naomi.type, "marketer");
+  assert.equal(isValidSlug(naomi.slug), true);
 });
