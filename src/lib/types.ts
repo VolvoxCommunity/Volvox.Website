@@ -65,3 +65,4 @@ export type Mentor = Extract<TeamMember, { type: "mentor" }>;
 export type Mentee = Extract<TeamMember, { type: "mentee" }>;
 export type Builder = Extract<TeamMember, { type: "builder" }>;
 export type Marketer = Extract<TeamMember, { type: "marketer" }>;
+export type Staff = Extract<TeamMember, { type: "staff" }>;

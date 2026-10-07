@@ -23,8 +23,8 @@ const mentorshipCardVariants = {
   },
 };
 
-// Row sizes form an upside-down pyramid: 3 -> 2 -> 1 (== 6 members).
-const ROW_LAYOUT = [3, 2, 1];
+// Row sizes form a pyramid: 2 -> 3 -> 4 (== 9 members).
+const ROW_LAYOUT = [2, 3, 4];
 
 // Critically-damped spring (no overshoot) for the shared-element morph.
 const MORPH_SPRING = { type: "spring", stiffness: 320, damping: 34 } as const;
@@ -231,9 +231,9 @@ function ProfileCard({ member, onOpen }: ProfileCardProps) {
           className="object-cover transition-transform duration-500 ease-[cubic-bezier(0.2,0.8,0.2,1)] group-hover:scale-105"
         />
       </motion.span>
-      {/* Title only (role); one line, full value reachable in the dialog. */}
+      {/* First name caption; full role is reachable in the dialog. */}
       <span className="w-full truncate text-center text-[10px] font-medium uppercase tracking-[0.15em] text-muted-foreground transition-colors duration-300 group-hover:text-foreground font-mono">
-        {"role" in member ? member.role : ""}
+        {member.name.split(" ")[0]}
       </span>
     </motion.button>
   );
