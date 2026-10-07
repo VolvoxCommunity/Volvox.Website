@@ -5,7 +5,7 @@
     "name": "Bill Chirico",
     "role": "CEO & Founder",
     "tagline": "Full-stack architect building scalable systems and mentoring the next generation.",
-    "bio": "Founder and CEO of Volvox LLC. 20+ years building apps, websites, and SaaS products. Runs a dev mentorship community since 2018 because he remembers what it's like to be lost. Believes software should help people help each other.",
+    "bio": "Founder and CEO of Volvox LLC with 20+ years of experience building apps, websites, SaaS products, and software platforms. Since 2018, Bill has mentored developers and helped create opportunities for people to learn, build, and grow through real-world experience.",
     "avatar": "https://github.com/BillChirico.png",
     "expertise": [
       ".NET - C#",
@@ -210,26 +210,122 @@
     "id": "rori",
     "slug": "rori-alano",
     "name": "Rori Alano",
-    "role": "Business Development",
-    "tagline": "Business Development at Volvox.",
-    "bio": "Rori is part of the Business Development team at Volvox.",
+    "role": "Business Development & Operations Manager",
+    "tagline": "Business development leader driving growth through strategy, relationships, people, and smart systems.",
+    "bio": "Business development leader driving growth through strategy, relationships, people, and smart systems.",
     "avatar": "/images/teams/rori.webp",
     "expertise": [
-      "Business Development"
+      "Business Development & Growth",
+      "Lead Generation & Prospecting",
+      "Marketing & Client Acquisition",
+      "Team & Workflow Management",
+      "Client Relationship Management",
+      "Process Improvement & Operations",
+      "AI & Business Automation",
+      "CRM & Pipeline Management",
+      "Strategic Outreach & Partnerships",
+      "Systems & Process Development"
     ],
-    "type": "marketer"
+    "type": "staff"
   },
   {
     "id": "naomi",
     "slug": "naomi-rosales",
     "name": "Naomi Rosales",
-    "role": "Business Development",
-    "tagline": "Business Development at Volvox.",
-    "bio": "Naomi is part of the Business Development team at Volvox.",
+    "role": "Marketing Strategist & Lead Generation Specialist",
+    "tagline": "Marketing strategist driving growth through strategy, relationships, people, and smart systems.",
+    "bio": "Marketing strategist driving growth through strategy, relationships, people, and smart systems.",
     "avatar": "/images/teams/naomi.webp",
     "expertise": [
-      "Business Development"
+      "Marketing Strategy & Growth",
+      "Lead Generation & Prospecting",
+      "Business Development",
+      "Client Acquisition & Outreach",
+      "Team & People Management",
+      "Client Relationship Management",
+      "CRM & Pipeline Management",
+      "Process Improvement & Operations",
+      "AI & Business Automation",
+      "Strategic Outreach & Partnerships",
+      "Workflow & Systems Development",
+      "Sales Strategy & Conversion"
     ],
     "type": "marketer"
+  },
+  {
+    "id": "john",
+    "slug": "john-lerguna",
+    "name": "John Edward Lerguna",
+    "role": "Full Stack Developer",
+    "tagline": "Full Stack developer specializing in modern web and desktop development.",
+    "bio": "Hands-on with LLM API integration, prompt engineering, and human-in-the-loop review of AI-generated code, tests, and documentation, holding every generated artifact to the same code review and quality standards as hand-written work. Authors technical design documents, requirements and analysis documents, ADRs, API references, and runbooks for developers, QA, product, operations, and compliance audiences.",
+    "avatar": "/images/teams/john.png",
+    "expertise": [
+      "Full-Stack Web Development",
+      "Desktop Development",
+      "LLM API Integration",
+      "Prompt Engineering",
+      "Human-in-the-Loop AI Review",
+      "Technical Design Documents",
+      "ADRs & API Documentation",
+      "Runbooks & Requirements Analysis"
+    ],
+    "type": "builder",
+    "email": "john@volvox.com"
+  },
+  {
+    "id": "alex",
+    "slug": "alex-kingsley",
+    "name": "Alex Kingsley",
+    "role": "AI Software Engineer",
+    "tagline": "Engineering intelligent systems where AI, software, and real-world impact meet.",
+    "bio": "Engineering intelligent systems where AI, software, and real-world impact meet.",
+    "avatar": "/images/teams/alex.png",
+    "expertise": [
+      "Python",
+      "AI / Machine Learning",
+      "LLMs / Generative AI",
+      "RAG & AI Agents",
+      "OpenAI / Claude / Gemini",
+      "React / TypeScript",
+      "FastAPI / Node.js",
+      "AWS / Azure",
+      "SQL / Vector Databases",
+      "System Design",
+      "Docker / Kubernetes",
+      "CI / CD"
+    ],
+    "projects": [
+      {
+        "name": "Sakana Fugu",
+        "description": "Multi-agent AI system that dynamically coordinates multiple LLMs to solve complex tasks.",
+        "url": "https://sakana.ai/"
+      }
+    ],
+    "type": "builder",
+    "githubUrl": "https://github.com/3two6",
+    "email": "alex@volvox.dev"
+  },
+  {
+    "id": "anthony",
+    "slug": "anthony-cotteta",
+    "name": "Anthony Cotteta",
+    "role": "Chief Financial Officer",
+    "tagline": "Finance leader helping build the financial structure, systems, and opportunities that support sustainable growth.",
+    "bio": "Finance leader helping build the financial structure, systems, and opportunities that support sustainable growth.",
+    "avatar": "/images/teams/anthony.png",
+    "expertise": [
+      "Financial Planning & Strategy",
+      "Financial Reporting & Analysis",
+      "Account & Cash Flow Management",
+      "Business Growth & Financial Structuring",
+      "Budgeting & Forecasting",
+      "Employee Incentive Programs",
+      "Team Communication & Collaboration",
+      "Process & Systems Development",
+      "Business Operations",
+      "Strategic Planning"
+    ],
+    "type": "staff"
   }
 ]

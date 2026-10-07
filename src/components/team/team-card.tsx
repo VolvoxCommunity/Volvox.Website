@@ -62,6 +62,7 @@ export function TeamCard({ member }: TeamCardProps) {
                 "bg-secondary text-secondary-foreground",
               member.type === "mentee" &&
                 "bg-secondary text-secondary-foreground",
+              member.type === "staff" && "bg-emerald-500 text-white",
             )}
           >
             {member.type}

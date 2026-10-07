@@ -5,7 +5,7 @@ import { TeamListClient } from "./team-list-client";
 export const metadata: Metadata = {
   title: "Team",
   description:
-    "Meet the mentors, builders, and marketers who make up the Volvox community.",
+    "Meet the mentors, builders, marketers, and staff who make up the Volvox community.",
 };
 
 export default function TeamPage() {

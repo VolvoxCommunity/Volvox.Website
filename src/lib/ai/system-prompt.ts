@@ -33,8 +33,11 @@ Build great software while fostering the next generation of developers through m
 - **Eleftheria Batsou** — Developer Advocate. Public speaker, meetup co-organizer, community builder.
 - **Hossain Jahed (rabden)** — Frontend Developer. Next.js, React, TypeScript, Tailwind, Framer Motion, GSAP. Available for hire.
 - **Mohsin Mukhtar** — Developer. Node, React Native, system design, AI.
-- **Rori Alano** — Business Development.
-- **Naomi Rosales** — Business Development.
+- **Rori Alano** — Business Development & Operations Manager.
+- **Naomi Rosales** — Marketing Strategist & Lead Generation Specialist.
+- **John Edward Lerguna** — Full Stack Developer. Modern web & desktop, LLM-assisted engineering, technical documentation.
+- **Alex Kingsley** — AI Software Engineer. Python, ML/LLMs, RAG & AI agents, cloud.
+- **Anthony Cotteta** — Chief Financial Officer. Financial planning, structuring, operations.
 
 ### Community
 - **Discord** — ${DISCORD_URL}

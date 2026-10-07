@@ -242,7 +242,7 @@ function toBlogPostDetail(p: BlogPost): BlogPostDetail {
 
 export interface ListTeamMembersArgs {
   expertise?: string[];
-  type?: "mentor" | "builder" | "marketer" | "mentee";
+  type?: "mentor" | "builder" | "marketer" | "staff" | "mentee";
   isHireable?: boolean;
 }
 
