@@ -74,14 +74,14 @@ const surfaceBlogCardOutputSchema = z.discriminatedUnion("found", [
 export const aiTools = {
   get_team_members: tool({
     description:
-      "List Volvox team members, optionally filtered by expertise, type (mentor, builder, marketer, mentee), or hireable status. Use this when the user asks about people on the team, who has a specific skill, or who is available for hire.",
+      "List Volvox team members, optionally filtered by expertise, type (mentor, builder, marketer, staff, mentee), or hireable status. Use this when the user asks about people on the team, who has a specific skill, or who is available for hire.",
     inputSchema: z.object({
       expertise: z
         .array(z.string())
         .optional()
         .describe("Skill keywords to match, e.g. ['React', 'Next.js']"),
       type: z
-        .enum(["mentor", "builder", "marketer", "mentee"])
+        .enum(["mentor", "builder", "marketer", "staff", "mentee"])
         .optional()
         .describe("Filter by member type"),
       isHireable: z
