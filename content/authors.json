@@ -12,5 +12,12 @@
     "role": "Developer Advocate",
     "avatar": "https://github.com/EleftheriaBatsou.png",
     "website": "http://localhost:3000/team/eleftheria-batsou"
+  },
+  {
+    "id": "3",
+    "name": "Jadon Watrous",
+    "role": "Digital Marketing Intern",
+    "avatar": "https://github.com/jadon-ui.png",
+    "website": "https://github.com/jadon-ui"
   }
 ]
