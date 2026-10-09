@@ -4,20 +4,20 @@
     "name": "Bill Chirico",
     "role": "CEO & Founder",
     "avatar": "https://github.com/BillChirico.png",
-    "website": "/team/bill-chirico"
+    "website": "https://www.volvox.dev/team/bill-chirico"
   },
   {
     "id": "2",
     "name": "Eleftheria Batsou",
     "role": "Developer Advocate",
     "avatar": "https://github.com/EleftheriaBatsou.png",
-    "website": "/team/eleftheria-batsou"
+    "website": "https://www.volvox.dev/team/eleftheria-batsou"
   },
   {
     "id": "3",
     "name": "Jadon Watrous",
     "role": "Digital Marketing Intern",
     "avatar": "/images/teams/jadon.jpeg",
-    "website": "/team/jadon-watrous"
+    "website": "https://www.volvox.dev/team/jadon-watrous"
   }
 ]
