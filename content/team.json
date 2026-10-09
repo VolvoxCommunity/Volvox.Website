@@ -327,5 +327,23 @@
     "linkedinUrl": "https://www.linkedin.com/in/eleftheriabatsou/",
     "email": "eleftheria@volvox.dev",
     "isHireable": false
-  }
+  },
+  {
+  "id": "jadon",
+  "slug": "jadon-watrous",
+  "name": "Jadon Watrous",
+  "role": "Digital Marketing Intern",
+  "tagline": "Developing practical marketing skills through content creation and continuous learning.",
+  "bio": "Jadon is a Digital Marketing Intern at Volvox with a Digital Marketing certificate from Harvard Business School Online. He contributes blog content while building experience in SEO and digital marketing.",
+  "avatar": "/images/teams/jadon.jpeg",
+  "expertise": [
+    "Blog Writing",
+    "SEO Fundamentals",
+    "Digital Marketing Fundamentals",
+    "Social Media Strategy",
+    "Marketing Strategy & Growth"
+  ],
+  "type": "mentee",
+  "email": "jadon@volvox.dev"
+}
 ]
