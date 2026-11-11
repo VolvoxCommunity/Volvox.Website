@@ -1,0 +1,100 @@
+---
+title: "How a Small Team Ships Four Products: Our AI-Assisted Workflow, Start to Finish"
+slug: "a-small-team-ships"
+excerpt: "We're a small team with four products. A Discord bot, a recovery app, a decision-making app, and a quest system for communities. People keep asking us the same question: how?"
+authorId: "2"
+date: "2026-10-26"
+banner: "/images/blog/a-small-team-ships.png"
+tags: ["Product", "AI", "Builder"]
+published: true
+---
+
+
+## Welcome to Built in the Open
+
+We're a small team with four products. A Discord bot, a recovery app, a decision-making app, and a quest system for communities. People keep asking us the same question: how?
+
+The honest answer is that AI is part of almost every step now. Not as magic, and not as a replacement for the people on the team. More like a very fast, very confident colleague who needs supervision.
+
+This column is where we show the work. The tools, the prompts, the mistakes, the stuff that didn't make it into the changelog. First up: our workflow from idea to shipped feature, and what we'd recommend if you're a small team trying to do the same.
+
+## 1. Planning: thinking out loud with a rubber duck that talks back
+
+Most features start as a messy idea in a Discord thread. Before anyone writes code, AI helps us turn that mess into something we can actually build.
+
+What that looks like in practice:
+
+- **Turning a rough idea into a spec.** Paste in the thread, ask for user stories, edge cases, and open questions. The open questions are usually the most useful part.
+- **Poking holes early.** Ask the model to argue against the feature. What breaks? Who gets annoyed? What's the cheapest version worth shipping?
+- **Breaking work into tasks.** A spec becomes a checklist small enough that one person can own each item.
+
+The rule: AI drafts the plan, a human decides. The model doesn't know your users, your budget, or what you promised in last week's changelog.
+
+## 2. Coding: a pair programmer that never gets tired (or careful)
+
+Our stack is React and Next.js on the web, React Native on mobile, and .NET on the backend. AI coding assistants help across all of it, but not equally.
+
+Where it shines:
+
+- **Boilerplate.** Components, API endpoints, DTOs, form validation. The stuff that's boring to type and easy to check.
+- **Translating between layers.** "Here's the C# model, write the TypeScript types and the fetch hook."
+- **Getting unstuck.** Paste the error, the relevant file, and what you already tried. It's faster than searching old forum threads.
+- **Learning a new library.** Ask for a minimal working example, then read the real docs.
+
+Where we slow down:
+
+- Anything touching authentication, permissions, payments, or user data.
+- Code that "works" but nobody on the team can explain.
+- Large changes across many files at once. Smaller requests give better results and easier reviews.
+
+Our tip: give the assistant context, not just a question. Point it at the existing file, the naming conventions, and an example of how you'd normally do it. Good context beats a clever prompt every time.
+
+## 3. Review and testing: where humans stay in charge
+
+This is the step we refuse to automate away. AI can write code faster than anyone can review it, so review becomes the bottleneck. That's fine. It should be.
+
+How we keep it honest:
+
+- **A human approves every merge.** AI review tools can flag issues, but they don't get the final say.
+- **AI-written tests get extra suspicion.** A model will happily write tests that pass because they test nothing. Read them like you'd read a stranger's code.
+- **"Explain it back" rule.** If you can't explain what a change does in a sentence, it's not ready.
+- **Small pull requests.** Easier to review, easier to revert, easier to learn from.
+
+AI is still useful here. It's good at a first pass: spotting missing null checks, inconsistent naming, or an edge case nobody wrote a test for. Treat it as a second pair of eyes, not the only pair.
+
+## 4. After shipping: docs, changelogs, and support
+
+Shipping is half the job. People need to know what changed and how to use it. For a small team, this is where AI saves the most hours.
+
+- **Changelogs from commits.** Feed in the merged pull requests, ask for a plain-language summary for users. Then cut it in half.
+- **First drafts of docs.** A model can turn code and a spec into a decent help article. A human checks every step actually works.
+- **Support replies.** Draft answers to common questions, then personalize. Nobody wants a reply that sounds like a bot, even from a team that builds bots.
+- **Spotting patterns.** Summarize a week of support tickets or community feedback to see what keeps coming up.
+
+One rule here: never publish AI-written docs without clicking through them yourself. A confident wrong instruction is worse than no instruction.
+
+## 5. Where we keep AI out
+
+Using AI well also means knowing when not to. A few places we draw the line:
+
+- **Sensitive products.** When an app deals with something as personal as addiction recovery, every word and every feature gets human judgment. Speed matters less than getting it right.
+- **Product decisions.** AI can list options. It doesn't decide what we build or who we build it for.
+- **Secrets and user data.** Keys, credentials, and personal data don't get pasted into prompts.
+- **Community.** Our Discord is run by people. The bot helps, but the conversations, mentorship, and welcomes are human.
+
+## What we'd tell another small team
+
+If you're a handful of people trying to ship more with AI, here's where we'd start:
+
+1. **Pick one step, not all of them.** Start with the most boring part of your week. For most teams that's boilerplate or changelogs.
+2. **Write down your conventions.** A short file with your stack, naming rules, and patterns makes every AI tool better instantly.
+3. **Keep pull requests small.** It's the single best defense against AI code nobody understands.
+4. **Make review non-negotiable.** Faster writing only helps if checking keeps up.
+5. **Decide your no-AI zones early.** It's easier than arguing about them mid-project.
+6. **Share what you learn.** Your mistakes are someone else's shortcut. That's why this column exists.
+
+## Coming up in Built in the Open
+
+Next time we'll go deeper on a single piece: how we choose which AI models power our products, and what we tested before deciding. After that, the mistakes we've made building with AI, so you don't have to make them too.
+
+Got a question about how we build? Want to share how your team uses AI? Join us on [Discord](https://discord.com/invite/8ahXACdamN). No gatekeeping, no ego, just code.
