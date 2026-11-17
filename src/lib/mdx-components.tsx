@@ -1,3 +1,4 @@
+import type { MDXRemoteProps } from "next-mdx-remote/rsc";
 import type {
   AnchorHTMLAttributes,
   HTMLAttributes,
@@ -5,6 +6,8 @@ import type {
   ReactElement,
 } from "react";
 import { isValidElement } from "react";
+import rehypeHighlight from "rehype-highlight";
+import remarkGfm from "remark-gfm";
 import { HeadingWithAnchor } from "@/components/blog/heading-with-anchor";
 import { Callout, CodeBlock, CustomLink, ImageZoom } from "@/components/mdx";
 
@@ -36,7 +39,7 @@ interface ImgPropsWithCaption extends ImgHTMLAttributes<HTMLImageElement> {
   "data-caption"?: string;
 }
 
-export const mdxComponents = {
+const mdxComponents = {
   // Custom components that can be used directly in MDX
   Callout,
 
@@ -127,7 +130,10 @@ export const mdxComponents = {
   // Enhanced table styling
   table: ({ children, ...props }: HTMLAttributes<HTMLTableElement>) => (
     <div className="overflow-x-auto my-6">
-      <table className="min-w-full" {...props}>
+      <table
+        className="min-w-full [&_:is(th,td)]:px-3 [&_:is(th,td)]:py-2 [&_th]:text-start"
+        {...props}
+      >
         {children}
       </table>
     </div>
@@ -148,5 +154,15 @@ export const mdxComponents = {
       );
     }
     return <li {...props}>{children}</li>;
+  },
+};
+
+export const blogMdxConfig: Omit<MDXRemoteProps, "source"> = {
+  components: mdxComponents,
+  options: {
+    mdxOptions: {
+      remarkPlugins: [remarkGfm],
+      rehypePlugins: [rehypeHighlight],
+    },
   },
 };
