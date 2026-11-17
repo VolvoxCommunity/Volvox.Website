@@ -5,7 +5,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import { MDXRemote } from "next-mdx-remote/rsc";
-import rehypeHighlight from "rehype-highlight";
 import { BlogContentWrapper } from "@/components/blog/blog-content-wrapper";
 import { BlogPostNavbar } from "@/components/blog/blog-post-navbar";
 import { RelatedPosts } from "@/components/blog/related-posts";
@@ -14,7 +13,7 @@ import { Footer } from "@/components/footer";
 import { Badge } from "@/components/ui/badge";
 import { getAllPosts, getPostBySlug } from "@/lib/blog";
 import { SITE_NAME, safeJsonLdSerialize } from "@/lib/constants";
-import { mdxComponents } from "@/lib/mdx-components";
+import { blogMdxConfig } from "@/lib/mdx-components";
 import { generateArticleSchema } from "@/lib/structured-data";
 
 export const dynamicParams = true;
@@ -256,19 +255,11 @@ export default async function BlogPostPage({
             prose-code:text-secondary prose-code:bg-muted
             prose-pre:bg-card prose-pre:border prose-pre:border-border
             prose-blockquote:border-l-secondary prose-blockquote:border-l-4 prose-blockquote:pl-4 prose-blockquote:italic
-            prose-ul:list-disc prose-ol:list-decimal
+            [&_ul]:list-disc [&_ol]:list-decimal [&_:is(ul,ol)]:ps-6
             prose-img:rounded-lg prose-img:border prose-img:border-border prose-img:shadow-sm
           "
             >
-              <MDXRemote
-                source={content}
-                components={mdxComponents}
-                options={{
-                  mdxOptions: {
-                    rehypePlugins: [rehypeHighlight],
-                  },
-                }}
-              />
+              <MDXRemote source={content} {...blogMdxConfig} />
             </div>
 
             <RelatedPosts currentSlug={slug} posts={allPosts} />
