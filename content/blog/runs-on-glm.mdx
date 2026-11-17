@@ -37,11 +37,11 @@ Leaderboards and benchmark charts are a starting point, not an answer. They meas
 
 So the test looked like this:
 
-1. test **Build a test set from real situations.** Typical chat questions, messy threads to summarize, borderline moderation cases, and messages that should *not* be flagged. Anonymized, of course.
-2. **Run every candidate on the same set.** Same prompts, same settings, no special tuning for one model.
-3. **Judge blind where possible.** Hide which model wrote which answer. It's surprisingly easy to favor a brand name.
-4. **Measure what users feel.** Time to first reply, not just total speed. A bot that starts typing fast feels faster.
-5. **Do the cost math at scale.** Estimate cost per 1,000 messages, then multiply by realistic server activity.
+1. 1. **Build a test set from real situations.** Typical chat questions, messy threads to summarize, borderline moderation cases, and messages that should *not* be flagged. Anonymized, of course.
+2. 2. **Run every candidate on the same set.** Same prompts, same settings, no special tuning for one model.
+3. 3. **Judge blind where possible.** Hide which model wrote which answer. It's surprisingly easy to favor a brand name.
+4. 4. **Measure what users feel.** Time to first reply, not just total speed. A bot that starts typing fast feels faster.
+5. 5. **Do the cost math at scale.** Estimate cost per 1,000 messages, then multiply by realistic server activity.
 
 ## Why we landed on GLM
 
@@ -67,13 +67,13 @@ Every model choice comes with downsides. Here are the ones worth knowing about.
 
 Building something with AI and not sure which model to pick? Here's the short version of our process:
 
-1. 1.**List your features and what each one needs.** Speed, accuracy, context length, tool use, cost.
-2. 2.**Collect 50 to 200 real examples.** Include the weird ones. Edge cases tell you more than easy wins.
-3. 3.**Shortlist three or four models.** Mix at least one big-name model with one or two cheaper or open-weight options.
-4. 4.**Run them all the same way.** Same prompts, same settings, same examples.
-5. 5.**Score blind.** Have someone who doesn't know which model is which pick the better answer.
-6. 6.**Do the cost math at your real scale.** Not per message. Per month, at the usage you expect.
-7. 7.**Keep the test set.** You'll want it again the next time a new model comes out.
+1. 1. **List your features and what each one needs.** Speed, accuracy, context length, tool use, cost.
+2. 2. **Collect 50 to 200 real examples.** Include the weird ones. Edge cases tell you more than easy wins.
+3. 3. **Shortlist three or four models.** Mix at least one big-name model with one or two cheaper or open-weight options.
+4. 4. **Run them all the same way.** Same prompts, same settings, same examples.
+5. 5. **Score blind.** Have someone who doesn't know which model is which pick the better answer.
+6. 6. **Do the cost math at your real scale.** Not per message. Per month, at the usage you expect.
+7. 7. **Keep the test set.** You'll want it again the next time a new model comes out.
 
 ## Next in Built in the Open
 
@@ -85,9 +85,9 @@ Want to see GLM in action? [Add Volvox.Bot to your server](https://volvox.bot) a
 
 ## Sources
 
-- [Z.ai docs: GLM-5.3](https://docs.z.ai/guides/llm/glm-5.3)
-- [GLM-5.2 model card on Hugging Face](https://huggingface.co/zai-org/GLM-5.2)
-- [OpenRouter: Z.ai GLM Latest](https://openrouter.ai/models/~z-ai/glm-latest)
-- [SemiAnalysis InferenceX: GLM-5.2 / GLM-5.3 overview](https://inferencex.semianalysis.com/model/glm-5-3)
+- • [Z.ai docs: GLM-5.3](https://docs.z.ai/guides/llm/glm-5.3)
+- • [GLM-5.2 model card on Hugging Face](https://huggingface.co/zai-org/GLM-5.2)
+- • [OpenRouter: Z.ai GLM Latest](https://openrouter.ai/models/~z-ai/glm-latest)
+- • [SemiAnalysis InferenceX: GLM-5.2 / GLM-5.3 overview](https://inferencex.semianalysis.com/model/glm-5-3)
 
 Got a question about how we build? Want to share how your team uses AI? Join us on [Discord](https://discord.com/invite/8ahXACdamN). No gatekeeping, no ego, just code.
