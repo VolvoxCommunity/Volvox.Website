@@ -22,7 +22,7 @@ interface ProductsProps {
   sortOption?: ProductSortOption;
   onSortChange?: (value: ProductSortOption | BlogSortOption) => void;
   enableFilters?: boolean;
-  /** Maximum number of products to display (defaults to 3 on homepage) */
+  /** Maximum number of products to display (defaults to 4 on homepage) */
   limit?: number;
 }
 
@@ -62,7 +62,7 @@ function ProductCard({ product }: ProductCardProps) {
                       src={imagePath}
                       alt={product.name}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(min-width: 1280px) 300px, (min-width: 768px) 50vw, 100vw"
                       className="object-cover"
                     />
                   </motion.div>
@@ -121,7 +121,7 @@ export function Products({
   sortOption = "newest",
   onSortChange,
   enableFilters = false,
-  limit = 3,
+  limit = 4,
 }: ProductsProps): JSX.Element | null {
   const filteredProducts = useMemo(() => {
     let result = [...allProducts].sort(sortProductsByNewest);
@@ -246,7 +246,7 @@ export function Products({
                 </p>
               </motion.div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
                 {filteredProducts.map((product) => (
                   <ProductCard key={product.id} product={product} />
                 ))}

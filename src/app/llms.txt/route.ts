@@ -7,10 +7,10 @@ import {
   SITE_NAME,
   SITE_URL,
 } from "@/lib/constants";
-import { getAllProducts } from "@/lib/content";
+import { getAllExtendedProducts } from "@/lib/content";
 import { reportError } from "@/lib/logger";
-import { ProductsArraySchema } from "@/lib/schemas";
-import type { BlogPost, Product } from "@/lib/types";
+import { sortProductsByNewest } from "@/lib/product-sorting";
+import type { BlogPost, ExtendedProduct } from "@/lib/types";
 
 const MAX_BLOG_POSTS_IN_LLM_TXT = 10;
 
@@ -35,10 +35,10 @@ const LlmsBlogPostsArraySchema = z.array(LlmsBlogPostSchema);
 /**
  * Generates the products list section for llms.txt content.
  *
- * @param products - Array of validated Product objects
+ * @param products - Array of validated product page records
  * @returns Formatted markdown string of products, or fallback message if empty
  */
-function generateProductsList(products: Product[]): string {
+function generateProductsList(products: ExtendedProduct[]): string {
   if (products.length === 0) {
     return "_Products information temporarily unavailable._";
   }
@@ -46,7 +46,7 @@ function generateProductsList(products: Product[]): string {
   return products
     .map(
       (product) =>
-        `- [${product.name}](${SITE_URL}/products/${product.id}): ${product.description}`,
+        `- [${product.name}](${SITE_URL}/products/${product.slug}): ${product.description}`,
     )
     .join("\n");
 }
@@ -146,21 +146,13 @@ export async function GET(): Promise<Response> {
   try {
     // Use Promise.allSettled for resilience against partial failures
     const [productsResult, postsResult] = await Promise.allSettled([
-      Promise.resolve(getAllProducts()),
+      Promise.resolve(getAllExtendedProducts().sort(sortProductsByNewest)),
       getAllPosts({ includeViews: false }),
     ]);
 
-    // Extract products with validation and error reporting
-    let products: Product[] = [];
-    if (productsResult.status === "fulfilled") {
-      try {
-        // Runtime validation of products data
-        products = ProductsArraySchema.parse(productsResult.value);
-      } catch (validationError) {
-        reportError("llms.txt: Products validation failed", validationError);
-        products = [];
-      }
-    } else {
+    const products =
+      productsResult.status === "fulfilled" ? productsResult.value : [];
+    if (productsResult.status === "rejected") {
       reportError("llms.txt: Failed to load products", productsResult.reason);
     }
 

@@ -284,7 +284,7 @@ export function ProductsListClient({ products }: ProductsListClientProps) {
           {/* Products Grid */}
           <section aria-label="Products list">
             {filteredProducts.length > 0 ? (
-              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
+              <div className="relative z-0 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 animate-in fade-in slide-in-from-bottom-8 duration-700 fill-mode-both delay-100">
                 {filteredProducts.map((product, idx) => (
                   <ProductCardGrid
                     key={product.id}
@@ -358,7 +358,7 @@ function ProductCardGrid({
                       src={imagePath}
                       alt={product.name}
                       fill
-                      sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                      sizes="(min-width: 1280px) 300px, (min-width: 768px) 50vw, 100vw"
                       className="object-cover"
                     />
                   </motion.div>
