@@ -1,5 +1,20 @@
 [
   {
+    "id": "bd7cad81-5c02-4687-95be-7599f0d14ab0",
+    "name": "Volvox.Quest",
+    "description": "Create Discord quests, award XP, and rank members on seasonal leaderboards.",
+    "longDescription": "Volvox.Quest gives Discord admins a bot and web dashboard for running community challenges. Schedule quests, choose what members need to submit, and award XP when you approve their submissions. Start a new leaderboard each season while members keep their all-time XP, and reward top ranks with Discord roles.",
+    "features": [
+      "Create and schedule one-time or recurring quests",
+      "Review links, screenshots, written responses, check-ins, and quiz submissions",
+      "Award XP for approved submissions and eligible Discord messages",
+      "Track seasonal and all-time leaderboards",
+      "Reward leaderboard ranks with Discord roles"
+    ],
+    "demoUrl": "https://volvox.app",
+    "image": "/images/product/volvox-quest/icon.png"
+  },
+  {
     "id": "c9c6e9f4-0f69-4cce-bc38-5f5f42ac8b3d",
     "name": "Volvox.Bot",
     "description": "An AI-powered Discord bot that brings chat, moderation, summaries, memory, XP, and community tooling into one command center.",

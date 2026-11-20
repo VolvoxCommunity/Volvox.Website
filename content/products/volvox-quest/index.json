@@ -1,0 +1,32 @@
+{
+  "id": "bd7cad81-5c02-4687-95be-7599f0d14ab0",
+  "name": "Volvox.Quest",
+  "type": "Discord Quests",
+  "slug": "volvox-quest",
+  "tagline": "Quests and leaderboards for Discord.",
+  "description": "Create Discord quests, award XP, and rank members on seasonal leaderboards.",
+  "longDescription": "Volvox.Quest gives Discord admins a bot and web dashboard for running community challenges. Schedule quests, choose what members need to submit, and award XP when you approve their submissions. Start a new leaderboard each season while members keep their all-time XP, and reward top ranks with Discord roles.",
+  "features": [
+    "Create and schedule one-time or recurring quests",
+    "Review links, screenshots, written responses, check-ins, and quiz submissions",
+    "Award XP for approved submissions and eligible Discord messages",
+    "Track seasonal and all-time leaderboards",
+    "Reward leaderboard ranks with Discord roles"
+  ],
+  "techStack": ["Discord", "Bot", "Gamification"],
+  "updatedAt": "2026-11-20T00:00:00Z",
+  "links": {
+    "demo": "https://volvox.app"
+  },
+  "screenshots": ["/images/product/volvox-quest/icon.png"],
+  "faq": [
+    {
+      "question": "How do I get started with Volvox.Quest?",
+      "answer": "Sign in with Discord at volvox.app and select a server that uses Volvox.Quest. If you manage a server, invite the bot before creating quests."
+    },
+    {
+      "question": "Do members keep their XP between seasons?",
+      "answer": "Yes. Each season starts with a fresh leaderboard. Members keep their all-time XP, and previous season standings remain available."
+    }
+  ]
+}

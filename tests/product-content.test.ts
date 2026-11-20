@@ -1,3 +1,4 @@
+import { GET as getLlmsTxt } from "../src/app/llms.txt/route";
 import {
   getAllExtendedProducts,
   getAllProducts,
@@ -26,7 +27,7 @@ describe("product content", () => {
     ).toBe(true);
   });
 
-  it("loads Volvox.Bot in the legacy products list used by llms.txt", () => {
+  it("loads Volvox.Bot in the legacy product catalog", () => {
     const products = getAllProducts();
     const volvoxBot = products.find((product) => product.name === "Volvox.Bot");
     const extendedProduct = getExtendedProductBySlug("volvox-bot");
@@ -45,5 +46,26 @@ describe("product content", () => {
   it("rejects the Volvox.Bot domain as a product route slug", () => {
     expect(isValidSlug("volvox.bot")).toBe(false);
     expect(getExtendedProductBySlug("volvox.bot")).toBeNull();
+  });
+
+  it("lists Volvox.Quest in both catalogs with the same product ID and site", () => {
+    const quest = getExtendedProductBySlug("volvox-quest");
+
+    expect(quest).toMatchObject({
+      name: "Volvox.Quest",
+      links: { demo: "https://volvox.app" },
+    });
+    expect(getAllExtendedProducts()).toContainEqual(quest);
+    expect(
+      getAllProducts().find((product) => product.name === "Volvox.Quest"),
+    ).toMatchObject({ id: quest?.id, demoUrl: "https://volvox.app" });
+  });
+
+  it("links to the Volvox.Quest product page in llms.txt", async () => {
+    const body = await (await getLlmsTxt()).text();
+
+    expect(body).toContain(
+      "[Volvox.Quest](https://www.volvox.dev/products/volvox-quest)",
+    );
   });
 });
