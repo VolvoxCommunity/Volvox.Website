@@ -1,0 +1,109 @@
+---
+title: "Teaching a Discord Bot to Remember People (Without Being Creepy)"
+slug: "discord-bot-memory-without-being-creepy"
+excerpt: "A bot that remembers your favorite language is helpful. A bot that brings up something personal in #general is not. Here's how Volvox.Bot's user memory works, and where we think the line should be."
+authorId: "2"
+date: "2026-11-24"
+banner: "/images/blog/built-in-the-open.png"
+tags: ["Product", "AI", "Volvox.Bot"]
+published: true
+---
+
+
+## Helpful or creepy? It's a thin line
+
+## Helpful or creepy? It's a thin line
+
+Imagine asking a Discord bot for help with your code. It remembers you prefer TypeScript and that you're building a portfolio site. That feels great. It's like talking to someone who was actually listening.
+
+Now imagine the same bot bringing up something you mentioned once, in a different channel, weeks ago. In front of everyone. That feels very different.
+
+Same feature. Same technology. The difference is entirely in the design choices. This post is about those choices: how memory works in Volvox.Bot, and what we think anyone building a bot with memory should keep in mind.
+
+## Two kinds of memory
+
+When people say a bot "remembers," they usually mean one of two things. Volvox.Bot has both, and they work differently.
+
+| | Conversation history | Long-term user memory |
+| --- | --- | --- |
+| What it is | The recent messages in a channel | Short facts about a person |
+| Scope | Per channel | Per user |
+| How much | The last 20 messages by default | Up to 5 memories added to each reply by default |
+| How long | Cleared after 30 days by default | Kept until removed, or the user opts out |
+| What it's for | Follow-up questions without repeating yourself | Personal context across conversations |
+
+Conversation history is short-term. It lets you say "what about the second option?" and have the bot know what you mean ([docs](https://www.mintlify.com/VolvoxLLC/volvox-bot/features/ai-chat)).
+
+Long-term memory is the interesting part. After an interaction, the bot picks out a few key facts about the user and stores them. Next time, the most relevant ones are added to the bot's context, so it can pick up where you left off. Under the hood this runs on [mem0](https://mem0.ai), an open-source memory layer for AI apps.
+
+## What's worth remembering
+
+The hardest question isn't *how* to store memories. It's *what* to store. A good rule of thumb: remember things that make the next answer better, and nothing else.
+
+Worth remembering:
+
+- **Preferences.** "Prefers short answers." "Uses Python, not JavaScript."
+- **Ongoing projects.** "Building a Discord bot for a book club."
+- **Skill level.** "New to coding," so the bot explains more and assumes less.
+
+Better left alone:
+
+- **Anything personal or sensitive.** Health, relationships, money, where someone lives. Even if they mentioned it, a public server is the wrong place for a bot to bring it back up.
+- **Things said in the moment.** Someone venting after a bad day doesn't want that to become a permanent "fact" about them.
+- **Guesses.** "Seems stressed" or "probably a student" are assumptions, not facts. Memory should only hold what the user actually said.
+
+## Less is more
+
+You might think more memory means a smarter bot. In practice, it's the opposite.
+
+By default, Volvox.Bot adds at most five memories to any reply. That limit is deliberate. A handful of relevant facts helps. Dozens of loosely related ones make answers weirder, slower, and more likely to surface something that has nothing to do with the question.
+
+There's a social reason too. A friend who remembers your name and your project is nice. A friend who recites everything you've ever said is unsettling.
+
+## Control belongs to people, not the bot
+
+Memory only works if people trust it. And trust comes from control.
+
+- **Users can opt out.** Anyone who doesn't want the bot to remember them can say so, and memory stops for them.
+- **Admins can turn it off.** Memory is a setting each server controls, along with whether the bot extracts memories automatically ([config docs](https://www.mintlify.com/VolvoxLLC/volvox-bot/configuration/overview)).
+- **It's documented.** What the bot stores and why is written down, not hidden. If you're curious, you can read exactly how it works.
+
+If you're building your own bot, make opting out as easy as opting in. If it takes more than one step, most people won't bother, and the ones who wanted out will just leave.
+
+## What makes memory feel creepy
+
+After building and testing memory features, a few patterns stand out. If your bot does any of these, people will notice.
+
+1. **Bringing things up unprompted.** Memory should help answer the question asked, not start new topics.
+2. **Mentioning private things in public.** Context matters. What's fine in a DM may not be fine in a busy channel.
+3. **Holding onto stale facts.** People change jobs, languages, and projects. Old memories should be easy to update or remove.
+4. **Remembering things people didn't expect.** If users are surprised the bot knows something, that's a design problem, not a user problem.
+5. **No way out.** A memory feature without an off switch isn't a feature. It's a liability.
+
+## A quick checklist for bot builders
+
+Thinking about adding memory to your own bot? Start here:
+
+- Decide what kinds of facts are worth storing, and write it down.
+- Keep the number of memories per reply small.
+- Only store what users actually said, never guesses.
+- Let users opt out in one step.
+- Let admins turn memory off for their whole server.
+- Explain the feature in plain language, in your docs and privacy policy.
+- Test it in a public channel. If anything it says would make you uncomfortable, fix it before shipping.
+
+## Next in Built in the Open
+
+The best memory feature is one people barely notice. It just makes the bot a little more helpful each time, and never makes anyone wonder what else it knows.
+
+Next up: the mistakes we've made building with AI, so you don't have to make them too.
+
+Want to try it? [Add Volvox.Bot to your server](https://volvox.bot), or come chat with us in our [Discord](https://discord.com/invite/8ahXACdamN). No gatekeeping, no ego, just code.
+
+## Sources
+
+- [Volvox.Bot docs: AI chat and memory](https://www.mintlify.com/VolvoxLLC/volvox-bot/features/ai-chat)
+- [Volvox.Bot docs: configuration](https://www.mintlify.com/VolvoxLLC/volvox-bot/configuration/overview)
+- [Volvox.Bot docs: architecture](https://www.mintlify.com/VolvoxLLC/volvox-bot/architecture)
+
+Got a question about how we build? Want to share how your team uses AI? Join us on [Discord](https://discord.com/invite/8ahXACdamN). No gatekeeping, no ego, just code.
